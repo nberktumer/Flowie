@@ -1,0 +1,21 @@
+{
+  "extends": "tslint:recommended",
+  "rules": {
+    "semicolon": false,
+    "member-access": [
+      true,
+      "no-public"
+    ],
+    "no-console": {
+      "severity": "off",
+      "options": [
+        "debug",
+        "info",
+        "log",
+        "time",
+        "timeEnd",
+        "trace"
+      ]
+    }
+  }
+}
