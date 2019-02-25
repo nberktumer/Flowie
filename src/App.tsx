@@ -1,6 +1,7 @@
-import React, {Component} from "react";
-import "./App.css";
-import logo from "./logo.svg";
+import React, {Component} from "react"
+import "./App.css"
+import strings from "./lang"
+import logo from "./logo.svg"
 
 class App extends Component {
     render() {
@@ -9,7 +10,7 @@ class App extends Component {
                 <header className="App-header">
                     <img src={logo} className="App-logo" alt="logo"/>
                     <p>
-                        Edit <code>src/App.tsx</code> and save to reload.
+                        {strings.test}
                     </p>
                     <a
                         className="App-link"
@@ -20,8 +21,8 @@ class App extends Component {
                     </a>
                 </header>
             </div>
-        );
+        )
     }
 }
 
-export default App;
+export default App

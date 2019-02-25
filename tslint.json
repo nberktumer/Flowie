@@ -1,21 +1,25 @@
 {
-  "extends": "tslint:recommended",
-  "rules": {
-    "semicolon": false,
-    "member-access": [
-      true,
-      "no-public"
-    ],
-    "no-console": {
-      "severity": "off",
-      "options": [
-        "debug",
-        "info",
-        "log",
-        "time",
-        "timeEnd",
-        "trace"
-      ]
+    "extends": "tslint:recommended",
+    "rules": {
+        "semicolon": false,
+        "trailing-comma": false,
+        "object-literal-sort-keys": false,
+        "no-trailing-whitespace": false,
+        "ordered-imports": false,
+        "member-access": [
+            true,
+            "no-public"
+        ],
+        "no-console": {
+            "severity": "off",
+            "options": [
+                "debug",
+                "info",
+                "log",
+                "time",
+                "timeEnd",
+                "trace"
+            ]
+        }
     }
-  }
 }
