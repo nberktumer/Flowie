@@ -1,9 +1,9 @@
 import React, {Component} from "react"
-import "./App.css"
-import strings from "./lang"
-import logo from "./logo.svg"
+import strings from "../../lang"
+import logo from "../../logo.svg"
+import "./style.css"
 
-class App extends Component {
+export default class Editor extends Component {
     render() {
         return (
             <div className="App">
@@ -24,5 +24,3 @@ class App extends Component {
         )
     }
 }
-
-export default App
