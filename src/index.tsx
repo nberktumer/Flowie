@@ -1,8 +1,10 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import {Editor} from "./pages"
-import {Route, BrowserRouter as Router} from "react-router-dom"
+import {BrowserRouter as Router, Route} from "react-router-dom"
 import "./index.css"
+import "storm-react-diagrams/dist/style.min.css"
+import "react-reflex/styles.css"
 import * as serviceWorker from "./serviceWorker"
 
 ReactDOM.render((

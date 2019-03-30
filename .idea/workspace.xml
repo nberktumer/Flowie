@@ -2,18 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1554d005-f905-47cc-b692-e435a8d4fe48" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/pages/editor/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utils/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/SimplePortFactory.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/UnlimitedInputNodeFactory.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/UnlimitedInputNodeModel.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/UnlimitedInputPortModel.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/CodePreviewPanel/CodePreviewPanel.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/CodePreviewPanel/CodePreviewPanel.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ProjectTreePanel/ProjectTreePanel.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ShapePanel/ShapeItem.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ShapePanel/ShapePanel.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ShapePanel/ShapePanel.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/config/Defaults.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/Operations.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/ProgrammingLanguage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/editor/Editor.module.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.test.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/editor/Editor.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/config/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/react-app-env.d.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/editor/Editor.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/editor/Editor.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/editor/style.css" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,43 +33,17 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DefaultGradleProjectSettings">
+    <option name="testRunner" value="GRADLE" />
+    <option name="delegatedBuild" value="true" />
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/components/index.tsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="19" selection-start-line="4" selection-end-line="5" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lang/index.tsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="19" selection-start-column="19" selection-end-column="19" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/pages/index.tsx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/pages/editor/Editor.tsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
+            <state relative-caret-position="250">
+              <caret line="59" lean-forward="true" selection-start-line="59" selection-end-line="59" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
               </folding>
@@ -65,29 +51,80 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/pages/editor/style.css">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/UnlimitedInputNodeModel.tsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="495">
-              <caret line="33" lean-forward="true" selection-start-line="33" selection-end-line="33" />
+            <state relative-caret-position="75">
+              <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package.json">
+        <entry file="file://$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/UnlimitedInputPortModel.tsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="600">
-              <caret line="40" column="43" selection-start-line="40" selection-start-column="43" selection-end-line="40" selection-end-column="43" />
+            <state relative-caret-position="120">
+              <caret line="8" selection-start-line="8" selection-end-line="8" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/index.tsx">
+        <entry file="file://$PROJECT_DIR$/node_modules/storm-react-diagrams/src/widgets/DiagramWidget.tsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" column="32" lean-forward="true" selection-start-line="1" selection-start-column="32" selection-end-line="1" selection-end-column="32" />
+            <state relative-caret-position="5070">
+              <caret line="355" column="21" selection-start-line="355" selection-start-column="20" selection-end-line="355" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/SimplePortFactory.tsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="5" column="4" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/UnlimitedInputNodeFactory.tsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="14" column="22" lean-forward="true" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
+              <folding>
+                <element signature="e#0#43#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/node_modules/storm-react-diagrams/src/defaults/factories/DefaultNodeFactory.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="8" selection-start-line="8" selection-end-line="23" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/node_modules/storm-react-diagrams/src/models/NodeModel.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1590">
+              <caret line="110" column="35" selection-start-line="110" selection-start-column="35" selection-end-line="110" selection-end-column="35" />
+              <folding>
+                <element signature="e#0#59#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/node_modules/storm-react-diagrams/src/models/BaseModel.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="17" column="12" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -97,8 +134,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="TypeScript File" />
         <option value="CSS File" />
+        <option value="TypeScript File" />
         <option value="TypeScript JSX File" />
       </list>
     </option>
@@ -108,6 +145,16 @@
       <find>semi</find>
       <find>history</find>
       <find>babel</find>
+      <find>className={classes.paper}</find>
+      <find>{...this.resizeProps}</find>
+      <find>type</find>
+      <find>out</find>
+      <find>nodeType</find>
+      <find>this.type</find>
+      <find>srd-default-node</find>
+      <find>in-out</find>
+      <find>tree</find>
+      <find>allowLooseLink</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -116,18 +163,14 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/config/index.ts" />
-        <option value="$PROJECT_DIR$/src/lang/en.ts" />
         <option value="$PROJECT_DIR$/src/lang/tr.ts" />
         <option value="$PROJECT_DIR$/src/lang/index.ts" />
         <option value="$PROJECT_DIR$/src/App.test.ts" />
         <option value="$PROJECT_DIR$/src/lang/tr.tsx" />
         <option value="$PROJECT_DIR$/src/lang/en.tsx" />
         <option value="$PROJECT_DIR$/tslint.json" />
-        <option value="$PROJECT_DIR$/src/config/index.tsx" />
         <option value="$PROJECT_DIR$/src/components/index.tsx" />
         <option value="$PROJECT_DIR$/src/serviceWorker.ts" />
-        <option value="$PROJECT_DIR$/src/index.css" />
         <option value="$PROJECT_DIR$/package-lock.json" />
         <option value="$PROJECT_DIR$/src/pages/Editor.ts" />
         <option value="$PROJECT_DIR$/src/App.tsx" />
@@ -137,14 +180,40 @@
         <option value="$PROJECT_DIR$/src/lang/index.tsx" />
         <option value="$PROJECT_DIR$/.babelrc" />
         <option value="$PROJECT_DIR$/tsconfig.paths.json" />
-        <option value="$PROJECT_DIR$/src/index.tsx" />
         <option value="$PROJECT_DIR$/src/.env" />
         <option value="$PROJECT_DIR$/tsconfig.json" />
         <option value="$PROJECT_DIR$/config-overrides.js" />
-        <option value="$PROJECT_DIR$/src/pages/editor/Editor.tsx" />
-        <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/src/pages/index.tsx" />
+        <option value="$PROJECT_DIR$/src/index.tsx" />
+        <option value="$PROJECT_DIR$/src/components/ShapePanel.tsx" />
         <option value="$PROJECT_DIR$/src/pages/editor/style.css" />
+        <option value="$PROJECT_DIR$/src/pages/editor/Editor.module.css" />
+        <option value="$PROJECT_DIR$/src/components/ShapePanel/ShapeItem.ts" />
+        <option value="$PROJECT_DIR$/src/components/ShapePanel/ShapePanel.tsx" />
+        <option value="$PROJECT_DIR$/src/models/ProgrammingLanguages.tsx" />
+        <option value="$PROJECT_DIR$/src/config/Defaults.tsx" />
+        <option value="$PROJECT_DIR$/src/config/index.tsx" />
+        <option value="$PROJECT_DIR$/src/models/ProgrammingLanguage.tsx" />
+        <option value="$PROJECT_DIR$/src/models/Operations.ts" />
+        <option value="$PROJECT_DIR$/src/models/index.tsx" />
+        <option value="$PROJECT_DIR$/src/components/CodePreviewPanel/CodePreviewPanel.module.css" />
+        <option value="$PROJECT_DIR$/src/index.css" />
+        <option value="$PROJECT_DIR$/src/components/CodePreviewPanel/CodePreviewPanel.tsx" />
+        <option value="$PROJECT_DIR$/src/components/ShapePanel/ShapePanel.module.css" />
+        <option value="$PROJECT_DIR$/src/components/ShapePanel/ShapeItem.tsx" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/src/components/ProjectTreePanel/ProjectTreePanel.tsx" />
+        <option value="$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/UnlimitedInputNodeModel.ts" />
+        <option value="$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/UnlimitedInputNodeWidget.ts" />
+        <option value="$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/UnlimitedInputPortModel.ts" />
+        <option value="$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/index.tsx" />
+        <option value="$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/UnlimitedInputNodeWidget.tsx" />
+        <option value="$PROJECT_DIR$/src/components/CanvasNodes/BaseLinkModel.tsx" />
+        <option value="$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/UnlimitedInputNodeModel.tsx" />
+        <option value="$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/SimplePortFactory.tsx" />
+        <option value="$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/UnlimitedInputPortModel.tsx" />
+        <option value="$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/UnlimitedInputNodeFactory.tsx" />
+        <option value="$PROJECT_DIR$/src/pages/editor/Editor.tsx" />
       </list>
     </option>
   </component>
@@ -155,17 +224,16 @@
     <auto-save>true</auto-save>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="916" />
-    <option name="y" value="94" />
-    <option name="width" value="1400" />
-    <option name="height" value="1000" />
+    <option name="x" value="153" />
+    <option name="y" value="24" />
+    <option name="width" value="1390" />
+    <option name="height" value="998" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -177,6 +245,27 @@
               <item name="COMP491" type="b2602c69:ProjectViewProjectNode" />
               <item name="COMP491" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="COMP491" type="b2602c69:ProjectViewProjectNode" />
+              <item name="COMP491" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="COMP491" type="b2602c69:ProjectViewProjectNode" />
+              <item name="COMP491" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="CanvasNodes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="COMP491" type="b2602c69:ProjectViewProjectNode" />
+              <item name="COMP491" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="CanvasNodes" type="462c0819:PsiDirectoryNode" />
+              <item name="UnlimitedInputNode" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="COMP491" type="b2602c69:ProjectViewProjectNode" />
@@ -195,14 +284,17 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551196676852" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/App.tsx" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553041733624" />
+    <property name="editor.config.ad.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.jscs" value="true" />
@@ -225,6 +317,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components/ShapePanel" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
@@ -261,18 +354,34 @@
       <workItem from="1551119401687" duration="1841000" />
       <workItem from="1551124035982" duration="2244000" />
       <workItem from="1551127544943" duration="5223000" />
-      <workItem from="1551191105292" duration="5565000" />
+      <workItem from="1551191105292" duration="6201000" />
+      <workItem from="1551271263442" duration="5950000" />
+      <workItem from="1551296807672" duration="7199000" />
+      <workItem from="1551374974522" duration="89000" />
+      <workItem from="1551723019825" duration="2542000" />
+      <workItem from="1551787702625" duration="4037000" />
+      <workItem from="1551803433774" duration="1088000" />
+      <workItem from="1552764787604" duration="5830000" />
+      <workItem from="1552773241234" duration="739000" />
+      <workItem from="1552834886020" duration="12131000" />
+      <workItem from="1553016195075" duration="2217000" />
+      <workItem from="1553037695361" duration="4134000" />
+      <workItem from="1553951333500" duration="1308000" />
+      <workItem from="1553952655991" duration="13000" />
+      <workItem from="1553952682247" duration="5882000" />
+      <workItem from="1553982968123" duration="20000" />
+      <workItem from="1553983005255" duration="807000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="22393000" />
+    <option name="totallyTimeSpent" value="77015000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="28" width="1920" height="1052" extended-state="6" />
+    <frame x="0" y="24" width="1920" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19411765" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23003195" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -289,9 +398,9 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.31664854" />
-      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
-      <window_info anchor="bottom" id="TypeScript" order="12" weight="0.3297062" />
+      <window_info anchor="bottom" id="Terminal" order="10" weight="0.32216215" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5026624" side_tool="true" visible="true" weight="0.32834226" />
+      <window_info anchor="bottom" id="TypeScript" order="12" sideWeight="0.49733758" visible="true" weight="0.32834226" />
       <window_info anchor="bottom" id="Messages" order="13" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -307,136 +416,17 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/UnlimitedInputNodeModel.tsx</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/public/favicon.ico">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/index.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/manifest.json">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.test.tsx" />
-    <entry file="file://$PROJECT_DIR$/node_modules/react-i18next/src/index.d.ts" />
-    <entry file="file://$PROJECT_DIR$/node_modules/react-localization/lib/LocalizedStrings.d.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="20" column="19" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lang/tr.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="8" lean-forward="true" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor />
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package-lock.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="13" lean-forward="true" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.css" />
-    <entry file="file://$PROJECT_DIR$/src/pages/Editor.ts" />
-    <entry file="file://$PROJECT_DIR$/node_modules/@types/react-router/index.d.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="94" column="13" selection-start-line="94" selection-start-column="13" selection-end-line="94" selection-end-column="18" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#1464#1495#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/App.tsx" />
-    <entry file="file://$PROJECT_DIR$/src/utils/index.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/react-app-env.d.ts">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/logo.svg">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/serviceWorker.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="35" selection-start-line="16" selection-start-column="35" selection-end-line="16" selection-end-column="35" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/config/index.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="5" selection-start-line="5" selection-end-line="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tslint.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="1" selection-start-column="1" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.babelrc">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/index.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="40" selection-start-line="4" selection-start-column="40" selection-end-line="4" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lang/en.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="1" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.env">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="14" selection-start-column="14" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tsconfig.paths.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="24" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tsconfig.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -444,17 +434,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config-overrides.js">
+    <entry file="file://$PROJECT_DIR$/config-overrides.js" />
+    <entry file="file://$PROJECT_DIR$/src/pages/index.tsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="9" lean-forward="true" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="40" column="43" selection-start-line="40" selection-start-column="43" selection-end-line="40" selection-end-column="43" />
+        <state relative-caret-position="15">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
         </state>
       </provider>
     </entry>
@@ -468,6 +452,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/react-split-grid/dist/react-split-grid.es.js" />
+    <entry file="file://$PROJECT_DIR$/node_modules/react-split-grid/dist/react-split-grid.js" />
+    <entry file="file://$PROJECT_DIR$/node_modules/react-reflex/styles.css">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/react-simple-resizer/dist/Bar/index.d.ts" />
+    <entry file="file://$PROJECT_DIR$/src/logo.svg" />
+    <entry file="file://$PROJECT_DIR$/src/lang/tr.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="8" lean-forward="true" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/lang/index.tsx">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -475,34 +473,287 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/index.tsx">
+    <entry file="file://$PROJECT_DIR$/node_modules/storm-react-diagrams/src/models/DiagramModel.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="27" column="13" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/react-app-env.d.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/config/Defaults.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="1" lean-forward="true" selection-start-line="4" selection-start-column="1" selection-end-line="4" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/config/index.tsx">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
-          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/models/index.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/models/Operations.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="1" lean-forward="true" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/models/ProgrammingLanguage.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="1" selection-end-line="12" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/ShapePanel/ShapePanel.module.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="23" selection-start-line="1" selection-start-column="23" selection-end-line="1" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/@types/react/index.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-430">
+          <caret line="362" column="10" selection-start-line="362" selection-start-column="10" selection-end-line="362" selection-end-column="10" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/index.tsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="32" lean-forward="true" selection-start-line="1" selection-start-column="32" selection-end-line="1" selection-end-column="32" />
+        <state relative-caret-position="180">
+          <caret line="12" column="43" selection-start-line="12" selection-start-column="43" selection-end-line="12" selection-end-column="43" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/editor/Editor.tsx">
+    <entry file="file://$PROJECT_DIR$/node_modules/typescript/lib/lib.dom.d.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
+        <state relative-caret-position="1678">
+          <caret line="17963" column="83" selection-start-line="17963" selection-start-column="83" selection-end-line="17963" selection-end-column="83" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/ShapePanel/ShapeItem.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="27" column="32" selection-start-line="27" selection-start-column="28" selection-end-line="27" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/index.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="21" selection-start-line="6" selection-start-column="21" selection-end-line="6" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LICENSE.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor />
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/CodePreviewPanel/CodePreviewPanel.module.css">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/ShapePanel/ShapePanel.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="39" selection-end-line="20" selection-end-column="1" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/editor/style.css">
+    <entry file="file://$PROJECT_DIR$/node_modules/storm-react-diagrams/src/defaults/models/DefaultPortModel.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="495">
-          <caret line="33" lean-forward="true" selection-start-line="33" selection-end-line="33" />
+          <caret line="37" column="4" selection-start-line="37" selection-start-column="4" selection-end-line="37" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/editor/Editor.module.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-225">
+          <caret line="6" column="24" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/ProjectTreePanel/ProjectTreePanel.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="12" selection-start-line="21" selection-start-column="12" selection-end-line="21" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/CodePreviewPanel/CodePreviewPanel.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="52" column="90" selection-start-line="52" selection-start-column="64" selection-end-line="52" selection-end-column="90" />
+          <folding>
+            <element signature="e#0#38#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/UnlimitedInputNodeWidget.tsx" />
+    <entry file="file://$PROJECT_DIR$/node_modules/storm-react-diagrams/src/BaseEntity.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="20" column="13" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/storm-react-diagrams/src/defaults/models/DefaultNodeModel.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="201">
+          <caret line="15" column="4" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#54#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/storm-react-diagrams/src/models/PortModel.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="17" column="4" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/storm-react-diagrams/src/defaults/factories/DefaultLabelFactory.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="10" column="4" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/storm-react-diagrams/src/DiagramEngine.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="80" column="48" lean-forward="true" selection-start-line="80" selection-start-column="48" selection-end-line="80" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/storm-react-diagrams/src/defaults/factories/DefaultLinkFactory.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="10" column="4" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/CanvasNodes/BaseLinkModel.tsx" />
+    <entry file="file://$PROJECT_DIR$/node_modules/storm-react-diagrams/src/widgets/NodeWidget.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/UnlimitedInputPortModel.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/storm-react-diagrams/src/widgets/DiagramWidget.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5070">
+          <caret line="355" column="21" selection-start-line="355" selection-start-column="20" selection-end-line="355" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/SimplePortFactory.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="4" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/storm-react-diagrams/src/defaults/factories/DefaultNodeFactory.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="8" selection-start-line="8" selection-end-line="23" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/storm-react-diagrams/src/models/NodeModel.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1590">
+          <caret line="110" column="35" selection-start-line="110" selection-start-column="35" selection-end-line="110" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/storm-react-diagrams/src/models/BaseModel.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="17" column="12" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/UnlimitedInputNodeFactory.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="22" lean-forward="true" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/index.tsx">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/CanvasNodes/UnlimitedInputNode/UnlimitedInputNodeModel.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/editor/Editor.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="59" lean-forward="true" selection-start-line="59" selection-end-line="59" />
+          <folding>
+            <element signature="e#0#38#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
