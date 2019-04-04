@@ -1,5 +1,6 @@
 export enum DefaultPortType {
     IN,
     OUT,
-    LOOP
+    LOOP,
+    SCOPE
 }

@@ -23,6 +23,14 @@ export class RectangleNodeModel extends NodeModel {
         return this.addPort(new DefaultPortModel(DefaultPortType.OUT, Random.UID(), label))
     }
 
+    addLoopPort(label: string): DefaultPortModel {
+        return this.addPort(new DefaultPortModel(DefaultPortType.LOOP, Random.UID(), label))
+    }
+
+    addScopePort(label: string): DefaultPortModel {
+        return this.addPort(new DefaultPortModel(DefaultPortType.SCOPE, Random.UID(), label))
+    }
+
     deSerialize(object: any, engine: DiagramEngine) {
         super.deSerialize(object, engine)
         this.name = object.name
@@ -45,6 +53,18 @@ export class RectangleNodeModel extends NodeModel {
     getOutPorts(): DefaultPortModel[] {
         return _.filter(this.ports, (portModel) => {
             return portModel.portType === DefaultPortType.OUT
+        })
+    }
+
+    getLoopPorts(): DefaultPortModel[] {
+        return _.filter(this.ports, (portModel) => {
+            return portModel.portType === DefaultPortType.LOOP
+        })
+    }
+
+    getScopePorts(): DefaultPortModel[] {
+        return _.filter(this.ports, (portModel) => {
+            return portModel.portType === DefaultPortType.SCOPE
         })
     }
 }

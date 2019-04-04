@@ -42,10 +42,9 @@ export class DefaultPortModel extends PortModel {
         if (port.getNode() === this.getNode())
             return false
 
-        if (this.portType !== DefaultPortType.OUT)
-            return false
-
-        return port.portType === DefaultPortType.IN || port.portType === DefaultPortType.LOOP
+        return (this.portType === DefaultPortType.OUT && port.portType === DefaultPortType.IN)
+            || (this.portType === DefaultPortType.OUT && port.portType === DefaultPortType.LOOP)
+            || (this.portType === DefaultPortType.SCOPE && port.portType === DefaultPortType.IN)
     }
 
     createLinkModel(): LinkModel {
