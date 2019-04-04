@@ -6,8 +6,16 @@ import {DefaultNodeModel, DiagramEngine, DiagramModel, DiagramWidget} from "stor
 import {ShapePanel} from "../../components/ShapePanel/ShapePanel"
 import {ShapeItem} from "../../components/ShapePanel/ShapeItem"
 import {CodePreviewPanel} from "../../components/CodePreviewPanel/CodePreviewPanel"
-import {ProgrammingLanguage} from "../../models"
+import {DataType, Operations, ProgrammingLanguage} from "../../models"
 import {ProjectTreePanel} from "../../components/ProjectTreePanel/ProjectTreePanel"
+import {TriangleNodeFactory} from "../../components/CanvasItems/Nodes/BaseNodes/TriangleNode/TriangleNodeFactory"
+import {PortFactory} from "../../components/CanvasItems/Ports/PortFactory"
+import {SingleConnectionPort} from "../../components/CanvasItems/Ports/SingleConnectionPort/SingleConnectionPort"
+import {RectangleNodeFactory} from "../../components/CanvasItems/Nodes/BaseNodes/RectangleNode/RectangleNodeFactory"
+import {RectangleNodeWithInfoFactory} from "../../components/CanvasItems/Nodes/BaseNodes/RectangleNode/RectangleNodeWithInfo/RectangleNodeWithInfoFactory"
+import {VariableNodeModel} from "../../components/CanvasItems/Nodes/VariableNode/VariableNodeModel"
+import {AddNodeDialog} from "../../components/AddNodeDialog/AddNodeDialog"
+import {BaseDialogBodyState} from "../../components/AddNodeDialog/DialogBody/BaseDialogBody"
 import {CodeGenerator} from "../../generator/CodeGenerator";
 
 const exampleCode = `class Editor extends Component {
@@ -88,7 +96,10 @@ export interface IEditorProps {
 export interface IEditorState {
     height: string | undefined,
     width: string | undefined,
-    selectedStr: string
+    selectedStr: string,
+    isModalOpen: boolean,
+    newOperation: Operations | null,
+    newItemPosition: { x: number, y: number }
 }
 
 export default class Editor extends Component<IEditorProps, IEditorState> {
@@ -102,8 +113,12 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
         this.diagramEngine = new DiagramEngine()
         this.diagramEngine.installDefaultFactories()
 
+        this.diagramEngine.registerNodeFactory(new TriangleNodeFactory())
+        this.diagramEngine.registerNodeFactory(new RectangleNodeFactory())
+        this.diagramEngine.registerNodeFactory(new RectangleNodeWithInfoFactory())
+        this.diagramEngine.registerPortFactory(new PortFactory("single", () => new SingleConnectionPort(true, "unknown")))
+
         this.activeModel = new DiagramModel()
-        this.activeModel.setGridSize(10)
         this.diagramEngine.setDiagramModel(this.activeModel)
 
         _.forEach(this.activeModel.getNodes(), (item) => {
@@ -112,38 +127,62 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
             })
         })
 
-        this.state = {height: "1px", width: "1px", selectedStr: "Nothing is selected!"}
+        this.state = {
+            height: "1px",
+            width: "1px",
+            selectedStr: "Nothing is selected!",
+            isModalOpen: false,
+            newOperation: null,
+            newItemPosition: {x: 0, y: 0}
+        }
 
         const generator = new CodeGenerator(json)
         generator.generate()
-
     }
 
     onDrop(event: any): void {
         const data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"))
-        const nodesCount = _.keys(
-            this.diagramEngine.getDiagramModel().getNodes()
-        ).length
 
-        let node = null
-        if (data.type === "in") {
-            node = new DefaultNodeModel("In Node " + (nodesCount + 1), "rgb(192, 255, 0)")
-            const port = node.addInPort("In")
-            port.setMaximumLinks(0)
-        } else if (data.type === "in-out") {
-            node = new DefaultNodeModel("In/Out Node " + (nodesCount + 1), "rgb(255, 192, 0)")
-            node.addOutPort("Out").setMaximumLinks(0)
-            node.addInPort("In").setMaximumLinks(0)
-            node.addInPort("In").setMaximumLinks(0)
-            node.addInPort("In").setMaximumLinks(0)
-            node.updateDimensions({width: 1000, height: 1000})
-        } else {
-            node = new DefaultNodeModel("Out Node " + (nodesCount + 1), "rgb(0, 192, 255)")
-            node.addOutPort("Out").setMaximumLinks(0)
-        }
+        if (!Object.values(Operations).includes(data.type))
+            return
+
         const points = this.diagramEngine.getRelativeMousePoint(event)
-        node.x = points.x
-        node.y = points.y
+
+        this.setState({
+            isModalOpen: true,
+            newOperation: data.type,
+            newItemPosition: points
+        })
+    }
+
+    addItem(data: BaseDialogBodyState): void {
+        let node = null
+
+        switch (this.state.newOperation) {
+            case Operations.VARIABLE:
+                if (data.variableName === "" || data.value === "")
+                    return
+
+                node = new VariableNodeModel(data.dataType as DataType)
+                node.info = data.variableName + " = " + data.value
+                break
+            case Operations.IF:
+                break
+            case Operations.FOR:
+                break
+            case Operations.SWITCH:
+                break
+            case Operations.WHILE:
+                break
+            default:
+                return
+        }
+
+        if (node == null)
+            return
+
+        node.x = this.state.newItemPosition.x
+        node.y = this.state.newItemPosition.y
 
         node.addListener({
             selectionChanged: this.addItemListener.bind(this)
@@ -153,9 +192,33 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
         this.forceUpdate()
     }
 
+    onModalSaveClick(data: BaseDialogBodyState | null) {
+        this.onModalClose()
+        if (data != null)
+            this.addItem(data)
+    }
+
+    onModalDismissClick() {
+        this.onModalClose()
+    }
+
+    onModalClose() {
+        this.setState({
+            isModalOpen: false,
+            newOperation: null
+        })
+    }
+
     render() {
         return (
             <div className={styles.App}>
+                <AddNodeDialog onSaveClick={this.onModalSaveClick.bind(this)}
+                               onDismissClick={this.onModalDismissClick.bind(this)}
+                               onClose={this.onModalClose.bind(this)}
+                               aria-labelledby="simple-dialog-title"
+                               open={this.state.isModalOpen}
+                               type={Operations.VARIABLE}/>
+
                 <ReflexContainer orientation="vertical">
                     <ReflexElement minSize={250}>
                         <ReflexContainer orientation="horizontal" style={{height: "100vh"}}>
@@ -169,9 +232,16 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
 
                             <ReflexElement className="left-pane" minSize={200}>
                                 <ShapePanel>
-                                    <ShapeItem model={{type: "in"}} name="In"/>
-                                    <ShapeItem model={{type: "out"}} name="Out"/>
-                                    <ShapeItem model={{type: "in-out"}} name="InOut"/>
+                                    <ShapeItem model={{type: Operations.WHILE.toString()}}
+                                               name={Operations.WHILE.toString()}/>
+                                    <ShapeItem model={{type: Operations.FOR.toString()}}
+                                               name={Operations.FOR.toString()}/>
+                                    <ShapeItem model={{type: Operations.SWITCH.toString()}}
+                                               name={Operations.SWITCH.toString()}/>
+                                    <ShapeItem model={{type: Operations.IF.toString()}}
+                                               name={Operations.IF.toString()}/>
+                                    <ShapeItem model={{type: Operations.VARIABLE.toString()}}
+                                               name={Operations.VARIABLE.toString()}/>
                                 </ShapePanel>
                             </ReflexElement>
                         </ReflexContainer>
@@ -201,7 +271,12 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
                         <ReflexContainer orientation="horizontal" style={{height: "100vh"}}>
                             <ReflexElement className="right-pane" flex={0.5} minSize={200}>
                                 <div
-                                    style={{width: "100%", height: "100%", backgroundColor: "#1d1f21", color: "white"}}>
+                                    style={{
+                                        width: "100%",
+                                        height: "100%",
+                                        backgroundColor: "#1d1f21",
+                                        color: "white"
+                                    }}>
                                     {this.state.selectedStr}
                                 </div>
                             </ReflexElement>

@@ -1,6 +1,7 @@
 export enum Operations {
-    IF,
-    SWITCH,
-    FOR,
-    WHILE
+    IF = "If",
+    SWITCH = "Switch",
+    FOR = "For",
+    WHILE = "While",
+    VARIABLE = "Variable"
 }
