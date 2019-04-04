@@ -42,8 +42,11 @@ const json = "[\n" +
     "    \"id\": 0,\n" +
     "    \"type\": \"input\",\n" +
     "    \"inputFlowContent\": {\n" +
-    "      \"writeToVar\": \"first\",\n" +
-    "      \"type\": \"Int\",\n" +
+    "      \"variable\" : {\n" +
+    "        \"name\" : \"first\",\n" +
+    "        \"type\" : \"INT\"\n" +
+    "      },\n" +
+    "      \"type\": \"INT\",\n" +
     "      \"nextFlowId\": 1\n" +
     "    },\n" +
     "    \"outputFlowContent\": null,\n" +
@@ -54,8 +57,10 @@ const json = "[\n" +
     "    \"id\": 1,\n" +
     "    \"type\": \"input\",\n" +
     "    \"inputFlowContent\": {\n" +
-    "      \"writeToVar\": \"second\",\n" +
-    "      \"type\": \"Int\",\n" +
+    "      \"variable\" : {\n" +
+    "        \"name\" : \"second\",\n" +
+    "        \"type\" : \"INT\"\n" +
+    "      },\n" +
     "      \"nextFlowId\": 2\n" +
     "    },\n" +
     "    \"outputFlowContent\": null,\n" +
@@ -66,8 +71,10 @@ const json = "[\n" +
     "    \"id\": 2,\n" +
     "    \"type\": \"arithmetic\",\n" +
     "    \"arithmeticFlowContent\": {\n" +
-    "      \"writeToVar\": \"product\",\n" +
-    "      \"operation\": \"Multiplication\",\n" +
+    "      \"variable\" : {\n" +
+    "        \"name\" : \"product\"\n" +
+    "      },\n" +
+    "      \"operation\": \"MULTIPLICATION\",\n" +
     "      \"operator1Name\": \"first\",\n" +
     "      \"operator2Name\": \"second\",\n" +
     "      \"nextFlowId\": 3\n" +
@@ -80,8 +87,10 @@ const json = "[\n" +
     "    \"id\": 3,\n" +
     "    \"type\": \"output\",\n" +
     "    \"outputFlowContent\": {\n" +
-    "      \"writeFromVar\": \"product\",\n" +
-    "      \"type\": \"Int\",\n" +
+    "      \"variable\" : {\n" +
+    "        \"name\" : \"product\",\n" +
+    "        \"type\" : \"INT\"\n" +
+    "      },\n" +
     "      \"nextFlowId\": -1\n" +
     "    },\n" +
     "    \"inputFlowContent\": null,\n" +

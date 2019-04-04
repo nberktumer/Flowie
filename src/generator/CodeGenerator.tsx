@@ -1,10 +1,10 @@
 import {CodeWriter} from "./CodeWriter";
-import {BaseFlow} from "./models/BaseFlow";
+import {BaseFlow} from "./flows/BaseFlow";
 import {FlowModel} from "./FlowModelJSON";
-import {AssignmentFlow} from "./AssignmentFlow";
-import {InputFlow} from "./InputFlow";
-import {OutputFlow} from "./OutputFlow";
-import {ArithmeticFlow} from "./ArithmeticFlow";
+import {AssignmentFlow} from "./flows/AssignmentFlow";
+import {InputFlow} from "./flows/InputFlow";
+import {OutputFlow} from "./flows/OutputFlow";
+import {ArithmeticFlow} from "./flows/ArithmeticFlow";
 
 export class CodeGenerator {
 

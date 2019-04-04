@@ -1,7 +1,7 @@
-import {ArithmeticFlowContent} from "./ArithmeticFlow";
-import {OutputFlowContent} from "./OutputFlow";
-import {InputFlowContent} from "./InputFlow";
-import {AssignmentFlowContent} from "./AssignmentFlow";
+import {ArithmeticFlowContent} from "./flows/ArithmeticFlow";
+import {OutputFlowContent} from "./flows/OutputFlow";
+import {InputFlowContent} from "./flows/InputFlow";
+import {AssignmentFlowContent} from "./flows/AssignmentFlow";
 
 export class FlowModel {
     type: string

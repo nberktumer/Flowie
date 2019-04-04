@@ -1,7 +1,7 @@
-import {BaseFlow} from "./models/BaseFlow";
-import {VariableType} from "../models/VariableEnums";
-import {Func, Parameter} from "./Func";
-import {CodeWriter} from "./CodeWriter";
+import {BaseFlow} from "./BaseFlow";
+import {Func, Parameter} from "../Func";
+import {CodeWriter} from "../CodeWriter";
+import {Variable} from "../../models/Variable";
 
 export class OutputFlow implements BaseFlow {
 
@@ -27,8 +27,8 @@ export class OutputFlow implements BaseFlow {
         const functionLines: string[] = []
         const parameters: Parameter[] = [
             new Parameter(
-                this.content.writeFromVar,
-                this.content.type.toString()
+                this.content.variable.name,
+                this.content.variable.type.toString()
             )
         ]
 
@@ -40,14 +40,14 @@ export class OutputFlow implements BaseFlow {
         )
 
         functionLines.push("print(\"Value of \")")
-        functionLines.push(`print("${this.content.writeFromVar}is ")`)
-        functionLines.push(`println(${this.content.writeFromVar})`)
+        functionLines.push(`print("${this.content.variable.name}is ")`)
+        functionLines.push(`println(${this.content.variable.name})`)
         CodeWriter.getInstance().writeFunction(func)
 
     }
 
     functionInvocation(): string {
-        return `${this.functionName()}(${this.content.writeFromVar})`
+        return `${this.functionName()}(${this.content.variable.name})`
     }
 
     functionName(): string {
@@ -58,20 +58,21 @@ export class OutputFlow implements BaseFlow {
         return this.content.nextFlowId
     }
 
+    hasExternalDependencies(): boolean {
+        return false;
+    }
+
 }
 
 export class OutputFlowContent {
-    writeFromVar: string
-    type: VariableType
+    variable: Variable
     nextFlowId: number
 
     constructor(
-        writeToVar: string,
-        type: VariableType,
+        variable: Variable,
         nextFlowId: number
     ) {
-        this.writeFromVar = writeToVar
-        this.type = type
+        this.variable = variable
         this.nextFlowId = nextFlowId
     }
 }

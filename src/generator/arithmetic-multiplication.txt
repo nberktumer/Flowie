@@ -3,8 +3,11 @@
     "id": 0,
     "type": "input",
     "inputFlowContent": {
-      "writeToVar": "first",
-      "type": "INT",
+      "variable" : {
+        "name" : "first",
+        "type" : "INT",
+        "value" : "asd"
+      },
       "nextFlowId": 1
     },
     "outputFlowContent": null,
@@ -15,8 +18,12 @@
     "id": 1,
     "type": "input",
     "inputFlowContent": {
-      "writeToVar": "second",
-      "type": "INT",
+      "variable" : {
+        "name" : "second",
+        "type" : "INT",
+        "value" : "asd"
+
+      },
       "nextFlowId": 2
     },
     "outputFlowContent": null,
@@ -27,7 +34,11 @@
     "id": 2,
     "type": "arithmetic",
     "arithmeticFlowContent": {
-      "writeToVar": "product",
+      "variable" : {
+        "name" : "product",
+        "type" : "INT",
+        "value" : "asd"
+      },
       "operation": "MULTIPLICATION",
       "operator1Name": "first",
       "operator2Name": "second",
@@ -41,8 +52,11 @@
     "id": 3,
     "type": "output",
     "outputFlowContent": {
-      "writeFromVar": "product",
-      "type": "INT",
+      "variable" : {
+        "name" : "product",
+        "type" : "INT",
+        "value" : "asd"
+      },
       "nextFlowId": -1
     },
     "inputFlowContent": null,
