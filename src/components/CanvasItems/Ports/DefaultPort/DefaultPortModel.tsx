@@ -1,27 +1,28 @@
-import {DefaultLinkModel, DiagramEngine, LinkModel, PortModel} from "storm-react-diagrams"
 import * as _ from "lodash"
+import {DefaultLinkModel, DiagramEngine, LinkModel, PortModel} from "storm-react-diagrams"
+import {DefaultPortType} from "./DefaultPortType"
 
-export class SingleConnectionPort extends PortModel {
-    in: boolean
+export class DefaultPortModel extends PortModel {
+    portType: DefaultPortType
     label: string
     links: { [id: string]: DefaultLinkModel }
 
-    constructor(isInput: boolean, name: string, label: string | null = null, id?: string) {
-        super(name, "single", id)
-        this.in = isInput
+    constructor(portType: DefaultPortType, name: string, label: string | null = null, id?: string) {
+        super(name, "default", id)
+        this.portType = portType
         this.label = label || name
         this.links = {}
     }
 
     deSerialize(object: any, engine: DiagramEngine) {
         super.deSerialize(object, engine)
-        this.in = object.in
+        this.portType = object.portType
         this.label = object.label
     }
 
     serialize() {
         return _.merge(super.serialize(), {
-            in: this.in,
+            portType: this.portType,
             label: this.label
         })
     }
@@ -33,7 +34,7 @@ export class SingleConnectionPort extends PortModel {
         return link
     }
 
-    canLinkToPort(port: PortModel): boolean {
+    canLinkToPort(port: DefaultPortModel): boolean {
         if (Object.keys(port.getLinks()).length > port.getMaximumLinks() || Object.keys(this.getLinks()).length > port.getMaximumLinks())
             return false
 
@@ -41,14 +42,13 @@ export class SingleConnectionPort extends PortModel {
         if (port.getNode() === this.getNode())
             return false
 
-        if (port instanceof SingleConnectionPort) {
-            return this.in !== port.in
-        }
-        return true
+        if (this.portType !== DefaultPortType.OUT)
+            return false
+
+        return port.portType === DefaultPortType.IN || port.portType === DefaultPortType.LOOP
     }
 
     createLinkModel(): LinkModel {
-        console.log("asdasda")
         const link = super.createLinkModel()
         return link || new DefaultLinkModel()
     }

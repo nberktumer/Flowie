@@ -1,9 +1,9 @@
 import * as React from "react"
 import * as _ from "lodash"
-import {BaseWidget, BaseWidgetProps, DefaultPortLabel} from "storm-react-diagrams"
+import {BaseWidget, BaseWidgetProps} from "storm-react-diagrams"
 import {RectangleNodeModel} from "./RectangleNodeModel"
-import {SingleConnectionPort} from "../../../Ports/SingleConnectionPort/SingleConnectionPort"
 import styles from "./RectangleNode.module.css"
+import {DefaultPortLabel, DefaultPortModel} from "../../../Ports/DefaultPort"
 
 export interface RectangleNodeWidgetProps extends BaseWidgetProps {
     node: RectangleNodeModel;
@@ -18,7 +18,7 @@ export class RectangleNodeWidget extends BaseWidget<RectangleNodeWidgetProps, Re
         this.state = {}
     }
 
-    generatePort(port: SingleConnectionPort) {
+    generatePort(port: DefaultPortModel) {
         return <DefaultPortLabel model={port} key={port.id}/>
     }
 

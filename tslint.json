@@ -6,6 +6,10 @@
         "object-literal-sort-keys": false,
         "no-trailing-whitespace": false,
         "ordered-imports": false,
+        "curly": false,
+        "no-bitwise": false,
+        "max-line-length": false,
+        "no-empty-interface": false,
         "member-access": [
             true,
             "no-public"

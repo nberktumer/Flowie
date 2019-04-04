@@ -2,8 +2,8 @@ import React from "react"
 import {MenuItem, TextField} from "@material-ui/core"
 import strings from "../../../lang"
 import {BaseDialogBody, BaseDialogBodyProps} from "./BaseDialogBody"
-import {Rules} from "../../../config"
 import {VariableType} from "../../../models"
+import {Rules} from "../../../config"
 
 export class AddVariableDialogBody extends BaseDialogBody {
 

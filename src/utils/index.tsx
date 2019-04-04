@@ -1,1 +1,1 @@
-export {default as Random} from "./Random"
+export {Random} from "./Random"

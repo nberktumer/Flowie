@@ -1,12 +1,12 @@
 import {DiagramEngine, NodeModel} from "storm-react-diagrams"
 import * as _ from "lodash"
-import {SingleConnectionPort} from "../../../Ports/SingleConnectionPort/SingleConnectionPort"
 import {Random} from "../../../../../utils"
+import {DefaultPortModel, DefaultPortType} from "../../../Ports/DefaultPort"
 
 export class RectangleNodeModel extends NodeModel {
     name: string
     color: string
-    ports: { [s: string]: SingleConnectionPort }
+    ports: { [s: string]: DefaultPortModel }
 
     constructor(name: string = "Untitled", color: string = "rgb(0,192,255)", nodeType: string = "rectangle-node") {
         super(nodeType)
@@ -15,12 +15,12 @@ export class RectangleNodeModel extends NodeModel {
         this.ports = {}
     }
 
-    addInPort(label: string): SingleConnectionPort {
-        return this.addPort(new SingleConnectionPort(true, Random.UID(), label))
+    addInPort(label: string): DefaultPortModel {
+        return this.addPort(new DefaultPortModel(DefaultPortType.IN, Random.UID(), label))
     }
 
-    addOutPort(label: string): SingleConnectionPort {
-        return this.addPort(new SingleConnectionPort(false, Random.UID(), label))
+    addOutPort(label: string): DefaultPortModel {
+        return this.addPort(new DefaultPortModel(DefaultPortType.OUT, Random.UID(), label))
     }
 
     deSerialize(object: any, engine: DiagramEngine) {
@@ -36,15 +36,15 @@ export class RectangleNodeModel extends NodeModel {
         })
     }
 
-    getInPorts(): SingleConnectionPort[] {
+    getInPorts(): DefaultPortModel[] {
         return _.filter(this.ports, (portModel) => {
-            return portModel.in
+            return portModel.portType === DefaultPortType.IN
         })
     }
 
-    getOutPorts(): SingleConnectionPort[] {
+    getOutPorts(): DefaultPortModel[] {
         return _.filter(this.ports, (portModel) => {
-            return !portModel.in
+            return portModel.portType === DefaultPortType.OUT
         })
     }
 }

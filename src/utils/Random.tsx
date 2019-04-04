@@ -1,4 +1,4 @@
-export default class Random {
+export class Random {
     /**
      * Generates a unique ID
      * @returns {String}

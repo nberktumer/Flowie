@@ -10,13 +10,13 @@ import {Operations, ProgrammingLanguage, VariableType} from "../../models"
 import {ProjectTreePanel} from "../../components/ProjectTreePanel/ProjectTreePanel"
 import {TriangleNodeFactory} from "../../components/CanvasItems/Nodes/BaseNodes/TriangleNode/TriangleNodeFactory"
 import {PortFactory} from "../../components/CanvasItems/Ports/PortFactory"
-import {SingleConnectionPort} from "../../components/CanvasItems/Ports/SingleConnectionPort/SingleConnectionPort"
 import {RectangleNodeFactory} from "../../components/CanvasItems/Nodes/BaseNodes/RectangleNode/RectangleNodeFactory"
 import {RectangleNodeWithInfoFactory} from "../../components/CanvasItems/Nodes/BaseNodes/RectangleNode/RectangleNodeWithInfo/RectangleNodeWithInfoFactory"
 import {VariableNodeModel} from "../../components/CanvasItems/Nodes/VariableNode/VariableNodeModel"
 import {AddNodeDialog} from "../../components/AddNodeDialog/AddNodeDialog"
 import {BaseDialogBodyState} from "../../components/AddNodeDialog/DialogBody/BaseDialogBody"
 import {CodeGenerator} from "../../generator/CodeGenerator"
+import {DefaultPortModel, DefaultPortType} from "../../components/CanvasItems/Ports/DefaultPort"
 
 const exampleCode = `class Editor extends Component {
     private readonly activeModel: SRD.DiagramModel
@@ -116,7 +116,7 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
         this.diagramEngine.registerNodeFactory(new TriangleNodeFactory())
         this.diagramEngine.registerNodeFactory(new RectangleNodeFactory())
         this.diagramEngine.registerNodeFactory(new RectangleNodeWithInfoFactory())
-        this.diagramEngine.registerPortFactory(new PortFactory("single", () => new SingleConnectionPort(true, "unknown")))
+        this.diagramEngine.registerPortFactory(new PortFactory("single", () => new DefaultPortModel(DefaultPortType.IN, "unknown")))
 
         this.activeModel = new DiagramModel()
         this.diagramEngine.setDiagramModel(this.activeModel)
