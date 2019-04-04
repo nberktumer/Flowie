@@ -20,6 +20,8 @@
                 "timeEnd",
                 "trace"
             ]
-        }
+        },
+        "interface-name": false,
+        "max-classes-per-file": false
     }
 }

@@ -8,6 +8,7 @@ import {ShapeItem} from "../../components/ShapePanel/ShapeItem"
 import {CodePreviewPanel} from "../../components/CodePreviewPanel/CodePreviewPanel"
 import {ProgrammingLanguage} from "../../models"
 import {ProjectTreePanel} from "../../components/ProjectTreePanel/ProjectTreePanel"
+import {CodeGenerator} from "../../generator/CodeGenerator";
 
 const exampleCode = `class Editor extends Component {
     private readonly activeModel: SRD.DiagramModel
@@ -27,6 +28,59 @@ const exampleCode = `class Editor extends Component {
         this.state = {height: "1px", width: "1px"}
     }
 }`
+
+const json = "[\n" +
+    "  {\n" +
+    "    \"id\": 0,\n" +
+    "    \"type\": \"input\",\n" +
+    "    \"inputFlowContent\": {\n" +
+    "      \"writeToVar\": \"first\",\n" +
+    "      \"type\": \"Int\",\n" +
+    "      \"nextFlowId\": 1\n" +
+    "    },\n" +
+    "    \"outputFlowContent\": null,\n" +
+    "    \"arithmeticFlowContent\": null,\n" +
+    "    \"forFlowContent\": null\n" +
+    "  },\n" +
+    "  {\n" +
+    "    \"id\": 1,\n" +
+    "    \"type\": \"input\",\n" +
+    "    \"inputFlowContent\": {\n" +
+    "      \"writeToVar\": \"second\",\n" +
+    "      \"type\": \"Int\",\n" +
+    "      \"nextFlowId\": 2\n" +
+    "    },\n" +
+    "    \"outputFlowContent\": null,\n" +
+    "    \"arithmeticFlowContent\": null,\n" +
+    "    \"forFlowContent\": null\n" +
+    "  },\n" +
+    "  {\n" +
+    "    \"id\": 2,\n" +
+    "    \"type\": \"arithmetic\",\n" +
+    "    \"arithmeticFlowContent\": {\n" +
+    "      \"writeToVar\": \"product\",\n" +
+    "      \"operation\": \"Multiplication\",\n" +
+    "      \"operator1Name\": \"first\",\n" +
+    "      \"operator2Name\": \"second\",\n" +
+    "      \"nextFlowId\": 3\n" +
+    "    },\n" +
+    "    \"outputFlowContent\": null,\n" +
+    "    \"inputFlowContent\": null,\n" +
+    "    \"forFlowContent\": null\n" +
+    "  },\n" +
+    "  {\n" +
+    "    \"id\": 3,\n" +
+    "    \"type\": \"output\",\n" +
+    "    \"outputFlowContent\": {\n" +
+    "      \"writeFromVar\": \"product\",\n" +
+    "      \"type\": \"Int\",\n" +
+    "      \"nextFlowId\": -1\n" +
+    "    },\n" +
+    "    \"inputFlowContent\": null,\n" +
+    "    \"arithmeticFlowContent\": null,\n" +
+    "    \"forFlowContent\": null\n" +
+    "  }\n" +
+    "]"
 
 export interface IEditorProps {
 }
@@ -59,6 +113,10 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
         })
 
         this.state = {height: "1px", width: "1px", selectedStr: "Nothing is selected!"}
+
+        const generator = new CodeGenerator(json)
+        generator.generate()
+
     }
 
     onDrop(event: any): void {

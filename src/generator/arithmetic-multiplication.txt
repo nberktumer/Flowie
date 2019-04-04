@@ -1,0 +1,52 @@
+[
+  {
+    "id": 0,
+    "type": "input",
+    "inputFlowContent": {
+      "writeToVar": "first",
+      "type": "INT",
+      "nextFlowId": 1
+    },
+    "outputFlowContent": null,
+    "arithmeticFlowContent": null,
+    "forFlowContent": null
+  },
+  {
+    "id": 1,
+    "type": "input",
+    "inputFlowContent": {
+      "writeToVar": "second",
+      "type": "INT",
+      "nextFlowId": 2
+    },
+    "outputFlowContent": null,
+    "arithmeticFlowContent": null,
+    "forFlowContent": null
+  },
+  {
+    "id": 2,
+    "type": "arithmetic",
+    "arithmeticFlowContent": {
+      "writeToVar": "product",
+      "operation": "MULTIPLICATION",
+      "operator1Name": "first",
+      "operator2Name": "second",
+      "nextFlowId": 3
+    },
+    "outputFlowContent": null,
+    "inputFlowContent": null,
+    "forFlowContent": null
+  },
+  {
+    "id": 3,
+    "type": "output",
+    "outputFlowContent": {
+      "writeFromVar": "product",
+      "type": "INT",
+      "nextFlowId": -1
+    },
+    "inputFlowContent": null,
+    "arithmeticFlowContent": null,
+    "forFlowContent": null
+  }
+]
