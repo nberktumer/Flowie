@@ -22,6 +22,15 @@ export class CodeWriter {
         this.loopStack.push(-1)
     }
 
+    reset() {
+        this.flows = []
+        this.codes = []
+        this.scopeCount = 0
+        this.mainFunctionLineIndex = 0
+        this.variableSet = new Set()
+        this.loopStack = new Stack()
+    }
+
     setFlows(value: BaseFlow[]) {
         this.flows = value;
     }
