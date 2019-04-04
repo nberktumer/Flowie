@@ -17,6 +17,7 @@ export class CodeGenerator {
     }
 
     generate(): string {
+        CodeWriter.getInstance().reset()
         CodeWriter.getInstance().setFlows(this.convertToFlowObjects(JSON.parse(this.flowJson)))
 
         CodeWriter.getInstance().flows.forEach((value) => {
