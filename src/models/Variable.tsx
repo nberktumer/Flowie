@@ -4,11 +4,11 @@ export class Variable {
 
     name: string
     type: VariableType
-    value: object
+    value: any
 
     constructor(name: string,
                 type: VariableType,
-                value: object) {
+                value: any) {
         this.name = name
         this.type = type
         this.value = value

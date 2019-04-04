@@ -1,7 +1,7 @@
 import * as React from "react"
 import {BaseWidget, BaseWidgetProps, PortWidget} from "storm-react-diagrams"
 import {DefaultPortModel} from "./DefaultPortModel"
-import {DefaultPortType} from "./DefaultPortType"
+import {DefaultPortLocation} from "./DefaultPortLocation"
 
 export interface DefaultPortLabelProps extends BaseWidgetProps {
     model: DefaultPortModel;
@@ -19,7 +19,8 @@ export class DefaultPortLabel extends BaseWidget<DefaultPortLabelProps, DefaultP
     }
 
     getClassName() {
-        return super.getClassName() + (this.props.model.portType === DefaultPortType.IN ? this.bem("--in") : this.bem("--out"))
+        return super.getClassName() + (this.props.model.portType.location === DefaultPortLocation.LEFT
+            ? this.bem("--in") : this.bem("--out"))
     }
 
     render() {
@@ -28,8 +29,8 @@ export class DefaultPortLabel extends BaseWidget<DefaultPortLabelProps, DefaultP
 
         return (
             <div {...this.getProps()}>
-                {this.props.model.portType === DefaultPortType.IN ? port : label}
-                {this.props.model.portType === DefaultPortType.IN ? label : port}
+                {this.props.model.portType.location === DefaultPortLocation.LEFT ? port : label}
+                {this.props.model.portType.location === DefaultPortLocation.LEFT ? label : port}
             </div>
         )
     }

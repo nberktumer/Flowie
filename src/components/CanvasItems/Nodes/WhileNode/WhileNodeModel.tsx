@@ -1,20 +1,20 @@
 import {RectangleNodeWithInfoModel} from "../BaseNodes/RectangleNode/RectangleNodeWithInfo/RectangleNodeWithInfoModel"
 import strings from "../../../../lang"
 import {NodeColors} from "../../../../config"
-import {VariableType} from "../../../../models"
 import {DiagramEngine, LinkModel, LinkModelListener} from "storm-react-diagrams"
 import * as _ from "lodash"
+import {Condition} from "../../../../models/Condition"
 
 export class WhileNodeModel extends RectangleNodeWithInfoModel {
     conditionList: Condition[] = []
 
-    constructor(type: VariableType) {
+    constructor() {
         super(strings.while, NodeColors.WHILE)
 
         this.addInPort(strings.in).setMaximumLinks(Infinity)
-        this.addLoopPort(strings.loop).setMaximumLinks(Infinity)
+        this.addInPort(strings.loop).setMaximumLinks(Infinity)
         this.addOutPort(strings.out).setMaximumLinks(1)
-        this.addScopePort(strings.scope).setMaximumLinks(1)
+        this.addOutPort(strings.scope).setMaximumLinks(1)
     }
 
     getNextFlowId() {
@@ -28,16 +28,12 @@ export class WhileNodeModel extends RectangleNodeWithInfoModel {
 
     deSerialize(object: any, engine: DiagramEngine) {
         super.deSerialize(object, engine)
-        this.variableName = object.variableName
-        this.dataType = object.dataType
-        this.value = object.value
+        this.conditionList = object.conditionList
     }
 
     serialize() {
         return _.merge(super.serialize(), {
-            variableName: this.variableName,
-            dataType: this.dataType,
-            value: this.value
+            conditionList: this.conditionList
         })
     }
 }

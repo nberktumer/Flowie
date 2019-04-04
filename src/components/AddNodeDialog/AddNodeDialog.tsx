@@ -7,11 +7,14 @@ import strings from "../../lang"
 import styles from "./AddNodeDialog.module.css"
 import {AddVariableDialogBody} from "./DialogBody/AddVariableDialogBody"
 import {BaseDialogBodyState} from "./DialogBody/BaseDialogBody"
+import {AddWhileDialogBody} from "./DialogBody/AddWhileDialogBody"
+import {Variable} from "../../models/Variable"
 
 export interface AddNodeDialogProps extends DialogProps {
-    type: Operations,
+    type: Operations | null,
     onSaveClick: (data: BaseDialogBodyState | null) => void,
-    onDismissClick: () => void
+    onDismissClick: () => void,
+    variableList: Variable[]
 }
 
 export interface AddNodeDialogState {
@@ -19,6 +22,9 @@ export interface AddNodeDialogState {
 }
 
 export class AddNodeDialog extends Component<AddNodeDialogProps, AddNodeDialogState> {
+    static defaultProps = {
+        variableList: []
+    }
 
     constructor(props: AddNodeDialogProps) {
         super(props)
@@ -27,7 +33,6 @@ export class AddNodeDialog extends Component<AddNodeDialogProps, AddNodeDialogSt
             bodyData: null
         }
     }
-
 
     onBodyChanged(data: BaseDialogBodyState) {
         this.setState({bodyData: data})
@@ -43,10 +48,28 @@ export class AddNodeDialog extends Component<AddNodeDialogProps, AddNodeDialogSt
             this.props.onDismissClick()
     }
 
+    getDialogBody() {
+        switch (this.props.type) {
+            case Operations.WHILE:
+                return (<AddWhileDialogBody variableList={this.props.variableList}
+                                            onDataChanged={this.onBodyChanged.bind(this)}/>)
+            case Operations.FOR:
+                return (<div/>)
+            case Operations.IF:
+                return (<div/>)
+            case Operations.VARIABLE:
+                return (<AddVariableDialogBody onDataChanged={this.onBodyChanged.bind(this)}/>)
+            case Operations.SWITCH:
+                return (<div/>)
+            default:
+                return (<div/>)
+        }
+    }
+
     renderDialogBody() {
         return (
             <div className={styles.addNodeDialogBody}>
-                <AddVariableDialogBody onDataChanged={this.onBodyChanged.bind(this)}/>
+                {this.getDialogBody()}
             </div>
         )
     }

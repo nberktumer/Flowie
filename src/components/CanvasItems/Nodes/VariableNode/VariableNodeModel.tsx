@@ -7,7 +7,7 @@ import * as _ from "lodash"
 
 export class VariableNodeModel extends RectangleNodeWithInfoModel {
     variableName: string | undefined
-    dataType: FlowType | undefined
+    dataType: VariableType | undefined
     value: any
 
     constructor(type: VariableType) {

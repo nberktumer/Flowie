@@ -1,13 +1,13 @@
 import * as _ from "lodash"
 import {DefaultLinkModel, DiagramEngine, LinkModel, PortModel} from "storm-react-diagrams"
-import {DefaultPortType} from "./DefaultPortType"
+import {DefaultPort, DefaultPortType} from "./index"
 
 export class DefaultPortModel extends PortModel {
-    portType: DefaultPortType
+    portType: DefaultPort
     label: string
     links: { [id: string]: DefaultLinkModel }
 
-    constructor(portType: DefaultPortType, name: string, label: string | null = null, id?: string) {
+    constructor(portType: DefaultPort, name: string, label: string | null = null, id?: string) {
         super(name, "default", id)
         this.portType = portType
         this.label = label || name
@@ -18,12 +18,14 @@ export class DefaultPortModel extends PortModel {
         super.deSerialize(object, engine)
         this.portType = object.portType
         this.label = object.label
+        this.links = object.links
     }
 
     serialize() {
         return _.merge(super.serialize(), {
             portType: this.portType,
-            label: this.label
+            label: this.label,
+            links: this.links
         })
     }
 
@@ -42,9 +44,9 @@ export class DefaultPortModel extends PortModel {
         if (port.getNode() === this.getNode())
             return false
 
-        return (this.portType === DefaultPortType.OUT && port.portType === DefaultPortType.IN)
-            || (this.portType === DefaultPortType.OUT && port.portType === DefaultPortType.LOOP)
-            || (this.portType === DefaultPortType.SCOPE && port.portType === DefaultPortType.IN)
+        return (this.portType.type === DefaultPortType.OUT && port.portType.type === DefaultPortType.IN)
+            || (this.portType.type === DefaultPortType.OUT && port.portType.type === DefaultPortType.LOOP)
+            || (this.portType.type === DefaultPortType.SCOPE && port.portType.type === DefaultPortType.IN)
     }
 
     createLinkModel(): LinkModel {

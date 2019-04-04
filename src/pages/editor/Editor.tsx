@@ -2,13 +2,12 @@ import React, {Component} from "react"
 import styles from "./Editor.module.css"
 import * as _ from "lodash"
 import {ReflexContainer, ReflexElement, ReflexSplitter} from "react-reflex"
-import {DefaultNodeModel, DiagramEngine, DiagramModel, DiagramWidget} from "storm-react-diagrams"
+import {BaseEvent, BaseModel, DefaultNodeModel, DiagramEngine, DiagramModel, DiagramWidget} from "storm-react-diagrams"
 import {ShapePanel} from "../../components/ShapePanel/ShapePanel"
 import {ShapeItem} from "../../components/ShapePanel/ShapeItem"
 import {CodePreviewPanel} from "../../components/CodePreviewPanel/CodePreviewPanel"
 import {Operations, ProgrammingLanguage, VariableType} from "../../models"
 import {ProjectTreePanel} from "../../components/ProjectTreePanel/ProjectTreePanel"
-import {TriangleNodeFactory} from "../../components/CanvasItems/Nodes/BaseNodes/TriangleNode/TriangleNodeFactory"
 import {PortFactory} from "../../components/CanvasItems/Ports/PortFactory"
 import {RectangleNodeFactory} from "../../components/CanvasItems/Nodes/BaseNodes/RectangleNode/RectangleNodeFactory"
 import {RectangleNodeWithInfoFactory} from "../../components/CanvasItems/Nodes/BaseNodes/RectangleNode/RectangleNodeWithInfo/RectangleNodeWithInfoFactory"
@@ -16,7 +15,16 @@ import {VariableNodeModel} from "../../components/CanvasItems/Nodes/VariableNode
 import {AddNodeDialog} from "../../components/AddNodeDialog/AddNodeDialog"
 import {BaseDialogBodyState} from "../../components/AddNodeDialog/DialogBody/BaseDialogBody"
 import {CodeGenerator} from "../../generator/CodeGenerator"
-import {DefaultPortModel, DefaultPortType} from "../../components/CanvasItems/Ports/DefaultPort"
+import {
+    DefaultPort,
+    DefaultPortLocation,
+    DefaultPortModel,
+    DefaultPortType
+} from "../../components/CanvasItems/Ports/DefaultPort"
+import {WhileNodeModel} from "../../components/CanvasItems/Nodes/WhileNode/WhileNodeModel"
+import {Variable} from "../../models/Variable"
+import {Condition} from "../../models/Condition"
+import {InitialNode} from "../../components/CanvasItems/Nodes/InitialNode/InitialNode"
 
 const exampleCode = `class Editor extends Component {
     private readonly activeModel: SRD.DiagramModel
@@ -108,7 +116,8 @@ export interface IEditorState {
     selectedStr: string,
     isModalOpen: boolean,
     newOperation: Operations | null,
-    newItemPosition: { x: number, y: number }
+    newItemPosition: { x: number, y: number },
+    variableList: Variable[]
 }
 
 export default class Editor extends Component<IEditorProps, IEditorState> {
@@ -122,10 +131,10 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
         this.diagramEngine = new DiagramEngine()
         this.diagramEngine.installDefaultFactories()
 
-        this.diagramEngine.registerNodeFactory(new TriangleNodeFactory())
         this.diagramEngine.registerNodeFactory(new RectangleNodeFactory())
         this.diagramEngine.registerNodeFactory(new RectangleNodeWithInfoFactory())
-        this.diagramEngine.registerPortFactory(new PortFactory("single", () => new DefaultPortModel(DefaultPortType.IN, "unknown")))
+        this.diagramEngine.registerPortFactory(new PortFactory("default", () => new DefaultPortModel(
+            new DefaultPort(DefaultPortType.IN, DefaultPortLocation.LEFT), "unknown")))
 
         this.activeModel = new DiagramModel()
         this.diagramEngine.setDiagramModel(this.activeModel)
@@ -136,17 +145,26 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
             })
         })
 
+        const initialNode = new InitialNode()
+        initialNode.addListener({
+            selectionChanged: this.addItemListener.bind(this),
+            entityRemoved: this.removeItemListener.bind(this)
+        })
+
+        this.diagramEngine.getDiagramModel().addNode(initialNode)
+
         this.state = {
             height: "1px",
             width: "1px",
             selectedStr: "Nothing is selected!",
             isModalOpen: false,
             newOperation: null,
-            newItemPosition: {x: 0, y: 0}
+            newItemPosition: {x: 0, y: 0},
+            variableList: []
         }
 
         const generator = new CodeGenerator(json)
-        generator.generate()
+        // generator.generate()
     }
 
     onDrop(event: any): void {
@@ -169,11 +187,18 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
 
         switch (this.state.newOperation) {
             case Operations.VARIABLE:
-                if (data.variableName === "" || data.value === "")
+                if (data.variableName === "" || data.value === "" || data.variableName === undefined)
                     return
 
                 node = new VariableNodeModel(data.variableType as VariableType)
                 node.info = data.variableName + " = " + data.value
+                node.variableName = data.variableName
+                node.dataType = data.variableType as VariableType
+                node.value = data.value
+
+                // Add the new variable to the variable list
+                this.state.variableList.push(new Variable(data.variableName, data.variableType as VariableType, data.value))
+
                 break
             case Operations.IF:
                 break
@@ -182,6 +207,14 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
             case Operations.SWITCH:
                 break
             case Operations.WHILE:
+                if (data.variableType === "" || data.first === "" || data.second === "" || data.operation === "")
+                    return
+
+                const condition = new Condition(data.variableType, JSON.parse(data.first), JSON.parse(data.second), data.operation)
+
+                node = new WhileNodeModel()
+                node.conditionList.push(condition)
+                node.info = condition.first.name + " " + condition.operation + " " + condition.second.name
                 break
             default:
                 return
@@ -194,7 +227,8 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
         node.y = this.state.newItemPosition.y
 
         node.addListener({
-            selectionChanged: this.addItemListener.bind(this)
+            selectionChanged: this.addItemListener.bind(this),
+            entityRemoved: this.removeItemListener.bind(this)
         })
 
         this.diagramEngine.getDiagramModel().addNode(node)
@@ -225,8 +259,9 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
                                onDismissClick={this.onModalDismissClick.bind(this)}
                                onClose={this.onModalClose.bind(this)}
                                aria-labelledby="simple-dialog-title"
+                               variableList={this.state.variableList}
                                open={this.state.isModalOpen}
-                               type={Operations.VARIABLE}/>
+                               type={this.state.newOperation}/>
 
                 <ReflexContainer orientation="vertical">
                     <ReflexElement minSize={250}>
@@ -321,6 +356,28 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
                         (this.selected.length === 1 ? " is " : " are ") + "selected."
                 })
             }
+        }
+    }
+
+    private removeItemListener(event: BaseEvent<BaseModel>) {
+        if (event.entity instanceof VariableNodeModel) {
+            const newVariableList = this.state.variableList.filter((value) => {
+                return value.name !== (event.entity as VariableNodeModel).variableName
+            })
+
+            this.setState({variableList: newVariableList})
+        }
+
+        const index = this.selected.indexOf((event.entity as DefaultNodeModel).name)
+        this.selected.splice(index, 1)
+
+        if (this.selected.length === 0) {
+            this.setState({selectedStr: "Nothing is selected!"})
+        } else {
+            this.setState({
+                selectedStr: this.selected.join(", ") +
+                    (this.selected.length === 1 ? " is " : " are ") + "selected."
+            })
         }
     }
 }

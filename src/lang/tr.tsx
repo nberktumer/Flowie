@@ -15,5 +15,12 @@ export default {
     dismiss: "Dismiss",
     variableName: "Variable Name",
     dataType: "Data Type",
-    value: "Value"
+    variableType: "Variable Type",
+    value: "Value",
+    firstVariable: "First Variable",
+    secondVariable: "Second Variable",
+    select: "Select",
+    operation: "Operation",
+    recurse: "Recurse",
+    initialFlow: "Initial Flow"
 }

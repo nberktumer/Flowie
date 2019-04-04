@@ -1,11 +1,12 @@
-import {ConditionOperation, VariableType} from "./VariableEnums";
-import {Variable} from "./Variable";
+import {ConditionOperation, VariableType} from "./VariableEnums"
+import {Variable} from "./Variable"
+import {Random} from "../utils"
 
 export class Condition {
-
+    id: string = Random.UID()
     variableType: VariableType
     first: Variable
-    second: Variable | null
+    second: Variable
     operation: ConditionOperation
 
     constructor(

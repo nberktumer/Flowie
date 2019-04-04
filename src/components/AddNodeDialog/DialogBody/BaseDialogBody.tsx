@@ -5,10 +5,10 @@ export interface BaseDialogBodyProps {
 }
 
 export interface BaseDialogBodyState {
-    [index: string]: string
+    [index: string]: any
 }
 
-export class BaseDialogBody extends Component<BaseDialogBodyProps, BaseDialogBodyState> {
+export class BaseDialogBody<T extends BaseDialogBodyProps = BaseDialogBodyProps, U extends BaseDialogBodyState = BaseDialogBodyState> extends Component<T, U> {
 
     handleChange = (key: string) => (event: any) => {
         this.setState({[key]: event.target.value}, () => {

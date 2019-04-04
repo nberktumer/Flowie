@@ -1,7 +1,7 @@
 import {DiagramEngine, NodeModel} from "storm-react-diagrams"
 import * as _ from "lodash"
 import {Random} from "../../../../../utils"
-import {DefaultPortModel, DefaultPortType} from "../../../Ports/DefaultPort"
+import {DefaultPort, DefaultPortLocation, DefaultPortModel, DefaultPortType} from "../../../Ports/DefaultPort"
 
 export class RectangleNodeModel extends NodeModel {
     name: string
@@ -16,19 +16,19 @@ export class RectangleNodeModel extends NodeModel {
     }
 
     addInPort(label: string): DefaultPortModel {
-        return this.addPort(new DefaultPortModel(DefaultPortType.IN, Random.UID(), label))
+        return this.addPort(new DefaultPortModel(new DefaultPort(DefaultPortType.IN, DefaultPortLocation.LEFT), Random.UID(), label))
     }
 
     addOutPort(label: string): DefaultPortModel {
-        return this.addPort(new DefaultPortModel(DefaultPortType.OUT, Random.UID(), label))
+        return this.addPort(new DefaultPortModel(new DefaultPort(DefaultPortType.OUT, DefaultPortLocation.RIGHT), Random.UID(), label))
     }
 
     addLoopPort(label: string): DefaultPortModel {
-        return this.addPort(new DefaultPortModel(DefaultPortType.LOOP, Random.UID(), label))
+        return this.addPort(new DefaultPortModel(new DefaultPort(DefaultPortType.LOOP, DefaultPortLocation.LEFT), Random.UID(), label))
     }
 
     addScopePort(label: string): DefaultPortModel {
-        return this.addPort(new DefaultPortModel(DefaultPortType.SCOPE, Random.UID(), label))
+        return this.addPort(new DefaultPortModel(new DefaultPort(DefaultPortType.SCOPE, DefaultPortLocation.RIGHT), Random.UID(), label))
     }
 
     deSerialize(object: any, engine: DiagramEngine) {
@@ -46,25 +46,25 @@ export class RectangleNodeModel extends NodeModel {
 
     getInPorts(): DefaultPortModel[] {
         return _.filter(this.ports, (portModel) => {
-            return portModel.portType === DefaultPortType.IN
+            return portModel.portType.type === DefaultPortType.IN
         })
     }
 
     getOutPorts(): DefaultPortModel[] {
         return _.filter(this.ports, (portModel) => {
-            return portModel.portType === DefaultPortType.OUT
+            return portModel.portType.type === DefaultPortType.OUT
         })
     }
 
     getLoopPorts(): DefaultPortModel[] {
         return _.filter(this.ports, (portModel) => {
-            return portModel.portType === DefaultPortType.LOOP
+            return portModel.portType.type === DefaultPortType.LOOP
         })
     }
 
     getScopePorts(): DefaultPortModel[] {
         return _.filter(this.ports, (portModel) => {
-            return portModel.portType === DefaultPortType.SCOPE
+            return portModel.portType.type === DefaultPortType.SCOPE
         })
     }
 }
