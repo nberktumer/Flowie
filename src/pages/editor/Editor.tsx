@@ -44,9 +44,8 @@ const json = "[\n" +
     "    \"inputFlowContent\": {\n" +
     "      \"variable\" : {\n" +
     "        \"name\" : \"first\",\n" +
-    "        \"type\" : \"INT\"\n" +
+    "        \"type\" : \"Int\"\n" +
     "      },\n" +
-    "      \"type\": \"INT\",\n" +
     "      \"nextFlowId\": 1\n" +
     "    },\n" +
     "    \"outputFlowContent\": null,\n" +
@@ -59,7 +58,7 @@ const json = "[\n" +
     "    \"inputFlowContent\": {\n" +
     "      \"variable\" : {\n" +
     "        \"name\" : \"second\",\n" +
-    "        \"type\" : \"INT\"\n" +
+    "        \"type\" : \"Int\"\n" +
     "      },\n" +
     "      \"nextFlowId\": 2\n" +
     "    },\n" +
@@ -74,7 +73,7 @@ const json = "[\n" +
     "      \"variable\" : {\n" +
     "        \"name\" : \"product\"\n" +
     "      },\n" +
-    "      \"operation\": \"MULTIPLICATION\",\n" +
+    "      \"operation\": \"Multiplication\",\n" +
     "      \"operator1Name\": \"first\",\n" +
     "      \"operator2Name\": \"second\",\n" +
     "      \"nextFlowId\": 3\n" +
@@ -89,7 +88,7 @@ const json = "[\n" +
     "    \"outputFlowContent\": {\n" +
     "      \"variable\" : {\n" +
     "        \"name\" : \"product\",\n" +
-    "        \"type\" : \"INT\"\n" +
+    "        \"type\" : \"Int\"\n" +
     "      },\n" +
     "      \"nextFlowId\": -1\n" +
     "    },\n" +

@@ -77,7 +77,7 @@ export class CodeWriter {
         })
 
         this.writeLine(`fun ${func.functionName}(${parameterString})${returnTypeString}`)
-        this.appendToLastLine("{")
+        this.appendToLastLine(" {")
         this.scopeCount++
 
         func.codeLines.forEach((value) => {
