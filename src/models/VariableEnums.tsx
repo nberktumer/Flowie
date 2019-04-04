@@ -4,10 +4,10 @@ export enum VariableType {
 }
 
 export enum ArithmeticOperationType {
-    ADDITION,
-    SUBSTRACTION,
-    MULTIPLICATION,
-    DIVISION
+    ADDITION = "Addition",
+    SUBTRACTION = "Subtraction",
+    MULTIPLICATION = "Multiplication",
+    DIVISION = "Division"
 }
 
 export enum FlowType {
@@ -18,4 +18,8 @@ export enum FlowType {
     OUTPUT = "Output",
     ARITHMETIC = "Arithmetic",
     ASSIGNMENT = "Assignment"
+}
+
+export enum ConditionOperation {
+    EQUALS = "Equals"
 }

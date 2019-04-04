@@ -1,7 +1,8 @@
-import {BaseFlow} from "./models/BaseFlow";
-import {VariableType} from "../models/VariableEnums";
-import {Func, Parameter} from "./Func";
-import {CodeWriter} from "./CodeWriter";
+import {BaseFlow} from "./BaseFlow";
+import {VariableType} from "../../models/VariableEnums";
+import {Func, Parameter} from "../Func";
+import {CodeWriter} from "../CodeWriter";
+import {Variable} from "../../models/Variable";
 
 export class InputFlow implements BaseFlow {
 
@@ -20,17 +21,17 @@ export class InputFlow implements BaseFlow {
 
     createMainCode(): void {
         CodeWriter.getInstance().writeLineToMainFunction(
-            `val ${this.content.writeToVar} = ${this.functionInvocation()}`
+            `val ${this.content.variable.name} = ${this.functionInvocation()}`
         )
         CodeWriter.getInstance().writeCodeFromFlowIndex(this.nextFlow())
     }
 
     createFunctionCode(): void {
         const functionLines: string[] = []
-        functionLines.push(`println("Please enter value for ${this.content.writeToVar}")`)
+        functionLines.push(`println("Please enter value for ${this.content.variable.name}")`)
 
         let scanCode = ""
-        switch (this.content.type) {
+        switch (this.content.variable.type) {
             case VariableType.INT:
                 scanCode = "readLine()!!.toInt()"
                 break
@@ -41,15 +42,15 @@ export class InputFlow implements BaseFlow {
                 break
         }
 
-        functionLines.push(`val ${this.content.writeToVar} = ${scanCode}`)
-        functionLines.push(`return ${this.content.writeToVar}`)
+        functionLines.push(`val ${this.content.variable.name} = ${scanCode}`)
+        functionLines.push(`return ${this.content.variable.name}`)
 
         const parameters: Parameter[] = []
 
         const func = new Func(
             this.functionName(),
             parameters,
-            this.content.type.toString(),
+            this.content.variable.type.toString(),
             functionLines
         )
 
@@ -68,20 +69,21 @@ export class InputFlow implements BaseFlow {
         return this.content.nextFlowId;
     }
 
+    hasExternalDependencies(): boolean {
+        return false;
+    }
+
 }
 
 export class InputFlowContent {
-    writeToVar: string
-    type: VariableType
+    variable: Variable
     nextFlowId: number
 
     constructor(
-        writeToVar: string,
-        type: VariableType,
+        variable: Variable,
         nextFlowId: number
     ) {
-        this.writeToVar = writeToVar
-        this.type = type
+        this.variable = variable
         this.nextFlowId = nextFlowId
     }
 }

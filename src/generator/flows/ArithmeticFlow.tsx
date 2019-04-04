@@ -1,7 +1,8 @@
-import {BaseFlow} from "./models/BaseFlow";
-import {ArithmeticOperationType, VariableType} from "../models/VariableEnums";
-import {Func, Parameter} from "./Func";
-import {CodeWriter} from "./CodeWriter";
+import {BaseFlow} from "./BaseFlow";
+import {ArithmeticOperationType, VariableType} from "../../models";
+import {Func, Parameter} from "../Func";
+import {CodeWriter} from "../CodeWriter";
+import {Variable} from "../../models/Variable";
 
 export class ArithmeticFlow implements BaseFlow {
 
@@ -19,8 +20,13 @@ export class ArithmeticFlow implements BaseFlow {
     }
 
     createMainCode(): void {
+        console.log(VariableType.INT)
+        console.log(VariableType.INT.toString())
+        console.log(this.content.operation)
+        console.log(ArithmeticOperationType.MULTIPLICATION.toString())
+
         CodeWriter.getInstance().writeLineToMainFunction(
-            `val ${this.content.writeToVar} = ${this.functionInvocation()}`
+            `val ${this.content.variable.name} = ${this.functionInvocation()}`
         )
         CodeWriter.getInstance().writeCodeFromFlowIndex(this.nextFlow())
     }
@@ -44,7 +50,7 @@ export class ArithmeticFlow implements BaseFlow {
             case ArithmeticOperationType.ADDITION:
                 operationCode = "+"
                 break;
-            case ArithmeticOperationType.SUBSTRACTION:
+            case ArithmeticOperationType.SUBTRACTION:
                 operationCode = "-"
                 break;
             case ArithmeticOperationType.MULTIPLICATION:
@@ -55,11 +61,11 @@ export class ArithmeticFlow implements BaseFlow {
                 break;
         }
 
-        const arithmeticCode = `val ${this.content.writeToVar} = ` +
+        const arithmeticCode = `val ${this.content.variable.name} = ` +
             `${this.content.operator1Name} ${operationCode} ${this.content.operator2Name}`
 
         functionLines.push(arithmeticCode)
-        functionLines.push(`return ${this.content.writeToVar}`)
+        functionLines.push(`return ${this.content.variable.name}`)
 
         const func = new Func(
             this.functionName(),
@@ -84,23 +90,27 @@ export class ArithmeticFlow implements BaseFlow {
         return this.content.nextFlowId
     }
 
+    hasExternalDependencies(): boolean {
+        return false;
+    }
+
 }
 
 export class ArithmeticFlowContent {
-    writeToVar: string
+    variable: Variable
     operation: ArithmeticOperationType
     operator1Name: string
     operator2Name: string
     nextFlowId: number
 
     constructor(
-        writeToVar: string,
+        variable: Variable,
         operation: ArithmeticOperationType,
         operator1Name: string,
         operator2Name: string,
         nextFlowId: number
     ) {
-        this.writeToVar = writeToVar
+        this.variable = variable
         this.operation = operation
         this.operator1Name = operator1Name
         this.operator2Name = operator2Name

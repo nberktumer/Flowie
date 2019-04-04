@@ -1,4 +1,4 @@
-import {BaseFlow} from "./models/BaseFlow";
+import {BaseFlow} from "./flows/BaseFlow";
 import {Func} from "./Func";
 
 export class CodeWriter {
