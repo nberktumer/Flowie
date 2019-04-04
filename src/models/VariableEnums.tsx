@@ -21,5 +21,6 @@ export enum FlowType {
 }
 
 export enum ConditionOperation {
-    EQUALS = "Equals"
+    EQUALS = "Equals",
+    NOT_EQUALS = "NotEquals"
 }

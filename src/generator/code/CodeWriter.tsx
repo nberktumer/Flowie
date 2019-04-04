@@ -1,5 +1,6 @@
-import {BaseFlow} from "./flows/BaseFlow";
-import {Func} from "./Func";
+import {BaseFlow} from "../flows/BaseFlow";
+import {Func} from "../Func";
+import {Stack} from "stack-typescript";
 
 export class CodeWriter {
     static getInstance(): CodeWriter {
@@ -8,14 +9,17 @@ export class CodeWriter {
 
     private static instance: CodeWriter
 
-    spacing = "\t"
-    scopeCount = 0
-    mainFunctionLineIndex = 0
     flows: BaseFlow[] = []
     codes: string[] = []
+    scopeCount = 0
+
+    private mainFunctionLineIndex = 0
+    private spacing = "\t"
+    private variableSet: Set<string> = new Set()
+    private loopStack: Stack<number> = new Stack()
 
     private constructor() {
-
+        this.loopStack.push(-1)
     }
 
     setFlows(value: BaseFlow[]) {
@@ -77,7 +81,7 @@ export class CodeWriter {
         })
 
         this.writeLine(`fun ${func.functionName}(${parameterString})${returnTypeString}`)
-        this.appendToLastLine("{")
+        this.appendToLastLine(" {")
         this.scopeCount++
 
         func.codeLines.forEach((value) => {
@@ -98,10 +102,49 @@ export class CodeWriter {
         return ""
     }
 
-    writeCodeFromFlowIndex(index: number) {
-        if (index !== -1) {
-            this.flows[index].createMainCode()
+    getNextFlowIndex(index: number): number {
+        return this.flows[index].nextFlow()
+    }
+
+    writeMainCodeFromFlow(flowIndex: number) {
+        const top = this.loopStack.top
+
+        if (!this.removeFromStackIfEquals(flowIndex)) {
+            console.log("Code for index " + flowIndex + " is being created!")
+            this.flows[flowIndex].createMainCode()
+        } else {
+            console.log("Top with index " + top + " is popped!")
         }
+    }
+
+    /**
+     * Returns false if the set already contains variable true otherwise
+     */
+
+    addVariable(name: string): boolean {
+        if (this.variableSet.has(name)) {
+            return false
+        }
+
+        this.variableSet.add(name)
+        return true
+    }
+
+    addToLoopStack(index: number) {
+        console.log("Pushed to stack " + index + "!")
+        this.loopStack.push(index)
+    }
+
+    /**
+     * Returns true if top equals index and pops it returns false otherwise.
+     */
+    removeFromStackIfEquals(index: number): boolean {
+        if (this.loopStack.top === index) {
+            this.loopStack.pop()
+            return true
+        }
+
+        return false
     }
 
     private createSpacing(): string {

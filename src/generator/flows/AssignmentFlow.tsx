@@ -1,6 +1,6 @@
 import {BaseFlow} from "./BaseFlow";
-import {VariableType} from "../../models/VariableEnums";
-import {CodeWriter} from "../CodeWriter";
+import {VariableType} from "../../models";
+import {CodeWriter} from "../code/CodeWriter";
 import {Variable} from "../../models/Variable";
 
 export class AssignmentFlow implements BaseFlow {
@@ -32,8 +32,13 @@ export class AssignmentFlow implements BaseFlow {
                 break
         }
 
-        CodeWriter.getInstance().writeLineToMainFunction(`val ${this.content.variable.name} = ${contentString}`)
-        CodeWriter.getInstance().writeCodeFromFlowIndex(this.nextFlow())
+        let variableSetCode = ""
+        if (CodeWriter.getInstance().addVariable(this.content.variable.name)) {
+            variableSetCode = "var "
+        }
+
+        CodeWriter.getInstance().writeLineToMainFunction(`${variableSetCode}${this.content.variable.name} = ${contentString}`)
+        CodeWriter.getInstance().writeMainCodeFromFlow(this.nextFlow())
     }
 
     createFunctionCode(): void {

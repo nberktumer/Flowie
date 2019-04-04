@@ -2,6 +2,7 @@ import {ArithmeticFlowContent} from "./flows/ArithmeticFlow";
 import {OutputFlowContent} from "./flows/OutputFlow";
 import {InputFlowContent} from "./flows/InputFlow";
 import {AssignmentFlowContent} from "./flows/AssignmentFlow";
+import {WhileFlowContent} from "./flows/WhileFlow";
 
 export class FlowModel {
     type: string
@@ -10,9 +11,9 @@ export class FlowModel {
     inputFlowContent: InputFlowContent
     outputFlowContent: OutputFlowContent
     arithmeticFlowContent: ArithmeticFlowContent
+    whileFlowContent: WhileFlowContent
     // forFlowContent: ForFlowContent,
     // ifFlowContent: IfFlowContent,
-    // whileFlowContent: WhileFlowContent
 
     constructor(
         type: string,
@@ -20,10 +21,10 @@ export class FlowModel {
         assignmentFlowContent: AssignmentFlowContent,
         inputFlowContent: InputFlowContent,
         outputFlowContent: OutputFlowContent,
-        arithmeticFlowContent: ArithmeticFlowContent
+        arithmeticFlowContent: ArithmeticFlowContent,
+        whileFlowContent: WhileFlowContent
         // forFlowContent: ForFlowContent,
         // ifFlowContent: IfFlowContent,
-        // whileFlowContent: WhileFlowContent
     ) {
         this.type = type
         this.id = id
@@ -31,5 +32,6 @@ export class FlowModel {
         this.inputFlowContent = inputFlowContent
         this.outputFlowContent = outputFlowContent
         this.arithmeticFlowContent = arithmeticFlowContent
+        this.whileFlowContent = whileFlowContent
     }
 }

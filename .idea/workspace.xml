@@ -2,29 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1554d005-f905-47cc-b692-e435a8d4fe48" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/AddNodeDialog/DialogBody/AddWhileDialogBody.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/CanvasItems/Nodes/InitialNode/InitialNode.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/CanvasItems/Ports/DefaultPort/DefaultPort.module.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/CanvasItems/Ports/DefaultPort/DefaultPort.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/CanvasItems/Ports/DefaultPort/DefaultPortLocation.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddNodeDialog/AddNodeDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddNodeDialog/AddNodeDialog.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddNodeDialog/DialogBody/BaseDialogBody.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddNodeDialog/DialogBody/BaseDialogBody.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/CanvasItems/Nodes/BaseNodes/RectangleNode/RectangleNodeModel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CanvasItems/Nodes/BaseNodes/RectangleNode/RectangleNodeModel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/CanvasItems/Nodes/BaseNodes/TriangleNode/TriangleNodeFactory.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/CanvasItems/Nodes/BaseNodes/TriangleNode/TriangleNodeModel.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/CanvasItems/Nodes/BaseNodes/TriangleNode/TriangleNodeWidget.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/CanvasItems/Nodes/BaseNodes/TriangleNode/TrianglePortModel.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/CanvasItems/Nodes/VariableNode/VariableNodeModel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CanvasItems/Nodes/VariableNode/VariableNodeModel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/CanvasItems/Nodes/WhileNode/WhileNodeModel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CanvasItems/Nodes/WhileNode/WhileNodeModel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/CanvasItems/Ports/DefaultPort/DefaultPortLabel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CanvasItems/Ports/DefaultPort/DefaultPortLabel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/CanvasItems/Ports/DefaultPort/DefaultPortModel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CanvasItems/Ports/DefaultPort/DefaultPortModel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/CanvasItems/Ports/DefaultPort/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CanvasItems/Ports/DefaultPort/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/config/NodeColors.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/NodeColors.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lang/en.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lang/en.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lang/tr.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/lang/tr.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/Condition.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Condition.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/Variable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Variable.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/generator/flows/WhileFlow.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generator/CodeGenerator.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/generator/CodeGenerator.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generator/CodeWriter.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/generator/code/CodeWriter.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generator/FlowModelJSON.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/generator/FlowModelJSON.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generator/flows/ArithmeticFlow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/generator/flows/ArithmeticFlow.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generator/flows/AssignmentFlow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/generator/flows/AssignmentFlow.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generator/flows/InputFlow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/generator/flows/InputFlow.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generator/flows/OutputFlow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/generator/flows/OutputFlow.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/VariableEnums.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/VariableEnums.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/editor/Editor.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/editor/Editor.tsx" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -38,11 +26,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/pages/editor/Editor.tsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="630">
-              <caret line="147" column="45" lean-forward="true" selection-start-line="147" selection-start-column="45" selection-end-line="147" selection-end-column="45" />
+            <state relative-caret-position="380">
+              <caret line="184" column="15" lean-forward="true" selection-start-line="184" selection-start-column="15" selection-end-line="184" selection-end-column="15" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
               </folding>
@@ -53,8 +41,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/components/CanvasItems/Nodes/VariableNode/VariableNodeModel.tsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="11" lean-forward="true" selection-end-line="43" />
+            <state relative-caret-position="91">
+              <caret line="16" column="55" selection-start-line="16" selection-start-column="55" selection-end-line="16" selection-end-column="55" />
               <folding>
                 <element signature="e#0#118#0" expanded="true" />
               </folding>
@@ -62,11 +50,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/components/CanvasItems/Nodes/InitialNode/InitialNode.tsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="46" selection-start-line="5" selection-start-column="46" selection-end-line="5" selection-end-column="46" />
+            <state relative-caret-position="285">
+              <caret line="19" column="9" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
               </folding>
@@ -102,7 +90,7 @@
         <entry file="file://$PROJECT_DIR$/src/components/AddNodeDialog/DialogBody/AddWhileDialogBody.tsx">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="226">
-              <caret line="40" column="49" lean-forward="true" selection-start-line="40" selection-start-column="49" selection-end-line="40" selection-end-column="49" />
+              <caret line="40" column="49" selection-start-line="40" selection-start-column="49" selection-end-line="40" selection-end-column="49" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
               </folding>
@@ -114,7 +102,7 @@
         <entry file="file://$PROJECT_DIR$/node_modules/@material-ui/core/MenuItem/index.d.ts">
           <provider selected="true" editor-type-id="text-editor">
             <state>
-              <caret column="13" lean-forward="true" selection-start-column="13" selection-end-column="13" />
+              <caret column="13" selection-start-column="13" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -222,8 +210,8 @@
         <option value="$PROJECT_DIR$/src/lang/tr.tsx" />
         <option value="$PROJECT_DIR$/src/lang/en.tsx" />
         <option value="$PROJECT_DIR$/src/config/NodeColors.tsx" />
-        <option value="$PROJECT_DIR$/src/pages/editor/Editor.tsx" />
         <option value="$PROJECT_DIR$/src/components/CanvasItems/Nodes/InitialNode/InitialNode.tsx" />
+        <option value="$PROJECT_DIR$/src/pages/editor/Editor.tsx" />
       </list>
     </option>
   </component>
@@ -300,15 +288,6 @@
               <item name="components" type="462c0819:PsiDirectoryNode" />
               <item name="CanvasItems" type="462c0819:PsiDirectoryNode" />
               <item name="Nodes" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="COMP491" type="b2602c69:ProjectViewProjectNode" />
-              <item name="COMP491" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-              <item name="CanvasItems" type="462c0819:PsiDirectoryNode" />
-              <item name="Nodes" type="462c0819:PsiDirectoryNode" />
-              <item name="InitialNode" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="COMP491" type="b2602c69:ProjectViewProjectNode" />
@@ -493,12 +472,12 @@
       <workItem from="1553982968123" duration="20000" />
       <workItem from="1553983005255" duration="807000" />
       <workItem from="1554395685832" duration="5292000" />
-      <workItem from="1554402266941" duration="5595000" />
+      <workItem from="1554402266941" duration="5864000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="93488000" />
+    <option name="totallyTimeSpent" value="93757000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="24" width="1920" height="1056" extended-state="6" />
@@ -550,7 +529,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/components/CanvasItems/Ports/SingleConnectionPort/SingleConnectionPort.tsx" />
     <entry file="file://$PROJECT_DIR$/src/config/Rules.tsx">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -815,14 +793,14 @@
     <entry file="file://$PROJECT_DIR$/node_modules/@material-ui/core/MenuItem/index.d.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret column="13" lean-forward="true" selection-start-column="13" selection-end-column="13" />
+          <caret column="13" selection-start-column="13" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/components/AddNodeDialog/DialogBody/AddWhileDialogBody.tsx">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="226">
-          <caret line="40" column="49" lean-forward="true" selection-start-line="40" selection-start-column="49" selection-end-line="40" selection-end-column="49" />
+          <caret line="40" column="49" selection-start-line="40" selection-start-column="49" selection-end-line="40" selection-end-column="49" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
           </folding>
@@ -859,16 +837,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/CanvasItems/Nodes/VariableNode/VariableNodeModel.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="11" lean-forward="true" selection-end-line="43" />
-          <folding>
-            <element signature="e#0#118#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/lang/index.tsx">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -897,20 +865,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pages/editor/Editor.tsx">
+    <entry file="file://$PROJECT_DIR$/src/components/CanvasItems/Nodes/InitialNode/InitialNode.tsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="147" column="45" lean-forward="true" selection-start-line="147" selection-start-column="45" selection-end-line="147" selection-end-column="45" />
+        <state relative-caret-position="285">
+          <caret line="19" column="9" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/CanvasItems/Nodes/InitialNode/InitialNode.tsx">
+    <entry file="file://$PROJECT_DIR$/src/components/CanvasItems/Nodes/VariableNode/VariableNodeModel.tsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="46" selection-start-line="5" selection-start-column="46" selection-end-line="5" selection-end-column="46" />
+        <state relative-caret-position="91">
+          <caret line="16" column="55" selection-start-line="16" selection-start-column="55" selection-end-line="16" selection-end-column="55" />
+          <folding>
+            <element signature="e#0#118#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/generator/CodeGenerator.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="17" column="4" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#45#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pages/editor/Editor.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="184" column="15" lean-forward="true" selection-start-line="184" selection-start-column="15" selection-end-line="184" selection-end-column="15" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
           </folding>

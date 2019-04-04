@@ -1,10 +1,11 @@
-import {CodeWriter} from "./CodeWriter";
+import {CodeWriter} from "./code/CodeWriter";
 import {BaseFlow} from "./flows/BaseFlow";
 import {FlowModel} from "./FlowModelJSON";
 import {AssignmentFlow} from "./flows/AssignmentFlow";
 import {InputFlow} from "./flows/InputFlow";
 import {OutputFlow} from "./flows/OutputFlow";
 import {ArithmeticFlow} from "./flows/ArithmeticFlow";
+import {WhileFlow} from "./flows/WhileFlow";
 
 export class CodeGenerator {
 
@@ -14,19 +15,19 @@ export class CodeGenerator {
         this.flowJson = flowJson
     }
 
-    generate() {
-        CodeWriter.getInstance().initMain()
+    generate(): string {
         CodeWriter.getInstance().setFlows(this.convertToFlowObjects(JSON.parse(this.flowJson)))
-        CodeWriter.getInstance().flows[0].createMainCode()
 
-        CodeWriter.getInstance().finishMain()
         CodeWriter.getInstance().flows.forEach((value) => {
             value.createFunctionCode()
         })
 
-        CodeWriter.getInstance().codes.forEach((value) => {
-            console.log(value)
-        })
+        CodeWriter.getInstance().initMain()
+        CodeWriter.getInstance().flows[0].createMainCode()
+
+        CodeWriter.getInstance().finishMain()
+
+        return CodeWriter.getInstance().codes.join("\n")
     }
 
     convertToFlowObjects(flowModels: FlowModel[]): BaseFlow[] {
@@ -62,19 +63,19 @@ export class CodeGenerator {
                             value.arithmeticFlowContent
                         ))
                         break
+                    case "while":
+                        baseFlowList.push(new WhileFlow(
+                            value.id,
+                            value.type,
+                            value.whileFlowContent
+                        ))
+                        break
                     /*
                     case "if":
                         baseFlowList.push(new IfFlow(
                             value.id,
                             value.type,
                             value.ifFlowContent
-                        ))
-                        break
-                    case "while":
-                        baseFlowList.push(new WhileFlow(
-                            value.id,
-                            value.type,
-                            value.whileFlowContent
                         ))
                         break
                     case "for":
