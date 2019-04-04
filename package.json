@@ -18,6 +18,7 @@
         "react-router": "^4.3.1",
         "react-router-dom": "^4.3.1",
         "react-scripts": "2.1.5",
+        "stack-typescript": "^1.0.4",
         "storm-react-diagrams": "^5.2.1",
         "tslint": "^5.12.1",
         "typeface-roboto": "0.0.54",

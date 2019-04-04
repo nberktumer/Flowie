@@ -1,7 +1,7 @@
 import {BaseFlow} from "./BaseFlow";
 import {VariableType} from "../../models/VariableEnums";
 import {Func, Parameter} from "../Func";
-import {CodeWriter} from "../CodeWriter";
+import {CodeWriter} from "../code/CodeWriter";
 import {Variable} from "../../models/Variable";
 
 export class InputFlow implements BaseFlow {
@@ -21,9 +21,9 @@ export class InputFlow implements BaseFlow {
 
     createMainCode(): void {
         CodeWriter.getInstance().writeLineToMainFunction(
-            `val ${this.content.variable.name} = ${this.functionInvocation()}`
+            `var ${this.content.variable.name} = ${this.functionInvocation()}`
         )
-        CodeWriter.getInstance().writeCodeFromFlowIndex(this.nextFlow())
+        CodeWriter.getInstance().writeMainCodeFromFlow(this.nextFlow())
     }
 
     createFunctionCode(): void {
@@ -42,7 +42,12 @@ export class InputFlow implements BaseFlow {
                 break
         }
 
-        functionLines.push(`val ${this.content.variable.name} = ${scanCode}`)
+        let variableSetCode = ""
+        if (CodeWriter.getInstance().addVariable(this.content.variable.name)) {
+            variableSetCode = "val "
+        }
+
+        functionLines.push(`${variableSetCode}${this.content.variable.name} = ${scanCode}`)
         functionLines.push(`return ${this.content.variable.name}`)
 
         const parameters: Parameter[] = []

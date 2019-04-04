@@ -1,6 +1,6 @@
 import {BaseFlow} from "./BaseFlow";
 import {Func, Parameter} from "../Func";
-import {CodeWriter} from "../CodeWriter";
+import {CodeWriter} from "../code/CodeWriter";
 import {Variable} from "../../models/Variable";
 
 export class OutputFlow implements BaseFlow {
@@ -20,7 +20,7 @@ export class OutputFlow implements BaseFlow {
 
     createMainCode(): void {
         CodeWriter.getInstance().writeLineToMainFunction(this.functionInvocation())
-        CodeWriter.getInstance().writeCodeFromFlowIndex(this.nextFlow())
+        CodeWriter.getInstance().writeMainCodeFromFlow(this.nextFlow())
     }
 
     createFunctionCode(): void {

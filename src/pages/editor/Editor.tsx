@@ -17,6 +17,7 @@ import {AddNodeDialog} from "../../components/AddNodeDialog/AddNodeDialog"
 import {BaseDialogBodyState} from "../../components/AddNodeDialog/DialogBody/BaseDialogBody"
 import {CodeGenerator} from "../../generator/CodeGenerator"
 import {DefaultPortModel, DefaultPortType} from "../../components/CanvasItems/Ports/DefaultPort"
+import {string} from "prop-types";
 
 const exampleCode = `class Editor extends Component {
     private readonly activeModel: SRD.DiagramModel
@@ -40,61 +41,95 @@ const exampleCode = `class Editor extends Component {
 const json = "[\n" +
     "  {\n" +
     "    \"id\": 0,\n" +
-    "    \"type\": \"input\",\n" +
-    "    \"inputFlowContent\": {\n" +
-    "      \"variable\" : {\n" +
-    "        \"name\" : \"first\",\n" +
-    "        \"type\" : \"Int\"\n" +
+    "    \"type\": \"assignment\",\n" +
+    "    \"assignmentFlowContent\": {\n" +
+    "      \"variable\": {\n" +
+    "        \"name\": \"total\",\n" +
+    "        \"value\": \"1\",\n" +
+    "        \"type\": \"Int\"\n" +
     "      },\n" +
     "      \"nextFlowId\": 1\n" +
-    "    },\n" +
-    "    \"outputFlowContent\": null,\n" +
-    "    \"arithmeticFlowContent\": null,\n" +
-    "    \"forFlowContent\": null\n" +
+    "    }\n" +
     "  },\n" +
     "  {\n" +
     "    \"id\": 1,\n" +
     "    \"type\": \"input\",\n" +
     "    \"inputFlowContent\": {\n" +
-    "      \"variable\" : {\n" +
-    "        \"name\" : \"second\",\n" +
-    "        \"type\" : \"Int\"\n" +
+    "      \"variable\": {\n" +
+    "        \"name\": \"n\",\n" +
+    "        \"type\": \"Int\"\n" +
     "      },\n" +
     "      \"nextFlowId\": 2\n" +
-    "    },\n" +
-    "    \"outputFlowContent\": null,\n" +
-    "    \"arithmeticFlowContent\": null,\n" +
-    "    \"forFlowContent\": null\n" +
+    "    }\n" +
     "  },\n" +
     "  {\n" +
     "    \"id\": 2,\n" +
-    "    \"type\": \"arithmetic\",\n" +
-    "    \"arithmeticFlowContent\": {\n" +
-    "      \"variable\" : {\n" +
-    "        \"name\" : \"product\"\n" +
-    "      },\n" +
-    "      \"operation\": \"Multiplication\",\n" +
-    "      \"operator1Name\": \"first\",\n" +
-    "      \"operator2Name\": \"second\",\n" +
-    "      \"nextFlowId\": 3\n" +
-    "    },\n" +
-    "    \"outputFlowContent\": null,\n" +
-    "    \"inputFlowContent\": null,\n" +
-    "    \"forFlowContent\": null\n" +
+    "    \"type\": \"while\",\n" +
+    "    \"whileFlowContent\": {\n" +
+    "      \"conditions\": [\n" +
+    "        {\n" +
+    "          \"variableType\": \"Int\",\n" +
+    "          \"first\": {\n" +
+    "            \"name\": \"n\"\n" +
+    "          },\n" +
+    "          \"second\": {\n" +
+    "            \"name\": 1\n" +
+    "          },\n" +
+    "          \"operation\": \"NotEquals\"\n" +
+    "        }\n" +
+    "      ],\n" +
+    "      \"scopeId\": 3,\n" +
+    "      \"nextFlowId\": 5\n" +
+    "    }\n" +
     "  },\n" +
     "  {\n" +
     "    \"id\": 3,\n" +
+    "    \"type\": \"arithmetic\",\n" +
+    "    \"arithmeticFlowContent\": {\n" +
+    "      \"variable\": {\n" +
+    "        \"name\": \"total\"\n" +
+    "      },\n" +
+    "      \"operation\": \"Multiplication\",\n" +
+    "      \"operator1\": {\n" +
+    "        \"type\": \"Variable\",\n" +
+    "        \"variableName\": \"n\"\n" +
+    "      },\n" +
+    "      \"operator2\": {\n" +
+    "        \"type\": \"Variable\",\n" +
+    "        \"variableName\": \"total\"\n" +
+    "      },\n" +
+    "      \"nextFlowId\": 4\n" +
+    "    }\n" +
+    "  },\n" +
+    "  {\n" +
+    "    \"id\": 4,\n" +
+    "    \"type\": \"arithmetic\",\n" +
+    "    \"arithmeticFlowContent\": {\n" +
+    "      \"variable\": {\n" +
+    "        \"name\": \"n\"\n" +
+    "      },\n" +
+    "      \"operation\": \"Subtraction\",\n" +
+    "      \"operator1\": {\n" +
+    "        \"type\": \"Variable\",\n" +
+    "        \"variableName\": \"n\"\n" +
+    "      },\n" +
+    "      \"operator2\": {\n" +
+    "        \"type\": \"Constant\",\n" +
+    "        \"constantValue\": 1\n" +
+    "      },\n" +
+    "      \"nextFlowId\": 2\n" +
+    "    }\n" +
+    "  },\n" +
+    "  {\n" +
+    "    \"id\": 5,\n" +
     "    \"type\": \"output\",\n" +
     "    \"outputFlowContent\": {\n" +
-    "      \"variable\" : {\n" +
-    "        \"name\" : \"product\",\n" +
-    "        \"type\" : \"Int\"\n" +
+    "      \"variable\": {\n" +
+    "        \"name\": \"total\",\n" +
+    "        \"type\": \"Int\"\n" +
     "      },\n" +
     "      \"nextFlowId\": -1\n" +
-    "    },\n" +
-    "    \"inputFlowContent\": null,\n" +
-    "    \"arithmeticFlowContent\": null,\n" +
-    "    \"forFlowContent\": null\n" +
+    "    }\n" +
     "  }\n" +
     "]"
 
@@ -107,7 +142,8 @@ export interface IEditorState {
     selectedStr: string,
     isModalOpen: boolean,
     newOperation: Operations | null,
-    newItemPosition: { x: number, y: number }
+    newItemPosition: { x: number, y: number },
+    generatedCode: string
 }
 
 export default class Editor extends Component<IEditorProps, IEditorState> {
@@ -135,17 +171,18 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
             })
         })
 
+        const generator = new CodeGenerator(json)
+
         this.state = {
             height: "1px",
             width: "1px",
             selectedStr: "Nothing is selected!",
             isModalOpen: false,
             newOperation: null,
-            newItemPosition: {x: 0, y: 0}
+            newItemPosition: {x: 0, y: 0},
+            generatedCode: generator.generate()
         }
 
-        const generator = new CodeGenerator(json)
-        generator.generate()
     }
 
     onDrop(event: any): void {
@@ -292,7 +329,7 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
                             <ReflexSplitter/>
 
                             <ReflexElement className="right-pane" minSize={100}>
-                                <CodePreviewPanel code={exampleCode} language={ProgrammingLanguage.TYPESCRIPT}/>
+                                <CodePreviewPanel code={this.state.generatedCode} language={ProgrammingLanguage.TYPESCRIPT}/>
                             </ReflexElement>
                         </ReflexContainer>
                     </ReflexElement>
