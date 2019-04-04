@@ -1,5 +1,5 @@
 import {BaseFlow} from "./models/BaseFlow";
-import {OperationType, VariableType} from "../models/VariableEnums";
+import {ArithmeticOperationType, VariableType} from "../models/VariableEnums";
 import {Func, Parameter} from "./Func";
 import {CodeWriter} from "./CodeWriter";
 
@@ -41,16 +41,16 @@ export class ArithmeticFlow implements BaseFlow {
 
         let operationCode = ""
         switch (this.content.operation) {
-            case OperationType.Addition:
+            case ArithmeticOperationType.ADDITION:
                 operationCode = "+"
                 break;
-            case OperationType.Subtraction:
+            case ArithmeticOperationType.SUBSTRACTION:
                 operationCode = "-"
                 break;
-            case OperationType.Multiplication:
+            case ArithmeticOperationType.MULTIPLICATION:
                 operationCode = "*"
                 break;
-            case OperationType.Division:
+            case ArithmeticOperationType.DIVISION:
                 operationCode = "/"
                 break;
         }
@@ -88,14 +88,14 @@ export class ArithmeticFlow implements BaseFlow {
 
 export class ArithmeticFlowContent {
     writeToVar: string
-    operation: OperationType
+    operation: ArithmeticOperationType
     operator1Name: string
     operator2Name: string
     nextFlowId: number
 
     constructor(
         writeToVar: string,
-        operation: OperationType,
+        operation: ArithmeticOperationType,
         operator1Name: string,
         operator2Name: string,
         nextFlowId: number

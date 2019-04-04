@@ -1,16 +1,16 @@
 import {RectangleNodeWithInfoModel} from "../BaseNodes/RectangleNode/RectangleNodeWithInfo/RectangleNodeWithInfoModel"
 import strings from "../../../../lang"
 import {NodeColors} from "../../../../config"
-import {DataType} from "../../../../models"
+import {FlowType, VariableType} from "../../../../models"
 import {DiagramEngine, LinkModel, LinkModelListener} from "storm-react-diagrams"
 import * as _ from "lodash"
 
 export class VariableNodeModel extends RectangleNodeWithInfoModel {
     variableName: string | undefined
-    dataType: DataType | undefined
+    dataType: FlowType | undefined
     value: any
 
-    constructor(type: DataType) {
+    constructor(type: VariableType) {
         super(strings.variable + " (" + type + ")", NodeColors.VARIABLE)
 
         this.addInPort(strings.in).setMaximumLinks(Infinity)

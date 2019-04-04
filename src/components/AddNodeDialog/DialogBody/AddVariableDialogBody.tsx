@@ -3,7 +3,7 @@ import {MenuItem, TextField} from "@material-ui/core"
 import strings from "../../../lang"
 import {BaseDialogBody, BaseDialogBodyProps} from "./BaseDialogBody"
 import {Rules} from "../../../config"
-import {DataType} from "../../../models"
+import {VariableType} from "../../../models"
 
 export class AddVariableDialogBody extends BaseDialogBody {
 
@@ -12,7 +12,7 @@ export class AddVariableDialogBody extends BaseDialogBody {
 
         this.state = {
             variableName: "",
-            dataType: "NUMBER",
+            variableType: "INT",
             value: ""
         }
     }
@@ -32,13 +32,13 @@ export class AddVariableDialogBody extends BaseDialogBody {
                     id="data-type-selector"
                     select
                     label={strings.dataType}
-                    value={this.state.dataType}
-                    onChange={this.handleChange("dataType")}
+                    value={this.state.variableType}
+                    onChange={this.handleChange("variableType")}
                     margin="normal"
                 >
-                    {Object.keys(DataType).map((key: any) => (
+                    {Object.keys(VariableType).map((key: any) => (
                         <MenuItem key={key} value={key}>
-                            {DataType[key]}
+                            {VariableType[key]}
                         </MenuItem>
                     ))}
                 </TextField>

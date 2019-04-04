@@ -6,7 +6,7 @@ import {DefaultNodeModel, DiagramEngine, DiagramModel, DiagramWidget} from "stor
 import {ShapePanel} from "../../components/ShapePanel/ShapePanel"
 import {ShapeItem} from "../../components/ShapePanel/ShapeItem"
 import {CodePreviewPanel} from "../../components/CodePreviewPanel/CodePreviewPanel"
-import {DataType, Operations, ProgrammingLanguage} from "../../models"
+import {Operations, ProgrammingLanguage, VariableType} from "../../models"
 import {ProjectTreePanel} from "../../components/ProjectTreePanel/ProjectTreePanel"
 import {TriangleNodeFactory} from "../../components/CanvasItems/Nodes/BaseNodes/TriangleNode/TriangleNodeFactory"
 import {PortFactory} from "../../components/CanvasItems/Ports/PortFactory"
@@ -16,7 +16,7 @@ import {RectangleNodeWithInfoFactory} from "../../components/CanvasItems/Nodes/B
 import {VariableNodeModel} from "../../components/CanvasItems/Nodes/VariableNode/VariableNodeModel"
 import {AddNodeDialog} from "../../components/AddNodeDialog/AddNodeDialog"
 import {BaseDialogBodyState} from "../../components/AddNodeDialog/DialogBody/BaseDialogBody"
-import {CodeGenerator} from "../../generator/CodeGenerator";
+import {CodeGenerator} from "../../generator/CodeGenerator"
 
 const exampleCode = `class Editor extends Component {
     private readonly activeModel: SRD.DiagramModel
@@ -163,7 +163,7 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
                 if (data.variableName === "" || data.value === "")
                     return
 
-                node = new VariableNodeModel(data.dataType as DataType)
+                node = new VariableNodeModel(data.variableType as VariableType)
                 node.info = data.variableName + " = " + data.value
                 break
             case Operations.IF:
