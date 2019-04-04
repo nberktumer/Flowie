@@ -1,17 +1,17 @@
 import {BaseFlow} from "./BaseFlow";
-import {VariableType} from "../../models";
+import {FlowType, VariableType} from "../../models";
 import {CodeWriter} from "../code/CodeWriter";
 import {Variable} from "../../models/Variable";
 
 export class AssignmentFlow implements BaseFlow {
 
     id: number
-    type: string
+    type: FlowType
     content: AssignmentFlowContent
 
     constructor(
         id: number,
-        type: string,
+        type: FlowType,
         content: AssignmentFlowContent) {
         this.id = id
         this.type = type

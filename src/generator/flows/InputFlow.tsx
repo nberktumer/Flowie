@@ -1,5 +1,5 @@
 import {BaseFlow} from "./BaseFlow";
-import {VariableType} from "../../models/VariableEnums";
+import {FlowType, VariableType} from "../../models/VariableEnums";
 import {Func, Parameter} from "../Func";
 import {CodeWriter} from "../code/CodeWriter";
 import {Variable} from "../../models/Variable";
@@ -7,12 +7,12 @@ import {Variable} from "../../models/Variable";
 export class InputFlow implements BaseFlow {
 
     id: number
-    type: string
+    type: FlowType
     content: InputFlowContent
 
     constructor(
         id: number,
-        type: string,
+        type: FlowType,
         content: InputFlowContent) {
         this.id = id
         this.type = type

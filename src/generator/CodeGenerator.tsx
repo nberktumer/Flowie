@@ -6,6 +6,7 @@ import {InputFlow} from "./flows/InputFlow";
 import {OutputFlow} from "./flows/OutputFlow";
 import {ArithmeticFlow} from "./flows/ArithmeticFlow";
 import {WhileFlow} from "./flows/WhileFlow";
+import {FlowType} from "../models";
 
 export class CodeGenerator {
 
@@ -35,35 +36,35 @@ export class CodeGenerator {
 
         flowModels.forEach((value) => {
                 switch (value.type) {
-                    case "assignment":
+                    case FlowType.ASSIGNMENT:
                         baseFlowList.push(new AssignmentFlow(
                             value.id,
                             value.type,
                             value.assignmentFlowContent
                         ))
                         break
-                    case "input":
+                    case FlowType.INPUT:
                         baseFlowList.push(new InputFlow(
                             value.id,
                             value.type,
                             value.inputFlowContent
                         ))
                         break
-                    case "output":
+                    case FlowType.OUTPUT:
                         baseFlowList.push(new OutputFlow(
                             value.id,
                             value.type,
                             value.outputFlowContent
                         ))
                         break
-                    case "arithmetic":
+                    case FlowType.ARITHMETIC:
                         baseFlowList.push(new ArithmeticFlow(
                             value.id,
                             value.type,
                             value.arithmeticFlowContent
                         ))
                         break
-                    case "while":
+                    case FlowType.WHILE:
                         baseFlowList.push(new WhileFlow(
                             value.id,
                             value.type,

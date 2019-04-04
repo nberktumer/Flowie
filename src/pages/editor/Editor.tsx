@@ -29,7 +29,7 @@ import {InitialNode} from "../../components/CanvasItems/Nodes/InitialNode/Initia
 const json = "[\n" +
     "  {\n" +
     "    \"id\": 0,\n" +
-    "    \"type\": \"assignment\",\n" +
+    "    \"type\": \"Assignment\",\n" +
     "    \"assignmentFlowContent\": {\n" +
     "      \"variable\": {\n" +
     "        \"name\": \"total\",\n" +
@@ -41,7 +41,7 @@ const json = "[\n" +
     "  },\n" +
     "  {\n" +
     "    \"id\": 1,\n" +
-    "    \"type\": \"input\",\n" +
+    "    \"type\": \"Input\",\n" +
     "    \"inputFlowContent\": {\n" +
     "      \"variable\": {\n" +
     "        \"name\": \"n\",\n" +
@@ -52,7 +52,7 @@ const json = "[\n" +
     "  },\n" +
     "  {\n" +
     "    \"id\": 2,\n" +
-    "    \"type\": \"while\",\n" +
+    "    \"type\": \"While\",\n" +
     "    \"whileFlowContent\": {\n" +
     "      \"conditions\": [\n" +
     "        {\n" +
@@ -72,7 +72,7 @@ const json = "[\n" +
     "  },\n" +
     "  {\n" +
     "    \"id\": 3,\n" +
-    "    \"type\": \"arithmetic\",\n" +
+    "    \"type\": \"Arithmetic\",\n" +
     "    \"arithmeticFlowContent\": {\n" +
     "      \"variable\": {\n" +
     "        \"name\": \"total\"\n" +
@@ -91,7 +91,7 @@ const json = "[\n" +
     "  },\n" +
     "  {\n" +
     "    \"id\": 4,\n" +
-    "    \"type\": \"arithmetic\",\n" +
+    "    \"type\": \"Arithmetic\",\n" +
     "    \"arithmeticFlowContent\": {\n" +
     "      \"variable\": {\n" +
     "        \"name\": \"n\"\n" +
@@ -110,7 +110,7 @@ const json = "[\n" +
     "  },\n" +
     "  {\n" +
     "    \"id\": 5,\n" +
-    "    \"type\": \"output\",\n" +
+    "    \"type\": \"Output\",\n" +
     "    \"outputFlowContent\": {\n" +
     "      \"variable\": {\n" +
     "        \"name\": \"total\",\n" +
