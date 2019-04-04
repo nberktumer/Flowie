@@ -3,9 +3,10 @@ import {OutputFlowContent} from "./flows/OutputFlow";
 import {InputFlowContent} from "./flows/InputFlow";
 import {AssignmentFlowContent} from "./flows/AssignmentFlow";
 import {WhileFlowContent} from "./flows/WhileFlow";
+import {FlowType} from "../models";
 
 export class FlowModel {
-    type: string
+    type: FlowType
     id: number
     assignmentFlowContent: AssignmentFlowContent
     inputFlowContent: InputFlowContent
@@ -16,7 +17,7 @@ export class FlowModel {
     // ifFlowContent: IfFlowContent,
 
     constructor(
-        type: string,
+        type: FlowType,
         id: number,
         assignmentFlowContent: AssignmentFlowContent,
         inputFlowContent: InputFlowContent,
