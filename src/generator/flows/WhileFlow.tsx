@@ -48,8 +48,11 @@ export class WhileFlow implements BaseFlow {
         CodeWriter.getInstance().writeLineToMainFunction("while(" + conditionCode + ") {")
         CodeWriter.getInstance().scopeCount++
 
-        CodeWriter.getInstance().addToLoopStack(this.id)
-        CodeWriter.getInstance().writeMainCodeFromFlow(nextScopeId)
+
+        if (nextScopeId != null) {
+            CodeWriter.getInstance().addToLoopStack(this.id)
+            CodeWriter.getInstance().writeMainCodeFromFlow(nextScopeId)
+        }
 
         CodeWriter.getInstance().scopeCount--
         CodeWriter.getInstance().writeLineToMainFunction("}")
@@ -76,7 +79,7 @@ export class WhileFlow implements BaseFlow {
 
 export class WhileFlowContent {
     conditions: Condition[]
-    scopeId: number
+    scopeId: number | null
     nextFlowId: number
 
     constructor(
