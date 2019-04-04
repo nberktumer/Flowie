@@ -1,5 +1,5 @@
 import {BaseFlow} from "./BaseFlow";
-import {ArithmeticOperationType, VariableType} from "../../models";
+import {ArithmeticOperationType, FlowType, VariableType} from "../../models";
 import {Func, Parameter} from "../Func";
 import {CodeWriter} from "../code/CodeWriter";
 import {Variable} from "../../models/Variable";
@@ -7,12 +7,12 @@ import {Variable} from "../../models/Variable";
 export class ArithmeticFlow implements BaseFlow {
 
     id: number
-    type: string
+    type: FlowType
     content: ArithmeticFlowContent
 
     constructor(
         id: number,
-        type: string,
+        type: FlowType,
         content: ArithmeticFlowContent) {
         this.id = id
         this.type = type

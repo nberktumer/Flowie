@@ -1,17 +1,17 @@
 import {BaseFlow} from "./BaseFlow";
 import {CodeWriter} from "../code/CodeWriter";
 import {Condition} from "../../models/Condition";
-import {ConditionOperation} from "../../models/VariableEnums";
+import {ConditionOperation, FlowType} from "../../models/VariableEnums";
 
 export class WhileFlow implements BaseFlow {
 
     id: number
-    type: string
+    type: FlowType
     content: WhileFlowContent
 
     constructor(
         id: number,
-        type: string,
+        type: FlowType,
         content: WhileFlowContent) {
         this.id = id
         this.type = type

@@ -2,16 +2,17 @@ import {BaseFlow} from "./BaseFlow";
 import {Func, Parameter} from "../Func";
 import {CodeWriter} from "../code/CodeWriter";
 import {Variable} from "../../models/Variable";
+import {FlowType} from "../../models";
 
 export class OutputFlow implements BaseFlow {
 
     id: number
-    type: string
+    type: FlowType
     content: OutputFlowContent
 
     constructor(
         id: number,
-        type: string,
+        type: FlowType,
         content: OutputFlowContent) {
         this.id = id
         this.type = type
