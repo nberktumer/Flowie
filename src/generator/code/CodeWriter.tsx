@@ -42,32 +42,33 @@ export class CodeWriter {
             let secondFlowId = -1
 
             if (first instanceof ArithmeticFlow) {
-                firstFlowId = first.content.nextFlowId
+                firstFlowId = first.id
             } else if (first instanceof InputFlow) {
-                firstFlowId = first.content.nextFlowId
+                firstFlowId = first.id
             } else if (first instanceof OutputFlow) {
-                firstFlowId = first.content.nextFlowId
+                firstFlowId = first.id
             } else if (first instanceof WhileFlow) {
-                firstFlowId = first.content.nextFlowId
+                firstFlowId = first.id
             } else if (first instanceof AssignmentFlow) {
-                firstFlowId = first.content.nextFlowId
+                firstFlowId = first.id
             }
 
             if (second instanceof ArithmeticFlow) {
-                secondFlowId = second.content.nextFlowId
+                secondFlowId = second.id
             } else if (second instanceof InputFlow) {
-                secondFlowId = second.content.nextFlowId
+                secondFlowId = second.id
             } else if (second instanceof OutputFlow) {
-                secondFlowId = second.content.nextFlowId
+                secondFlowId = second.id
             } else if (second instanceof WhileFlow) {
-                secondFlowId = second.content.nextFlowId
+                secondFlowId = second.id
             } else if (second instanceof AssignmentFlow) {
-                secondFlowId = second.content.nextFlowId
+                secondFlowId = second.id
             }
 
             return firstFlowId - secondFlowId
         })
 
+        console.log(sortedFlows)
         this.flows = sortedFlows;
     }
 
