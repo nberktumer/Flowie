@@ -1,6 +1,11 @@
 import {BaseFlow} from "../flows/BaseFlow";
 import {Func} from "../Func";
 import {Stack} from "stack-typescript";
+import {AssignmentFlow} from "../flows/AssignmentFlow";
+import {InputFlow} from "../flows/InputFlow";
+import {OutputFlow} from "../flows/OutputFlow";
+import {ArithmeticFlow} from "../flows/ArithmeticFlow";
+import {WhileFlow} from "../flows/WhileFlow";
 
 export class CodeWriter {
     static getInstance(): CodeWriter {
@@ -32,7 +37,38 @@ export class CodeWriter {
     }
 
     setFlows(value: BaseFlow[]) {
-        this.flows = value;
+        const sortedFlows = value.sort((first, second) => {
+            let firstFlowId = -1
+            let secondFlowId = -1
+
+            if (first instanceof ArithmeticFlow) {
+                firstFlowId = first.content.nextFlowId
+            } else if (first instanceof InputFlow) {
+                firstFlowId = first.content.nextFlowId
+            } else if (first instanceof OutputFlow) {
+                firstFlowId = first.content.nextFlowId
+            } else if (first instanceof WhileFlow) {
+                firstFlowId = first.content.nextFlowId
+            } else if (first instanceof AssignmentFlow) {
+                firstFlowId = first.content.nextFlowId
+            }
+
+            if (second instanceof ArithmeticFlow) {
+                secondFlowId = second.content.nextFlowId
+            } else if (second instanceof InputFlow) {
+                secondFlowId = second.content.nextFlowId
+            } else if (second instanceof OutputFlow) {
+                secondFlowId = second.content.nextFlowId
+            } else if (second instanceof WhileFlow) {
+                secondFlowId = second.content.nextFlowId
+            } else if (second instanceof AssignmentFlow) {
+                secondFlowId = second.content.nextFlowId
+            }
+
+            return firstFlowId - secondFlowId
+        })
+
+        this.flows = sortedFlows;
     }
 
     writeLineToMainFunction(line: string) {
