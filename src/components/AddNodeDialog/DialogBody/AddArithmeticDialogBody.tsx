@@ -3,23 +3,22 @@ import {MenuItem, TextField} from "@material-ui/core"
 import strings from "../../../lang"
 import {BaseDialogBody, BaseDialogBodyProps} from "./BaseDialogBody"
 import {Variable} from "../../../models/Variable"
-import {VariableType} from "../../../models"
-import {ConditionOperation} from "../../../models/VariableEnums"
+import {ArithmeticOperationType} from "../../../models"
 
-export interface WhileDialogBodyProps extends BaseDialogBodyProps {
+export interface AddArithmeticDialogBodyProps extends BaseDialogBodyProps {
     variables: Variable[]
 }
 
-export class AddWhileDialogBody extends BaseDialogBody<WhileDialogBodyProps> {
+export class AddArithmeticDialogBody extends BaseDialogBody<AddArithmeticDialogBodyProps> {
 
-    constructor(props: WhileDialogBodyProps) {
+    constructor(props: AddArithmeticDialogBodyProps) {
         super(props)
 
         this.state = {
-            variableType: "",
-            first: "",
-            second: "",
-            operation: ""
+            variable: "",
+            operation: "",
+            operator1: "",
+            operator2: ""
         }
     }
 
@@ -29,49 +28,15 @@ export class AddWhileDialogBody extends BaseDialogBody<WhileDialogBodyProps> {
                 <TextField
                     id="data-type-selector"
                     select
-                    label={strings.variableType}
-                    value={this.state.variableType}
-                    onChange={this.handleChange("variableType")}
-                    margin="normal">
-                    <MenuItem key="__select__" value="">
-                        {strings.select}
-                    </MenuItem>
-                    {Object.keys(VariableType).map((value: any) => (
-                        <MenuItem key={value} value={value}>
-                            {VariableType[value]}
-                        </MenuItem>
-                    ))}
-                </TextField>
-                <TextField
-                    id="data-type-selector"
-                    select
-                    label={strings.firstVariable}
-                    value={this.state.first}
-                    onChange={this.handleChange("first")}
+                    label={strings.variable}
+                    value={this.state.variable}
+                    onChange={this.handleChange("variable")}
                     margin="normal">
                     <MenuItem key="__select__" value="">
                         {strings.select}
                     </MenuItem>
                     {this.props.variables.filter((value) => {
-                        return value.type === this.state.variableType
-                    }).map((value) => (
-                        <MenuItem key={value.name} value={JSON.stringify(value)}>
-                            {value.name}
-                        </MenuItem>
-                    ))}
-                </TextField>
-                <TextField
-                    id="data-type-selector"
-                    select
-                    label={strings.secondVariable}
-                    value={this.state.second}
-                    onChange={this.handleChange("second")}
-                    margin="normal">
-                    <MenuItem key="__select__" value="">
-                        {strings.select}
-                    </MenuItem>
-                    {this.props.variables.filter((value) => {
-                        return value.type === this.state.variableType
+                        return value.type.toString() === "INT"
                     }).map((value) => (
                         <MenuItem key={value.name} value={JSON.stringify(value)}>
                             {value.name}
@@ -88,9 +53,45 @@ export class AddWhileDialogBody extends BaseDialogBody<WhileDialogBodyProps> {
                     <MenuItem key="__select__" value="">
                         {strings.select}
                     </MenuItem>
-                    {Object.keys(ConditionOperation).map((value: any) => (
+                    {Object.keys(ArithmeticOperationType).map((value: any) => (
                         <MenuItem key={value} value={value}>
-                            {ConditionOperation[value]}
+                            {ArithmeticOperationType[value]}
+                        </MenuItem>
+                    ))}
+                </TextField>
+                <TextField
+                    id="data-type-selector"
+                    select
+                    label={strings.firstOperator}
+                    value={this.state.operator1}
+                    onChange={this.handleChange("operator1")}
+                    margin="normal">
+                    <MenuItem key="__select__" value="">
+                        {strings.select}
+                    </MenuItem>
+                    {this.props.variables.filter((value) => {
+                        return value.type.toString() === "INT"
+                    }).map((value) => (
+                        <MenuItem key={value.name} value={JSON.stringify(value)}>
+                            {value.name}
+                        </MenuItem>
+                    ))}
+                </TextField>
+                <TextField
+                    id="data-type-selector"
+                    select
+                    label={strings.secondOperator}
+                    value={this.state.operator2}
+                    onChange={this.handleChange("operator2")}
+                    margin="normal">
+                    <MenuItem key="__select__" value="">
+                        {strings.select}
+                    </MenuItem>
+                    {this.props.variables.filter((value) => {
+                        return value.type.toString() === "INT"
+                    }).map((value) => (
+                        <MenuItem key={value.name} value={JSON.stringify(value)}>
+                            {value.name}
                         </MenuItem>
                     ))}
                 </TextField>

@@ -1,18 +1,18 @@
-import {BaseFlow} from "./BaseFlow";
-import {CodeWriter} from "../code/CodeWriter";
-import {Condition} from "../../models/Condition";
-import {ConditionOperation, FlowType} from "../../models/VariableEnums";
+import {BaseFlow} from "./BaseFlow"
+import {CodeWriter} from "../code/CodeWriter"
+import {Condition} from "../../models/Condition"
+import {ConditionOperation, FlowType} from "../../models/VariableEnums"
 
 export class WhileFlow implements BaseFlow {
 
     id: number
     type: FlowType
-    content: WhileFlowContent
+    content: WhileFlowContent | null
 
     constructor(
         id: number,
         type: FlowType,
-        content: WhileFlowContent) {
+        content: WhileFlowContent | null) {
         this.id = id
         this.type = type
         this.content = content
@@ -23,6 +23,9 @@ export class WhileFlow implements BaseFlow {
     }
 
     createMainCode(): void {
+        if (this.content == null)
+            return
+
         const nextScopeId = this.content.scopeId
 
         let conditionCode = ""
@@ -48,7 +51,6 @@ export class WhileFlow implements BaseFlow {
         CodeWriter.getInstance().writeLineToMainFunction("while(" + conditionCode + ") {")
         CodeWriter.getInstance().scopeCount++
 
-
         if (nextScopeId != null) {
             CodeWriter.getInstance().addToLoopStack(this.id)
             CodeWriter.getInstance().writeMainCodeFromFlow(nextScopeId)
@@ -64,15 +66,15 @@ export class WhileFlow implements BaseFlow {
     }
 
     functionName(): string {
-        return "";
+        return ""
     }
 
     hasExternalDependencies(): boolean {
-        return false;
+        return false
     }
 
     nextFlow(): number {
-        return this.content.nextFlowId;
+        return this.content != null ? this.content.nextFlowId : -1
     }
 
 }

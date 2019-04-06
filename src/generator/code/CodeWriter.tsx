@@ -1,23 +1,17 @@
-import {BaseFlow} from "../flows/BaseFlow";
-import {Func} from "../Func";
-import {Stack} from "stack-typescript";
-import {AssignmentFlow} from "../flows/AssignmentFlow";
-import {InputFlow} from "../flows/InputFlow";
-import {OutputFlow} from "../flows/OutputFlow";
-import {ArithmeticFlow} from "../flows/ArithmeticFlow";
-import {WhileFlow} from "../flows/WhileFlow";
+import {BaseFlow} from "../flows/BaseFlow"
+import {Func} from "../Func"
+import {Stack} from "stack-typescript"
+import {AssignmentFlow} from "../flows/AssignmentFlow"
+import {InputFlow} from "../flows/InputFlow"
+import {OutputFlow} from "../flows/OutputFlow"
+import {ArithmeticFlow} from "../flows/ArithmeticFlow"
+import {WhileFlow} from "../flows/WhileFlow"
 
 export class CodeWriter {
-    static getInstance(): CodeWriter {
-        return this.instance || (this.instance = new this())
-    }
-
     private static instance: CodeWriter
-
     flows: BaseFlow[] = []
     codes: string[] = []
     scopeCount = 0
-
     private mainFunctionLineIndex = 0
     private spacing = "\t"
     private variableSet: Set<string> = new Set()
@@ -27,6 +21,10 @@ export class CodeWriter {
         this.loopStack.push(-1)
     }
 
+    static getInstance(): CodeWriter {
+        return this.instance || (this.instance = new this())
+    }
+
     reset() {
         this.flows = []
         this.codes = []
@@ -34,6 +32,7 @@ export class CodeWriter {
         this.mainFunctionLineIndex = 0
         this.variableSet = new Set()
         this.loopStack = new Stack()
+        this.loopStack.push(-1)
     }
 
     setFlows(value: BaseFlow[]) {
@@ -69,7 +68,7 @@ export class CodeWriter {
         })
 
         console.log(sortedFlows)
-        this.flows = sortedFlows;
+        this.flows = sortedFlows
     }
 
     writeLineToMainFunction(line: string) {
@@ -167,7 +166,9 @@ export class CodeWriter {
      * Returns false if the set already contains variable true otherwise
      */
 
-    addVariable(name: string): boolean {
+    addVariable(name: string | undefined): boolean {
+        name = name === undefined ? "" : name
+
         if (this.variableSet.has(name)) {
             return false
         }

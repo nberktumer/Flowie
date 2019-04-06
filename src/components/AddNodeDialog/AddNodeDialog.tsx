@@ -1,7 +1,6 @@
 import React, {Component} from "react"
 import {Dialog, DialogTitle} from "@material-ui/core"
 import {DialogProps} from "@material-ui/core/Dialog"
-import {Operations} from "../../models"
 import Button from "@material-ui/core/Button"
 import strings from "../../lang"
 import styles from "./AddNodeDialog.module.css"
@@ -9,12 +8,16 @@ import {AddVariableDialogBody} from "./DialogBody/AddVariableDialogBody"
 import {BaseDialogBodyState} from "./DialogBody/BaseDialogBody"
 import {AddWhileDialogBody} from "./DialogBody/AddWhileDialogBody"
 import {Variable} from "../../models/Variable"
+import {FlowType} from "../../models"
+import {AddArithmeticDialogBody} from "./DialogBody/AddArithmeticDialogBody"
+import {AddOutputDialogBody} from "./DialogBody/AddOutputDialogBody"
+import {AddInputDialogBody} from "./DialogBody/AddInputDialogBody"
 
 export interface AddNodeDialogProps extends DialogProps {
-    type: Operations | null,
+    type: FlowType | null,
     onSaveClick: (data: BaseDialogBodyState | null) => void,
     onDismissClick: () => void,
-    variableList: Variable[]
+    variables: Variable[]
 }
 
 export interface AddNodeDialogState {
@@ -23,7 +26,7 @@ export interface AddNodeDialogState {
 
 export class AddNodeDialog extends Component<AddNodeDialogProps, AddNodeDialogState> {
     static defaultProps = {
-        variableList: []
+        variables: []
     }
 
     constructor(props: AddNodeDialogProps) {
@@ -38,29 +41,31 @@ export class AddNodeDialog extends Component<AddNodeDialogProps, AddNodeDialogSt
         this.setState({bodyData: data})
     }
 
-    onSave(event: any) {
+    onSave() {
         if (this.props.onSaveClick != null)
             this.props.onSaveClick(this.state.bodyData)
     }
 
-    onDismiss(event: any) {
+    onDismiss() {
         if (this.props.onDismissClick != null)
             this.props.onDismissClick()
     }
 
     getDialogBody() {
         switch (this.props.type) {
-            case Operations.WHILE:
-                return (<AddWhileDialogBody variableList={this.props.variableList}
+            case FlowType.WHILE:
+                return (<AddWhileDialogBody variables={this.props.variables}
                                             onDataChanged={this.onBodyChanged.bind(this)}/>)
-            case Operations.FOR:
-                return (<div/>)
-            case Operations.IF:
-                return (<div/>)
-            case Operations.VARIABLE:
+            case FlowType.ARITHMETIC:
+                return (<AddArithmeticDialogBody variables={this.props.variables}
+                                                 onDataChanged={this.onBodyChanged.bind(this)}/>)
+            case FlowType.ASSIGNMENT:
                 return (<AddVariableDialogBody onDataChanged={this.onBodyChanged.bind(this)}/>)
-            case Operations.SWITCH:
-                return (<div/>)
+            case FlowType.INPUT:
+                return (<AddInputDialogBody onDataChanged={this.onBodyChanged.bind(this)}/>)
+            case FlowType.OUTPUT:
+                return (<AddOutputDialogBody variables={this.props.variables}
+                                             onDataChanged={this.onBodyChanged.bind(this)}/>)
             default:
                 return (<div/>)
         }

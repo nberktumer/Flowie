@@ -1,19 +1,19 @@
-import {BaseFlow} from "./BaseFlow";
-import {Func, Parameter} from "../Func";
-import {CodeWriter} from "../code/CodeWriter";
-import {Variable} from "../../models/Variable";
-import {FlowType} from "../../models";
+import {BaseFlow} from "./BaseFlow"
+import {Func, Parameter} from "../Func"
+import {CodeWriter} from "../code/CodeWriter"
+import {Variable} from "../../models/Variable"
+import {FlowType} from "../../models"
 
 export class OutputFlow implements BaseFlow {
 
     id: number
     type: FlowType
-    content: OutputFlowContent
+    content: OutputFlowContent | null
 
     constructor(
         id: number,
         type: FlowType,
-        content: OutputFlowContent) {
+        content: OutputFlowContent | null) {
         this.id = id
         this.type = type
         this.content = content
@@ -25,6 +25,9 @@ export class OutputFlow implements BaseFlow {
     }
 
     createFunctionCode(): void {
+        if (this.content == null || this.content.variable.name === undefined)
+            return
+
         const functionLines: string[] = []
         const parameters: Parameter[] = [
             new Parameter(
@@ -48,7 +51,7 @@ export class OutputFlow implements BaseFlow {
     }
 
     functionInvocation(): string {
-        return `${this.functionName()}(${this.content.variable.name})`
+        return this.content != null ? `${this.functionName()}(${this.content.variable.name})` : ""
     }
 
     functionName(): string {
@@ -56,11 +59,11 @@ export class OutputFlow implements BaseFlow {
     }
 
     nextFlow(): number {
-        return this.content.nextFlowId
+        return this.content != null ? this.content.nextFlowId : -1
     }
 
     hasExternalDependencies(): boolean {
-        return false;
+        return false
     }
 
 }

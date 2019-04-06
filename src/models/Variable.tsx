@@ -2,11 +2,11 @@ import {VariableType} from "./VariableEnums";
 
 export class Variable {
 
-    name: string
+    name: string | undefined
     type: VariableType
     value: any
 
-    constructor(name: string,
+    constructor(name: string | undefined,
                 type: VariableType,
                 value: any) {
         this.name = name

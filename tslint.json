@@ -10,6 +10,8 @@
         "no-bitwise": false,
         "max-line-length": false,
         "no-empty-interface": false,
+        "no-shadowed-variable": false,
+        "no-empty": false,
         "member-access": [
             true,
             "no-public"

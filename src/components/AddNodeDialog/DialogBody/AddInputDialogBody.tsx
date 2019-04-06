@@ -5,15 +5,14 @@ import {BaseDialogBody, BaseDialogBodyProps} from "./BaseDialogBody"
 import {VariableType} from "../../../models"
 import {Rules} from "../../../config"
 
-export class AddVariableDialogBody extends BaseDialogBody {
+export class AddInputDialogBody extends BaseDialogBody {
 
     constructor(props: BaseDialogBodyProps) {
         super(props)
 
         this.state = {
             variableName: "",
-            variableType: "",
-            value: ""
+            variableType: ""
         }
     }
 
@@ -39,20 +38,12 @@ export class AddVariableDialogBody extends BaseDialogBody {
                     <MenuItem key="__SELECT__" value="">
                         {strings.select}
                     </MenuItem>
-                    {Object.values(VariableType).map((value) => (
-                        <MenuItem key={value} value={value}>
-                            {value}
+                    {Object.keys(VariableType).map((key: any) => (
+                        <MenuItem key={key} value={key}>
+                            {VariableType[key]}
                         </MenuItem>
                     ))}
                 </TextField>
-                <TextField
-                    id="value-input"
-                    label={strings.value}
-                    value={this.state.value}
-                    inputProps={{maxLength: Rules.MAX_VAR_LENGTH}}
-                    onChange={this.handleChange("value")}
-                    margin="normal"
-                />
             </div>
         )
     }

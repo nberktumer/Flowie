@@ -5,11 +5,11 @@ import {DiagramEngine} from "storm-react-diagrams"
 import * as _ from "lodash"
 import {Variable} from "../../../../models/Variable"
 
-export class VariableNodeModel extends RectangleNodeWithInfoModel {
+export class OutputNodeModel extends RectangleNodeWithInfoModel {
     variable: Variable
 
     constructor(variable: Variable) {
-        super(strings.variable + " (" + variable.type + ")", NodeColors.VARIABLE)
+        super(strings.output, NodeColors.IF)
 
         this.variable = variable
 

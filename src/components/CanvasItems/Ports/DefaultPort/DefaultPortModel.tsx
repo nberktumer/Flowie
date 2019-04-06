@@ -1,10 +1,11 @@
 import * as _ from "lodash"
-import {DefaultLinkModel, DiagramEngine, LinkModel, PortModel} from "storm-react-diagrams"
+import {BaseEvent, BaseModel, DefaultLinkModel, DiagramEngine, LinkModel, PortModel} from "storm-react-diagrams"
 import {DefaultPort, DefaultPortType} from "./index"
 
 export class DefaultPortModel extends PortModel {
     portType: DefaultPort
     label: string
+    onLinkChangedListener: () => void
     links: { [id: string]: DefaultLinkModel }
 
     constructor(portType: DefaultPort, name: string, label: string | null = null, id?: string) {
@@ -12,6 +13,8 @@ export class DefaultPortModel extends PortModel {
         this.portType = portType
         this.label = label || name
         this.links = {}
+        this.onLinkChangedListener = () => {
+        }
     }
 
     deSerialize(object: any, engine: DiagramEngine) {
@@ -49,8 +52,24 @@ export class DefaultPortModel extends PortModel {
             || (this.portType.type === DefaultPortType.SCOPE && port.portType.type === DefaultPortType.IN)
     }
 
+    addOnLinkChangedListener(listener: () => void) {
+        this.onLinkChangedListener = listener
+    }
+
     createLinkModel(): LinkModel {
-        const link = super.createLinkModel()
-        return link || new DefaultLinkModel()
+        const link = new DefaultLinkModel()
+        link.addListener({
+            targetPortChanged(event: BaseEvent<LinkModel> & { port: PortModel | null }): void {
+                if (event.port != null && event.port instanceof DefaultPortModel && link.sourcePort != null && link.sourcePort.canLinkToPort(event.port)) {
+                    (event.port as DefaultPortModel).onLinkChangedListener()
+                }
+            },
+            entityRemoved(event: BaseEvent<BaseModel>): void {
+                const link = event.entity as DefaultLinkModel
+                if (link.getTargetPort() != null)
+                    (link.getTargetPort() as DefaultPortModel).onLinkChangedListener()
+            }
+        })
+        return link
     }
 }

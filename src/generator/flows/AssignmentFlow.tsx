@@ -1,24 +1,26 @@
-import {BaseFlow} from "./BaseFlow";
-import {FlowType, VariableType} from "../../models";
-import {CodeWriter} from "../code/CodeWriter";
-import {Variable} from "../../models/Variable";
+import {BaseFlow} from "./BaseFlow"
+import {FlowType, VariableType} from "../../models"
+import {CodeWriter} from "../code/CodeWriter"
+import {Variable} from "../../models/Variable"
 
 export class AssignmentFlow implements BaseFlow {
 
     id: number
     type: FlowType
-    content: AssignmentFlowContent
+    content: AssignmentFlowContent | null
 
     constructor(
         id: number,
         type: FlowType,
-        content: AssignmentFlowContent) {
+        content: AssignmentFlowContent | null) {
         this.id = id
         this.type = type
         this.content = content
     }
 
     createMainCode(): void {
+        if (this.content == null)
+            return
 
         let contentString = ""
         switch (this.content.variable.type) {
@@ -46,19 +48,19 @@ export class AssignmentFlow implements BaseFlow {
     }
 
     functionInvocation(): string {
-        return `${this.functionName()}()`;
+        return `${this.functionName()}()`
     }
 
     functionName(): string {
-        return `assignmentFlow${this.id}`;
+        return `assignmentFlow${this.id}`
     }
 
     nextFlow(): number {
-        return this.content.nextFlowId;
+        return this.content != null ? this.content.nextFlowId : -1
     }
 
     hasExternalDependencies(): boolean {
-        return false;
+        return false
     }
 
 }

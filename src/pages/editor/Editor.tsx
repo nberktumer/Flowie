@@ -6,7 +6,7 @@ import {BaseEvent, BaseModel, DefaultNodeModel, DiagramEngine, DiagramModel, Dia
 import {ShapePanel} from "../../components/ShapePanel/ShapePanel"
 import {ShapeItem} from "../../components/ShapePanel/ShapeItem"
 import {CodePreviewPanel} from "../../components/CodePreviewPanel/CodePreviewPanel"
-import {Operations, ProgrammingLanguage, VariableType} from "../../models"
+import {FlowType, ProgrammingLanguage, VariableType} from "../../models"
 import {ProjectTreePanel} from "../../components/ProjectTreePanel/ProjectTreePanel"
 import {PortFactory} from "../../components/CanvasItems/Ports/PortFactory"
 import {RectangleNodeFactory} from "../../components/CanvasItems/Nodes/BaseNodes/RectangleNode/RectangleNodeFactory"
@@ -24,101 +24,110 @@ import {
 import {WhileNodeModel} from "../../components/CanvasItems/Nodes/WhileNode/WhileNodeModel"
 import {Variable} from "../../models/Variable"
 import {Condition} from "../../models/Condition"
-import {InitialNode} from "../../components/CanvasItems/Nodes/InitialNode/InitialNode"
+import {InitialNodeModel} from "../../components/CanvasItems/Nodes/InitialNode/InitialNodeModel"
+import {ArithmeticNodeModel} from "../../components/CanvasItems/Nodes/ArithmeticNode/ArithmeticNodeModel"
+import {ArithmeticFlowContent, Operator, OperatorType} from "../../generator/flows/ArithmeticFlow"
+import {InputNodeModel} from "../../components/CanvasItems/Nodes/InputNode/InputNodeModel"
+import {OutputNodeModel} from "../../components/CanvasItems/Nodes/OutputNode/OutputNodeModel"
+import {FlowModel} from "../../generator/FlowModelJSON"
+import {AssignmentFlowContent} from "../../generator/flows/AssignmentFlow"
+import {InputFlowContent} from "../../generator/flows/InputFlow"
+import {OutputFlowContent} from "../../generator/flows/OutputFlow"
+import {WhileFlowContent} from "../../generator/flows/WhileFlow"
 
-const json = "[\n" +
-    "  {\n" +
-    "    \"id\": 0,\n" +
-    "    \"type\": \"Assignment\",\n" +
-    "    \"assignmentFlowContent\": {\n" +
-    "      \"variable\": {\n" +
-    "        \"name\": \"total\",\n" +
-    "        \"value\": \"1\",\n" +
-    "        \"type\": \"Int\"\n" +
-    "      },\n" +
-    "      \"nextFlowId\": 1\n" +
-    "    }\n" +
-    "  },\n" +
-    "  {\n" +
-    "    \"id\": 1,\n" +
-    "    \"type\": \"Input\",\n" +
-    "    \"inputFlowContent\": {\n" +
-    "      \"variable\": {\n" +
-    "        \"name\": \"n\",\n" +
-    "        \"type\": \"Int\"\n" +
-    "      },\n" +
-    "      \"nextFlowId\": 2\n" +
-    "    }\n" +
-    "  },\n" +
-    "  {\n" +
-    "    \"id\": 2,\n" +
-    "    \"type\": \"While\",\n" +
-    "    \"whileFlowContent\": {\n" +
-    "      \"conditions\": [\n" +
-    "        {\n" +
-    "          \"variableType\": \"Int\",\n" +
-    "          \"first\": {\n" +
-    "            \"name\": \"n\"\n" +
-    "          },\n" +
-    "          \"second\": {\n" +
-    "            \"name\": 1\n" +
-    "          },\n" +
-    "          \"operation\": \"NotEquals\"\n" +
-    "        }\n" +
-    "      ],\n" +
-    "      \"scopeId\": 3,\n" +
-    "      \"nextFlowId\": 5\n" +
-    "    }\n" +
-    "  },\n" +
-    "  {\n" +
-    "    \"id\": 3,\n" +
-    "    \"type\": \"Arithmetic\",\n" +
-    "    \"arithmeticFlowContent\": {\n" +
-    "      \"variable\": {\n" +
-    "        \"name\": \"total\"\n" +
-    "      },\n" +
-    "      \"operation\": \"Multiplication\",\n" +
-    "      \"operator1\": {\n" +
-    "        \"type\": \"Variable\",\n" +
-    "        \"variableName\": \"n\"\n" +
-    "      },\n" +
-    "      \"operator2\": {\n" +
-    "        \"type\": \"Variable\",\n" +
-    "        \"variableName\": \"total\"\n" +
-    "      },\n" +
-    "      \"nextFlowId\": 4\n" +
-    "    }\n" +
-    "  },\n" +
-    "  {\n" +
-    "    \"id\": 4,\n" +
-    "    \"type\": \"Arithmetic\",\n" +
-    "    \"arithmeticFlowContent\": {\n" +
-    "      \"variable\": {\n" +
-    "        \"name\": \"n\"\n" +
-    "      },\n" +
-    "      \"operation\": \"Subtraction\",\n" +
-    "      \"operator1\": {\n" +
-    "        \"type\": \"Variable\",\n" +
-    "        \"variableName\": \"n\"\n" +
-    "      },\n" +
-    "      \"operator2\": {\n" +
-    "        \"type\": \"Constant\",\n" +
-    "        \"constantValue\": 1\n" +
-    "      },\n" +
-    "      \"nextFlowId\": 2\n" +
-    "    }\n" +
-    "  },\n" +
-    "  {\n" +
-    "    \"id\": 5,\n" +
-    "    \"type\": \"Output\",\n" +
-    "    \"outputFlowContent\": {\n" +
-    "      \"variable\": {\n" +
-    "        \"name\": \"total\",\n" +
-    "        \"type\": \"Int\"\n" +
-    "      },\n" +
-    "      \"nextFlowId\": -1\n" +
-    "    }\n" +
-    "  }\n" +
+const json = "[" +
+    "  {" +
+    "    \"id\": 0," +
+    "    \"type\": \"Assignment\"," +
+    "    \"assignmentFlowContent\": {" +
+    "      \"variable\": {" +
+    "        \"name\": \"total\"," +
+    "        \"value\": \"1\"," +
+    "        \"type\": \"Int\"" +
+    "      }," +
+    "      \"nextFlowId\": 1" +
+    "    }" +
+    "  }," +
+    "  {" +
+    "    \"id\": 1," +
+    "    \"type\": \"Input\"," +
+    "    \"inputFlowContent\": {" +
+    "      \"variable\": {" +
+    "        \"name\": \"n\"," +
+    "        \"type\": \"Int\"" +
+    "      }," +
+    "      \"nextFlowId\": 2" +
+    "    }" +
+    "  }," +
+    "  {" +
+    "    \"id\": 2," +
+    "    \"type\": \"While\"," +
+    "    \"whileFlowContent\": {" +
+    "      \"conditions\": [" +
+    "        {" +
+    "          \"variableType\": \"Int\"," +
+    "          \"first\": {" +
+    "            \"name\": \"n\"" +
+    "          }," +
+    "          \"second\": {" +
+    "            \"name\": 1" +
+    "          }," +
+    "          \"operation\": \"NotEquals\"" +
+    "        }" +
+    "      ]," +
+    "      \"scopeId\": 3," +
+    "      \"nextFlowId\": 5" +
+    "    }" +
+    "  }," +
+    "  {" +
+    "    \"id\": 3," +
+    "    \"type\": \"Arithmetic\"," +
+    "    \"arithmeticFlowContent\": {" +
+    "      \"variable\": {" +
+    "        \"name\": \"total\"" +
+    "      }," +
+    "      \"operation\": \"Multiplication\"," +
+    "      \"operator1\": {" +
+    "        \"type\": \"Variable\"," +
+    "        \"variableName\": \"n\"" +
+    "      }," +
+    "      \"operator2\": {" +
+    "        \"type\": \"Variable\"," +
+    "        \"variableName\": \"total\"" +
+    "      }," +
+    "      \"nextFlowId\": 4" +
+    "    }" +
+    "  }," +
+    "  {" +
+    "    \"id\": 4," +
+    "    \"type\": \"Arithmetic\"," +
+    "    \"arithmeticFlowContent\": {" +
+    "      \"variable\": {" +
+    "        \"name\": \"n\"" +
+    "      }," +
+    "      \"operation\": \"Subtraction\"," +
+    "      \"operator1\": {" +
+    "        \"type\": \"Variable\"," +
+    "        \"variableName\": \"n\"" +
+    "      }," +
+    "      \"operator2\": {" +
+    "        \"type\": \"Constant\"," +
+    "        \"constantValue\": 1" +
+    "      }," +
+    "      \"nextFlowId\": 2" +
+    "    }" +
+    "  }," +
+    "  {" +
+    "    \"id\": 5," +
+    "    \"type\": \"Output\"," +
+    "    \"outputFlowContent\": {" +
+    "      \"variable\": {" +
+    "        \"name\": \"total\"," +
+    "        \"type\": \"Int\"" +
+    "      }," +
+    "      \"nextFlowId\": -1" +
+    "    }" +
+    "  }" +
     "]"
 
 export interface IEditorProps {
@@ -129,7 +138,7 @@ export interface IEditorState {
     width: string | undefined,
     selectedStr: string,
     isModalOpen: boolean,
-    newOperation: Operations | null,
+    newOperation: FlowType | null,
     newItemPosition: { x: number, y: number },
     generatedCode: string,
     variableList: Variable[]
@@ -139,6 +148,7 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
     private readonly activeModel: DiagramModel
     private readonly diagramEngine: DiagramEngine
     private readonly selected: string[] = []
+    private readonly initialNode: InitialNodeModel
 
     constructor(props: any) {
         super(props)
@@ -160,13 +170,13 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
             })
         })
 
-        const initialNode = new InitialNode()
-        initialNode.addListener({
+        this.initialNode = new InitialNodeModel()
+        this.initialNode.addListener({
             selectionChanged: this.addItemListener.bind(this),
             entityRemoved: this.removeItemListener.bind(this)
         })
 
-        this.diagramEngine.getDiagramModel().addNode(initialNode)
+        this.diagramEngine.getDiagramModel().addNode(this.initialNode)
 
         this.state = {
             height: "1px",
@@ -178,17 +188,12 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
             generatedCode: "",
             variableList: []
         }
-
-        setTimeout(() => {
-            const generator = new CodeGenerator(json)
-            this.setState({generatedCode: generator.generate()})
-        }, 500)
     }
 
     onDrop(event: any): void {
         const data = JSON.parse(event.dataTransfer.getData("storm-diagram-node"))
 
-        if (!Object.values(Operations).includes(data.type))
+        if (!Object.values(FlowType).includes(data.type))
             return
 
         const points = this.diagramEngine.getRelativeMousePoint(event)
@@ -204,42 +209,70 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
         let node = null
 
         switch (this.state.newOperation) {
-            case Operations.VARIABLE:
-                if (data.variableName === "" || data.value === "" || data.variableName === undefined)
+            case FlowType.ASSIGNMENT:
+                if (data.variableName === "" || data.variableType === "" || data.value === "")
                     return
 
-                node = new VariableNodeModel(data.variableType as VariableType)
+                node = new VariableNodeModel(new Variable(data.variableName, data.variableType as VariableType, data.value))
+                node.addOnLinkChangedListener(() => this.onLinkChanged())
                 node.info = data.variableName + " = " + data.value
-                node.variableName = data.variableName
-                node.dataType = data.variableType as VariableType
-                node.value = data.value
 
                 // Add the new variable to the variable list
                 this.state.variableList.push(new Variable(data.variableName, data.variableType as VariableType, data.value))
 
                 break
-            case Operations.IF:
+            case FlowType.ARITHMETIC:
+                if (data.variable === "" || data.operation === "" || data.operator1 === "" || data.operator2 === "")
+                    return
+
+                const var1 = JSON.parse(data.operator1) as Variable
+                const var2 = JSON.parse(data.operator2) as Variable
+
+                const op1 = new Operator(OperatorType.VARIABLE, var1.name, var1.value)
+                const op2 = new Operator(OperatorType.VARIABLE, var2.name, var2.value)
+
+                node = new ArithmeticNodeModel(
+                    JSON.parse(data.variable),
+                    data.operation,
+                    op1,
+                    op2
+                )
+                node.addOnLinkChangedListener(() => this.onLinkChanged())
+                node.info = data.operation
                 break
-            case Operations.FOR:
-                break
-            case Operations.SWITCH:
-                break
-            case Operations.WHILE:
+            case FlowType.WHILE:
                 if (data.variableType === "" || data.first === "" || data.second === "" || data.operation === "")
                     return
 
                 const condition = new Condition(data.variableType, JSON.parse(data.first), JSON.parse(data.second), data.operation)
 
                 node = new WhileNodeModel()
+                node.addOnLinkChangedListener(() => this.onLinkChanged())
                 node.conditionList.push(condition)
                 node.info = condition.first.name + " " + condition.operation + " " + condition.second.name
+                break
+            case FlowType.INPUT:
+                if (data.variableName === "" || data.variableType === "")
+                    return
+
+                node = new InputNodeModel(new Variable(data.variableName, data.variableType, null))
+                node.addOnLinkChangedListener(() => this.onLinkChanged())
+                node.info = data.variableName
+
+                // Add the new variable to the variable list
+                this.state.variableList.push(new Variable(data.variableName, data.variableType as VariableType, null))
+                break
+            case FlowType.OUTPUT:
+                if (data.variable === "")
+                    return
+
+                node = new OutputNodeModel(JSON.parse(data.variable))
+                node.addOnLinkChangedListener(() => this.onLinkChanged())
+                node.info = node.variable.name === undefined ? "" : node.variable.name
                 break
             default:
                 return
         }
-
-        if (node == null)
-            return
 
         node.x = this.state.newItemPosition.x
         node.y = this.state.newItemPosition.y
@@ -270,6 +303,114 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
         })
     }
 
+    onLinkChanged() {
+        let currentFlow = this.initialNode.getNextFlow()
+        // clear the code preview and return if the initial node link has deleted
+        if (currentFlow == null) {
+            const generator =
+            this.setState({generatedCode: "[]"})
+            return
+        }
+
+        const flowList = []
+        let id = 0
+
+        const list = []
+
+        while (currentFlow != null) {
+            if (currentFlow instanceof VariableNodeModel) {
+                flowList.push(new FlowModel(
+                    FlowType.ASSIGNMENT,
+                    id++,
+                    new AssignmentFlowContent(currentFlow.variable, id),
+                    null,
+                    null,
+                    null,
+                    null,
+                    id
+                ))
+            } else if (currentFlow instanceof ArithmeticNodeModel) {
+                flowList.push(new FlowModel(
+                    FlowType.ASSIGNMENT,
+                    id++,
+                    null,
+                    null,
+                    null,
+                    new ArithmeticFlowContent(
+                        currentFlow.variable,
+                        currentFlow.operation,
+                        currentFlow.operator1,
+                        currentFlow.operator2,
+                        id
+                    ),
+                    null,
+                    id
+                ))
+            } else if (currentFlow instanceof WhileNodeModel) {
+                flowList.push(new FlowModel(
+                    FlowType.ASSIGNMENT,
+                    id++,
+                    null,
+                    null,
+                    null,
+                    null,
+                    new WhileFlowContent(
+                        currentFlow.conditionList,
+                        -1, // TODO: Scope ID
+                        id
+                    ),
+                    id
+                ))
+            } else if (currentFlow instanceof InputNodeModel) {
+                flowList.push(new FlowModel(
+                    FlowType.ASSIGNMENT,
+                    id++,
+                    null,
+                    new InputFlowContent(currentFlow.variable, id),
+                    null,
+                    null,
+                    null,
+                    id
+                ))
+            } else if (currentFlow instanceof OutputNodeModel) {
+                flowList.push(new FlowModel(
+                    FlowType.ASSIGNMENT,
+                    id++,
+                    null,
+                    null,
+                    new OutputFlowContent(currentFlow.variable, id),
+                    null,
+                    null,
+                    id
+                ))
+            }
+
+            list.push({id: currentFlow.getID(), index: id - 1})
+            currentFlow = currentFlow.getNextFlow()
+        }
+
+        console.log(JSON.stringify(flowList))
+
+        const flowModelList = JSON.parse(JSON.stringify(flowList)) as FlowModel[]
+        const lastItem = flowModelList[flowModelList.length - 1]
+        if (lastItem.arithmeticFlowContent != null) {
+            lastItem.arithmeticFlowContent.nextFlowId = -1
+        } else if (lastItem.assignmentFlowContent != null) {
+            lastItem.assignmentFlowContent.nextFlowId = -1
+        } else if (lastItem.whileFlowContent != null) {
+            lastItem.whileFlowContent.nextFlowId = -1
+        } else if (lastItem.inputFlowContent != null) {
+            lastItem.inputFlowContent.nextFlowId = -1
+        } else if (lastItem.outputFlowContent != null) {
+            lastItem.outputFlowContent.nextFlowId = -1
+        }
+
+        console.log(JSON.stringify(flowModelList))
+
+        const generator = new CodeGenerator(JSON.stringify(flowModelList))
+        this.setState({generatedCode: generator.generate()})
+    }
+
     render() {
         return (
             <div className={styles.App}>
@@ -277,7 +418,7 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
                                onDismissClick={this.onModalDismissClick.bind(this)}
                                onClose={this.onModalClose.bind(this)}
                                aria-labelledby="simple-dialog-title"
-                               variableList={this.state.variableList}
+                               variables={this.state.variableList}
                                open={this.state.isModalOpen}
                                type={this.state.newOperation}/>
 
@@ -294,16 +435,9 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
 
                             <ReflexElement className="left-pane" minSize={200}>
                                 <ShapePanel>
-                                    <ShapeItem model={{type: Operations.WHILE.toString()}}
-                                               name={Operations.WHILE.toString()}/>
-                                    <ShapeItem model={{type: Operations.FOR.toString()}}
-                                               name={Operations.FOR.toString()}/>
-                                    <ShapeItem model={{type: Operations.SWITCH.toString()}}
-                                               name={Operations.SWITCH.toString()}/>
-                                    <ShapeItem model={{type: Operations.IF.toString()}}
-                                               name={Operations.IF.toString()}/>
-                                    <ShapeItem model={{type: Operations.VARIABLE.toString()}}
-                                               name={Operations.VARIABLE.toString()}/>
+                                    {Object.values(FlowType).map((value) => (
+                                        <ShapeItem key={value} model={{type: value}} name={value}/>
+                                    ))}
                                 </ShapePanel>
                             </ReflexElement>
                         </ReflexContainer>
@@ -381,7 +515,7 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
     private removeItemListener(event: BaseEvent<BaseModel>) {
         if (event.entity instanceof VariableNodeModel) {
             const newVariableList = this.state.variableList.filter((value) => {
-                return value.name !== (event.entity as VariableNodeModel).variableName
+                return value.name !== (event.entity as VariableNodeModel).variable.name
             })
 
             this.setState({variableList: newVariableList})

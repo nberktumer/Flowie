@@ -1,25 +1,28 @@
-import {BaseFlow} from "./BaseFlow";
-import {FlowType, VariableType} from "../../models/VariableEnums";
-import {Func, Parameter} from "../Func";
-import {CodeWriter} from "../code/CodeWriter";
-import {Variable} from "../../models/Variable";
+import {BaseFlow} from "./BaseFlow"
+import {FlowType, VariableType} from "../../models/VariableEnums"
+import {Func, Parameter} from "../Func"
+import {CodeWriter} from "../code/CodeWriter"
+import {Variable} from "../../models/Variable"
 
 export class InputFlow implements BaseFlow {
 
     id: number
     type: FlowType
-    content: InputFlowContent
+    content: InputFlowContent | null
 
     constructor(
         id: number,
         type: FlowType,
-        content: InputFlowContent) {
+        content: InputFlowContent | null) {
         this.id = id
         this.type = type
         this.content = content
     }
 
     createMainCode(): void {
+        if (this.content == null)
+            return
+
         CodeWriter.getInstance().writeLineToMainFunction(
             `var ${this.content.variable.name} = ${this.functionInvocation()}`
         )
@@ -27,6 +30,9 @@ export class InputFlow implements BaseFlow {
     }
 
     createFunctionCode(): void {
+        if (this.content == null)
+            return
+
         const functionLines: string[] = []
         functionLines.push(`println("Please enter value for ${this.content.variable.name}")`)
 
@@ -63,19 +69,19 @@ export class InputFlow implements BaseFlow {
     }
 
     functionInvocation(): string {
-        return `${this.functionName()}()`;
+        return `${this.functionName()}()`
     }
 
     functionName(): string {
-        return `inputFlow${this.id}`;
+        return `inputFlow${this.id}`
     }
 
     nextFlow(): number {
-        return this.content.nextFlowId;
+        return this.content != null ? this.content.nextFlowId : -1
     }
 
     hasExternalDependencies(): boolean {
-        return false;
+        return false
     }
 
 }

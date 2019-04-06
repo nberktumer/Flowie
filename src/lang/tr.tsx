@@ -22,5 +22,9 @@ export default {
     select: "Select",
     operation: "Operation",
     recurse: "Recurse",
-    initialFlow: "Initial Flow"
+    initialFlow: "Initial Flow",
+    firstOperator: "First Operator",
+    secondOperator: "Second Operator",
+    input: "Input",
+    output: "Output"
 }
