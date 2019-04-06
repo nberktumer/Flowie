@@ -1,74 +1,42 @@
 import {BaseFlow} from "../flows/BaseFlow"
 import {Func} from "../Func"
 import {Stack} from "stack-typescript"
-import {AssignmentFlow} from "../flows/AssignmentFlow"
-import {InputFlow} from "../flows/InputFlow"
-import {OutputFlow} from "../flows/OutputFlow"
-import {ArithmeticFlow} from "../flows/ArithmeticFlow"
-import {WhileFlow} from "../flows/WhileFlow"
 
 export class CodeWriter {
-    private static instance: CodeWriter
-    flows: BaseFlow[] = []
-    codes: string[] = []
-    scopeCount = 0
-    private mainFunctionLineIndex = 0
-    private spacing = "\t"
-    private variableSet: Set<string> = new Set()
-    private loopStack: Stack<number> = new Stack()
-
-    private constructor() {
-        this.loopStack.push(-1)
-    }
+    static INITIAL_ID = "INITIAL_ID"
+    static TERMINATION_ID = "TERMINATION_ID"
 
     static getInstance(): CodeWriter {
         return this.instance || (this.instance = new this())
     }
 
+    private static instance: CodeWriter
+
+    flows: Map<string, BaseFlow> = new Map()
+    codes: string[] = []
+    scopeCount = 0
+    private mainFunctionLineIndex = 0
+    private spacing = "\t"
+    private variableSet: Set<string> = new Set()
+    private loopStack: Stack<string> = new Stack()
+
+    private constructor() {
+        this.loopStack.push(CodeWriter.TERMINATION_ID)
+    }
+
     reset() {
-        this.flows = []
+        this.flows.clear()
+        this.variableSet.clear()
         this.codes = []
         this.scopeCount = 0
         this.mainFunctionLineIndex = 0
-        this.variableSet = new Set()
         this.loopStack = new Stack()
-        this.loopStack.push(-1)
+        this.loopStack.push(CodeWriter.TERMINATION_ID)
     }
 
-    setFlows(value: BaseFlow[]) {
-        const sortedFlows = value.sort((first, second) => {
-            let firstFlowId = -1
-            let secondFlowId = -1
-
-            if (first instanceof ArithmeticFlow) {
-                firstFlowId = first.id
-            } else if (first instanceof InputFlow) {
-                firstFlowId = first.id
-            } else if (first instanceof OutputFlow) {
-                firstFlowId = first.id
-            } else if (first instanceof WhileFlow) {
-                firstFlowId = first.id
-            } else if (first instanceof AssignmentFlow) {
-                firstFlowId = first.id
-            }
-
-            if (second instanceof ArithmeticFlow) {
-                secondFlowId = second.id
-            } else if (second instanceof InputFlow) {
-                secondFlowId = second.id
-            } else if (second instanceof OutputFlow) {
-                secondFlowId = second.id
-            } else if (second instanceof WhileFlow) {
-                secondFlowId = second.id
-            } else if (second instanceof AssignmentFlow) {
-                secondFlowId = second.id
-            }
-
-            return firstFlowId - secondFlowId
-        })
-
-        console.log(sortedFlows)
-        this.flows = sortedFlows
+    setFlows(flows: Map<string, BaseFlow>) {
+        console.log(flows)
+        this.flows = flows
     }
 
     writeLineToMainFunction(line: string) {
@@ -87,25 +55,20 @@ export class CodeWriter {
         this.codes[lastIndex] = last
     }
 
-    initMain() {
+    generateMain() {
         this.writeLineToMainFunction(`fun main(args: Array<String\>) {`)
         this.scopeCount++
-    }
 
-    finishMain() {
+        const initialFlow = this.flows.get(CodeWriter.INITIAL_ID)
+        if (initialFlow !== undefined) {
+            initialFlow.createMainCode()
+        } else {
+            console.log("No initial defined please define it with " + CodeWriter.INITIAL_ID + "!")
+        }
+
         this.scopeCount--
         this.writeLineToMainFunction("}")
         this.writeLineToMainFunction("")
-    }
-
-    openScope() {
-        this.writeLine("{")
-        this.scopeCount++
-    }
-
-    closeScope() {
-        this.scopeCount--
-        this.writeLine("}")
     }
 
     writeFunction(func: Func) {
@@ -139,26 +102,19 @@ export class CodeWriter {
         this.writeLine("")
     }
 
-    getFunctionInvocationFromFlowIndex(index: number): string {
-        if (index !== -1) {
-            return this.flows[index].functionInvocation()
-        }
-
-        return ""
-    }
-
-    getNextFlowIndex(index: number): number {
-        return this.flows[index].nextFlow()
-    }
-
-    writeMainCodeFromFlow(flowIndex: number) {
+    writeMainCodeFromFlow(id: string) {
         const top = this.loopStack.top
 
-        if (!this.removeFromStackIfEquals(flowIndex)) {
-            console.log("Code for index " + flowIndex + " is being created!")
-            this.flows[flowIndex].createMainCode()
+        if (!this.removeFromStackIfEquals(id)) {
+            const flow = this.flows.get(id)
+            if (flow !== undefined) {
+                console.log("Code for id " + id + " is being created!")
+                return flow.createMainCode()
+            }
+
+            console.log("Something went horribly wrong!")
         } else {
-            console.log("Top with index " + top + " is popped!")
+            console.log("Top with id " + top + " is popped!")
         }
     }
 
@@ -177,16 +133,16 @@ export class CodeWriter {
         return true
     }
 
-    addToLoopStack(index: number) {
-        console.log("Pushed to stack " + index + "!")
-        this.loopStack.push(index)
+    addToLoopStack(id: string) {
+        console.log("Pushed to stack " + id + "!")
+        this.loopStack.push(id)
     }
 
     /**
      * Returns true if top equals index and pops it returns false otherwise.
      */
-    removeFromStackIfEquals(index: number): boolean {
-        if (this.loopStack.top === index) {
+    removeFromStackIfEquals(id: string): boolean {
+        if (this.loopStack.top === id) {
             this.loopStack.pop()
             return true
         }

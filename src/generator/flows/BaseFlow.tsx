@@ -5,7 +5,7 @@ export interface BaseFlow {
 
     createFunctionCode(): void,
 
-    nextFlow(): number,
+    nextFlow(): string,
 
     functionName(): string,
 
