@@ -6,7 +6,7 @@ import {BaseEvent, BaseModel, DefaultNodeModel, DiagramEngine, DiagramModel, Dia
 import {ShapePanel} from "../../components/ShapePanel/ShapePanel"
 import {ShapeItem} from "../../components/ShapePanel/ShapeItem"
 import {CodePreviewPanel} from "../../components/CodePreviewPanel/CodePreviewPanel"
-import {FlowType, ProgrammingLanguage, VariableType} from "../../models"
+import {FlowType, ProgrammingLanguage} from "../../models"
 import {ProjectTreePanel} from "../../components/ProjectTreePanel/ProjectTreePanel"
 import {PortFactory} from "../../components/CanvasItems/Ports/PortFactory"
 import {RectangleNodeFactory} from "../../components/CanvasItems/Nodes/BaseNodes/RectangleNode/RectangleNodeFactory"
@@ -34,101 +34,7 @@ import {AssignmentFlowContent} from "../../generator/flows/AssignmentFlow"
 import {InputFlowContent} from "../../generator/flows/InputFlow"
 import {OutputFlowContent} from "../../generator/flows/OutputFlow"
 import {WhileFlowContent} from "../../generator/flows/WhileFlow"
-
-const json = "[" +
-    "  {" +
-    "    \"id\": 0," +
-    "    \"type\": \"Assignment\"," +
-    "    \"assignmentFlowContent\": {" +
-    "      \"variable\": {" +
-    "        \"name\": \"total\"," +
-    "        \"value\": \"1\"," +
-    "        \"type\": \"Int\"" +
-    "      }," +
-    "      \"nextFlowId\": 1" +
-    "    }" +
-    "  }," +
-    "  {" +
-    "    \"id\": 1," +
-    "    \"type\": \"Input\"," +
-    "    \"inputFlowContent\": {" +
-    "      \"variable\": {" +
-    "        \"name\": \"n\"," +
-    "        \"type\": \"Int\"" +
-    "      }," +
-    "      \"nextFlowId\": 2" +
-    "    }" +
-    "  }," +
-    "  {" +
-    "    \"id\": 2," +
-    "    \"type\": \"While\"," +
-    "    \"whileFlowContent\": {" +
-    "      \"conditions\": [" +
-    "        {" +
-    "          \"variableType\": \"Int\"," +
-    "          \"first\": {" +
-    "            \"name\": \"n\"" +
-    "          }," +
-    "          \"second\": {" +
-    "            \"name\": 1" +
-    "          }," +
-    "          \"operation\": \"NotEquals\"" +
-    "        }" +
-    "      ]," +
-    "      \"scopeId\": 3," +
-    "      \"nextFlowId\": 5" +
-    "    }" +
-    "  }," +
-    "  {" +
-    "    \"id\": 3," +
-    "    \"type\": \"Arithmetic\"," +
-    "    \"arithmeticFlowContent\": {" +
-    "      \"variable\": {" +
-    "        \"name\": \"total\"" +
-    "      }," +
-    "      \"operation\": \"Multiplication\"," +
-    "      \"operator1\": {" +
-    "        \"type\": \"Variable\"," +
-    "        \"variableName\": \"n\"" +
-    "      }," +
-    "      \"operator2\": {" +
-    "        \"type\": \"Variable\"," +
-    "        \"variableName\": \"total\"" +
-    "      }," +
-    "      \"nextFlowId\": 4" +
-    "    }" +
-    "  }," +
-    "  {" +
-    "    \"id\": 4," +
-    "    \"type\": \"Arithmetic\"," +
-    "    \"arithmeticFlowContent\": {" +
-    "      \"variable\": {" +
-    "        \"name\": \"n\"" +
-    "      }," +
-    "      \"operation\": \"Subtraction\"," +
-    "      \"operator1\": {" +
-    "        \"type\": \"Variable\"," +
-    "        \"variableName\": \"n\"" +
-    "      }," +
-    "      \"operator2\": {" +
-    "        \"type\": \"Constant\"," +
-    "        \"constantValue\": 1" +
-    "      }," +
-    "      \"nextFlowId\": 2" +
-    "    }" +
-    "  }," +
-    "  {" +
-    "    \"id\": 5," +
-    "    \"type\": \"Output\"," +
-    "    \"outputFlowContent\": {" +
-    "      \"variable\": {" +
-    "        \"name\": \"total\"," +
-    "        \"type\": \"Int\"" +
-    "      }," +
-    "      \"nextFlowId\": -1" +
-    "    }" +
-    "  }" +
-    "]"
+import {RectangleNodeModel} from "../../components/CanvasItems/Nodes/BaseNodes/RectangleNode/RectangleNodeModel"
 
 export interface IEditorProps {
 }
@@ -176,6 +82,8 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
             entityRemoved: this.removeItemListener.bind(this)
         })
 
+        const generator = new CodeGenerator("[]")
+
         this.diagramEngine.getDiagramModel().addNode(this.initialNode)
 
         this.state = {
@@ -185,7 +93,7 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
             isModalOpen: false,
             newOperation: null,
             newItemPosition: {x: 0, y: 0},
-            generatedCode: "",
+            generatedCode: generator.generate(),
             variableList: []
         }
     }
@@ -209,19 +117,22 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
         let node = null
 
         switch (this.state.newOperation) {
-            case FlowType.ASSIGNMENT:
+            case FlowType.ASSIGNMENT: {
                 if (data.variableName === "" || data.variableType === "" || data.value === "")
                     return
 
-                node = new VariableNodeModel(new Variable(data.variableName, data.variableType as VariableType, data.value))
+                const variable = new Variable(data.variableName, data.variableType, data.value)
+
+                node = new VariableNodeModel(variable)
                 node.addOnLinkChangedListener(() => this.onLinkChanged())
                 node.info = data.variableName + " = " + data.value
 
                 // Add the new variable to the variable list
-                this.state.variableList.push(new Variable(data.variableName, data.variableType as VariableType, data.value))
+                this.state.variableList.push(variable)
 
                 break
-            case FlowType.ARITHMETIC:
+            }
+            case FlowType.ARITHMETIC: {
                 if (data.variable === "" || data.operation === "" || data.operator1 === "" || data.operator2 === "")
                     return
 
@@ -240,7 +151,8 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
                 node.addOnLinkChangedListener(() => this.onLinkChanged())
                 node.info = data.operation
                 break
-            case FlowType.WHILE:
+            }
+            case FlowType.WHILE: {
                 if (data.variableType === "" || data.first === "" || data.second === "" || data.operation === "")
                     return
 
@@ -251,18 +163,22 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
                 node.conditionList.push(condition)
                 node.info = condition.first.name + " " + condition.operation + " " + condition.second.name
                 break
-            case FlowType.INPUT:
+            }
+            case FlowType.INPUT: {
                 if (data.variableName === "" || data.variableType === "")
                     return
 
-                node = new InputNodeModel(new Variable(data.variableName, data.variableType, null))
+                const variable = new Variable(data.variableName, data.variableType, null)
+
+                node = new InputNodeModel(variable)
                 node.addOnLinkChangedListener(() => this.onLinkChanged())
                 node.info = data.variableName
 
                 // Add the new variable to the variable list
-                this.state.variableList.push(new Variable(data.variableName, data.variableType as VariableType, null))
+                this.state.variableList.push(variable)
                 break
-            case FlowType.OUTPUT:
+            }
+            case FlowType.OUTPUT: {
                 if (data.variable === "")
                     return
 
@@ -270,6 +186,7 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
                 node.addOnLinkChangedListener(() => this.onLinkChanged())
                 node.info = node.variable.name === undefined ? "" : node.variable.name
                 break
+            }
             default:
                 return
         }
@@ -304,111 +221,18 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
     }
 
     onLinkChanged() {
-        let currentFlow = this.initialNode.getNextFlow()
+        const currentFlow = this.initialNode.getNextFlow()
         // clear the code preview and return if the initial node link has deleted
         if (currentFlow == null) {
-            const generator =
-            this.setState({generatedCode: "[]"})
-            return
+            const generator = new CodeGenerator("[]")
+            this.setState({generatedCode: generator.generate()})
+        } else {
+            const flowModelList: FlowModel[] = []
+            this.generateFlowModel(currentFlow, flowModelList, 0)
+
+            const generator = new CodeGenerator(JSON.stringify(flowModelList))
+            this.setState({generatedCode: generator.generate()})
         }
-
-        const flowList = []
-        let id = 0
-
-        const list = []
-
-        while (currentFlow != null) {
-            if (currentFlow instanceof VariableNodeModel) {
-                flowList.push(new FlowModel(
-                    FlowType.ASSIGNMENT,
-                    id++,
-                    new AssignmentFlowContent(currentFlow.variable, id),
-                    null,
-                    null,
-                    null,
-                    null,
-                    id
-                ))
-            } else if (currentFlow instanceof ArithmeticNodeModel) {
-                flowList.push(new FlowModel(
-                    FlowType.ASSIGNMENT,
-                    id++,
-                    null,
-                    null,
-                    null,
-                    new ArithmeticFlowContent(
-                        currentFlow.variable,
-                        currentFlow.operation,
-                        currentFlow.operator1,
-                        currentFlow.operator2,
-                        id
-                    ),
-                    null,
-                    id
-                ))
-            } else if (currentFlow instanceof WhileNodeModel) {
-                flowList.push(new FlowModel(
-                    FlowType.ASSIGNMENT,
-                    id++,
-                    null,
-                    null,
-                    null,
-                    null,
-                    new WhileFlowContent(
-                        currentFlow.conditionList,
-                        -1, // TODO: Scope ID
-                        id
-                    ),
-                    id
-                ))
-            } else if (currentFlow instanceof InputNodeModel) {
-                flowList.push(new FlowModel(
-                    FlowType.ASSIGNMENT,
-                    id++,
-                    null,
-                    new InputFlowContent(currentFlow.variable, id),
-                    null,
-                    null,
-                    null,
-                    id
-                ))
-            } else if (currentFlow instanceof OutputNodeModel) {
-                flowList.push(new FlowModel(
-                    FlowType.ASSIGNMENT,
-                    id++,
-                    null,
-                    null,
-                    new OutputFlowContent(currentFlow.variable, id),
-                    null,
-                    null,
-                    id
-                ))
-            }
-
-            list.push({id: currentFlow.getID(), index: id - 1})
-            currentFlow = currentFlow.getNextFlow()
-        }
-
-        console.log(JSON.stringify(flowList))
-
-        const flowModelList = JSON.parse(JSON.stringify(flowList)) as FlowModel[]
-        const lastItem = flowModelList[flowModelList.length - 1]
-        if (lastItem.arithmeticFlowContent != null) {
-            lastItem.arithmeticFlowContent.nextFlowId = -1
-        } else if (lastItem.assignmentFlowContent != null) {
-            lastItem.assignmentFlowContent.nextFlowId = -1
-        } else if (lastItem.whileFlowContent != null) {
-            lastItem.whileFlowContent.nextFlowId = -1
-        } else if (lastItem.inputFlowContent != null) {
-            lastItem.inputFlowContent.nextFlowId = -1
-        } else if (lastItem.outputFlowContent != null) {
-            lastItem.outputFlowContent.nextFlowId = -1
-        }
-
-        console.log(JSON.stringify(flowModelList))
-
-        const generator = new CodeGenerator(JSON.stringify(flowModelList))
-        this.setState({generatedCode: generator.generate()})
     }
 
     render() {
@@ -490,6 +314,107 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
         )
     }
 
+    private generateFlowModel(currentFlow: RectangleNodeModel | null, flowModelList: FlowModel[], depth: number, scopeId: string | null = null) {
+        if (currentFlow == null || (scopeId != null && currentFlow.getID() === scopeId))
+            return
+
+        let flowModel
+        const currentFlowId = depth === 0 ? "INITIAL_ID" : currentFlow.getID()
+        const nextFlow = currentFlow.getNextFlow()
+        const nextFlowId = nextFlow == null ? null : nextFlow.getID()
+
+        switch (currentFlow.constructor) {
+            case VariableNodeModel: {
+                const nodeModel = currentFlow as VariableNodeModel
+                flowModel = new FlowModel(
+                    FlowType.ASSIGNMENT,
+                    currentFlowId,
+                    new AssignmentFlowContent(nodeModel.variable),
+                    null,
+                    null,
+                    null,
+                    null,
+                    nextFlowId
+                )
+                break
+            }
+            case ArithmeticNodeModel: {
+                const nodeModel = currentFlow as ArithmeticNodeModel
+                flowModel = new FlowModel(
+                    FlowType.ARITHMETIC,
+                    currentFlowId,
+                    null,
+                    null,
+                    null,
+                    new ArithmeticFlowContent(
+                        nodeModel.variable,
+                        nodeModel.operation,
+                        nodeModel.operator1,
+                        nodeModel.operator2
+                    ),
+                    null,
+                    nextFlowId
+                )
+                break
+            }
+            case WhileNodeModel: {
+                const nodeModel = currentFlow as WhileNodeModel
+                const scopeFlow = nodeModel.getScopeFlow()
+
+                this.generateFlowModel(scopeFlow, flowModelList, depth++, nodeModel.getID())
+
+                flowModel = new FlowModel(
+                    FlowType.WHILE,
+                    currentFlowId,
+                    null,
+                    null,
+                    null,
+                    null,
+                    new WhileFlowContent(
+                        nodeModel.conditionList,
+                        scopeFlow == null ? null : scopeFlow.getID()
+                    ),
+                    nextFlowId
+                )
+                break
+            }
+            case InputNodeModel: {
+                const nodeModel = currentFlow as InputNodeModel
+                flowModel = new FlowModel(
+                    FlowType.INPUT,
+                    currentFlowId,
+                    null,
+                    new InputFlowContent(nodeModel.variable),
+                    null,
+                    null,
+                    null,
+                    nextFlowId
+                )
+                break
+            }
+            case OutputNodeModel: {
+                const nodeModel = currentFlow as OutputNodeModel
+                flowModel = new FlowModel(
+                    FlowType.OUTPUT,
+                    currentFlowId,
+                    null,
+                    null,
+                    new OutputFlowContent(nodeModel.variable),
+                    null,
+                    null,
+                    nextFlowId
+                )
+                break
+            }
+            default:
+                break
+        }
+
+        if (flowModel !== undefined)
+            flowModelList.push(flowModel)
+        this.generateFlowModel(currentFlow.getNextFlow(), flowModelList, depth + 1, scopeId)
+    }
+
     private addItemListener(item: any) {
         if (item.isSelected && this.selected.indexOf((item.entity as DefaultNodeModel).name) === -1) {
             this.selected.push((item.entity as DefaultNodeModel).name)
@@ -513,7 +438,7 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
     }
 
     private removeItemListener(event: BaseEvent<BaseModel>) {
-        if (event.entity instanceof VariableNodeModel) {
+        if (event.entity instanceof VariableNodeModel || event.entity instanceof InputNodeModel) {
             const newVariableList = this.state.variableList.filter((value) => {
                 return value.name !== (event.entity as VariableNodeModel).variable.name
             })

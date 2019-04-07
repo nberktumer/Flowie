@@ -39,9 +39,9 @@ export class AddVariableDialogBody extends BaseDialogBody {
                     <MenuItem key="__SELECT__" value="">
                         {strings.select}
                     </MenuItem>
-                    {Object.values(VariableType).map((value) => (
-                        <MenuItem key={value} value={value}>
-                            {value}
+                    {Object.keys(VariableType).map((key: any) => (
+                        <MenuItem key={key} value={VariableType[key]}>
+                            {VariableType[key]}
                         </MenuItem>
                     ))}
                 </TextField>

@@ -39,7 +39,7 @@ export class AddInputDialogBody extends BaseDialogBody {
                         {strings.select}
                     </MenuItem>
                     {Object.keys(VariableType).map((key: any) => (
-                        <MenuItem key={key} value={key}>
+                        <MenuItem key={key} value={VariableType[key]}>
                             {VariableType[key]}
                         </MenuItem>
                     ))}

@@ -6,13 +6,13 @@ import {ConditionOperation, FlowType} from "../../models/VariableEnums"
 export class WhileFlow implements BaseFlow {
 
     id: string
-    nextFlowId: string
+    nextFlowId: string | null
     type: FlowType
     content: WhileFlowContent | null
 
     constructor(
         id: string,
-        nextFlowId: string,
+        nextFlowId: string | null,
         type: FlowType,
         content: WhileFlowContent | null) {
         this.id = id
@@ -88,7 +88,7 @@ export class WhileFlowContent {
 
     constructor(
         conditions: Condition[],
-        scopeId: string,
+        scopeId: string | null,
     ) {
         this.conditions = conditions
         this.scopeId = scopeId

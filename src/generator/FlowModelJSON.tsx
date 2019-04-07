@@ -15,7 +15,7 @@ export class FlowModel {
     whileFlowContent: WhileFlowContent | null
     // forFlowContent: ForFlowContent,
     // ifFlowContent: IfFlowContent,
-    nextFlowId: string
+    nextFlowId: string | null
 
     constructor(
         type: FlowType,
@@ -25,7 +25,7 @@ export class FlowModel {
         outputFlowContent: OutputFlowContent | null = null,
         arithmeticFlowContent: ArithmeticFlowContent | null = null,
         whileFlowContent: WhileFlowContent | null = null,
-        nextFlowId: string
+        nextFlowId: string | null
         // forFlowContent: ForFlowContent,
         // ifFlowContent: IfFlowContent,
 

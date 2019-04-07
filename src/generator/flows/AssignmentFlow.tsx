@@ -6,13 +6,13 @@ import {Variable} from "../../models/Variable"
 export class AssignmentFlow implements BaseFlow {
 
     id: string
-    nextFlowId: string
+    nextFlowId: string | null
     type: FlowType
     content: AssignmentFlowContent | null
 
     constructor(
         id: string,
-        nextFlowId: string,
+        nextFlowId: string | null,
         type: FlowType,
         content: AssignmentFlowContent | null) {
         this.id = id
@@ -34,6 +34,7 @@ export class AssignmentFlow implements BaseFlow {
                 contentString = `"${this.content.variable.value}"`
                 break
             default:
+                console.log("default...")
                 break
         }
 

@@ -7,13 +7,13 @@ import {Variable} from "../../models/Variable"
 export class ArithmeticFlow implements BaseFlow {
 
     id: string
-    nextFlowId: string
+    nextFlowId: string | null
     type: FlowType
     content: ArithmeticFlowContent | null
 
     constructor(
         id: string,
-        nextFlowId: string,
+        nextFlowId: string | null,
         type: FlowType,
         content: ArithmeticFlowContent | null) {
         this.id = id

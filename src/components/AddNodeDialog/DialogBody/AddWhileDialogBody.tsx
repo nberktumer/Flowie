@@ -33,11 +33,11 @@ export class AddWhileDialogBody extends BaseDialogBody<WhileDialogBodyProps> {
                     value={this.state.variableType}
                     onChange={this.handleChange("variableType")}
                     margin="normal">
-                    <MenuItem key="__select__" value="">
+                    <MenuItem key="__SELECT__" value="">
                         {strings.select}
                     </MenuItem>
                     {Object.keys(VariableType).map((value: any) => (
-                        <MenuItem key={value} value={value}>
+                        <MenuItem key={value} value={VariableType[value]}>
                             {VariableType[value]}
                         </MenuItem>
                     ))}
@@ -49,7 +49,7 @@ export class AddWhileDialogBody extends BaseDialogBody<WhileDialogBodyProps> {
                     value={this.state.first}
                     onChange={this.handleChange("first")}
                     margin="normal">
-                    <MenuItem key="__select__" value="">
+                    <MenuItem key="__SELECT__" value="">
                         {strings.select}
                     </MenuItem>
                     {this.props.variables.filter((value) => {
@@ -67,7 +67,7 @@ export class AddWhileDialogBody extends BaseDialogBody<WhileDialogBodyProps> {
                     value={this.state.second}
                     onChange={this.handleChange("second")}
                     margin="normal">
-                    <MenuItem key="__select__" value="">
+                    <MenuItem key="__SELECT__" value="">
                         {strings.select}
                     </MenuItem>
                     {this.props.variables.filter((value) => {
@@ -85,11 +85,11 @@ export class AddWhileDialogBody extends BaseDialogBody<WhileDialogBodyProps> {
                     value={this.state.operation}
                     onChange={this.handleChange("operation")}
                     margin="normal">
-                    <MenuItem key="__select__" value="">
+                    <MenuItem key="__SELECT__" value="">
                         {strings.select}
                     </MenuItem>
                     {Object.keys(ConditionOperation).map((value: any) => (
-                        <MenuItem key={value} value={value}>
+                        <MenuItem key={value} value={ConditionOperation[value]}>
                             {ConditionOperation[value]}
                         </MenuItem>
                     ))}

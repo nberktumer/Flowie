@@ -3,7 +3,7 @@ import {MenuItem, TextField} from "@material-ui/core"
 import strings from "../../../lang"
 import {BaseDialogBody, BaseDialogBodyProps} from "./BaseDialogBody"
 import {Variable} from "../../../models/Variable"
-import {ArithmeticOperationType} from "../../../models"
+import {ArithmeticOperationType, VariableType} from "../../../models"
 
 export interface AddArithmeticDialogBodyProps extends BaseDialogBodyProps {
     variables: Variable[]
@@ -32,11 +32,11 @@ export class AddArithmeticDialogBody extends BaseDialogBody<AddArithmeticDialogB
                     value={this.state.variable}
                     onChange={this.handleChange("variable")}
                     margin="normal">
-                    <MenuItem key="__select__" value="">
+                    <MenuItem key="__SELECT__" value="">
                         {strings.select}
                     </MenuItem>
                     {this.props.variables.filter((value) => {
-                        return value.type.toString() === "INT"
+                        return value.type === VariableType.INT
                     }).map((value) => (
                         <MenuItem key={value.name} value={JSON.stringify(value)}>
                             {value.name}
@@ -50,11 +50,11 @@ export class AddArithmeticDialogBody extends BaseDialogBody<AddArithmeticDialogB
                     value={this.state.operation}
                     onChange={this.handleChange("operation")}
                     margin="normal">
-                    <MenuItem key="__select__" value="">
+                    <MenuItem key="__SELECT__" value="">
                         {strings.select}
                     </MenuItem>
                     {Object.keys(ArithmeticOperationType).map((value: any) => (
-                        <MenuItem key={value} value={value}>
+                        <MenuItem key={value} value={ArithmeticOperationType[value]}>
                             {ArithmeticOperationType[value]}
                         </MenuItem>
                     ))}
@@ -70,7 +70,7 @@ export class AddArithmeticDialogBody extends BaseDialogBody<AddArithmeticDialogB
                         {strings.select}
                     </MenuItem>
                     {this.props.variables.filter((value) => {
-                        return value.type.toString() === "INT"
+                        return value.type === VariableType.INT
                     }).map((value) => (
                         <MenuItem key={value.name} value={JSON.stringify(value)}>
                             {value.name}
@@ -88,7 +88,7 @@ export class AddArithmeticDialogBody extends BaseDialogBody<AddArithmeticDialogB
                         {strings.select}
                     </MenuItem>
                     {this.props.variables.filter((value) => {
-                        return value.type.toString() === "INT"
+                        return value.type === VariableType.INT
                     }).map((value) => (
                         <MenuItem key={value.name} value={JSON.stringify(value)}>
                             {value.name}

@@ -10,4 +10,9 @@ export class InitialNodeModel extends RectangleNodeModel {
         this.addInPort(strings.recurse).setMaximumLinks(Infinity)
         this.addOutPort(strings.out).setMaximumLinks(1)
     }
+
+    // Prevent removing this item
+    remove(): void {
+        return
+    }
 }

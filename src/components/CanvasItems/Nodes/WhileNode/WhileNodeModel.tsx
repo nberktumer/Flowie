@@ -4,6 +4,7 @@ import {NodeColors} from "../../../../config"
 import {DiagramEngine} from "storm-react-diagrams"
 import * as _ from "lodash"
 import {Condition} from "../../../../models/Condition"
+import {RectangleNodeModel} from "../BaseNodes/RectangleNode/RectangleNodeModel"
 
 export class WhileNodeModel extends RectangleNodeWithInfoModel {
     conditionList: Condition[] = []
@@ -26,5 +27,17 @@ export class WhileNodeModel extends RectangleNodeWithInfoModel {
         return _.merge(super.serialize(), {
             conditionList: this.conditionList
         })
+    }
+
+    getScopeFlow(): RectangleNodeModel | null {
+        const links = Object.values(this.getOutPorts().filter((value) => {
+            return value.label === strings.scope
+        })[0].getLinks())
+
+        if (links.length > 0) {
+            return links[0].getTargetPort().getNode() as RectangleNodeModel
+        } else {
+            return null
+        }
     }
 }
