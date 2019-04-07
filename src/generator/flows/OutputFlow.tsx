@@ -46,9 +46,7 @@ export class OutputFlow implements BaseFlow {
             functionLines
         )
 
-        functionLines.push("print(\"Value of \")")
-        functionLines.push(`print("${this.content.variable.name} is ")`)
-        functionLines.push(`println(${this.content.variable.name})`)
+        functionLines.push(`print("Value of ${this.content.variable.name} is \${${this.content.variable.name}})")`)
         CodeWriter.getInstance().writeFunction(func)
 
     }

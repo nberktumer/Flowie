@@ -51,13 +51,7 @@ export class InputFlow implements BaseFlow {
                 break
         }
 
-        let variableSetCode = ""
-        if (CodeWriter.getInstance().addVariable(this.content.variable.name)) {
-            variableSetCode = "val "
-        }
-
-        functionLines.push(`${variableSetCode}${this.content.variable.name} = ${scanCode}`)
-        functionLines.push(`return ${this.content.variable.name}`)
+        functionLines.push(`return ${scanCode}`)
 
         const parameters: Parameter[] = []
 
