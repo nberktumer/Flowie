@@ -99,11 +99,7 @@ export class ArithmeticFlow implements BaseFlow {
                 break
         }
 
-        const arithmeticCode = `val result = ` +
-            `${operator1Code} ${operationCode} ${operator2Code}`
-
-        functionLines.push(arithmeticCode)
-        functionLines.push(`return result`)
+        functionLines.push(`return ${operator1Code} ${operationCode} ${operator2Code}`)
 
         const func = new Func(
             this.functionName(),
