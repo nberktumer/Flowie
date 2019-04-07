@@ -10,7 +10,7 @@ import {FlowType} from "../models";
 
 export class CodeGenerator {
 
-    flowJson: string
+    private readonly flowJson: string
 
     constructor(flowJson: string) {
         this.flowJson = flowJson
@@ -21,53 +21,57 @@ export class CodeGenerator {
         CodeWriter.getInstance().setFlows(this.convertToFlowObjects(JSON.parse(this.flowJson)))
 
         CodeWriter.getInstance().flows.forEach((value) => {
+            console.log("Creating function code")
             value.createFunctionCode()
         })
 
-        CodeWriter.getInstance().initMain()
-        CodeWriter.getInstance().flows[0].createMainCode()
-
-        CodeWriter.getInstance().finishMain()
+        CodeWriter.getInstance().generateMain()
 
         return CodeWriter.getInstance().codes.join("\n")
     }
 
-    convertToFlowObjects(flowModels: FlowModel[]): BaseFlow[] {
-        const baseFlowList: BaseFlow[] = []
+    private convertToFlowObjects(flowModels: FlowModel[]): Map<string, BaseFlow> {
+        const baseFlowMap = new Map<string, BaseFlow>()
 
         flowModels.forEach((value) => {
+
                 switch (value.type) {
                     case FlowType.ASSIGNMENT:
-                        baseFlowList.push(new AssignmentFlow(
+                        baseFlowMap.set(value.id, new AssignmentFlow(
                             value.id,
+                            value.nextFlowId,
                             value.type,
                             value.assignmentFlowContent
                         ))
                         break
                     case FlowType.INPUT:
-                        baseFlowList.push(new InputFlow(
+                        baseFlowMap.set(value.id, new InputFlow(
                             value.id,
+                            value.nextFlowId,
                             value.type,
                             value.inputFlowContent
                         ))
                         break
                     case FlowType.OUTPUT:
-                        baseFlowList.push(new OutputFlow(
+                        baseFlowMap.set(value.id, new OutputFlow(
                             value.id,
+                            value.nextFlowId,
                             value.type,
                             value.outputFlowContent
                         ))
                         break
                     case FlowType.ARITHMETIC:
-                        baseFlowList.push(new ArithmeticFlow(
+                        baseFlowMap.set(value.id, new ArithmeticFlow(
                             value.id,
+                            value.nextFlowId,
                             value.type,
                             value.arithmeticFlowContent
                         ))
                         break
                     case FlowType.WHILE:
-                        baseFlowList.push(new WhileFlow(
+                        baseFlowMap.set(value.id, new WhileFlow(
                             value.id,
+                            value.nextFlowId,
                             value.type,
                             value.whileFlowContent
                         ))
@@ -96,6 +100,6 @@ export class CodeGenerator {
             }
         )
 
-        return baseFlowList
+        return baseFlowMap
     }
 }

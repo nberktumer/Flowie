@@ -7,7 +7,7 @@ import {FlowType} from "../models"
 
 export class FlowModel {
     type: FlowType
-    id: number
+    id: string
     assignmentFlowContent: AssignmentFlowContent | null
     inputFlowContent: InputFlowContent | null
     outputFlowContent: OutputFlowContent | null
@@ -15,17 +15,17 @@ export class FlowModel {
     whileFlowContent: WhileFlowContent | null
     // forFlowContent: ForFlowContent,
     // ifFlowContent: IfFlowContent,
-    nextFlowId: number
+    nextFlowId: string
 
     constructor(
         type: FlowType,
-        id: number,
+        id: string,
         assignmentFlowContent: AssignmentFlowContent | null = null,
         inputFlowContent: InputFlowContent | null = null,
         outputFlowContent: OutputFlowContent | null = null,
         arithmeticFlowContent: ArithmeticFlowContent | null = null,
         whileFlowContent: WhileFlowContent | null = null,
-        nextFlowId: number
+        nextFlowId: string
         // forFlowContent: ForFlowContent,
         // ifFlowContent: IfFlowContent,
 

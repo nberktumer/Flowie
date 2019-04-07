@@ -6,15 +6,18 @@ import {Variable} from "../../models/Variable"
 
 export class ArithmeticFlow implements BaseFlow {
 
-    id: number
+    id: string
+    nextFlowId: string
     type: FlowType
     content: ArithmeticFlowContent | null
 
     constructor(
-        id: number,
+        id: string,
+        nextFlowId: string,
         type: FlowType,
         content: ArithmeticFlowContent | null) {
         this.id = id
+        this.nextFlowId = nextFlowId
         this.type = type
         this.content = content
     }
@@ -36,7 +39,7 @@ export class ArithmeticFlow implements BaseFlow {
     }
 
     createFunctionCode(): void {
-        if (this.content == null || this.content.operator1.variableName === undefined || this.content.operator2.variableName === undefined)
+        if (this.content == null)
             return
 
         const functionLines: string[] = []
@@ -44,15 +47,19 @@ export class ArithmeticFlow implements BaseFlow {
         const parameters: Parameter[] = []
 
         if (this.content.operator1.type === OperatorType.VARIABLE) {
-            parameters.push(new Parameter(
-                this.content.operator1.variableName,
-                VariableType.INT.toString()))
+            if (this.content.operator1.variableName != null) {
+                parameters.push(new Parameter(
+                    this.content.operator1.variableName,
+                    VariableType.INT.toString()))
+            }
         }
 
         if (this.content.operator2.type === OperatorType.VARIABLE) {
-            parameters.push(new Parameter(
-                this.content.operator2.variableName,
-                VariableType.INT.toString()))
+            if (this.content.operator2.variableName != null) {
+                parameters.push(new Parameter(
+                    this.content.operator2.variableName,
+                    VariableType.INT.toString()))
+            }
         }
 
         let operationCode = ""
@@ -139,8 +146,8 @@ export class ArithmeticFlow implements BaseFlow {
         return `arithmeticFlow${this.id}`
     }
 
-    nextFlow(): number {
-        return this.content != null ? this.content.nextFlowId : -1
+    nextFlow(): string {
+        return this.nextFlowId != null ? this.nextFlowId : CodeWriter.TERMINATION_ID
     }
 
     hasExternalDependencies(): boolean {
@@ -154,20 +161,17 @@ export class ArithmeticFlowContent {
     operation: ArithmeticOperationType
     operator1: Operator
     operator2: Operator
-    nextFlowId: number
 
     constructor(
         variable: Variable,
         operation: ArithmeticOperationType,
         operator1: Operator,
         operator2: Operator,
-        nextFlowId: number
     ) {
         this.variable = variable
         this.operation = operation
         this.operator1 = operator1
         this.operator2 = operator2
-        this.nextFlowId = nextFlowId
     }
 }
 

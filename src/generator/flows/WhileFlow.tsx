@@ -5,15 +5,18 @@ import {ConditionOperation, FlowType} from "../../models/VariableEnums"
 
 export class WhileFlow implements BaseFlow {
 
-    id: number
+    id: string
+    nextFlowId: string
     type: FlowType
     content: WhileFlowContent | null
 
     constructor(
-        id: number,
+        id: string,
+        nextFlowId: string,
         type: FlowType,
         content: WhileFlowContent | null) {
         this.id = id
+        this.nextFlowId = nextFlowId
         this.type = type
         this.content = content
     }
@@ -73,25 +76,22 @@ export class WhileFlow implements BaseFlow {
         return false
     }
 
-    nextFlow(): number {
-        return this.content != null ? this.content.nextFlowId : -1
+    nextFlow(): string {
+        return this.nextFlowId != null ? this.nextFlowId : CodeWriter.TERMINATION_ID
     }
 
 }
 
 export class WhileFlowContent {
     conditions: Condition[]
-    scopeId: number | null
-    nextFlowId: number
+    scopeId: string | null
 
     constructor(
         conditions: Condition[],
-        scopeId: number,
-        nextFlowId: number
+        scopeId: string,
     ) {
         this.conditions = conditions
         this.scopeId = scopeId
-        this.nextFlowId = nextFlowId
     }
 
 }

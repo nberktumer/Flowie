@@ -6,15 +6,18 @@ import {FlowType} from "../../models"
 
 export class OutputFlow implements BaseFlow {
 
-    id: number
+    id: string
+    nextFlowId: string
     type: FlowType
     content: OutputFlowContent | null
 
     constructor(
-        id: number,
+        id: string,
+        nextFlowId: string,
         type: FlowType,
         content: OutputFlowContent | null) {
         this.id = id
+        this.nextFlowId = nextFlowId
         this.type = type
         this.content = content
     }
@@ -58,8 +61,8 @@ export class OutputFlow implements BaseFlow {
         return `outputFlow${this.id}`
     }
 
-    nextFlow(): number {
-        return this.content != null ? this.content.nextFlowId : -1
+    nextFlow(): string {
+        return this.nextFlowId != null ? this.nextFlowId : CodeWriter.TERMINATION_ID
     }
 
     hasExternalDependencies(): boolean {
@@ -70,13 +73,10 @@ export class OutputFlow implements BaseFlow {
 
 export class OutputFlowContent {
     variable: Variable
-    nextFlowId: number
 
     constructor(
         variable: Variable,
-        nextFlowId: number
     ) {
         this.variable = variable
-        this.nextFlowId = nextFlowId
     }
 }
