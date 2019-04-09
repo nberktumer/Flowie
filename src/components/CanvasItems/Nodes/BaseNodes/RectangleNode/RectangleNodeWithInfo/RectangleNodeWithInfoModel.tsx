@@ -1,4 +1,4 @@
-import {DiagramEngine} from "storm-react-diagrams"
+import {DiagramEngine} from "nberktumer-react-diagrams"
 import * as _ from "lodash"
 import {RectangleNodeModel} from "../RectangleNodeModel"
 

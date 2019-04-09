@@ -1,5 +1,5 @@
 import * as _ from "lodash"
-import {BaseEvent, BaseModel, DefaultLinkModel, DiagramEngine, LinkModel, PortModel} from "storm-react-diagrams"
+import {BaseEvent, BaseModel, DefaultLinkModel, DiagramEngine, LinkModel, PortModel} from "nberktumer-react-diagrams"
 import {DefaultPort, DefaultPortType} from "./index"
 
 export class DefaultPortModel extends PortModel {

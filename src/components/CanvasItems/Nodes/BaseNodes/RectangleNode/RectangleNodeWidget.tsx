@@ -1,6 +1,6 @@
 import * as React from "react"
 import * as _ from "lodash"
-import {BaseWidget, BaseWidgetProps} from "storm-react-diagrams"
+import {BaseWidget, BaseWidgetProps} from "nberktumer-react-diagrams"
 import {RectangleNodeModel} from "./RectangleNodeModel"
 import styles from "./RectangleNode.module.css"
 import {DefaultPortLabel, DefaultPortModel} from "../../../Ports/DefaultPort"

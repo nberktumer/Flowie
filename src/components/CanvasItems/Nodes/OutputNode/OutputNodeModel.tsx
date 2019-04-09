@@ -1,7 +1,7 @@
 import {RectangleNodeWithInfoModel} from "../BaseNodes/RectangleNode/RectangleNodeWithInfo/RectangleNodeWithInfoModel"
 import strings from "../../../../lang"
 import {NodeColors} from "../../../../config"
-import {DiagramEngine} from "storm-react-diagrams"
+import {DiagramEngine} from "nberktumer-react-diagrams"
 import * as _ from "lodash"
 import {Variable} from "../../../../models/Variable"
 

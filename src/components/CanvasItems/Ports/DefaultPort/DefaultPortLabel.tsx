@@ -1,5 +1,5 @@
 import * as React from "react"
-import {BaseWidget, BaseWidgetProps, PortWidget} from "storm-react-diagrams"
+import {BaseWidget, BaseWidgetProps, PortWidget} from "nberktumer-react-diagrams"
 import {DefaultPortModel} from "./DefaultPortModel"
 import {DefaultPortLocation} from "./DefaultPortLocation"
 

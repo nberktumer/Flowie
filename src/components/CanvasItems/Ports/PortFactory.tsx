@@ -1,4 +1,4 @@
-import {AbstractPortFactory, PortModel} from "storm-react-diagrams"
+import {AbstractPortFactory, PortModel} from "nberktumer-react-diagrams"
 
 export class PortFactory extends AbstractPortFactory {
     cb: (initialConfig?: any) => PortModel

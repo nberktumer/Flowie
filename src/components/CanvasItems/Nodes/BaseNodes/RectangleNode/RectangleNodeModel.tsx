@@ -1,4 +1,4 @@
-import {DiagramEngine, NodeModel} from "storm-react-diagrams"
+import {DiagramEngine, NodeModel} from "nberktumer-react-diagrams"
 import * as _ from "lodash"
 import {Random} from "../../../../../utils"
 import {DefaultPort, DefaultPortLocation, DefaultPortModel, DefaultPortType} from "../../../Ports/DefaultPort"

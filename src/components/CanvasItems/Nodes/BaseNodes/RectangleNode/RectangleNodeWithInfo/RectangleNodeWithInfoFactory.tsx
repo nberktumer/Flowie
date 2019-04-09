@@ -1,4 +1,4 @@
-import * as SRD from "storm-react-diagrams"
+import * as SRD from "nberktumer-react-diagrams"
 import * as React from "react"
 import {RectangleNodeWithInfoModel} from "./RectangleNodeWithInfoModel"
 import {RectangleNodeWithInfoWidget} from "./RectangleNodeWithInfoWidget"
