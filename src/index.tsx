@@ -8,7 +8,7 @@ import "react-reflex/styles.css"
 import * as serviceWorker from "./serviceWorker"
 
 ReactDOM.render((
-    <Router>
+    <Router basename="/Flowie">
         <div>
             <Route path="/" component={Editor} exact/>
         </div>
