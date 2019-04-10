@@ -1,0 +1,15 @@
+.tray {
+    background: #1d1f21;
+    height: 100%;
+    width: 100%;
+}
+
+.trayItem {
+    color: white;
+    padding: 5px;
+    border: solid 1px;
+    border-radius: 5px;
+    margin: 0 10px 2px;
+    cursor: pointer;
+    transform: translate(0, 0); /* Workaround for incorrect background color while dragging */
+}

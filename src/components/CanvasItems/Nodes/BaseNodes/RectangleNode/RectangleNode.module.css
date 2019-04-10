@@ -1,0 +1,64 @@
+.rectangleNode {
+    background-color: rgb(30, 30, 30);
+    border-radius: 5px;
+    font-family: sans-serif;
+    color: white;
+    border: solid 2px black;
+    overflow: visible;
+    font-size: 11px;
+}
+
+.rectangleNode {
+    position: absolute;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Chrome/Safari/Opera */
+    user-select: none;
+    cursor: move;
+    pointer-events: all;
+}
+
+.rectangleNode--selected > * {
+    border-color: rgb(0, 192, 255) !important;
+}
+
+.rectangleNodeTitle {
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    white-space: nowrap;
+}
+
+.rectangleNodeInfo {
+    background: rgba(0, 0, 0, 0.15);
+    display: flex;
+    white-space: nowrap;
+}
+
+.rectangleNodeTitle > * {
+    align-self: center;
+}
+
+.fa {
+    padding: 5px;
+    opacity: 0.2;
+    cursor: pointer;
+}
+
+.rectangleNode:hover {
+    opacity: 1.0;
+}
+
+.rectangleNodeName {
+    flex-grow: 1;
+    padding: 5px 5px;
+}
+
+.rectangleNodePorts {
+    display: flex;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
+}
+
+.rectangleNodeIn, .rectangleNodeOut {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}

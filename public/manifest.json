@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Flowie Code Generator",
+  "name": "Generate Code from Flow Diagram",
   "icons": [
     {
       "src": "favicon.ico",
