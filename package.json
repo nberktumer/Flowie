@@ -1,7 +1,7 @@
 {
-    "name": "my-app",
+    "name": "Flowie",
     "version": "0.1.0",
-    "private": true,
+    "private": false,
     "dependencies": {
         "@material-ui/core": "^3.9.2",
         "@material-ui/icons": "^3.0.2",
@@ -41,7 +41,7 @@
         "not ie <= 11",
         "not op_mini all"
     ],
-    "homepage": "https://nberktumer.github.io/Change-me-plz-zahit",
+    "homepage": "https://nberktumer.github.io/Flowie",
     "devDependencies": {
         "@types/jest": "^24.0.6",
         "@types/lodash": "^4.14.121",
