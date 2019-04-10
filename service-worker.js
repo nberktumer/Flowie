@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/Change-me-plz-zahit/precache-manifest.4a9f4164c843a928e93abcf1a95a763a.js"
+  "/Flowie/precache-manifest.dd61c434013cedad7a01db87cfac997b.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("/Change-me-plz-zahit/index.html", {
+workbox.routing.registerNavigationRoute("/Flowie/index.html", {
   
   blacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
 });

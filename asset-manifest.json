@@ -1,14 +1,15 @@
 {
-  "main.css": "/Change-me-plz-zahit/static/css/main.daedcb28.chunk.css",
-  "main.js": "/Change-me-plz-zahit/static/js/main.89679d71.chunk.js",
-  "main.js.map": "/Change-me-plz-zahit/static/js/main.89679d71.chunk.js.map",
-  "runtime~main.js": "/Change-me-plz-zahit/static/js/runtime~main.a9a70bef.js",
-  "runtime~main.js.map": "/Change-me-plz-zahit/static/js/runtime~main.a9a70bef.js.map",
-  "static/js/2.5bf9b2cd.chunk.js": "/Change-me-plz-zahit/static/js/2.5bf9b2cd.chunk.js",
-  "static/js/2.5bf9b2cd.chunk.js.map": "/Change-me-plz-zahit/static/js/2.5bf9b2cd.chunk.js.map",
-  "index.html": "/Change-me-plz-zahit/index.html",
-  "precache-manifest.4a9f4164c843a928e93abcf1a95a763a.js": "/Change-me-plz-zahit/precache-manifest.4a9f4164c843a928e93abcf1a95a763a.js",
-  "service-worker.js": "/Change-me-plz-zahit/service-worker.js",
-  "static/css/main.daedcb28.chunk.css.map": "/Change-me-plz-zahit/static/css/main.daedcb28.chunk.css.map",
-  "static/media/logo.svg": "/Change-me-plz-zahit/static/media/logo.5d5d9eef.svg"
+  "main.css": "/Flowie/static/css/main.a5224234.chunk.css",
+  "main.js": "/Flowie/static/js/main.ffccc7d7.chunk.js",
+  "main.js.map": "/Flowie/static/js/main.ffccc7d7.chunk.js.map",
+  "runtime~main.js": "/Flowie/static/js/runtime~main.e9c6ec87.js",
+  "runtime~main.js.map": "/Flowie/static/js/runtime~main.e9c6ec87.js.map",
+  "static/css/2.2bad0162.chunk.css": "/Flowie/static/css/2.2bad0162.chunk.css",
+  "static/js/2.484928a5.chunk.js": "/Flowie/static/js/2.484928a5.chunk.js",
+  "static/js/2.484928a5.chunk.js.map": "/Flowie/static/js/2.484928a5.chunk.js.map",
+  "index.html": "/Flowie/index.html",
+  "precache-manifest.dd61c434013cedad7a01db87cfac997b.js": "/Flowie/precache-manifest.dd61c434013cedad7a01db87cfac997b.js",
+  "service-worker.js": "/Flowie/service-worker.js",
+  "static/css/2.2bad0162.chunk.css.map": "/Flowie/static/css/2.2bad0162.chunk.css.map",
+  "static/css/main.a5224234.chunk.css.map": "/Flowie/static/css/main.a5224234.chunk.css.map"
 }
