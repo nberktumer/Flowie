@@ -30,11 +30,8 @@ export class AddArithmeticDialogBody extends BaseDialogBody<AddArithmeticDialogB
                     select
                     label={strings.variable}
                     value={this.state.variable}
-                    onChange={this.handleChange("variable")}
+                    onChange={this.handleStringChange("variable")}
                     margin="normal">
-                    <MenuItem key="__SELECT__" value="">
-                        {strings.select}
-                    </MenuItem>
                     {this.props.variables.filter((value) => {
                         return value.type === VariableType.INT
                     }).map((value) => (
@@ -48,11 +45,8 @@ export class AddArithmeticDialogBody extends BaseDialogBody<AddArithmeticDialogB
                     select
                     label={strings.operation}
                     value={this.state.operation}
-                    onChange={this.handleChange("operation")}
+                    onChange={this.handleStringChange("operation")}
                     margin="normal">
-                    <MenuItem key="__SELECT__" value="">
-                        {strings.select}
-                    </MenuItem>
                     {Object.keys(ArithmeticOperationType).map((value: any) => (
                         <MenuItem key={value} value={ArithmeticOperationType[value]}>
                             {ArithmeticOperationType[value]}
@@ -64,11 +58,8 @@ export class AddArithmeticDialogBody extends BaseDialogBody<AddArithmeticDialogB
                     select
                     label={strings.firstOperator}
                     value={this.state.operator1}
-                    onChange={this.handleChange("operator1")}
+                    onChange={this.handleStringChange("operator1")}
                     margin="normal">
-                    <MenuItem key="__select__" value="">
-                        {strings.select}
-                    </MenuItem>
                     {this.props.variables.filter((value) => {
                         return value.type === VariableType.INT
                     }).map((value) => (
@@ -82,11 +73,8 @@ export class AddArithmeticDialogBody extends BaseDialogBody<AddArithmeticDialogB
                     select
                     label={strings.secondOperator}
                     value={this.state.operator2}
-                    onChange={this.handleChange("operator2")}
+                    onChange={this.handleStringChange("operator2")}
                     margin="normal">
-                    <MenuItem key="__select__" value="">
-                        {strings.select}
-                    </MenuItem>
                     {this.props.variables.filter((value) => {
                         return value.type === VariableType.INT
                     }).map((value) => (

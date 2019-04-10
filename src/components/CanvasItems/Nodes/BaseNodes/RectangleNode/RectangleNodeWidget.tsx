@@ -3,7 +3,7 @@ import * as _ from "lodash"
 import {BaseWidget, BaseWidgetProps} from "nberktumer-react-diagrams"
 import {RectangleNodeModel} from "./RectangleNodeModel"
 import styles from "./RectangleNode.module.css"
-import {DefaultPortLabel, DefaultPortModel} from "../../../Ports/DefaultPort"
+import {DefaultPortLabel, DefaultPortLocation, DefaultPortModel, DefaultPortType} from "../../../Ports/DefaultPort"
 
 export interface RectangleNodeWidgetProps extends BaseWidgetProps {
     node: RectangleNodeModel;
@@ -30,10 +30,10 @@ export class RectangleNodeWidget extends BaseWidget<RectangleNodeWidgetProps, Re
                 </div>
                 <div className={styles.rectangleNodePorts}>
                     <div className={styles.rectangleNodeIn}>
-                        {_.map(this.props.node.getInPorts(), this.generatePort.bind(this))}
+                        {_.map(this.props.node.getPortListByLocation(DefaultPortLocation.LEFT), this.generatePort.bind(this))}
                     </div>
                     <div className={styles.rectangleNodeOut}>
-                        {_.map(this.props.node.getOutPorts(), this.generatePort.bind(this))}
+                        {_.map(this.props.node.getPortListByLocation(DefaultPortLocation.RIGHT), this.generatePort.bind(this))}
                     </div>
                 </div>
             </div>

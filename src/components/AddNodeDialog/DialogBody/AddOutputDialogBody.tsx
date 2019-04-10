@@ -26,11 +26,8 @@ export class AddOutputDialogBody extends BaseDialogBody<AddOutputDialogBodyProps
                     select
                     label={strings.variable}
                     value={this.state.variable}
-                    onChange={this.handleChange("variable")}
+                    onChange={this.handleStringChange("variable")}
                     margin="normal">
-                    <MenuItem key="__SELECT__" value="">
-                        {strings.select}
-                    </MenuItem>
                     {this.props.variables.map((value) => (
                         <MenuItem key={value.name} value={JSON.stringify(value)}>
                             {value.name}

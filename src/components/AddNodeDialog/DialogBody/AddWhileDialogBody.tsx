@@ -31,11 +31,8 @@ export class AddWhileDialogBody extends BaseDialogBody<WhileDialogBodyProps> {
                     select
                     label={strings.variableType}
                     value={this.state.variableType}
-                    onChange={this.handleChange("variableType")}
+                    onChange={this.handleStringChange("variableType")}
                     margin="normal">
-                    <MenuItem key="__SELECT__" value="">
-                        {strings.select}
-                    </MenuItem>
                     {Object.keys(VariableType).map((value: any) => (
                         <MenuItem key={value} value={VariableType[value]}>
                             {VariableType[value]}
@@ -47,11 +44,8 @@ export class AddWhileDialogBody extends BaseDialogBody<WhileDialogBodyProps> {
                     select
                     label={strings.firstVariable}
                     value={this.state.first}
-                    onChange={this.handleChange("first")}
+                    onChange={this.handleStringChange("first")}
                     margin="normal">
-                    <MenuItem key="__SELECT__" value="">
-                        {strings.select}
-                    </MenuItem>
                     {this.props.variables.filter((value) => {
                         return value.type === this.state.variableType
                     }).map((value) => (
@@ -65,11 +59,8 @@ export class AddWhileDialogBody extends BaseDialogBody<WhileDialogBodyProps> {
                     select
                     label={strings.secondVariable}
                     value={this.state.second}
-                    onChange={this.handleChange("second")}
+                    onChange={this.handleStringChange("second")}
                     margin="normal">
-                    <MenuItem key="__SELECT__" value="">
-                        {strings.select}
-                    </MenuItem>
                     {this.props.variables.filter((value) => {
                         return value.type === this.state.variableType
                     }).map((value) => (
@@ -83,11 +74,8 @@ export class AddWhileDialogBody extends BaseDialogBody<WhileDialogBodyProps> {
                     select
                     label={strings.operation}
                     value={this.state.operation}
-                    onChange={this.handleChange("operation")}
+                    onChange={this.handleStringChange("operation")}
                     margin="normal">
-                    <MenuItem key="__SELECT__" value="">
-                        {strings.select}
-                    </MenuItem>
                     {Object.keys(ConditionOperation).map((value: any) => (
                         <MenuItem key={value} value={ConditionOperation[value]}>
                             {ConditionOperation[value]}

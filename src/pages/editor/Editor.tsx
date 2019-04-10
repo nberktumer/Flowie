@@ -121,6 +121,7 @@ export default class Editor extends Component<IEditorProps, IEditorState> {
                 if (data.variableName === "" || data.variableType === "" || data.value === "")
                     return
 
+                // data.isNull
                 const variable = new Variable(data.variableName, data.variableType, data.value)
 
                 node = new VariableNodeModel(variable)

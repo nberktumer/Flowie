@@ -24,7 +24,7 @@ export class AddInputDialogBody extends BaseDialogBody {
                     label={strings.variableName}
                     value={this.state.variableName}
                     inputProps={{maxLength: Rules.MAX_VAR_LENGTH}}
-                    onChange={this.handleChange("variableName")}
+                    onChange={this.handleStringChange("variableName")}
                     margin="normal"
                 />
                 <TextField
@@ -32,12 +32,9 @@ export class AddInputDialogBody extends BaseDialogBody {
                     select
                     label={strings.dataType}
                     value={this.state.variableType}
-                    onChange={this.handleChange("variableType")}
+                    onChange={this.handleStringChange("variableType")}
                     margin="normal"
                 >
-                    <MenuItem key="__SELECT__" value="">
-                        {strings.select}
-                    </MenuItem>
                     {Object.keys(VariableType).map((key: any) => (
                         <MenuItem key={key} value={VariableType[key]}>
                             {VariableType[key]}

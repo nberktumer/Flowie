@@ -64,34 +64,20 @@ export class RectangleNodeModel extends NodeModel {
         })
     }
 
-    getInPorts(): DefaultPortModel[] {
+    getPortListByType(...type: DefaultPortType[]): DefaultPortModel[] {
         return _.filter(this.ports, (portModel) => {
-            return portModel.portType.type === DefaultPortType.IN
+            return _.includes(type, portModel.portType.type)
         })
     }
 
-    getOutPorts(): DefaultPortModel[] {
+    getPortListByLocation(...location: DefaultPortLocation[]): DefaultPortModel[] {
         return _.filter(this.ports, (portModel) => {
-            return portModel.portType.type === DefaultPortType.OUT
-        })
-    }
-
-    getLoopPorts(): DefaultPortModel[] {
-        return _.filter(this.ports, (portModel) => {
-            return portModel.portType.type === DefaultPortType.LOOP
-        })
-    }
-
-    getScopePorts(): DefaultPortModel[] {
-        return _.filter(this.ports, (portModel) => {
-            return portModel.portType.type === DefaultPortType.SCOPE
+            return _.includes(location, portModel.portType.location)
         })
     }
 
     getNextFlow(): RectangleNodeModel | null {
-        const links = Object.values(this.getOutPorts().filter((value) => {
-            return value.label === strings.out
-        })[0].getLinks())
+        const links = Object.values(this.getPortListByType(DefaultPortType.OUT)[0].getLinks())
 
         if (links.length > 0) {
             return links[0].getTargetPort().getNode() as RectangleNodeModel
