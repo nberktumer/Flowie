@@ -1,0 +1,33 @@
+{
+    "extends": "tslint:recommended",
+    "rules": {
+        "semicolon": false,
+        "trailing-comma": false,
+        "object-literal-sort-keys": false,
+        "no-trailing-whitespace": false,
+        "ordered-imports": false,
+        "curly": false,
+        "no-bitwise": false,
+        "max-line-length": false,
+        "no-empty-interface": false,
+        "no-shadowed-variable": false,
+        "no-empty": false,
+        "member-access": [
+            true,
+            "no-public"
+        ],
+        "no-console": {
+            "severity": "off",
+            "options": [
+                "debug",
+                "info",
+                "log",
+                "time",
+                "timeEnd",
+                "trace"
+            ]
+        },
+        "interface-name": false,
+        "max-classes-per-file": false
+    }
+}
