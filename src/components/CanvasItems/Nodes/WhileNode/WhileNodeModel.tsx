@@ -14,7 +14,6 @@ export class WhileNodeModel extends RectangleNodeWithInfoModel {
         super(strings.while, NodeColors.WHILE)
 
         this.addInPort(strings.in).setMaximumLinks(Infinity)
-        this.addLoopPort(strings.loop).setMaximumLinks(Infinity)
         this.addOutPort(strings.out).setMaximumLinks(1)
         this.addScopePort(strings.scope).setMaximumLinks(1)
     }
