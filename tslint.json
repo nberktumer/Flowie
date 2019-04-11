@@ -12,6 +12,8 @@
         "no-empty-interface": false,
         "no-shadowed-variable": false,
         "no-empty": false,
+        "no-namespace": false,
+        "member-ordering": false,
         "member-access": [
             true,
             "no-public"

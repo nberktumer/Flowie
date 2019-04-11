@@ -12,6 +12,7 @@ export enum ArithmeticOperationType {
 }
 
 export enum FlowType {
+    INITIAL = "Initial",
     IF = "If",
     WHILE = "While",
     FOR = "For",
