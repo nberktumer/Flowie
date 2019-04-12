@@ -2,11 +2,11 @@ import * as React from "react"
 import * as _ from "lodash"
 import {BaseWidget, BaseWidgetProps} from "nberktumer-react-diagrams"
 import styles from "../BaseFlow/BaseFlow.module.css"
-import {BaseInfoFlowModel} from "./BaseInfoFlowModel"
+import {BaseInfoFlowNode} from "./BaseInfoFlowNode"
 import {DefaultPortLabel, DefaultPortLocation, DefaultPortModel} from "../../Ports/DefaultPort"
 
 export interface RectangleNodeWithInfoWidgetProps extends BaseWidgetProps {
-    node: BaseInfoFlowModel;
+    node: BaseInfoFlowNode;
 }
 
 export interface RectangleNodeWithInfoWidgetState {

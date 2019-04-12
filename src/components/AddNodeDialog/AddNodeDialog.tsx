@@ -52,7 +52,7 @@ export class AddNodeDialog extends Component<AddNodeDialogProps, AddNodeDialogSt
             <Dialog aria-labelledby="simple-dialog-title" {...this.props}>
                 <DialogTitle id="simple-dialog-title">Set Properties</DialogTitle>
                 <div className={styles.addNodeDialogBody}>
-                    {FlowPropertiesFactory.create(this.props.type, this.props.variables, this.onBodyChanged)}
+                    {FlowPropertiesFactory.create(this.props.type, this.props.variables, this.onBodyChanged.bind(this))}
                 </div>
                 <div className={styles.addNodeDialogButtonContainer}>
                     <Button variant="contained" color="secondary" onClick={this.onDismiss.bind(this)}>

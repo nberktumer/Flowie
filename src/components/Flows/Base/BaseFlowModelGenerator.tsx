@@ -1,6 +1,6 @@
-import {BaseFlowModel} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowModel"
-import {BasePropertiesState} from "./BaseProperties"
+import {FlowModel} from "../../../generator/FlowModelJSON"
+import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 
 export abstract class BaseFlowModelGenerator {
-    abstract create(data?: BasePropertiesState): BaseFlowModel | null
+    abstract generate(flow: BaseFlowNode): FlowModel
 }

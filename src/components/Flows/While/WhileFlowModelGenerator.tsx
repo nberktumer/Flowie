@@ -1,18 +1,31 @@
 import {BaseFlowModelGenerator} from "../Base/BaseFlowModelGenerator"
-import {BaseFlowModel} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowModel"
-import {BasePropertiesState} from "../Base/BaseProperties"
-import {Condition} from "../../../models/Condition"
-import {WhileFlowModel} from "./WhileFlowModel"
+import {FlowModel} from "../../../generator/FlowModelJSON"
+import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
+import {FlowType} from "../../../models"
+import {WhileFlowNode} from "./WhileFlowNode"
+import {WhileFlowContent} from "../../../generator/flows/WhileFlow"
 
 export class WhileFlowModelGenerator extends BaseFlowModelGenerator {
-    create(data?: BasePropertiesState): BaseFlowModel | null {
-        if (!data || data.variableType === "" || data.first === "" || data.second === "" || data.operation === "")
-            return null
+    generate(flow: BaseFlowNode): FlowModel {
+        const whileFlow = flow as WhileFlowNode
 
-        const condition = new Condition(data.variableType, JSON.parse(data.first), JSON.parse(data.second), data.operation)
+        const nextFlow = whileFlow.getNextFlow()
+        const nextFlowId = nextFlow ? nextFlow.getID() : null
+        const scopeFlow = whileFlow.getScopeFlow()
+        const scopeFlowId = scopeFlow ? scopeFlow.getID() : null
 
-        const node = new WhileFlowModel()
-        node.addCondition(condition)
-        return node
+        return new FlowModel(
+            FlowType.WHILE,
+            whileFlow.getID(),
+            null,
+            null,
+            null,
+            null,
+            new WhileFlowContent(
+                whileFlow.conditionList,
+                scopeFlowId
+            ),
+            nextFlowId
+        )
     }
 }

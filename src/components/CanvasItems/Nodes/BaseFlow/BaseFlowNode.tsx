@@ -2,9 +2,9 @@ import {DiagramEngine, NodeModel} from "nberktumer-react-diagrams"
 import * as _ from "lodash"
 import {Random} from "../../../../utils"
 import {DefaultPort, DefaultPortLocation, DefaultPortModel, DefaultPortType} from "../../Ports/DefaultPort"
-import strings from "../../../../lang"
+import {BaseVariableFlowNode} from "../../../Flows/Base/BaseVariableFlowNode"
 
-export class BaseFlowModel extends NodeModel {
+export class BaseFlowNode extends NodeModel {
     name: string
     color: string
     ports: { [s: string]: DefaultPortModel }
@@ -76,11 +76,11 @@ export class BaseFlowModel extends NodeModel {
         })
     }
 
-    getNextFlow(): BaseFlowModel | null {
+    getNextFlow(): BaseFlowNode | null {
         const links = Object.values(this.getPortListByType(DefaultPortType.OUT)[0].getLinks())
 
         if (links.length > 0) {
-            return links[0].getTargetPort().getNode() as BaseFlowModel
+            return links[0].getTargetPort().getNode() as BaseFlowNode
         } else {
             return null
         }

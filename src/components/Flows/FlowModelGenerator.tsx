@@ -1,15 +1,15 @@
-import {BaseFlowModel} from "../CanvasItems/Nodes/BaseFlow/BaseFlowModel"
+import {BaseFlowNode} from "../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {FlowModel} from "../../generator/FlowModelJSON"
-import {FlowObjectFactory} from "./FlowObjectFactory"
+import {FlowModelFactory} from "./FlowModelFactory"
 import {FlowType} from "../../models"
-import {WhileFlowModel} from "./While/WhileFlowModel"
+import {WhileFlowNode} from "./While/WhileFlowNode"
 
-export class FlowGenerator {
+export class FlowModelGenerator {
 
     private constructor() {
     }
 
-    static generate(initialFlow: BaseFlowModel | null): FlowModel[] {
+    static generate(initialFlow: BaseFlowNode | null): FlowModel[] {
         const flowModelList: FlowModel[] = []
 
         this.generateFlowModel(initialFlow, flowModelList)
@@ -17,19 +17,19 @@ export class FlowGenerator {
         return flowModelList
     }
 
-    private static generateFlowModel(currentFlow: BaseFlowModel | null, flowModelList: FlowModel[], scopeId: string | null = null) {
+    private static generateFlowModel(currentFlow: BaseFlowNode | null, flowModelList: FlowModel[], scopeId: string | null = null) {
         if (currentFlow == null || (scopeId != null && currentFlow.getID() === scopeId))
             return
 
         switch (currentFlow.type) {
             case FlowType.WHILE:
-                this.generateFlowModel((currentFlow as WhileFlowModel).getScopeFlow(), flowModelList, currentFlow.getID())
+                this.generateFlowModel((currentFlow as WhileFlowNode).getScopeFlow(), flowModelList, currentFlow.getID())
                 break
             default:
                 break
         }
 
-        const flowModel = FlowObjectFactory.create(currentFlow)
+        const flowModel = FlowModelFactory.create(currentFlow)
 
         if (flowModel)
             flowModelList.push(flowModel)

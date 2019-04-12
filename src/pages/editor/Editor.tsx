@@ -11,11 +11,10 @@ import {BasePropertiesState} from "../../components/Flows/Base/BaseProperties"
 import {CodeGenerator} from "../../generator/CodeGenerator"
 import {Variable} from "../../models/Variable"
 import CanvasPanel from "../../components/CanvasPanel/CanvasPanel"
-import {FlowGenerator} from "../../components/Flows"
+import {FlowModelGenerator} from "../../components/Flows"
 import {BaseEvent, BaseModel} from "nberktumer-react-diagrams"
-import {BaseFlowModel} from "../../components/CanvasItems/Nodes/BaseFlow/BaseFlowModel"
-import {InputFlowModel} from "../../components/Flows/Input/InputFlowModel"
-import {AssignmentFlowModel} from "../../components/Flows/Assignment/AssignmentFlowModel"
+import {BaseFlowNode} from "../../components/CanvasItems/Nodes/BaseFlow/BaseFlowNode"
+import {BaseVariableFlowNode} from "../../components/Flows/Base/BaseVariableFlowNode"
 
 export interface EditorProps {
 }
@@ -71,7 +70,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
         if (!this.canvasPanel.current)
             return
 
-        const flowModelList = FlowGenerator.generate(this.canvasPanel.current.initialNode)
+        const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current.initialNode)
         const generator = new CodeGenerator(JSON.stringify(flowModelList))
         this.setState({generatedCode: generator.generate()})
     }
@@ -84,21 +83,16 @@ export default class Editor extends Component<EditorProps, EditorState> {
         })
     }
 
-    onItemAdded(flow: BaseFlowModel) {
-        switch (flow.constructor) {
-            case InputFlowModel:
-                this.state.variableList.push((flow as InputFlowModel).variable)
-                break
-            case AssignmentFlowModel:
-                this.state.variableList.push((flow as AssignmentFlowModel).variable)
-                break
+    onItemAdded(flow: BaseFlowNode) {
+        if (flow instanceof BaseVariableFlowNode) {
+            this.state.variableList.push((flow as BaseVariableFlowNode).variable)
         }
     }
 
     onEntityRemoved(event: BaseEvent<BaseModel>) {
-        if (event.entity instanceof AssignmentFlowModel || event.entity instanceof InputFlowModel) {
+        if (event.entity instanceof BaseVariableFlowNode) {
             const newVariableList = this.state.variableList.filter((value) => {
-                return value.name !== (event.entity as AssignmentFlowModel).variable.name
+                return value.name !== (event.entity as BaseVariableFlowNode).variable.name
             })
 
             this.setState({variableList: newVariableList})

@@ -1,4 +1,4 @@
-import {BaseInfoFlowModel} from "../../CanvasItems/Nodes/BaseInfoFlow/BaseInfoFlowModel"
+import {BaseInfoFlowNode} from "../../CanvasItems/Nodes/BaseInfoFlow/BaseInfoFlowNode"
 import strings from "../../../lang"
 import {NodeColors} from "../../../config"
 import {DiagramEngine} from "nberktumer-react-diagrams"
@@ -7,7 +7,7 @@ import {ArithmeticOperationType} from "../../../models"
 import {Operator} from "../../../generator/flows/ArithmeticFlow"
 import * as _ from "lodash"
 
-export class ArithmeticFlowModel extends BaseInfoFlowModel {
+export class ArithmeticFlowNode extends BaseInfoFlowNode {
     variable: Variable
     operation: ArithmeticOperationType
     operator1: Operator

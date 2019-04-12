@@ -1,13 +1,13 @@
-import {BaseInfoFlowModel} from "../../CanvasItems/Nodes/BaseInfoFlow/BaseInfoFlowModel"
+import {BaseInfoFlowNode} from "../../CanvasItems/Nodes/BaseInfoFlow/BaseInfoFlowNode"
 import strings from "../../../lang"
 import {NodeColors} from "../../../config"
 import {DiagramEngine} from "nberktumer-react-diagrams"
 import * as _ from "lodash"
 import {Condition} from "../../../models/Condition"
-import {BaseFlowModel} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowModel"
+import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {DefaultPortType} from "../../CanvasItems/Ports/DefaultPort"
 
-export class WhileFlowModel extends BaseInfoFlowModel {
+export class WhileFlowNode extends BaseInfoFlowNode {
     conditionList: Condition[] = []
 
     constructor() {
@@ -45,11 +45,11 @@ export class WhileFlowModel extends BaseInfoFlowModel {
         })
     }
 
-    getScopeFlow(): BaseFlowModel | null {
+    getScopeFlow(): BaseFlowNode | null {
         const links = Object.values(this.getPortListByType(DefaultPortType.SCOPE)[0].getLinks())
 
         if (links.length > 0) {
-            return links[0].getTargetPort().getNode() as BaseFlowModel
+            return links[0].getTargetPort().getNode() as BaseFlowNode
         } else {
             return null
         }

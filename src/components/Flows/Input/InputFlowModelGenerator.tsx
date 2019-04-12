@@ -1,16 +1,26 @@
 import {BaseFlowModelGenerator} from "../Base/BaseFlowModelGenerator"
-import {BaseFlowModel} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowModel"
-import {BasePropertiesState} from "../Base/BaseProperties"
-import {Variable} from "../../../models/Variable"
-import {InputFlowModel} from "./InputFlowModel"
+import {FlowModel} from "../../../generator/FlowModelJSON"
+import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
+import {FlowType} from "../../../models"
+import {InputFlowNode} from "./InputFlowNode"
+import {InputFlowContent} from "../../../generator/flows/InputFlow"
 
 export class InputFlowModelGenerator extends BaseFlowModelGenerator {
-    create(data?: BasePropertiesState): BaseFlowModel | null {
-        if (!data || data.variableName === "" || data.variableType === "")
-            return null
+    generate(flow: BaseFlowNode): FlowModel {
+        const inputFlow = flow as InputFlowNode
 
-        const variable = new Variable(data.variableName, data.variableType, null)
+        const nextFlow = inputFlow.getNextFlow()
+        const nextFlowId = nextFlow ? nextFlow.getID() : null
 
-        return new InputFlowModel(variable)
+        return new FlowModel(
+            FlowType.INPUT,
+            inputFlow.getID(),
+            null,
+            new InputFlowContent(inputFlow.variable),
+            null,
+            null,
+            null,
+            nextFlowId
+        )
     }
 }

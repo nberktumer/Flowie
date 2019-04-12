@@ -1,8 +1,8 @@
-import {BaseFlowModel} from "../CanvasItems/Nodes/BaseFlow/BaseFlowModel"
 import {FlowType} from "../../models"
-import {BasePropertiesState} from "./Base/BaseProperties"
-import {InputFlowModelGenerator} from "./Input/InputFlowModelGenerator"
+import {FlowModel} from "../../generator/FlowModelJSON"
 import {WhileFlowModelGenerator} from "./While/WhileFlowModelGenerator"
+import {BaseFlowNode} from "../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
+import {InputFlowModelGenerator} from "./Input/InputFlowModelGenerator"
 import {OutputFlowModelGenerator} from "./Output/OutputFlowModelGenerator"
 import {ArithmeticFlowModelGenerator} from "./Arithmetic/ArithmeticFlowModelGenerator"
 import {AssignmentFlowModelGenerator} from "./Assignment/AssignmentFlowModelGenerator"
@@ -12,24 +12,24 @@ export class FlowModelFactory {
     private constructor() {
     }
 
-    static create(type: FlowType, data?: BasePropertiesState): BaseFlowModel | null {
-        switch (type) {
+    static create(baseFlow: BaseFlowNode): FlowModel | null {
+        switch (baseFlow.type) {
             case FlowType.INITIAL:
-                return new InitialFlowModelGenerator().create(data)
+                return new InitialFlowModelGenerator().generate(baseFlow)
             case FlowType.IF:
                 return null // TODO
             case FlowType.WHILE:
-                return new WhileFlowModelGenerator().create(data)
+                return new WhileFlowModelGenerator().generate(baseFlow)
             case FlowType.FOR:
                 return null // TODO
             case FlowType.INPUT:
-                return new InputFlowModelGenerator().create(data)
+                return new InputFlowModelGenerator().generate(baseFlow)
             case FlowType.OUTPUT:
-                return new OutputFlowModelGenerator().create(data)
+                return new OutputFlowModelGenerator().generate(baseFlow)
             case FlowType.ARITHMETIC:
-                return new ArithmeticFlowModelGenerator().create(data)
+                return new ArithmeticFlowModelGenerator().generate(baseFlow)
             case FlowType.ASSIGNMENT:
-                return new AssignmentFlowModelGenerator().create(data)
+                return new AssignmentFlowModelGenerator().generate(baseFlow)
             default:
                 return null
         }

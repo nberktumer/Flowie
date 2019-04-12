@@ -1,12 +1,12 @@
-import {BaseFlowObjectGenerator} from "../Base/BaseFlowObjectGenerator"
+import {BaseFlowModelGenerator} from "../Base/BaseFlowModelGenerator"
 import {FlowModel} from "../../../generator/FlowModelJSON"
-import {BaseFlowModel} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowModel"
+import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {FlowType} from "../../../models"
-import {InitialFlowModel} from "./InitialFlowModel"
+import {InitialFlowNode} from "./InitialFlowNode"
 
-export class InitialFlowObjectGenerator extends BaseFlowObjectGenerator {
-    generate(flow: BaseFlowModel): FlowModel {
-        const initialFlow = flow as InitialFlowModel
+export class InitialFlowModelGenerator extends BaseFlowModelGenerator {
+    generate(flow: BaseFlowNode): FlowModel {
+        const initialFlow = flow as InitialFlowNode
 
         const nextFlow = initialFlow.getNextFlow()
         const nextFlowId = nextFlow ? nextFlow.getID() : null

@@ -1,4 +1,4 @@
-export {FlowModelFactory} from "./FlowModelFactory"
+export {FlowNodeFactory} from "./FlowNodeFactory"
 export {FlowPropertiesFactory} from "./FlowPropertiesFactory"
-export {FlowObjectFactory} from "./FlowObjectFactory"
-export {FlowGenerator} from "./FlowGenerator"
+export {FlowModelFactory} from "./FlowModelFactory"
+export {FlowModelGenerator} from "./FlowModelGenerator"

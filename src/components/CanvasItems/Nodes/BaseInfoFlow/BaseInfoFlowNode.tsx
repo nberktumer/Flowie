@@ -1,8 +1,8 @@
 import {DiagramEngine} from "nberktumer-react-diagrams"
 import * as _ from "lodash"
-import {BaseFlowModel} from "../BaseFlow/BaseFlowModel"
+import {BaseFlowNode} from "../BaseFlow/BaseFlowNode"
 
-export class BaseInfoFlowModel extends BaseFlowModel {
+export class BaseInfoFlowNode extends BaseFlowNode {
     info: string | undefined
 
     constructor(name: string = "Untitled", color: string = "rgb(0,192,255)") {

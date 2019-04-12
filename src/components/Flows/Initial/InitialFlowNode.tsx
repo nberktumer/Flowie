@@ -1,8 +1,8 @@
 import strings from "../../../lang"
 import {NodeColors} from "../../../config"
-import {BaseFlowModel} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowModel"
+import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 
-export class InitialFlowModel extends BaseFlowModel {
+export class InitialFlowNode extends BaseFlowNode {
 
     constructor() {
         super(strings.initialFlow, NodeColors.INITIAL)

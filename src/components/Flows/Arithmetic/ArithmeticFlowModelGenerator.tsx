@@ -1,26 +1,31 @@
 import {BaseFlowModelGenerator} from "../Base/BaseFlowModelGenerator"
-import {BaseFlowModel} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowModel"
-import {BasePropertiesState} from "../Base/BaseProperties"
-import {Variable} from "../../../models/Variable"
-import {Operator, OperatorType} from "../../../generator/flows/ArithmeticFlow"
-import {ArithmeticFlowModel} from "./ArithmeticFlowModel"
+import {FlowModel} from "../../../generator/FlowModelJSON"
+import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
+import {FlowType} from "../../../models"
+import {ArithmeticFlowNode} from "./ArithmeticFlowNode"
+import {ArithmeticFlowContent} from "../../../generator/flows/ArithmeticFlow"
 
 export class ArithmeticFlowModelGenerator extends BaseFlowModelGenerator {
-    create(data?: BasePropertiesState): BaseFlowModel | null {
-        if (!data || data.variable === "" || data.operation === "" || data.operator1 === "" || data.operator2 === "")
-            return null
+    generate(flow: BaseFlowNode): FlowModel {
+        const arithmeticFlow = flow as ArithmeticFlowNode
 
-        const var1 = JSON.parse(data.operator1) as Variable
-        const var2 = JSON.parse(data.operator2) as Variable
+        const nextFlow = arithmeticFlow.getNextFlow()
+        const nextFlowId = nextFlow ? nextFlow.getID() : null
 
-        const op1 = new Operator(OperatorType.VARIABLE, var1.name, var1.value)
-        const op2 = new Operator(OperatorType.VARIABLE, var2.name, var2.value)
-
-        return new ArithmeticFlowModel(
-            JSON.parse(data.variable),
-            data.operation,
-            op1,
-            op2
+        return new FlowModel(
+            FlowType.ARITHMETIC,
+            arithmeticFlow.getID(),
+            null,
+            null,
+            null,
+            new ArithmeticFlowContent(
+                arithmeticFlow.variable,
+                arithmeticFlow.operation,
+                arithmeticFlow.operator1,
+                arithmeticFlow.operator2
+            ),
+            null,
+            nextFlowId
         )
     }
 }

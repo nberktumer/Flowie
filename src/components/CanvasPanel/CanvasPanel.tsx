@@ -9,9 +9,9 @@ import {BaseInfoFlowFactory} from "../CanvasItems/Nodes/BaseInfoFlow/BaseInfoFlo
 import {BasePropertiesState} from "../Flows/Base/BaseProperties"
 import {DefaultPort, DefaultPortLocation, DefaultPortModel, DefaultPortType} from "../CanvasItems/Ports/DefaultPort"
 import {Variable} from "../../models/Variable"
-import {InitialFlowModel} from "../Flows/Initial/InitialFlowModel"
-import {FlowModelFactory} from "../Flows"
-import {BaseFlowModel} from "../CanvasItems/Nodes/BaseFlow/BaseFlowModel"
+import {InitialFlowNode} from "../Flows/Initial/InitialFlowNode"
+import {FlowNodeFactory} from "../Flows"
+import {BaseFlowNode} from "../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 
 export interface CanvasPanelProps {
     variableList: Variable[]
@@ -19,7 +19,7 @@ export interface CanvasPanelProps {
     onDiagramChanged: () => void,
     onSectionChanged: (event: BaseEvent<BaseModel> & { isSelected: boolean }) => void,
     onEntityRemoved: (event: BaseEvent<BaseModel>) => void,
-    onItemAdded: (flow: BaseFlowModel) => void
+    onItemAdded: (flow: BaseFlowNode) => void
 }
 
 export interface CanvasPanelState {
@@ -28,7 +28,7 @@ export interface CanvasPanelState {
 export default class CanvasPanel extends Component<CanvasPanelProps, CanvasPanelState> {
     activeModel: DiagramModel
     diagramEngine: DiagramEngine
-    initialNode: InitialFlowModel
+    initialNode: InitialFlowNode
 
     constructor(props: CanvasPanelProps) {
         super(props)
@@ -51,7 +51,7 @@ export default class CanvasPanel extends Component<CanvasPanelProps, CanvasPanel
             })
         })
 
-        this.initialNode = FlowModelFactory.create(FlowType.INITIAL, undefined) as InitialFlowModel
+        this.initialNode = FlowNodeFactory.create(FlowType.INITIAL, undefined) as InitialFlowNode
         this.initialNode.addListener({
             selectionChanged: this.props.onSectionChanged.bind(this),
             entityRemoved: this.props.onEntityRemoved.bind(this)
@@ -64,7 +64,7 @@ export default class CanvasPanel extends Component<CanvasPanelProps, CanvasPanel
     }
 
     addItem(type: FlowType, data: BasePropertiesState, position: { x: number, y: number }): void {
-        const node = FlowModelFactory.create(type, data)
+        const node = FlowNodeFactory.create(type, data)
         if (!node)
             return
 

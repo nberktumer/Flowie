@@ -1,6 +1,6 @@
 import * as SRD from "nberktumer-react-diagrams"
 import * as React from "react"
-import {BaseInfoFlowModel} from "./BaseInfoFlowModel"
+import {BaseInfoFlowNode} from "./BaseInfoFlowNode"
 import {BaseInfoFlowWidget} from "./BaseInfoFlowWidget"
 
 export class BaseInfoFlowFactory extends SRD.AbstractNodeFactory {
@@ -8,11 +8,11 @@ export class BaseInfoFlowFactory extends SRD.AbstractNodeFactory {
         super("base-info-flow")
     }
 
-    generateReactWidget(diagramEngine: SRD.DiagramEngine, node: BaseInfoFlowModel): JSX.Element {
+    generateReactWidget(diagramEngine: SRD.DiagramEngine, node: BaseInfoFlowNode): JSX.Element {
         return <BaseInfoFlowWidget node={node}/>
     }
 
     getNewInstance() {
-        return new BaseInfoFlowModel()
+        return new BaseInfoFlowNode()
     }
 }

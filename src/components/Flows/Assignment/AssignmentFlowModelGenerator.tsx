@@ -1,17 +1,26 @@
 import {BaseFlowModelGenerator} from "../Base/BaseFlowModelGenerator"
-import {BaseFlowModel} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowModel"
-import {BasePropertiesState} from "../Base/BaseProperties"
-import {Variable} from "../../../models/Variable"
-import {AssignmentFlowModel} from "./AssignmentFlowModel"
+import {FlowModel} from "../../../generator/FlowModelJSON"
+import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
+import {AssignmentFlowNode} from "./AssignmentFlowNode"
+import {FlowType} from "../../../models"
+import {AssignmentFlowContent} from "../../../generator/flows/AssignmentFlow"
 
 export class AssignmentFlowModelGenerator extends BaseFlowModelGenerator {
-    create(data?: BasePropertiesState): BaseFlowModel | null {
-        if (!data || data.variableName === "" || data.variableType === "" || data.value === "")
-            return null
+    generate(flow: BaseFlowNode): FlowModel {
+        const assignmentFlow = flow as AssignmentFlowNode
 
-        // data.isNull
-        const variable = new Variable(data.variableName, data.variableType, data.value)
+        const nextFlow = assignmentFlow.getNextFlow()
+        const nextFlowId = nextFlow ? nextFlow.getID() : null
 
-        return new AssignmentFlowModel(variable)
+        return new FlowModel(
+            FlowType.ASSIGNMENT,
+            assignmentFlow.getID(),
+            new AssignmentFlowContent(assignmentFlow.variable),
+            null,
+            null,
+            null,
+            null,
+            nextFlowId
+        )
     }
 }
