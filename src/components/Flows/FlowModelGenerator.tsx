@@ -3,6 +3,7 @@ import {FlowModel} from "../../generator/FlowModelJSON"
 import {FlowModelFactory} from "./FlowModelFactory"
 import {FlowType} from "../../models"
 import {WhileFlowNode} from "./While/WhileFlowNode"
+import * as _ from "lodash"
 
 export class FlowModelGenerator {
 
@@ -21,18 +22,24 @@ export class FlowModelGenerator {
         if (currentFlow == null || (scopeId != null && currentFlow.getID() === scopeId))
             return
 
+        // Check if the node has been visited before
+        console.log(flowModelList, currentFlow.getID())
+        if (_.includes(flowModelList.map((flow) => flow.id), currentFlow.getID()))
+            return
+
         switch (currentFlow.type) {
             case FlowType.WHILE:
                 this.generateFlowModel((currentFlow as WhileFlowNode).getScopeFlow(), flowModelList, currentFlow.getID())
                 break
-            default:
-                break
         }
 
         const flowModel = FlowModelFactory.create(currentFlow)
+        console.log(flowModel)
 
-        if (flowModel)
+        if (flowModel) {
             flowModelList.push(flowModel)
+            console.log("pushed")
+        }
 
         this.generateFlowModel(currentFlow.getNextFlow(), flowModelList, scopeId)
     }

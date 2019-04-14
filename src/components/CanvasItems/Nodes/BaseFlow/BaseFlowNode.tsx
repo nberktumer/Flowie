@@ -2,21 +2,23 @@ import {DiagramEngine, NodeModel} from "nberktumer-react-diagrams"
 import * as _ from "lodash"
 import {Random} from "../../../../utils"
 import {DefaultPort, DefaultPortLocation, DefaultPortModel, DefaultPortType} from "../../Ports/DefaultPort"
-import {BaseVariableFlowNode} from "../../../Flows/Base/BaseVariableFlowNode"
+import {FlowType} from "../../../../models"
 
 export class BaseFlowNode extends NodeModel {
     name: string
     color: string
     ports: { [s: string]: DefaultPortModel }
     onLinkChangedListener: () => void
+    flowType: FlowType | undefined
 
-    constructor(name: string = "Untitled", color: string = "rgb(0,192,255)", nodeType: string = "base-flow") {
+    constructor(flowType?: FlowType, name: string = "Untitled", color: string = "rgb(0,192,255)", nodeType: string = "base-flow") {
         super(nodeType)
         this.name = name
         this.color = color
         this.ports = {}
         this.onLinkChangedListener = () => {
         }
+        this.flowType = flowType
     }
 
     addOnLinkChangedListener(listener: () => void) {

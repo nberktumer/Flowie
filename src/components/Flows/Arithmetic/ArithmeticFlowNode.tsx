@@ -3,7 +3,7 @@ import strings from "../../../lang"
 import {NodeColors} from "../../../config"
 import {DiagramEngine} from "nberktumer-react-diagrams"
 import {Variable} from "../../../models/Variable"
-import {ArithmeticOperationType} from "../../../models"
+import {ArithmeticOperationType, FlowType} from "../../../models"
 import {Operator} from "../../../generator/flows/ArithmeticFlow"
 import * as _ from "lodash"
 
@@ -14,7 +14,7 @@ export class ArithmeticFlowNode extends BaseInfoFlowNode {
     operator2: Operator
 
     constructor(variable: Variable, operation: ArithmeticOperationType, operator1: Operator, operator2: Operator) {
-        super(strings.arithmetic, NodeColors.ARITHMETIC)
+        super(FlowType.ASSIGNMENT, strings.arithmetic, NodeColors.ARITHMETIC)
 
         this.addInPort(strings.in).setMaximumLinks(Infinity)
         this.addOutPort(strings.out).setMaximumLinks(1)

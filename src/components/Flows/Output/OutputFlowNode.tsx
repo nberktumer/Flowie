@@ -4,12 +4,13 @@ import {NodeColors} from "../../../config"
 import {DiagramEngine} from "nberktumer-react-diagrams"
 import * as _ from "lodash"
 import {Variable} from "../../../models/Variable"
+import {FlowType} from "../../../models"
 
 export class OutputFlowNode extends BaseInfoFlowNode {
     variable: Variable
 
     constructor(variable: Variable) {
-        super(strings.output, NodeColors.IF)
+        super(FlowType.OUTPUT, strings.output, NodeColors.IF)
 
         this.variable = variable
         this.info = variable.name

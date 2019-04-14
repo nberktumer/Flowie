@@ -13,7 +13,7 @@ export class InitialFlowModelGenerator extends BaseFlowModelGenerator {
 
         return new FlowModel(
             FlowType.INITIAL,
-            "INITIAL_ID",
+            flow.getID(),
             null,
             null,
             null,

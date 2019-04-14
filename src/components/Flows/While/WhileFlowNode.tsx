@@ -6,12 +6,13 @@ import * as _ from "lodash"
 import {Condition} from "../../../models/Condition"
 import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {DefaultPortType} from "../../CanvasItems/Ports/DefaultPort"
+import {FlowType} from "../../../models"
 
 export class WhileFlowNode extends BaseInfoFlowNode {
     conditionList: Condition[] = []
 
     constructor() {
-        super(strings.while, NodeColors.WHILE)
+        super(FlowType.WHILE, strings.while, NodeColors.WHILE)
 
         this.addInPort(strings.in).setMaximumLinks(Infinity)
         this.addOutPort(strings.out).setMaximumLinks(1)

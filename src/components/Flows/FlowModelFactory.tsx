@@ -1,19 +1,19 @@
 import {FlowType} from "../../models"
 import {FlowModel} from "../../generator/FlowModelJSON"
 import {WhileFlowModelGenerator} from "./While/WhileFlowModelGenerator"
-import {BaseFlowNode} from "../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {InputFlowModelGenerator} from "./Input/InputFlowModelGenerator"
 import {OutputFlowModelGenerator} from "./Output/OutputFlowModelGenerator"
 import {ArithmeticFlowModelGenerator} from "./Arithmetic/ArithmeticFlowModelGenerator"
 import {AssignmentFlowModelGenerator} from "./Assignment/AssignmentFlowModelGenerator"
 import {InitialFlowModelGenerator} from "./Initial/InitialFlowModelGenerator"
+import {BaseFlowNode} from "../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 
 export class FlowModelFactory {
     private constructor() {
     }
 
     static create(baseFlow: BaseFlowNode): FlowModel | null {
-        switch (baseFlow.type) {
+        switch (baseFlow.flowType) {
             case FlowType.INITIAL:
                 return new InitialFlowModelGenerator().generate(baseFlow)
             case FlowType.IF:
