@@ -40,7 +40,7 @@ export class DefaultPortModel extends PortModel {
     }
 
     canLinkToPort(port: DefaultPortModel): boolean {
-        if (Object.keys(port.getLinks()).length > port.getMaximumLinks() || Object.keys(this.getLinks()).length > port.getMaximumLinks())
+        if (Object.keys(port.getLinks()).length > port.getMaximumLinks() || Object.keys(this.getLinks()).length > this.getMaximumLinks())
             return false
 
         // Do not connect ports that are in the same node
