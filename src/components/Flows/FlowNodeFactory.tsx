@@ -7,6 +7,12 @@ import {OutputFlowNodeGenerator} from "./Output/OutputFlowNodeGenerator"
 import {ArithmeticFlowNodeGenerator} from "./Arithmetic/ArithmeticFlowNodeGenerator"
 import {AssignmentFlowNodeGenerator} from "./Assignment/AssignmentFlowNodeGenerator"
 import {InitialFlowNodeGenerator} from "./Initial/InitialFlowNodeGenerator"
+import {InputFlowNode} from "./Input/InputFlowNode"
+import {InitialFlowNode} from "./Initial/InitialFlowNode"
+import {WhileFlowNode} from "./While/WhileFlowNode"
+import {AssignmentFlowNode} from "./Assignment/AssignmentFlowNode"
+import {ArithmeticFlowNode} from "./Arithmetic/ArithmeticFlowNode"
+import {OutputFlowNode} from "./Output/OutputFlowNode"
 
 export class FlowNodeFactory {
     private constructor() {
@@ -30,6 +36,30 @@ export class FlowNodeFactory {
                 return new ArithmeticFlowNodeGenerator().create(data)
             case FlowType.ASSIGNMENT:
                 return new AssignmentFlowNodeGenerator().create(data)
+            default:
+                return null
+        }
+    }
+
+    static update(node: BaseFlowNode, data?: BasePropertiesState): BaseFlowNode | null {
+        console.log(node.flowType)
+        switch (node.flowType) {
+            case FlowType.INITIAL:
+                return new InitialFlowNodeGenerator().create(data, node as InitialFlowNode)
+            case FlowType.IF:
+                return null // TODO
+            case FlowType.WHILE:
+                return new WhileFlowNodeGenerator().create(data, node as WhileFlowNode)
+            case FlowType.FOR:
+                return null // TODO
+            case FlowType.INPUT:
+                return new InputFlowNodeGenerator().create(data, node as InputFlowNode)
+            case FlowType.OUTPUT:
+                return new OutputFlowNodeGenerator().create(data, node as OutputFlowNode)
+            case FlowType.ARITHMETIC:
+                return new ArithmeticFlowNodeGenerator().create(data, node as ArithmeticFlowNode)
+            case FlowType.ASSIGNMENT:
+                return new AssignmentFlowNodeGenerator().create(data, node as AssignmentFlowNode)
             default:
                 return null
         }

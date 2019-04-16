@@ -4,15 +4,25 @@ import strings from "../../../lang"
 import {BaseProperties, BasePropertiesProps} from "../Base/BaseProperties"
 import {VariableType} from "../../../models"
 import {Rules} from "../../../config"
+import {InputFlowNode} from "./InputFlowNode"
 
 export class InputProperties extends BaseProperties {
 
     constructor(props: BasePropertiesProps) {
         super(props)
 
-        this.state = {
-            variableName: "",
-            variableType: ""
+        if (props.node !== undefined) {
+            const node = props.node as InputFlowNode
+
+            this.state = {
+                variableName: node.getVariable().name,
+                variableType: node.getVariable().type
+            }
+        } else {
+            this.state = {
+                variableName: "",
+                variableType: ""
+            }
         }
     }
 
@@ -33,8 +43,7 @@ export class InputProperties extends BaseProperties {
                     label={strings.dataType}
                     value={this.state.variableType}
                     onChange={this.handleStringChange("variableType")}
-                    margin="normal"
-                >
+                    margin="normal">
                     {Object.keys(VariableType).map((key: any) => (
                         <MenuItem key={key} value={VariableType[key]}>
                             {VariableType[key]}

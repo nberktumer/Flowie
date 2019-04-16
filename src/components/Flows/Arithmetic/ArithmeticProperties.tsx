@@ -4,6 +4,7 @@ import strings from "../../../lang"
 import {BaseProperties, BasePropertiesProps} from "../Base/BaseProperties"
 import {Variable} from "../../../models/Variable"
 import {ArithmeticOperationType, VariableType} from "../../../models"
+import {ArithmeticFlowNode} from "./ArithmeticFlowNode"
 
 export interface ArithmeticPropertiesProps extends BasePropertiesProps {
     variables: Variable[]
@@ -14,11 +15,22 @@ export class ArithmeticProperties extends BaseProperties<ArithmeticPropertiesPro
     constructor(props: ArithmeticPropertiesProps) {
         super(props)
 
-        this.state = {
-            variable: "",
-            operation: "",
-            operator1: "",
-            operator2: ""
+        if (props.node !== undefined) {
+            const node = props.node as ArithmeticFlowNode
+
+            this.state = {
+                variable: node.variable,
+                operation: node.operation,
+                operator1: node.operator1,
+                operator2: node.operator2
+            }
+        } else {
+            this.state = {
+                variable: "",
+                operation: "",
+                operator1: "",
+                operator2: ""
+            }
         }
     }
 

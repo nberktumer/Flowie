@@ -1,7 +1,9 @@
 import React, {Component} from "react"
+import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 
 export interface BasePropertiesProps {
     onDataChanged: (data: BasePropertiesState) => void
+    node?: BaseFlowNode
 }
 
 export interface BasePropertiesState {

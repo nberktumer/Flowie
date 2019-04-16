@@ -15,7 +15,7 @@ export class AssignmentFlowModelGenerator extends BaseFlowModelGenerator {
         return new FlowModel(
             FlowType.ASSIGNMENT,
             assignmentFlow.getID(),
-            new AssignmentFlowContent(assignmentFlow.variable),
+            new AssignmentFlowContent(assignmentFlow.getVariable()),
             null,
             null,
             null,

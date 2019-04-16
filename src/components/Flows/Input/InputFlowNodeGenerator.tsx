@@ -5,12 +5,17 @@ import {Variable} from "../../../models/Variable"
 import {InputFlowNode} from "./InputFlowNode"
 
 export class InputFlowNodeGenerator extends BaseFlowNodeGenerator {
-    create(data?: BasePropertiesState): BaseFlowNode | null {
+    create(data?: BasePropertiesState, node?: InputFlowNode): BaseFlowNode | null {
         if (!data || data.variableName === "" || data.variableType === "")
             return null
 
         const variable = new Variable(data.variableName, data.variableType, null)
 
-        return new InputFlowNode(variable)
+        if (node !== undefined) {
+            node.setVariable(variable)
+            return node
+        } else {
+            return new InputFlowNode(variable)
+        }
     }
 }

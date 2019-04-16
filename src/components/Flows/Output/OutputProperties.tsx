@@ -3,6 +3,7 @@ import {MenuItem, TextField} from "@material-ui/core"
 import strings from "../../../lang"
 import {BaseProperties, BasePropertiesProps} from "../Base/BaseProperties"
 import {Variable} from "../../../models/Variable"
+import {OutputFlowNode} from "./OutputFlowNode"
 
 export interface OutputPropertiesProps extends BasePropertiesProps {
     variables: Variable[]
@@ -13,8 +14,16 @@ export class OutputProperties extends BaseProperties<OutputPropertiesProps> {
     constructor(props: OutputPropertiesProps) {
         super(props)
 
-        this.state = {
-            variable: ""
+        if (props.node !== undefined) {
+            const node = props.node as OutputFlowNode
+
+            this.state = {
+                variable: node.variable.name
+            }
+        } else {
+            this.state = {
+                variable: ""
+            }
         }
     }
 

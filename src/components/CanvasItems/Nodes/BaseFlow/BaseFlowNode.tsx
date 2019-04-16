@@ -3,6 +3,8 @@ import * as _ from "lodash"
 import {Random} from "../../../../utils"
 import {DefaultPort, DefaultPortLocation, DefaultPortModel, DefaultPortType} from "../../Ports/DefaultPort"
 import {FlowType} from "../../../../models"
+import {BasePropertiesState} from "../../../Flows/Base/BaseProperties"
+import {FlowNodeFactory} from "../../../Flows"
 
 export class BaseFlowNode extends NodeModel {
     name: string
@@ -19,6 +21,10 @@ export class BaseFlowNode extends NodeModel {
         this.onLinkChangedListener = () => {
         }
         this.flowType = flowType
+    }
+
+    updateNode(data: BasePropertiesState) {
+        FlowNodeFactory.update(this, data)
     }
 
     addOnLinkChangedListener(listener: () => void) {

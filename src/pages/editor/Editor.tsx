@@ -11,7 +11,7 @@ import {BasePropertiesState} from "../../components/Flows/Base/BaseProperties"
 import {CodeGenerator} from "../../generator/CodeGenerator"
 import {Variable} from "../../models/Variable"
 import CanvasPanel from "../../components/CanvasPanel/CanvasPanel"
-import {FlowModelGenerator} from "../../components/Flows"
+import {FlowModelGenerator, FlowPropertiesFactory} from "../../components/Flows"
 import {BaseEvent, BaseModel} from "nberktumer-react-diagrams"
 import {BaseFlowNode} from "../../components/CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {BaseVariableFlowNode} from "../../components/Flows/Base/BaseVariableFlowNode"
@@ -26,7 +26,9 @@ export interface EditorState {
     flowType: FlowType | null,
     flowPosition: { x: number, y: number },
     generatedCode: string,
-    variableList: Variable[]
+    variableList: Variable[],
+    properties: JSX.Element,
+    selectedItem: string
 }
 
 export default class Editor extends Component<EditorProps, EditorState> {
@@ -44,7 +46,9 @@ export default class Editor extends Component<EditorProps, EditorState> {
             flowType: null,
             flowPosition: {x: 0, y: 0},
             generatedCode: generator.generate(),
-            variableList: []
+            variableList: [],
+            properties: <div/>,
+            selectedItem: ""
         }
     }
 
@@ -85,53 +89,47 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
     onItemAdded(flow: BaseFlowNode) {
         if (flow instanceof BaseVariableFlowNode) {
-            this.state.variableList.push((flow as BaseVariableFlowNode).variable)
+            this.state.variableList.push((flow as BaseVariableFlowNode).getVariable())
         }
     }
 
     onEntityRemoved(event: BaseEvent<BaseModel>) {
         if (event.entity instanceof BaseVariableFlowNode) {
             const newVariableList = this.state.variableList.filter((value) => {
-                return value.name !== (event.entity as BaseVariableFlowNode).variable.name
+                return value.name !== (event.entity as BaseVariableFlowNode).getVariable().name
             })
 
             this.setState({variableList: newVariableList})
         }
 
-        /*
-                        const index = this.selected.indexOf((event.entity as DefaultNodeModel).name)
-                        this.selected.splice(index, 1)
-
-                        if (this.selected.length === 0) {
-                            this.setState({selectedStr: "Nothing is selected!"})
-                        } else {
-                            this.setState({
-                                selectedStr: this.selected.join(", ") +
-                                    (this.selected.length === 1 ? " is " : " are ") + "selected."
-                            })
-                        }*/
+        if (event.entity.getID() === this.state.selectedItem) {
+            this.setState({properties: (<div/>), selectedItem: ""})
+        }
     }
 
     onSelectionChanged(event: BaseEvent<BaseModel> & { isSelected: boolean }) {
-        /*if (item.isSelected && this.selected.indexOf((item.entity as DefaultNodeModel).name) === -1) {
-                    this.selected.push((item.entity as DefaultNodeModel).name)
-                    this.setState({
-                        selectedStr: this.selected.join(", ") +
-                            (this.selected.length === 1 ? " is " : " are ") + "selected."
-                    })
-                } else if (!item.isSelected) {
-                    const index = this.selected.indexOf((item.entity as DefaultNodeModel).name)
-                    this.selected.splice(index, 1)
+        if (!this.canvasPanel.current || !(event.entity instanceof BaseFlowNode))
+            return
 
-                    if (this.selected.length === 0) {
-                        this.setState({selectedStr: "Nothing is selected!"})
-                    } else {
-                        this.setState({
-                            selectedStr: this.selected.join(", ") +
-                                (this.selected.length === 1 ? " is " : " are ") + "selected."
-                        })
-                    }
-                }*/
+        const selectedItems = this.canvasPanel.current.diagramEngine.diagramModel.getSelectedItems().filter((item) => {
+            return item instanceof BaseFlowNode
+        })
+
+        if (selectedItems.length > 1) {
+            this.setState({properties: (<div/>), selectedItem: ""})
+        } else if (selectedItems.length === 1 && event.isSelected) {
+            // Workaround for updating the properties panel
+            this.setState({properties: <div/>}, () => {
+                const properties = FlowPropertiesFactory.create((event.entity as BaseFlowNode).flowType, this.state.variableList, (data: BasePropertiesState) => {
+                    (event.entity as BaseFlowNode).updateNode(data)
+                    this.onDiagramChanged()
+                }, event.entity as BaseFlowNode)
+
+                this.setState({properties, selectedItem: event.entity.getID()})
+            })
+        } else {
+            this.setState({properties: (<div/>), selectedItem: ""})
+        }
     }
 
     render() {
@@ -186,13 +184,8 @@ export default class Editor extends Component<EditorProps, EditorState> {
                     <ReflexElement minSize={250}>
                         <ReflexContainer orientation="horizontal" style={{height: "100vh"}}>
                             <ReflexElement className="right-pane" flex={0.5} minSize={200}>
-                                <div
-                                    style={{
-                                        width: "100%",
-                                        height: "100%",
-                                        backgroundColor: "#1d1f21",
-                                        color: "white"
-                                    }}>
+                                <div className={styles.propertiesPanel}>
+                                    {this.state.properties}
                                 </div>
                             </ReflexElement>
 

@@ -23,7 +23,6 @@ export class FlowModelGenerator {
             return
 
         // Check if the node has been visited before
-        console.log(flowModelList, currentFlow.getID())
         if (_.includes(flowModelList.map((flow) => flow.id), currentFlow.getID()))
             return
 
@@ -34,12 +33,8 @@ export class FlowModelGenerator {
         }
 
         const flowModel = FlowModelFactory.create(currentFlow)
-        console.log(flowModel)
-
-        if (flowModel) {
+        if (flowModel)
             flowModelList.push(flowModel)
-            console.log("pushed")
-        }
 
         this.generateFlowModel(currentFlow.getNextFlow(), flowModelList, scopeId)
     }

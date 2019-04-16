@@ -16,7 +16,7 @@ export class InputFlowModelGenerator extends BaseFlowModelGenerator {
             FlowType.INPUT,
             inputFlow.getID(),
             null,
-            new InputFlowContent(inputFlow.variable),
+            new InputFlowContent(inputFlow.getVariable()),
             null,
             null,
             null,

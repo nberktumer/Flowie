@@ -4,10 +4,15 @@ import {BasePropertiesState} from "../Base/BaseProperties"
 import {OutputFlowNode} from "./OutputFlowNode"
 
 export class OutputFlowNodeGenerator extends BaseFlowNodeGenerator {
-    create(data?: BasePropertiesState): BaseFlowNode | null {
+    create(data?: BasePropertiesState, node?: OutputFlowNode): BaseFlowNode | null {
         if (!data || data.variable === "")
             return null
 
-        return new OutputFlowNode(JSON.parse(data.variable))
+        if (node !== undefined) {
+            node.variable = JSON.parse(data.variable)
+            return node
+        } else {
+            return new OutputFlowNode(JSON.parse(data.variable))
+        }
     }
 }

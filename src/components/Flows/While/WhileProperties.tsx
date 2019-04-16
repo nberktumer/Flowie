@@ -5,6 +5,7 @@ import {BaseProperties, BasePropertiesProps} from "../Base/BaseProperties"
 import {Variable} from "../../../models/Variable"
 import {VariableType} from "../../../models"
 import {ConditionOperation} from "../../../models/VariableEnums"
+import {WhileFlowNode} from "./WhileFlowNode"
 
 export interface WhilePropertiesProps extends BasePropertiesProps {
     variables: Variable[]
@@ -15,11 +16,23 @@ export class WhileProperties extends BaseProperties<WhilePropertiesProps> {
     constructor(props: WhilePropertiesProps) {
         super(props)
 
-        this.state = {
-            variableType: "",
-            first: "",
-            second: "",
-            operation: ""
+        if (props.node !== undefined) {
+            const node = props.node as WhileFlowNode
+
+            // TODO: Change this to handle all conditions
+            this.state = {
+                variableType: node.conditionList[0].variableType,
+                first: node.conditionList[0].first,
+                second: node.conditionList[0].second,
+                operation: node.conditionList[0].operation
+            }
+        } else {
+            this.state = {
+                variableType: "",
+                first: "",
+                second: "",
+                operation: ""
+            }
         }
     }
 

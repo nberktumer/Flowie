@@ -27,6 +27,11 @@ export class WhileFlowNode extends BaseInfoFlowNode {
         }).join("\n")
     }
 
+    removeAllConditions() {
+        this.conditionList = []
+        this.info = ""
+    }
+
     removeCondition(condition: Condition) {
         this.conditionList = this.conditionList.filter((cond) => cond != condition)
 

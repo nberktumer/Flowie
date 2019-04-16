@@ -5,14 +5,20 @@ import {Condition} from "../../../models/Condition"
 import {WhileFlowNode} from "./WhileFlowNode"
 
 export class WhileFlowNodeGenerator extends BaseFlowNodeGenerator {
-    create(data?: BasePropertiesState): BaseFlowNode | null {
+    create(data?: BasePropertiesState, node?: WhileFlowNode): BaseFlowNode | null {
         if (!data || data.variableType === "" || data.first === "" || data.second === "" || data.operation === "")
             return null
 
         const condition = new Condition(data.variableType, JSON.parse(data.first), JSON.parse(data.second), data.operation)
 
-        const node = new WhileFlowNode()
-        node.addCondition(condition)
-        return node
+        if (node !== undefined) {
+            node.removeAllConditions()
+            node.addCondition(condition)
+            return node
+        } else {
+            const whileNode = new WhileFlowNode()
+            whileNode.addCondition(condition)
+            return whileNode
+        }
     }
 }

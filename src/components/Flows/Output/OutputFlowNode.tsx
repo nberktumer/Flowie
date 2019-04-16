@@ -7,16 +7,25 @@ import {Variable} from "../../../models/Variable"
 import {FlowType} from "../../../models"
 
 export class OutputFlowNode extends BaseInfoFlowNode {
-    variable: Variable
-
     constructor(variable: Variable) {
         super(FlowType.OUTPUT, strings.output, NodeColors.IF)
 
-        this.variable = variable
+        this._variable = variable
         this.info = variable.name
 
         this.addInPort(strings.in).setMaximumLinks(Infinity)
         this.addOutPort(strings.out).setMaximumLinks(1)
+    }
+
+    private _variable: Variable
+
+    get variable() {
+        return this.variable
+    }
+
+    set variable(variable: Variable) {
+        this._variable = variable
+        this.info = variable.name
     }
 
     deSerialize(object: any, engine: DiagramEngine) {

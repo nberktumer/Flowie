@@ -4,17 +4,29 @@ import strings from "../../../lang"
 import {BaseProperties, BasePropertiesProps} from "../Base/BaseProperties"
 import {VariableType} from "../../../models"
 import {Rules} from "../../../config"
+import {AssignmentFlowNode} from "./AssignmentFlowNode"
 
 export class AssignmentProperties extends BaseProperties {
 
     constructor(props: BasePropertiesProps) {
         super(props)
+        
+        if (props.node !== undefined) {
+            const node = props.node as AssignmentFlowNode
 
-        this.state = {
-            variableName: "",
-            variableType: "",
-            value: "",
-            isNull: false
+            this.state = {
+                variableName: node.getVariable().name,
+                variableType: node.getVariable().type,
+                value: node.getVariable().value,
+                isNull: node.getVariable().value === "NULL"
+            }
+        } else {
+            this.state = {
+                variableName: "",
+                variableType: "",
+                value: "",
+                isNull: false
+            }
         }
     }
 

@@ -4,7 +4,7 @@ import {BasePropertiesState} from "../Base/BaseProperties"
 import {InitialFlowNode} from "./InitialFlowNode"
 
 export class InitialFlowNodeGenerator extends BaseFlowNodeGenerator {
-    create(data?: BasePropertiesState): BaseFlowNode | null {
+    create(data?: BasePropertiesState, node?: InitialFlowNode): BaseFlowNode | null {
         return new InitialFlowNode()
     }
 }
