@@ -9,6 +9,7 @@ export class AssignmentFlow implements BaseFlow {
     nextFlowId: string | null
     type: FlowType
     content: AssignmentFlowContent | null
+    functionCallName: string
 
     constructor(
         id: string,
@@ -19,6 +20,7 @@ export class AssignmentFlow implements BaseFlow {
         this.nextFlowId = nextFlowId
         this.type = type
         this.content = content
+        this.functionCallName = (CodeWriter.getInstance().flowIncrementalId++).toString()
     }
 
     createMainCode(): void {
@@ -56,7 +58,7 @@ export class AssignmentFlow implements BaseFlow {
     }
 
     functionName(): string {
-        return `assignmentFlow${this.id}`
+        return `assignmentFlow${this.functionCallName}`
     }
 
     nextFlow(): string {

@@ -10,6 +10,7 @@ export class OutputFlow implements BaseFlow {
     nextFlowId: string | null
     type: FlowType
     content: OutputFlowContent | null
+    functionCallName: string
 
     constructor(
         id: string,
@@ -20,6 +21,7 @@ export class OutputFlow implements BaseFlow {
         this.nextFlowId = nextFlowId
         this.type = type
         this.content = content
+        this.functionCallName = (CodeWriter.getInstance().flowIncrementalId++).toString()
     }
 
     createMainCode(): void {
@@ -46,7 +48,7 @@ export class OutputFlow implements BaseFlow {
             functionLines
         )
 
-        functionLines.push(`println("Value of ${this.content.variable.name} is \${${this.content.variable.name}})")`)
+        functionLines.push(`println("Value of ${this.content.variable.name} is \${${this.content.variable.name}}")`)
         CodeWriter.getInstance().writeFunction(func)
 
     }
@@ -56,7 +58,7 @@ export class OutputFlow implements BaseFlow {
     }
 
     functionName(): string {
-        return `outputFlow${this.id}`
+        return `outputFlow${this.functionCallName}`
     }
 
     nextFlow(): string {
