@@ -1,4 +1,6 @@
 export interface BaseFlow {
+    functionCallName: string,
+
     hasExternalDependencies(): boolean,
 
     createMainCode(): void,

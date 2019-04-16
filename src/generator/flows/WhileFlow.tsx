@@ -9,6 +9,7 @@ export class WhileFlow implements BaseFlow {
     nextFlowId: string | null
     type: FlowType
     content: WhileFlowContent | null
+    functionCallName: string
 
     constructor(
         id: string,
@@ -19,6 +20,7 @@ export class WhileFlow implements BaseFlow {
         this.nextFlowId = nextFlowId
         this.type = type
         this.content = content
+        this.functionCallName = (CodeWriter.getInstance().flowIncrementalId++).toString()
     }
 
     createFunctionCode(): void {

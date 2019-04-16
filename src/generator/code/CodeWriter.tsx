@@ -12,6 +12,7 @@ export class CodeWriter {
 
     private static instance: CodeWriter
 
+    flowIncrementalId = 0
     flows: Map<string, BaseFlow> = new Map()
     codes: string[] = []
     scopeCount = 0
@@ -25,6 +26,7 @@ export class CodeWriter {
     }
 
     reset() {
+        this.flowIncrementalId = 0
         this.flows.clear()
         this.variableSet.clear()
         this.codes = []
@@ -125,6 +127,7 @@ export class CodeWriter {
     addVariable(name: string | undefined): boolean {
         name = name === undefined ? "" : name
 
+        console.log("Adding variable : " + name + " isContained: " + this.variableSet.has(name))
         if (this.variableSet.has(name)) {
             return false
         }

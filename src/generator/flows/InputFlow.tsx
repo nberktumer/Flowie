@@ -10,6 +10,7 @@ export class InputFlow implements BaseFlow {
     nextFlowId: string | null
     type: FlowType
     content: InputFlowContent | null
+    functionCallName: string
 
     constructor(
         id: string,
@@ -20,15 +21,22 @@ export class InputFlow implements BaseFlow {
         this.nextFlowId = nextFlowId
         this.type = type
         this.content = content
+        this.functionCallName = (CodeWriter.getInstance().flowIncrementalId++).toString()
     }
 
     createMainCode(): void {
         if (this.content == null)
             return
 
+        let variableSetCode = ""
+        if (CodeWriter.getInstance().addVariable(this.content.variable.name)) {
+            variableSetCode = "var "
+        }
+
         CodeWriter.getInstance().writeLineToMainFunction(
-            `var ${this.content.variable.name} = ${this.functionInvocation()}`
+            `${variableSetCode}${this.content.variable.name} = ${this.functionInvocation()}`
         )
+
         CodeWriter.getInstance().writeMainCodeFromFlow(this.nextFlow())
     }
 
@@ -70,7 +78,7 @@ export class InputFlow implements BaseFlow {
     }
 
     functionName(): string {
-        return `inputFlow${this.id}`
+        return `inputFlow${this.functionCallName}`
     }
 
     nextFlow(): string {
