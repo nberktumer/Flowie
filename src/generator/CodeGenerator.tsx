@@ -7,6 +7,7 @@ import {OutputFlow} from "./flows/OutputFlow";
 import {ArithmeticFlow} from "./flows/ArithmeticFlow";
 import {WhileFlow} from "./flows/WhileFlow";
 import {FlowType} from "../models";
+import {InitialFlow} from "./flows/InitialFlow";
 
 export class CodeGenerator {
 
@@ -36,6 +37,13 @@ export class CodeGenerator {
         flowModels.forEach((value) => {
 
                 switch (value.type) {
+                    case FlowType.INITIAL:
+                        baseFlowMap.set(CodeWriter.INITIAL_ID, new InitialFlow(
+                            CodeWriter.INITIAL_ID,
+                            value.nextFlowId,
+                            value.type
+                        ))
+                        break
                     case FlowType.ASSIGNMENT:
                         baseFlowMap.set(value.id, new AssignmentFlow(
                             value.id,
