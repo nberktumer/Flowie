@@ -8,75 +8,78 @@ import {Operator} from "../../../generator/flows/ArithmeticFlow"
 import * as _ from "lodash"
 
 export class ArithmeticFlowNode extends BaseInfoFlowNode {
-    private _variable: Variable
-    private _operation: ArithmeticOperationType
-    private _operator1: Operator
-    private _operator2: Operator
+    private variable: Variable
+    private operation: ArithmeticOperationType
+    private operator1: Operator
+    private operator2: Operator
 
     constructor(variable: Variable, operation: ArithmeticOperationType, operator1: Operator, operator2: Operator) {
-        super(FlowType.ASSIGNMENT, strings.arithmetic, NodeColors.ARITHMETIC)
+        super(FlowType.ARITHMETIC, strings.arithmetic, NodeColors.ARITHMETIC)
 
         this.addInPort(strings.in).setMaximumLinks(Infinity)
         this.addOutPort(strings.out).setMaximumLinks(1)
 
-        this._variable = variable
-        this._operation = operation
-        this._operator1 = operator1
-        this._operator2 = operator2
+        this.variable = variable
+        this.operation = operation
+        this.operator1 = operator1
+        this.operator2 = operator2
 
-        this.info = `${variable.name} = ${operator1.variableName} ${operation} ${operator2.variableName}`
+        this.setVariable(variable)
+        this.setOperation(operation)
+        this.setOperator1(operator1)
+        this.setOperator2(operator2)
     }
 
-    get variable(): Variable {
-        return this._variable
+    getVariable(): Variable {
+        return this.variable
     }
 
-    set variable(value: Variable) {
-        this._variable = value
-        this.info = `${value.name} = ${this.operator1.variableName} ${this.operation} ${this.operator2.variableName}`
+    setVariable(value: Variable) {
+        this.variable = value
+        this.info = `${value.name} = ${this.getOperator1().variableName} ${this.getOperation()} ${this.getOperator2().variableName}`
     }
 
-    get operation(): ArithmeticOperationType {
-        return this._operation
+    getOperation(): ArithmeticOperationType {
+        return this.operation
     }
 
-    set operation(value: ArithmeticOperationType) {
-        this._operation = value
-        this.info = `${this.variable.name} = ${this.operator1.variableName} ${value} ${this.operator2.variableName}`
+    setOperation(value: ArithmeticOperationType) {
+        this.operation = value
+        this.info = `${this.getVariable().name} = ${this.getOperator1().variableName} ${value} ${this.getOperator2().variableName}`
     }
 
-    get operator1(): Operator {
-        return this._operator1
+    getOperator1(): Operator {
+        return this.operator1
     }
 
-    set operator1(value: Operator) {
-        this._operator1 = value
-        this.info = `${this.variable.name} = ${value.variableName} ${this.operation} ${this.operator2.variableName}`
+    setOperator1(value: Operator) {
+        this.operator1 = value
+        this.info = `${this.getVariable().name} = ${value.variableName} ${this.getOperation()} ${this.getOperator2().variableName}`
     }
 
-    get operator2(): Operator {
-        return this._operator2
+    getOperator2(): Operator {
+        return this.operator2
     }
 
-    set operator2(value: Operator) {
-        this._operator2 = value
-        this.info = `${this.variable.name} = ${this.operator1.variableName} ${this.operation} ${value.variableName}`
+    setOperator2(value: Operator) {
+        this.operator2 = value
+        this.info = `${this.getVariable().name} = ${this.getOperator1().variableName} ${this.getOperation()} ${value.variableName}`
     }
 
     deSerialize(object: any, engine: DiagramEngine) {
         super.deSerialize(object, engine)
-        this._variable = object._variable
-        this._operation = object._operation
-        this._operator1 = object._operator1
-        this._operator2 = object._operator2
+        this.variable = object.variable
+        this.operation = object.operation
+        this.operator1 = object.operator1
+        this.operator2 = object.operator2
     }
 
     serialize() {
         return _.merge(super.serialize(), {
-            variable: this._variable,
-            operation: this._operation,
-            operator1: this._operator1,
-            operator2: this._operator2
+            variable: this.variable,
+            operation: this.operation,
+            operator1: this.operator1,
+            operator2: this.operator2
         })
     }
 }

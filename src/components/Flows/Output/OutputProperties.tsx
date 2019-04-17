@@ -18,7 +18,7 @@ export class OutputProperties extends BaseProperties<OutputPropertiesProps> {
             const node = props.node as OutputFlowNode
 
             this.state = {
-                variable: node.variable.name
+                variable: node.getVariable().name
             }
         } else {
             this.state = {

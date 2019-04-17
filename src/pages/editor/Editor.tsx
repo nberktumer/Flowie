@@ -54,6 +54,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
     onModalSaveClick(data: BasePropertiesState | null) {
         this.onModalClose()
+        console.log(this.state.flowType, data)
         if (data && this.canvasPanel.current && this.state.flowType)
             this.canvasPanel.current.addItem(this.state.flowType, data, this.state.flowPosition)
     }
@@ -75,6 +76,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
             return
 
         const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current.initialNode)
+        console.log(flowModelList)
         const generator = new CodeGenerator(JSON.stringify(flowModelList))
         this.setState({generatedCode: generator.generate()})
     }

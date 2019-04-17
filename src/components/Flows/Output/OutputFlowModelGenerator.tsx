@@ -17,7 +17,7 @@ export class OutputFlowModelGenerator extends BaseFlowModelGenerator {
             outputFlow.getID(),
             null,
             null,
-            new OutputFlowContent(outputFlow.variable),
+            new OutputFlowContent(outputFlow.getVariable()),
             null,
             null,
             nextFlowId

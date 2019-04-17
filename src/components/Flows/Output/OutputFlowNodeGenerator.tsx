@@ -9,7 +9,7 @@ export class OutputFlowNodeGenerator extends BaseFlowNodeGenerator {
             return null
 
         if (node !== undefined) {
-            node.variable = JSON.parse(data.variable)
+            node.setVariable(JSON.parse(data.variable))
             return node
         } else {
             return new OutputFlowNode(JSON.parse(data.variable))

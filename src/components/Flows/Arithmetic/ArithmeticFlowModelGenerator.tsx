@@ -19,10 +19,10 @@ export class ArithmeticFlowModelGenerator extends BaseFlowModelGenerator {
             null,
             null,
             new ArithmeticFlowContent(
-                arithmeticFlow.variable,
-                arithmeticFlow.operation,
-                arithmeticFlow.operator1,
-                arithmeticFlow.operator2
+                arithmeticFlow.getVariable(),
+                arithmeticFlow.getOperation(),
+                arithmeticFlow.getOperator1(),
+                arithmeticFlow.getOperator2()
             ),
             null,
             nextFlowId

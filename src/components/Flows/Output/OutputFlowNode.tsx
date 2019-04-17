@@ -7,24 +7,24 @@ import {Variable} from "../../../models/Variable"
 import {FlowType} from "../../../models"
 
 export class OutputFlowNode extends BaseInfoFlowNode {
+    private variable: Variable
+
     constructor(variable: Variable) {
         super(FlowType.OUTPUT, strings.output, NodeColors.IF)
 
-        this._variable = variable
-        this.info = variable.name
+        this.variable = variable
+        this.setVariable(variable)
 
         this.addInPort(strings.in).setMaximumLinks(Infinity)
         this.addOutPort(strings.out).setMaximumLinks(1)
     }
 
-    private _variable: Variable
-
-    get variable() {
+    getVariable() {
         return this.variable
     }
 
-    set variable(variable: Variable) {
-        this._variable = variable
+    setVariable(variable: Variable) {
+        this.variable = variable
         this.info = variable.name
     }
 

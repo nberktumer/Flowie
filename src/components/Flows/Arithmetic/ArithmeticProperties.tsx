@@ -5,6 +5,7 @@ import {BaseProperties, BasePropertiesProps} from "../Base/BaseProperties"
 import {Variable} from "../../../models/Variable"
 import {ArithmeticOperationType, VariableType} from "../../../models"
 import {ArithmeticFlowNode} from "./ArithmeticFlowNode"
+import {Operator, OperatorType} from "../../../generator/flows/ArithmeticFlow"
 
 export interface ArithmeticPropertiesProps extends BasePropertiesProps {
     variables: Variable[]
@@ -19,10 +20,10 @@ export class ArithmeticProperties extends BaseProperties<ArithmeticPropertiesPro
             const node = props.node as ArithmeticFlowNode
 
             this.state = {
-                variable: node.variable,
-                operation: node.operation,
-                operator1: node.operator1,
-                operator2: node.operator2
+                variable: JSON.stringify(node.getVariable()),
+                operation: node.getOperation(),
+                operator1: JSON.stringify(node.getOperator1()),
+                operator2: JSON.stringify(node.getOperator2())
             }
         } else {
             this.state = {
@@ -75,7 +76,7 @@ export class ArithmeticProperties extends BaseProperties<ArithmeticPropertiesPro
                     {this.props.variables.filter((value) => {
                         return value.type === VariableType.INT
                     }).map((value) => (
-                        <MenuItem key={value.name} value={JSON.stringify(value)}>
+                        <MenuItem key={value.name} value={JSON.stringify(new Operator(OperatorType.VARIABLE, value.name, value.value))}>
                             {value.name}
                         </MenuItem>
                     ))}
@@ -90,7 +91,7 @@ export class ArithmeticProperties extends BaseProperties<ArithmeticPropertiesPro
                     {this.props.variables.filter((value) => {
                         return value.type === VariableType.INT
                     }).map((value) => (
-                        <MenuItem key={value.name} value={JSON.stringify(value)}>
+                        <MenuItem key={value.name} value={JSON.stringify(new Operator(OperatorType.VARIABLE, value.name, value.value))}>
                             {value.name}
                         </MenuItem>
                     ))}

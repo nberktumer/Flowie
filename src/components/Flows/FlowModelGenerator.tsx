@@ -26,7 +26,7 @@ export class FlowModelGenerator {
         if (_.includes(flowModelList.map((flow) => flow.id), currentFlow.getID()))
             return
 
-        switch (currentFlow.type) {
+        switch (currentFlow.flowType) {
             case FlowType.WHILE:
                 this.generateFlowModel((currentFlow as WhileFlowNode).getScopeFlow(), flowModelList, currentFlow.getID())
                 break
