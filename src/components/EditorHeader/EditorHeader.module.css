@@ -1,0 +1,14 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    vertical-align: middle;
+    align-items: center;
+}
+
+.toolbar {
+    min-height: 40px!important;
+}
+
+.clickable {
+    cursor: pointer;
+}

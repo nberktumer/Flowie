@@ -63,6 +63,14 @@ export default class CanvasPanel extends Component<CanvasPanelProps, CanvasPanel
         this.diagramEngine.getDiagramModel().addNode(this.initialNode)
     }
 
+    load(data: string) {
+        const model = new DiagramModel()
+        model.deSerializeDiagram(JSON.parse(data), this.diagramEngine)
+        this.activeModel = model
+        this.diagramEngine.setDiagramModel(model)
+        this.forceUpdate()
+    }
+
     addItem(type: FlowType, data: BasePropertiesState, position: { x: number, y: number }): void {
         const node = FlowNodeFactory.create(type, data)
         if (!node)

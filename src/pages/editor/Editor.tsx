@@ -15,6 +15,8 @@ import {FlowModelGenerator, FlowPropertiesFactory} from "../../components/Flows"
 import {BaseEvent, BaseModel} from "nberktumer-react-diagrams"
 import {BaseFlowNode} from "../../components/CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {BaseVariableFlowNode} from "../../components/Flows/Base/BaseVariableFlowNode"
+import {EditorHeader} from "../../components/EditorHeader/EditorHeader"
+import {FileUtils} from "../../utils"
 
 export interface EditorProps {
 }
@@ -54,7 +56,6 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
     onModalSaveClick(data: BasePropertiesState | null) {
         this.onModalClose()
-        console.log(this.state.flowType, data)
         if (data && this.canvasPanel.current && this.state.flowType)
             this.canvasPanel.current.addItem(this.state.flowType, data, this.state.flowPosition)
     }
@@ -134,6 +135,33 @@ export default class Editor extends Component<EditorProps, EditorState> {
         }
     }
 
+    onHeaderMenuClickListener = (item: string) => {
+        switch (item) {
+            case "save": {
+                if (!this.canvasPanel.current)
+                    return
+
+                const base64 = JSON.stringify(this.canvasPanel.current.activeModel.serializeDiagram())
+                FileUtils.save("FlowieSave.flwie", base64)
+                break
+            }
+            case "load": {
+                FileUtils.load((data: string) => {
+                    if (!this.canvasPanel.current)
+                        return
+
+                    this.canvasPanel.current.load(data)
+                }, (err: string) => {
+                    console.log(err)
+                })
+
+                break
+            }
+            default:
+                return
+        }
+    }
+
     render() {
         return (
             <div className={styles.App}>
@@ -144,7 +172,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
                                variables={this.state.variableList}
                                open={this.state.isModalOpen}
                                type={this.state.flowType}/>
-
+                <EditorHeader onClickListener={(item: string) => this.onHeaderMenuClickListener(item)}/>
                 <ReflexContainer orientation="vertical">
                     <ReflexElement minSize={250}>
                         <ReflexContainer orientation="horizontal" style={{height: "100vh"}}>

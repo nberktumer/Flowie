@@ -11,7 +11,6 @@ export default {
     arithmetic: "Arithmetic",
     while: "While",
     switch: "Switch",
-    save: "Save",
     dismiss: "Dismiss",
     variableName: "Variable Name",
     dataType: "Data Type",
@@ -26,5 +25,9 @@ export default {
     firstOperator: "First Operator",
     secondOperator: "Second Operator",
     input: "Input",
-    output: "Output"
+    output: "Output",
+    file: "File",
+    save: "Save",
+    load: "Load",
+    fileReadError: "Could not read file"
 }
