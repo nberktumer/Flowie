@@ -135,7 +135,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
             return item instanceof BaseFlowNode
         })
 
-        if (selectedItems.length > 1) {
+        if (selectedItems.length > 1 && this.state.selectedItem !== "") {
             this.setState({properties: (<div/>), selectedItem: ""})
         } else if (selectedItems.length === 1 && event.isSelected) {
             // Workaround for updating the properties panel
