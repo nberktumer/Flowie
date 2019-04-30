@@ -13,11 +13,13 @@ export class ArithmeticFlowNode extends BaseInfoFlowNode {
     private operator1: Operator
     private operator2: Operator
 
-    constructor(variable: Variable, operation: ArithmeticOperationType, operator1: Operator, operator2: Operator) {
+    constructor(variable: Variable, operation: ArithmeticOperationType, operator1: Operator, operator2: Operator, withoutPorts: boolean = false) {
         super(FlowType.ARITHMETIC, strings.arithmetic, NodeColors.ARITHMETIC)
 
-        this.addInPort(strings.in).setMaximumLinks(Infinity)
-        this.addOutPort(strings.out).setMaximumLinks(1)
+        if (!withoutPorts) {
+            this.addInPort(strings.in).setMaximumLinks(Infinity)
+            this.addOutPort(strings.out).setMaximumLinks(1)
+        }
 
         this.variable = variable
         this.operation = operation

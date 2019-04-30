@@ -6,13 +6,15 @@ import {FlowType} from "../../../models"
 
 export class AssignmentFlowNode extends BaseVariableFlowNode {
 
-    constructor(variable: Variable) {
+    constructor(variable: Variable, withoutPorts: boolean = false) {
         super(FlowType.ASSIGNMENT, strings.variable + " (" + variable.type + ")", NodeColors.VARIABLE)
 
         this.setVariable(variable)
 
-        this.addInPort(strings.in).setMaximumLinks(Infinity)
-        this.addOutPort(strings.out).setMaximumLinks(1)
+        if (!withoutPorts) {
+            this.addInPort(strings.in).setMaximumLinks(Infinity)
+            this.addOutPort(strings.out).setMaximumLinks(1)
+        }
     }
 
     setVariable(variable: Variable) {

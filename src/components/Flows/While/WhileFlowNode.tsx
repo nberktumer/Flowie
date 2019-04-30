@@ -11,12 +11,14 @@ import {FlowType} from "../../../models"
 export class WhileFlowNode extends BaseInfoFlowNode {
     conditionList: Condition[] = []
 
-    constructor() {
+    constructor(withoutPorts: boolean = false) {
         super(FlowType.WHILE, strings.while, NodeColors.WHILE)
 
-        this.addInPort(strings.in).setMaximumLinks(Infinity)
-        this.addOutPort(strings.out).setMaximumLinks(1)
-        this.addScopePort(strings.scope).setMaximumLinks(1)
+        if (!withoutPorts) {
+            this.addInPort(strings.in).setMaximumLinks(Infinity)
+            this.addOutPort(strings.out).setMaximumLinks(1)
+            this.addScopePort(strings.scope).setMaximumLinks(1)
+        }
     }
 
     addCondition(condition: Condition) {

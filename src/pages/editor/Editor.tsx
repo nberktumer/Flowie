@@ -17,6 +17,7 @@ import {BaseFlowNode} from "../../components/CanvasItems/Nodes/BaseFlow/BaseFlow
 import {BaseVariableFlowNode} from "../../components/Flows/Base/BaseVariableFlowNode"
 import {EditorHeader} from "../../components/EditorHeader/EditorHeader"
 import {FileUtils} from "../../utils"
+import {MenuItem, TextField} from "@material-ui/core"
 
 export interface EditorProps {
 }
@@ -30,10 +31,13 @@ export interface EditorState {
     generatedCode: string,
     variableList: Variable[],
     properties: JSX.Element,
-    selectedItem: string
+    selectedItem: string,
+    selectedLanguage: ProgrammingLanguage | undefined
 }
 
 export default class Editor extends Component<EditorProps, EditorState> {
+    readonly programmingLanguages = Object.keys(ProgrammingLanguage)
+        .filter((k) => typeof ProgrammingLanguage[k as any] !== "number")
     canvasPanel = createRef<CanvasPanel>()
 
     constructor(props: any) {
@@ -50,8 +54,21 @@ export default class Editor extends Component<EditorProps, EditorState> {
             generatedCode: generator.generate(),
             variableList: [],
             properties: <div/>,
-            selectedItem: ""
+            selectedItem: "",
+            selectedLanguage: ProgrammingLanguage.KOTLIN
         }
+    }
+
+    resetState = () => {
+        this.setState({
+            isModalOpen: false,
+            flowType: null,
+            flowPosition: {x: 0, y: 0},
+            variableList: [],
+            properties: <div/>,
+            selectedItem: "",
+            selectedLanguage: ProgrammingLanguage.KOTLIN
+        })
     }
 
     onModalSaveClick(data: BasePropertiesState | null) {
@@ -137,11 +154,20 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
     onHeaderMenuClickListener = (item: string) => {
         switch (item) {
+            case "new": {
+                if (!this.canvasPanel.current)
+                    return
+
+                this.canvasPanel.current.new()
+                this.resetState()
+                this.onDiagramChanged()
+                break
+            }
             case "save": {
                 if (!this.canvasPanel.current)
                     return
 
-                const base64 = JSON.stringify(this.canvasPanel.current.activeModel.serializeDiagram())
+                const base64 = JSON.stringify(this.canvasPanel.current.save())
                 FileUtils.save("FlowieSave.flwie", base64)
                 break
             }
@@ -150,9 +176,14 @@ export default class Editor extends Component<EditorProps, EditorState> {
                     if (!this.canvasPanel.current)
                         return
 
-                    this.canvasPanel.current.load(data)
+                    this.canvasPanel.current.load(data, (variableList: any) => {
+                        console.log(variableList)
+                        this.resetState()
+                        this.setState({variableList})
+                        this.onDiagramChanged()
+                    })
                 }, (err: string) => {
-                    console.log(err)
+                    console.error(err)
                 })
 
                 break
@@ -204,7 +235,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
                                          onItemAdded={this.onItemAdded.bind(this)}
                                          onDiagramChanged={this.onDiagramChanged.bind(this)}
                                          onDrop={this.onCanvasDrop.bind(this)}
-                                         onSectionChanged={this.onSelectionChanged.bind(this)}
+                                         onSelectionChanged={this.onSelectionChanged.bind(this)}
                                          onEntityRemoved={this.onEntityRemoved.bind(this)}/>
                         </div>
                     </ReflexElement>
@@ -222,8 +253,23 @@ export default class Editor extends Component<EditorProps, EditorState> {
                             <ReflexSplitter/>
 
                             <ReflexElement className="right-pane" minSize={100}>
+                                <TextField
+                                    id="language-selector"
+                                    select
+                                    value={this.state.selectedLanguage}
+                                    onChange={(event: any) => {
+                                        this.setState({selectedLanguage: event.target.value})
+                                    }}
+                                    className={styles.languageSelector}
+                                    margin="none">
+                                    {this.programmingLanguages.map((key: any) => (
+                                        <MenuItem key={key} value={key}>
+                                            {ProgrammingLanguage[key]}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
                                 <CodePreviewPanel code={this.state.generatedCode}
-                                                  language={ProgrammingLanguage.KOTLIN}/>
+                                                  language={this.state.selectedLanguage}/>
                             </ReflexElement>
                         </ReflexContainer>
                     </ReflexElement>

@@ -1,18 +1,16 @@
 import * as _ from "lodash"
-import {BaseEvent, BaseModel, DefaultLinkModel, DiagramEngine, LinkModel, PortModel} from "nberktumer-react-diagrams"
+import {BaseEvent, DefaultLinkModel, DiagramEngine, LinkModel, PortModel} from "nberktumer-react-diagrams"
 import {DefaultPort, DefaultPortType} from "./index"
 
 export class DefaultPortModel extends PortModel {
     portType: DefaultPort
     label: string
     onLinkChangedListener: () => void
-    links: { [id: string]: DefaultLinkModel }
 
     constructor(portType: DefaultPort, name: string, label: string | null = null, id?: string) {
         super(name, "default", id)
         this.portType = portType
         this.label = label || name
-        this.links = {}
         this.onLinkChangedListener = () => {
         }
     }
@@ -21,14 +19,12 @@ export class DefaultPortModel extends PortModel {
         super.deSerialize(object, engine)
         this.portType = object.portType
         this.label = object.label
-        this.links = object.links
     }
 
     serialize() {
         return _.merge(super.serialize(), {
             portType: this.portType,
-            label: this.label,
-            links: this.links
+            label: this.label
         })
     }
 
@@ -37,6 +33,10 @@ export class DefaultPortModel extends PortModel {
         link.setSourcePort(this)
         link.setTargetPort(port)
         return link
+    }
+
+    getMaximumLinks(): number {
+        return !this.maximumLinks ? Infinity : this.maximumLinks
     }
 
     canLinkToPort(port: DefaultPortModel): boolean {
@@ -54,22 +54,34 @@ export class DefaultPortModel extends PortModel {
 
     addOnLinkChangedListener(listener: () => void) {
         this.onLinkChangedListener = listener
+
+        _.forEach(this.getLinks(), (link: LinkModel) => {
+            link.addListener({
+                targetPortChanged: this.targetPortChangedListener,
+                entityRemoved: this.entityRemovedListener
+            })
+        })
     }
 
     createLinkModel(): LinkModel {
         const link = new DefaultLinkModel()
         link.addListener({
-            targetPortChanged(event: BaseEvent<LinkModel> & { port: PortModel | null }): void {
-                if (event.port != null && event.port instanceof DefaultPortModel && link.sourcePort != null && link.sourcePort.canLinkToPort(event.port)) {
-                    (event.port as DefaultPortModel).onLinkChangedListener()
-                }
-            },
-            entityRemoved(event: BaseEvent<BaseModel>): void {
-                const link = event.entity as DefaultLinkModel
-                if (link.getTargetPort() != null)
-                    (link.getTargetPort() as DefaultPortModel).onLinkChangedListener()
-            }
+            targetPortChanged: this.targetPortChangedListener,
+            entityRemoved: this.entityRemovedListener
         })
         return link
+    }
+
+    private targetPortChangedListener = (event: BaseEvent<LinkModel> & { port: PortModel | null }) => {
+        const link = event.entity as DefaultLinkModel
+        if (!event.port != null && event.port instanceof DefaultPortModel && link.sourcePort != null && link.sourcePort.canLinkToPort(event.port)) {
+            (event.port as DefaultPortModel).onLinkChangedListener()
+        }
+    }
+
+    private entityRemovedListener = (event: BaseEvent<LinkModel> & { port: PortModel | null }) => {
+        const link = event.entity as DefaultLinkModel
+        if (link.getTargetPort() != null)
+            (link.getTargetPort() as DefaultPortModel).onLinkChangedListener()
     }
 }

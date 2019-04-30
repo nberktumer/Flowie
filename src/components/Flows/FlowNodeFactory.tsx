@@ -41,8 +41,30 @@ export class FlowNodeFactory {
         }
     }
 
+    static load(node: any): BaseFlowNode {
+        switch (node.flowType) {
+            case FlowType.INITIAL:
+                return new InitialFlowNodeGenerator().load(node)
+            // case FlowType.IF:
+            //     return null // TODO
+            case FlowType.WHILE:
+                return new WhileFlowNodeGenerator().load(node)
+            // case FlowType.FOR:
+            //     return null // TODO
+            case FlowType.INPUT:
+                return new InputFlowNodeGenerator().load(node)
+            case FlowType.OUTPUT:
+                return new OutputFlowNodeGenerator().load(node)
+            case FlowType.ARITHMETIC:
+                return new ArithmeticFlowNodeGenerator().load(node)
+            case FlowType.ASSIGNMENT:
+                return new AssignmentFlowNodeGenerator().load(node)
+            default:
+                return new BaseFlowNode()
+        }
+    }
+
     static update(node: BaseFlowNode, data?: BasePropertiesState): BaseFlowNode | null {
-        console.log(node.flowType)
         switch (node.flowType) {
             case FlowType.INITIAL:
                 return new InitialFlowNodeGenerator().create(data, node as InitialFlowNode)

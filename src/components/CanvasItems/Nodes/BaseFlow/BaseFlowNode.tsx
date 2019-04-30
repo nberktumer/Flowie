@@ -1,4 +1,4 @@
-import {DiagramEngine, NodeModel} from "nberktumer-react-diagrams"
+import {DiagramEngine, NodeModel, PortModel} from "nberktumer-react-diagrams"
 import * as _ from "lodash"
 import {Random} from "../../../../utils"
 import {DefaultPort, DefaultPortLocation, DefaultPortModel, DefaultPortType} from "../../Ports/DefaultPort"
@@ -9,7 +9,6 @@ import {FlowNodeFactory} from "../../../Flows"
 export class BaseFlowNode extends NodeModel {
     name: string
     color: string
-    ports: { [s: string]: DefaultPortModel }
     onLinkChangedListener: () => void
     flowType: FlowType | undefined
 
@@ -17,7 +16,6 @@ export class BaseFlowNode extends NodeModel {
         super(nodeType)
         this.name = name
         this.color = color
-        this.ports = {}
         this.onLinkChangedListener = () => {
         }
         this.flowType = flowType
@@ -30,7 +28,7 @@ export class BaseFlowNode extends NodeModel {
     addOnLinkChangedListener(listener: () => void) {
         this.onLinkChangedListener = listener
 
-        _.map(this.ports, (portModel) => {
+        _.map(this.ports, (portModel: DefaultPortModel) => {
             portModel.addOnLinkChangedListener(listener)
         })
     }
@@ -61,25 +59,23 @@ export class BaseFlowNode extends NodeModel {
 
     deSerialize(object: any, engine: DiagramEngine) {
         super.deSerialize(object, engine)
-        this.name = object.name
-        this.color = object.color
+        this.flowType = object.flowType
     }
 
     serialize() {
         return _.merge(super.serialize(), {
-            name: this.name,
-            color: this.color
+            flowType: this.flowType
         })
     }
 
-    getPortListByType(...type: DefaultPortType[]): DefaultPortModel[] {
-        return _.filter(this.ports, (portModel) => {
+    getPortListByType(...type: DefaultPortType[]): PortModel[] {
+        return _.filter(this.ports, (portModel: any) => {
             return _.includes(type, portModel.portType.type)
         })
     }
 
-    getPortListByLocation(...location: DefaultPortLocation[]): DefaultPortModel[] {
-        return _.filter(this.ports, (portModel) => {
+    getPortListByLocation(...location: DefaultPortLocation[]): PortModel[] {
+        return _.filter(this.ports, (portModel: any) => {
             return _.includes(location, portModel.portType.location)
         })
     }

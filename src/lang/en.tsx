@@ -29,5 +29,6 @@ export default {
     file: "File",
     save: "Save",
     load: "Load",
+    new: "New",
     fileReadError: "Could not read file"
 }

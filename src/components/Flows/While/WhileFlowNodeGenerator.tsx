@@ -21,4 +21,8 @@ export class WhileFlowNodeGenerator extends BaseFlowNodeGenerator {
             return whileNode
         }
     }
+
+    load(node: any): BaseFlowNode {
+        return new WhileFlowNode(true)
+    }
 }

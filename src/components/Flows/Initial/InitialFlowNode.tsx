@@ -5,11 +5,13 @@ import {FlowType} from "../../../models"
 
 export class InitialFlowNode extends BaseFlowNode {
 
-    constructor() {
+    constructor(withoutPorts: boolean = false) {
         super(FlowType.INITIAL, strings.initialFlow, NodeColors.INITIAL)
 
-        this.addLoopPort(strings.recurse).setMaximumLinks(Infinity)
-        this.addOutPort(strings.out).setMaximumLinks(1)
+        if (!withoutPorts) {
+            this.addLoopPort(strings.recurse).setMaximumLinks(Infinity)
+            this.addOutPort(strings.out).setMaximumLinks(1)
+        }
     }
 
     // Prevent removing this item

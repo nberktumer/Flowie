@@ -20,8 +20,6 @@ export class FileUtils {
         const elem = window.document.createElement("input")
         elem.type = "file"
         elem.accept = ".flwie"
-        elem.click()
-
         elem.onchange = (e: any) => {
             if (!e.target.files) {
                 onError(strings.fileReadError)
@@ -42,5 +40,6 @@ export class FileUtils {
             }
             reader.readAsText(file)
         }
+        elem.click()
     }
 }

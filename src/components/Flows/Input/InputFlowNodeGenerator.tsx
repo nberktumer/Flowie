@@ -18,4 +18,9 @@ export class InputFlowNodeGenerator extends BaseFlowNodeGenerator {
             return new InputFlowNode(variable)
         }
     }
+
+    load(node: any): BaseFlowNode {
+        return new InputFlowNode(node.variable, true)
+    }
+
 }

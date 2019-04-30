@@ -53,6 +53,7 @@ export class EditorHeader extends Component<EditorHeaderProps, EditorHeaderState
                             open={Boolean(this.state.anchorEl)}
                             onClose={this.handleClose}
                         >
+                            <MenuItem onClick={() => this.handleClick("new")}>{strings.new}</MenuItem>
                             <MenuItem onClick={() => this.handleClick("save")}>{strings.save}</MenuItem>
                             <MenuItem onClick={() => this.handleClick("load")}>{strings.load}</MenuItem>
                         </Menu>

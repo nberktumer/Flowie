@@ -26,6 +26,9 @@ export class ArithmeticFlowNodeGenerator extends BaseFlowNodeGenerator {
                 op2
             )
         }
+    }
 
+    load(node: any): BaseFlowNode {
+        return new ArithmeticFlowNode(node.variable, node.operation, node.operator1, node.operator2, true)
     }
 }

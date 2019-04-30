@@ -7,4 +7,8 @@ export class InitialFlowNodeGenerator extends BaseFlowNodeGenerator {
     create(data?: BasePropertiesState, node?: InitialFlowNode): BaseFlowNode | null {
         return new InitialFlowNode()
     }
+
+    load(node: InitialFlowNode): BaseFlowNode {
+       return new InitialFlowNode(true)
+    }
 }

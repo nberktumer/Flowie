@@ -9,14 +9,16 @@ import {FlowType} from "../../../models"
 export class OutputFlowNode extends BaseInfoFlowNode {
     private variable: Variable
 
-    constructor(variable: Variable) {
+    constructor(variable: Variable, withoutPorts: boolean = false) {
         super(FlowType.OUTPUT, strings.output, NodeColors.IF)
 
         this.variable = variable
         this.setVariable(variable)
 
-        this.addInPort(strings.in).setMaximumLinks(Infinity)
-        this.addOutPort(strings.out).setMaximumLinks(1)
+        if (!withoutPorts) {
+            this.addInPort(strings.in).setMaximumLinks(Infinity)
+            this.addOutPort(strings.out).setMaximumLinks(1)
+        }
     }
 
     getVariable() {

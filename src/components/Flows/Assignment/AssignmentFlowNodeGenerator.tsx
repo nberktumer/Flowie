@@ -19,4 +19,8 @@ export class AssignmentFlowNodeGenerator extends BaseFlowNodeGenerator {
             return new AssignmentFlowNode(variable)
         }
     }
+
+    load(node: any): BaseFlowNode {
+        return new AssignmentFlowNode(node.variable, true)
+    }
 }

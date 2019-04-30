@@ -46,3 +46,18 @@
 .propertiesPanel div::before:hover {
     border-bottom-color: rgba(255, 255, 255, 0.87)
 }
+
+.languageSelector {
+    width: 100%;
+    text-align: center;
+    background-color: #1d1f21;
+}
+
+.languageSelector * {
+    color: #ffffff!important;
+}
+
+.languageSelector .underline {
+    background-color: transparent;
+    border-bottom: none;
+}

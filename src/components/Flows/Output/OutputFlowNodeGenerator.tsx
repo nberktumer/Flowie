@@ -15,4 +15,8 @@ export class OutputFlowNodeGenerator extends BaseFlowNodeGenerator {
             return new OutputFlowNode(JSON.parse(data.variable))
         }
     }
+
+    load(node: any): BaseFlowNode {
+        return new OutputFlowNode(node.variable, true)
+    }
 }
