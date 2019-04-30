@@ -17,7 +17,7 @@ export class ArithmeticFlowNode extends BaseInfoFlowNode {
         super(FlowType.ARITHMETIC, strings.arithmetic, NodeColors.ARITHMETIC)
 
         if (!withoutPorts) {
-            this.addInPort(strings.in).setMaximumLinks(Infinity)
+            this.addInPort(strings.in).setMaximumLinks(1)
             this.addOutPort(strings.out).setMaximumLinks(1)
         }
 

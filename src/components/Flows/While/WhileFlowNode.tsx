@@ -15,7 +15,7 @@ export class WhileFlowNode extends BaseInfoFlowNode {
         super(FlowType.WHILE, strings.while, NodeColors.WHILE)
 
         if (!withoutPorts) {
-            this.addInPort(strings.in).setMaximumLinks(Infinity)
+            this.addInPort(strings.in).setMaximumLinks(1)
             this.addOutPort(strings.out).setMaximumLinks(1)
             this.addScopePort(strings.scope).setMaximumLinks(1)
         }

@@ -12,7 +12,7 @@ export class AssignmentFlowNode extends BaseVariableFlowNode {
         this.setVariable(variable)
 
         if (!withoutPorts) {
-            this.addInPort(strings.in).setMaximumLinks(Infinity)
+            this.addInPort(strings.in).setMaximumLinks(1)
             this.addOutPort(strings.out).setMaximumLinks(1)
         }
     }
