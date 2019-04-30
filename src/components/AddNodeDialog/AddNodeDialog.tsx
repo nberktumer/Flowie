@@ -38,6 +38,7 @@ export class AddNodeDialog extends Component<AddNodeDialogProps, AddNodeDialogSt
     }
 
     onSave() {
+        console.log(this.state.bodyData)
         if (this.props.onSaveClick != null)
             this.props.onSaveClick(this.state.bodyData)
     }

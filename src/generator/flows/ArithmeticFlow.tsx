@@ -177,12 +177,12 @@ export class ArithmeticFlowContent {
 export class Operator {
     type: OperatorType
     variableName: string | undefined
-    constantValue: number
+    constantValue: number | undefined
 
     constructor(
         type: OperatorType,
         name: string | undefined,
-        value: number
+        value: number | undefined
     ) {
         this.type = type
         this.variableName = name

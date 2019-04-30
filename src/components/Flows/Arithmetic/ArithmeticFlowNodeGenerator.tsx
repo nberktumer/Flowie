@@ -6,6 +6,7 @@ import {ArithmeticFlowNode} from "./ArithmeticFlowNode"
 
 export class ArithmeticFlowNodeGenerator extends BaseFlowNodeGenerator {
     create(data?: BasePropertiesState, node?: ArithmeticFlowNode): BaseFlowNode | null {
+        console.log(data)
         if (!data || data.variable === "" || data.operation === "" || data.operator1 === "" || data.operator2 === "")
             return null
 

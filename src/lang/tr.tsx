@@ -7,6 +7,8 @@ export default {
     false: "False",
     ifStatement: "If Statement",
     variable: "Variable",
+    constant: "Constant",
+    constantValue: "Constant Value",
     assignment: "Assignment",
     arithmetic: "Arithmetic",
     while: "While",
