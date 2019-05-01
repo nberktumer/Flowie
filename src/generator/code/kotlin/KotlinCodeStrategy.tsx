@@ -10,6 +10,7 @@ import {ArithmeticOperationType, VariableType} from "../../../models";
 import {ConditionOperation} from "../../../models/VariableEnums";
 import {Class} from "../Class";
 import {RandomFlow} from "../../flows/RandomFlow";
+import {IfFlow} from "../../flows/IfFlow";
 
 export class KotlinCodeStrategy implements CodeStrategy {
 
@@ -317,6 +318,60 @@ export class KotlinCodeStrategy implements CodeStrategy {
         CodeWriter.getInstance().scopeCount--
         CodeWriter.getInstance().writeLineToMainFunction("}")
         CodeWriter.getInstance().writeMainCodeFromFlow(whileFlow.nextFlow())
+    }
+
+    writeIfFunction(ifFlow: IfFlow): void {
+
+    }
+
+    writeIfMain(ifFlow: IfFlow): void {
+        if (ifFlow.content == null)
+            return
+
+        const nextScopeId = ifFlow.content.scopeId
+
+        let conditionCode = ""
+
+        for (let i = 0; i < ifFlow.content.conditions.length; i++) {
+            const condition = ifFlow.content.conditions[i]
+
+            conditionCode += condition.first.name
+
+            if (condition.second !== undefined) {
+                conditionCode += " "
+
+                switch (condition.operation) {
+                    case ConditionOperation.EQUALS:
+                        conditionCode += "=="
+                        break
+                    case ConditionOperation.NOT_EQUALS:
+                        conditionCode += "!="
+                        break
+                }
+
+                if (!condition.second.name) {
+                    conditionCode += " " + condition.second.value
+                } else {
+                    conditionCode += " " + condition.second.name
+                }
+            }
+
+            if (i !== ifFlow.content.conditions.length - 1) {
+                conditionCode += ` ${ifFlow.content.conditionType} `
+            }
+        }
+
+        CodeWriter.getInstance().writeLineToMainFunction("if(" + conditionCode + ") {")
+        CodeWriter.getInstance().scopeCount++
+
+        if (nextScopeId != null) {
+            CodeWriter.getInstance().addToLoopStack(ifFlow.id)
+            CodeWriter.getInstance().writeMainCodeFromFlow(nextScopeId)
+        }
+
+        CodeWriter.getInstance().scopeCount--
+        CodeWriter.getInstance().writeLineToMainFunction("}")
+        CodeWriter.getInstance().writeMainCodeFromFlow(ifFlow.nextFlow())
     }
 
     writeRandomFunction(randomFlow: RandomFlow): void {

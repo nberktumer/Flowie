@@ -13,6 +13,7 @@ import {WhileFlow} from "../flows/WhileFlow";
 import {InitialFlow} from "../flows/InitialFlow";
 import {Class} from "./Class";
 import {RandomFlow} from "../flows/RandomFlow";
+import {IfFlow} from "../flows/IfFlow";
 
 export class CodeWriter {
     static INITIAL_ID = "INITIAL_ID"
@@ -122,6 +123,8 @@ export class CodeWriter {
                     this.codeStrategy.writeOutputMain(flow)
                 } else if (flow instanceof WhileFlow) {
                     this.codeStrategy.writeWhileMain(flow)
+                } else if (flow instanceof IfFlow) {
+                    this.codeStrategy.writeIfMain(flow)
                 } else if (flow instanceof RandomFlow) {
                     this.codeStrategy.writeRandomMain(flow)
                 } else if (flow instanceof InitialFlow) {
@@ -143,6 +146,8 @@ export class CodeWriter {
             this.codeStrategy.writeOutputFunction(flow)
         } else if (flow instanceof WhileFlow) {
             this.codeStrategy.writeWhileFunction(flow)
+        } else if (flow instanceof IfFlow) {
+            this.codeStrategy.writeIfFunction(flow)
         } else if (flow instanceof RandomFlow) {
             this.codeStrategy.writeRandomFunction(flow)
         }
