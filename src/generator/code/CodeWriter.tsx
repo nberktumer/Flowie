@@ -46,6 +46,7 @@ export class CodeWriter {
         this.flowIncrementalId = 0
         this.flows.clear()
         this.variableSet.clear()
+        this.globalVariableSet.clear()
         this.dependencySet.clear()
         this.codes = []
         this.scopeCount = 0
