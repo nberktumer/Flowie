@@ -6,13 +6,13 @@ export class Condition {
     id: string = Random.UID()
     variableType: VariableType
     first: Variable
-    second: Variable | Value
+    second: Variable
     operation: ConditionOperation
 
     constructor(
         variableType: VariableType,
         first: Variable,
-        second: Variable | Value,
+        second: Variable,
         operation: ConditionOperation
     ) {
         this.variableType = variableType
@@ -23,15 +23,3 @@ export class Condition {
 
 }
 
-export class Value {
-    variableType: VariableType
-    value: any
-
-    constructor(
-        variableType: VariableType,
-        value: any
-    ) {
-        this.value = value
-        this.variableType = variableType
-    }
-}

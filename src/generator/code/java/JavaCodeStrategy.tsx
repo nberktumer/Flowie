@@ -9,8 +9,6 @@ import {AssignmentFlow} from "../../flows/AssignmentFlow";
 import {ArithmeticOperationType, ProgrammingLanguage, VariableType} from "../../../models";
 import {Class} from "../Class";
 import {ConditionOperation} from "../../../models/VariableEnums";
-import {Variable} from "../../../models/Variable";
-import {Value} from "../../../models/Condition";
 import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
 
 export class JavaCodeStrategy implements CodeStrategy {
@@ -301,12 +299,11 @@ export class JavaCodeStrategy implements CodeStrategy {
                         break
                 }
 
-                if ((condition.second as Value).variableType !== undefined) {
+                if (!condition.second.name) {
                     conditionCode += " " + condition.second.value
                 } else {
-                    conditionCode += " " + (condition.second as Variable).name
+                    conditionCode += " " + condition.second.name
                 }
-
             }
         })
 
