@@ -35,6 +35,30 @@
     flex-direction: column;
 }
 
+.propertiesPanel *:global(#paper) * {
+    color: black !important;
+}
+
+.propertiesPanel * {
+    color: white !important;
+}
+
+.propertiesPanel div::before {
+    border-bottom-color: rgba(255, 255, 255, 0.42)
+}
+
+.propertiesPanel *:global(#paper) div::before {
+    border-bottom-color: rgba(0, 0, 0, 0.42)
+}
+
+.propertiesPanel *:global(#paper) div::before:hover {
+    border-bottom-color: rgba(0, 0, 0, 0.87)
+}
+
+.propertiesPanel div::before:hover {
+    border-bottom-color: rgba(255, 255, 255, 0.87)
+}
+
 .languageSelector {
     width: 100%;
     text-align: center;
@@ -42,7 +66,7 @@
 }
 
 .languageSelector * {
-    color: #ffffff!important;
+    color: #ffffff !important;
 }
 
 .languageSelector .underline {

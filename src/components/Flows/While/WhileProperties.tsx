@@ -77,17 +77,19 @@ export class WhileProperties extends BaseProperties<BasePropertiesProps> {
     render() {
         return (
             <div className="bodyContainer">
-                <Paper style={{
-                    display: "flex",
-                    flex: 1,
-                    padding: 24,
-                    marginBottom: 8
-                }}>
+                <Paper id="paper"
+                       style={{
+                           display: "flex",
+                           flex: 1,
+                           padding: 24,
+                           marginBottom: 8
+                       }}>
                     <TextField
                         style={{
                             display: "flex",
                             flex: 1,
-                            margin: 0
+                            margin: 0,
+                            color: "black"
                         }}
                         id="condition-type-selector"
                         select
@@ -103,7 +105,8 @@ export class WhileProperties extends BaseProperties<BasePropertiesProps> {
                     </TextField>
                 </Paper>
                 {this.state.conditions.map((condition: any, index: number) => (
-                    <ExpansionPanel key={index}
+                    <ExpansionPanel id="paper"
+                                    key={index}
                                     expanded={this.state.expanded === index}
                                     onChange={(e, expanded) => {
                                         this.setState({

@@ -46,7 +46,7 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                     onChange={this.handleStringChange("variable")}
                     margin="normal">
                     {this.props.variables.filter((value) => {
-                        return value.type === VariableType.INT
+                        return value.type === VariableType.INT || value.type === VariableType.DOUBLE
                     }).map((value) => (
                         <MenuItem key={value.name} value={JSON.stringify(value)}>
                             {value.name}
