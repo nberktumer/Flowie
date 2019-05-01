@@ -7,9 +7,16 @@ import {Rules} from "../../../config"
 import {AssignmentFlowNode} from "./AssignmentFlowNode"
 import InputWithType from "../../InputWithType/InputWithType"
 
-export class AssignmentProperties extends BaseProperties {
+export interface AssignmentPropertiesProps extends BasePropertiesProps {
+    readonlyType: boolean
+}
 
-    constructor(props: BasePropertiesProps) {
+export class AssignmentProperties extends BaseProperties<AssignmentPropertiesProps> {
+    static defaultProps = {
+        readonlyType: false
+    }
+
+    constructor(props: AssignmentPropertiesProps) {
         super(props)
 
         if (props.node !== undefined) {
@@ -31,10 +38,6 @@ export class AssignmentProperties extends BaseProperties {
         }
     }
 
-    onDataChanged = (data: any) => {
-        console.log(data)
-    }
-
     render() {
         return (
             <div className="bodyContainer">
@@ -49,6 +52,7 @@ export class AssignmentProperties extends BaseProperties {
                 <TextField
                     id="data-type-selector"
                     select
+                    disabled={this.props.readonlyType}
                     label={strings.dataType}
                     value={this.state.variableType}
                     onChange={this.handleStringChange("variableType", (value) => {
@@ -61,9 +65,15 @@ export class AssignmentProperties extends BaseProperties {
                         </MenuItem>
                     ))}
                 </TextField>
-                <InputWithType variableType={this.state.variableType}
-                               onDataChanged={(data: any) => this.onDataChanged(data)}
-                               hide={this.state.variableType === ""}/>
+                <InputWithType
+                    variableType={this.state.variableType}
+                    onDataChanged={(data: any) => {
+                        this.setState({value: data.value, isNull: data.isNull}, () => {
+                            this.props.onDataChanged(this.state)
+                        })
+                    }}
+                    value={this.state.value}
+                    hide={this.state.variableType === ""}/>
             </div>
         )
     }

@@ -6,9 +6,16 @@ import {VariableType} from "../../../models"
 import {Rules} from "../../../config"
 import {InputFlowNode} from "./InputFlowNode"
 
-export class InputProperties extends BaseProperties {
+export interface InputPropertiesProps extends BasePropertiesProps {
+    readonlyType: boolean
+}
 
-    constructor(props: BasePropertiesProps) {
+export class InputProperties extends BaseProperties<InputPropertiesProps> {
+    static defaultProps = {
+        readonlyType: false
+    }
+
+    constructor(props: InputPropertiesProps) {
         super(props)
 
         if (props.node !== undefined) {
@@ -40,6 +47,7 @@ export class InputProperties extends BaseProperties {
                 <TextField
                     id="data-type-selector"
                     select
+                    disabled={this.props.readonlyType}
                     label={strings.dataType}
                     value={this.state.variableType}
                     onChange={this.handleStringChange("variableType")}

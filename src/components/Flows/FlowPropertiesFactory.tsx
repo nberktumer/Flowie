@@ -29,4 +29,21 @@ export class FlowPropertiesFactory {
                 return (<div/>)
         }
     }
+
+    static createReadonlyVariableType(type: FlowType | null | undefined, variables: Variable[], onDataChanged: (data: BasePropertiesState) => void, node?: BaseFlowNode): JSX.Element {
+        switch (type) {
+            case FlowType.WHILE:
+                return (<WhileProperties variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
+            case FlowType.ARITHMETIC:
+                return (<ArithmeticProperties variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
+            case FlowType.ASSIGNMENT:
+                return (<AssignmentProperties readonlyType node={node} onDataChanged={onDataChanged.bind(this)}/>)
+            case FlowType.INPUT:
+                return (<InputProperties readonlyType node={node} onDataChanged={onDataChanged.bind(this)}/>)
+            case FlowType.OUTPUT:
+                return (<OutputProperties variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
+            default:
+                return (<div/>)
+        }
+    }
 }

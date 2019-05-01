@@ -25,7 +25,7 @@ export default class InputWithType extends Component<InputWithTypeProps, InputWi
 
         this.state = {
             value: this.props.value,
-            isNull: false
+            isNull: this.props.value === "NULL"
         }
     }
 
