@@ -1,7 +1,8 @@
 export enum VariableType {
     INT = "Int",
     STRING = "String",
-    BOOLEAN = "Boolean"
+    BOOLEAN = "Boolean",
+    DOUBLE = "Double"
 }
 
 export enum ArithmeticOperationType {

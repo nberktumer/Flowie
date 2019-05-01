@@ -16,6 +16,8 @@ export class ProgrammingLanguageTypeConverter {
                     case VariableType.STRING:
                         convertedType = "String"
                         break
+                    case VariableType.DOUBLE:
+                        convertedType = "double"
                 }
                 break
             case ProgrammingLanguage.KOTLIN:
@@ -29,6 +31,8 @@ export class ProgrammingLanguageTypeConverter {
                     case VariableType.STRING:
                         convertedType = "String"
                         break
+                    case VariableType.DOUBLE:
+                        convertedType = "Double"
                 }
                 break
         }

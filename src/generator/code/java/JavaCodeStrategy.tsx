@@ -1,7 +1,7 @@
 import {CodeStrategy} from "../CodeStrategy";
 import {Func, Parameter} from "../../Func";
 import {CodeWriter} from "../CodeWriter";
-import {ArithmeticFlow, OperatorType} from "../../flows/ArithmeticFlow";
+import {ArithmeticFlow} from "../../flows/ArithmeticFlow";
 import {InputFlow} from "../../flows/InputFlow";
 import {OutputFlow} from "../../flows/OutputFlow";
 import {WhileFlow} from "../../flows/WhileFlow";
@@ -75,20 +75,16 @@ export class JavaCodeStrategy implements CodeStrategy {
 
         const parameters: Parameter[] = []
 
-        if (arithmeticFlow.content.operator1.type === OperatorType.VARIABLE) {
-            if (arithmeticFlow.content.operator1.variableName != null) {
-                parameters.push(new Parameter(
-                    arithmeticFlow.content.operator1.variableName,
-                    ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, VariableType.INT)))
-            }
+        if (arithmeticFlow.content.operator1.name !== undefined) {
+            parameters.push(new Parameter(
+                arithmeticFlow.content.operator1.name,
+                ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, arithmeticFlow.content.operator1.type)))
         }
 
-        if (arithmeticFlow.content.operator2.type === OperatorType.VARIABLE) {
-            if (arithmeticFlow.content.operator2.variableName != null) {
-                parameters.push(new Parameter(
-                    arithmeticFlow.content.operator2.variableName,
-                    ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, VariableType.INT)))
-            }
+        if (arithmeticFlow.content.operator2.name !== undefined) {
+            parameters.push(new Parameter(
+                arithmeticFlow.content.operator2.name,
+                ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, arithmeticFlow.content.operator2.type)))
         }
 
         let operationCode = ""
@@ -110,22 +106,16 @@ export class JavaCodeStrategy implements CodeStrategy {
         let operator1Code = ""
         let operator2Code = ""
 
-        switch (arithmeticFlow.content.operator1.type) {
-            case OperatorType.CONSTANT:
-                operator1Code += arithmeticFlow.content.operator1.constantValue
-                break
-            case OperatorType.VARIABLE:
-                operator1Code += arithmeticFlow.content.operator1.variableName
-                break
+        if (arithmeticFlow.content.operator1.name !== undefined) {
+            operator1Code += arithmeticFlow.content.operator1.name
+        } else {
+            operator1Code += arithmeticFlow.content.operator1.value
         }
 
-        switch (arithmeticFlow.content.operator2.type) {
-            case OperatorType.CONSTANT:
-                operator2Code += arithmeticFlow.content.operator2.constantValue
-                break
-            case OperatorType.VARIABLE:
-                operator2Code += arithmeticFlow.content.operator2.variableName
-                break
+        if (arithmeticFlow.content.operator2.name !== undefined) {
+            operator2Code += arithmeticFlow.content.operator2.name
+        } else {
+            operator2Code += arithmeticFlow.content.operator2.value
         }
 
         functionLines.push(`return ${operator1Code} ${operationCode} ${operator2Code};`)
@@ -133,7 +123,7 @@ export class JavaCodeStrategy implements CodeStrategy {
         const func = new Func(
             arithmeticFlow.functionName(),
             parameters,
-            ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, VariableType.INT),
+            ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, arithmeticFlow.content.variable.type),
             functionLines
         )
 
@@ -165,6 +155,7 @@ export class JavaCodeStrategy implements CodeStrategy {
 
         let contentString = ""
         switch (assignmentFlow.content.variable.type) {
+            case VariableType.DOUBLE:
             case VariableType.INT:
                 contentString = assignmentFlow.content.variable.value.toString()
                 break
@@ -198,6 +189,9 @@ export class JavaCodeStrategy implements CodeStrategy {
         switch (inputFlow.content.variable.type) {
             case VariableType.INT:
                 functionLines.push(`${variableTypeString} input = scanner.nextInt();`)
+                break
+            case VariableType.DOUBLE:
+                functionLines.push(`${variableTypeString} input = scanner.nextDouble();`)
                 break
             case VariableType.STRING:
                 functionLines.push(`${variableTypeString} input = scanner.next();`)
@@ -287,7 +281,7 @@ export class JavaCodeStrategy implements CodeStrategy {
         whileFlow.content.conditions.forEach((condition) => {
             conditionCode += condition.first.name
 
-            if (condition.second !== null) {
+            if (condition.second !== undefined) {
                 conditionCode += " "
 
                 switch (condition.operation) {
