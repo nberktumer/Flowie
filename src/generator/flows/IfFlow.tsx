@@ -45,16 +45,19 @@ export class IfFlow implements BaseFlow {
 export class IfFlowContent {
     conditions: Condition[]
     conditionType: ConditionType
-    scopeId: string | null
+    trueScopeId: string | null
+    falseScopeId: string | null
 
     constructor(
         conditions: Condition[],
         conditionType: ConditionType,
-        scopeId: string | null,
+        trueScopeId: string | null,
+        falseScopeId: string | null,
     ) {
         this.conditions = conditions
         this.conditionType = conditionType
-        this.scopeId = scopeId
+        this.trueScopeId = trueScopeId
+        this.falseScopeId = falseScopeId
     }
 
 }
