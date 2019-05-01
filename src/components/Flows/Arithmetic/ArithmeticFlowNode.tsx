@@ -6,6 +6,7 @@ import {Variable} from "../../../models/Variable"
 import {ArithmeticOperationType, FlowType} from "../../../models"
 import {Operator, OperatorType} from "../../../generator/flows/ArithmeticFlow"
 import * as _ from "lodash"
+import {SignConverter} from "../../../utils"
 
 export class ArithmeticFlowNode extends BaseInfoFlowNode {
     private variable: Variable
@@ -32,14 +33,18 @@ export class ArithmeticFlowNode extends BaseInfoFlowNode {
         this.setOperator2(operator2)
     }
 
+    updateInfo = () => {
+        this.info = `${this.getVariable().name} = ${this.getOperator1().variableName} ${SignConverter.arithmeticOperation(this.getOperation())} 
+        ${this.getOperator2().type === OperatorType.CONSTANT ? this.getOperator2().constantValue : this.getOperator2().variableName}`
+    }
+
     getVariable(): Variable {
         return this.variable
     }
 
     setVariable(value: Variable) {
         this.variable = value
-        this.info = `${value.name} = ${this.getOperator1().variableName} ${this.getOperation()} 
-        ${this.getOperator2().type === OperatorType.CONSTANT ? this.getOperator2().constantValue : this.getOperator2().variableName}`
+        this.updateInfo()
     }
 
     getOperation(): ArithmeticOperationType {
@@ -48,8 +53,7 @@ export class ArithmeticFlowNode extends BaseInfoFlowNode {
 
     setOperation(value: ArithmeticOperationType) {
         this.operation = value
-        this.info = `${this.getVariable().name} = ${this.getOperator1().variableName} ${value} 
-        ${this.getOperator2().type === OperatorType.CONSTANT ? this.getOperator2().constantValue : this.getOperator2().variableName}`
+        this.updateInfo()
     }
 
     getOperator1(): Operator {
@@ -58,8 +62,7 @@ export class ArithmeticFlowNode extends BaseInfoFlowNode {
 
     setOperator1(value: Operator) {
         this.operator1 = value
-        this.info = `${this.getVariable().name} = ${value.variableName} ${this.getOperation()} 
-        ${this.getOperator2().type === OperatorType.CONSTANT ? this.getOperator2().constantValue : this.getOperator2().variableName}`
+        this.updateInfo()
     }
 
     getOperator2(): Operator {
@@ -68,8 +71,7 @@ export class ArithmeticFlowNode extends BaseInfoFlowNode {
 
     setOperator2(value: Operator) {
         this.operator2 = value
-        this.info = `${this.getVariable().name} = ${this.getOperator1().variableName} ${this.getOperation()}
-        ${value.type === OperatorType.CONSTANT ? value.constantValue : value.variableName}`
+        this.updateInfo()
     }
 
     deSerialize(object: any, engine: DiagramEngine) {

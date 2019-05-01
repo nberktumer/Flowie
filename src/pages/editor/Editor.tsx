@@ -168,7 +168,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
                 if (!this.canvasPanel.current)
                     return
 
-                this.canvasPanel.current.new()
+                this.canvasPanel.current.newProject()
                 this.resetState()
                 this.onDiagramChanged()
                 break
@@ -177,7 +177,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
                 if (!this.canvasPanel.current)
                     return
 
-                const base64 = JSON.stringify(this.canvasPanel.current.save())
+                const base64 = JSON.stringify(this.canvasPanel.current.saveProject())
                 FileUtils.save("FlowieSave.flwie", base64)
                 break
             }
@@ -186,8 +186,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
                     if (!this.canvasPanel.current)
                         return
 
-                    this.canvasPanel.current.load(data, (variableList: any) => {
-                        console.log(variableList)
+                    this.canvasPanel.current.loadProject(data, (variableList: any) => {
                         this.resetState()
                         this.setState({variableList})
                         this.onDiagramChanged()

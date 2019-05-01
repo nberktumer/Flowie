@@ -1,4 +1,4 @@
-import React, {Component, createRef} from "react"
+import React, {Component} from "react"
 import styles from "./CanvasPanel.module.css"
 import * as _ from "lodash"
 import {BaseEvent, BaseModel, DiagramEngine, DiagramModel, DiagramWidget, NodeModel} from "nberktumer-react-diagrams"
@@ -12,6 +12,7 @@ import {Variable} from "../../models/Variable"
 import {InitialFlowNode} from "../Flows/Initial/InitialFlowNode"
 import {FlowNodeFactory} from "../Flows"
 import {BaseFlowNode} from "../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
+import {BaseInfoFlowNode} from "../CanvasItems/Nodes/BaseInfoFlow/BaseInfoFlowNode"
 
 export interface CanvasPanelProps {
     variableList: Variable[]
@@ -36,10 +37,10 @@ export default class CanvasPanel extends Component<CanvasPanelProps, CanvasPanel
         this.activeModel = new DiagramModel()
         this.initialNode = FlowNodeFactory.create(FlowType.INITIAL, undefined) as InitialFlowNode
 
-        this.new()
+        this.newProject()
     }
 
-    new = () => {
+    newProject = () => {
         this.diagramEngine = new DiagramEngine()
         this.diagramEngine.installDefaultFactories()
 
@@ -63,7 +64,7 @@ export default class CanvasPanel extends Component<CanvasPanelProps, CanvasPanel
         this.diagramEngine.getDiagramModel().addNode(this.initialNode)
     }
 
-    save = () => {
+    saveProject = () => {
         const diagram = this.activeModel.serializeDiagram() as { [k: string]: any }
         diagram.canvasPanel = {
             variableList: this.props.variableList,
@@ -72,7 +73,7 @@ export default class CanvasPanel extends Component<CanvasPanelProps, CanvasPanel
         return diagram
     }
 
-    load = (data: string, onLoad: (props: any) => void) => {
+    loadProject = (data: string, onLoad: (props: any) => void) => {
         const diagram = JSON.parse(data)
 
         const model = new DiagramModel()
@@ -84,6 +85,10 @@ export default class CanvasPanel extends Component<CanvasPanelProps, CanvasPanel
                 entityRemoved: (e: BaseEvent<BaseModel>) => this.props.onEntityRemoved(e)
             });
             (node as BaseFlowNode).addOnLinkChangedListener(this.props.onDiagramChanged)
+
+            if (node instanceof BaseInfoFlowNode) {
+                (node as BaseInfoFlowNode).updateInfo()
+            }
         })
 
         this.diagramEngine.setDiagramModel(model)

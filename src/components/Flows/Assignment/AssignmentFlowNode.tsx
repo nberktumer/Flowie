@@ -21,4 +21,8 @@ export class AssignmentFlowNode extends BaseVariableFlowNode {
         super.setVariable(variable)
         this.info = `${variable.name} = ${variable.value}`
     }
+
+    updateInfo(): void {
+        this.info = `${this.getVariable().name} = ${this.getVariable().value}`
+    }
 }

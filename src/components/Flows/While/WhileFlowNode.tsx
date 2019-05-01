@@ -8,6 +8,7 @@ import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {DefaultPortType} from "../../CanvasItems/Ports/DefaultPort"
 import {FlowType} from "../../../models"
 import {Variable} from "../../../models/Variable"
+import {SignConverter} from "../../../utils"
 
 export class WhileFlowNode extends BaseInfoFlowNode {
     conditionList: Condition[] = []
@@ -24,7 +25,7 @@ export class WhileFlowNode extends BaseInfoFlowNode {
 
     updateInfo = () => {
         this.info = this.conditionList.map((condition) => {
-            return `${condition.first.name} ${condition.operation} ${(condition.second as Value).variableType !== undefined ? condition.second.value : (condition.second as Variable).name}`
+            return `${condition.first.name} ${SignConverter.booleanOperation(condition.operation)} ${(condition.second as Value).variableType !== undefined ? condition.second.value : (condition.second as Variable).name}`
         }).join("\n")
     }
 
