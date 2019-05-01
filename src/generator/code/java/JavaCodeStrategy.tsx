@@ -12,6 +12,7 @@ import {ConditionOperation} from "../../../models/VariableEnums";
 import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
 import {Variable} from "../../../models/Variable";
 import {RandomFlow} from "../../flows/RandomFlow";
+import {IfFlow} from "../../flows/IfFlow";
 
 export class JavaCodeStrategy implements CodeStrategy {
 
@@ -314,6 +315,52 @@ export class JavaCodeStrategy implements CodeStrategy {
         CodeWriter.getInstance().scopeCount--
         CodeWriter.getInstance().writeLineToMainFunction("}")
         CodeWriter.getInstance().writeMainCodeFromFlow(whileFlow.nextFlow())
+    }
+
+    writeIfFunction(ifFlow: IfFlow): void {
+    }
+
+    writeIfMain(ifFlow: IfFlow): void {
+        if (ifFlow.content == null)
+            return
+
+        const nextScopeId = ifFlow.content.scopeId
+
+        let conditionCode = ""
+        ifFlow.content.conditions.forEach((condition) => {
+            conditionCode += condition.first.name
+
+            if (condition.second !== undefined) {
+                conditionCode += " "
+
+                switch (condition.operation) {
+                    case ConditionOperation.EQUALS:
+                        conditionCode += "=="
+                        break
+                    case ConditionOperation.NOT_EQUALS:
+                        conditionCode += "!="
+                        break
+                }
+
+                if (!condition.second.name) {
+                    conditionCode += " " + condition.second.value
+                } else {
+                    conditionCode += " " + condition.second.name
+                }
+            }
+        })
+
+        CodeWriter.getInstance().writeLineToMainFunction("if(" + conditionCode + ") {")
+        CodeWriter.getInstance().scopeCount++
+
+        if (nextScopeId != null) {
+            CodeWriter.getInstance().addToLoopStack(ifFlow.id)
+            CodeWriter.getInstance().writeMainCodeFromFlow(nextScopeId)
+        }
+
+        CodeWriter.getInstance().scopeCount--
+        CodeWriter.getInstance().writeLineToMainFunction("}")
+        CodeWriter.getInstance().writeMainCodeFromFlow(ifFlow.nextFlow())
     }
 
     writeRandomFunction(randomFlow: RandomFlow): void {

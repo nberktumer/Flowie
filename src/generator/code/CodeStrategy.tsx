@@ -6,6 +6,7 @@ import {WhileFlow} from "../flows/WhileFlow";
 import {AssignmentFlow} from "../flows/AssignmentFlow";
 import {Class} from "./Class";
 import {RandomFlow} from "../flows/RandomFlow";
+import {IfFlow} from "../flows/IfFlow";
 
 export interface CodeStrategy {
 
@@ -38,6 +39,10 @@ export interface CodeStrategy {
     writeWhileMain(whileFlow: WhileFlow): void
 
     writeWhileFunction(whileFlow: WhileFlow): void
+
+    writeIfMain(ifFlow: IfFlow) : void
+
+    writeIfFunction(ifFlow: IfFlow) : void
 
     writeRandomMain(randomFlow: RandomFlow): void
 
