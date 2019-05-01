@@ -7,8 +7,8 @@ import {Variable} from "../../models/Variable"
 export class ArithmeticFlow implements BaseFlow {
 
     id: string
+    type: FlowType;
     nextFlowId: string | null
-    type: FlowType
     content: ArithmeticFlowContent | null
     functionCallName: string
 
@@ -22,96 +22,6 @@ export class ArithmeticFlow implements BaseFlow {
         this.type = type
         this.content = content
         this.functionCallName = (CodeWriter.getInstance().flowIncrementalId++).toString()
-
-    }
-
-    createMainCode(): void {
-        if (this.content == null)
-            return
-
-        let variableSetCode = ""
-
-        if (CodeWriter.getInstance().addVariable(this.content.variable.name)) {
-            variableSetCode = "var "
-        }
-
-        CodeWriter.getInstance().writeLineToMainFunction(
-            `${variableSetCode}${this.content.variable.name} = ${this.functionInvocation()}`
-        )
-        CodeWriter.getInstance().writeMainCodeFromFlow(this.nextFlow())
-    }
-
-    createFunctionCode(): void {
-        if (this.content == null)
-            return
-
-        const functionLines: string[] = []
-
-        const parameters: Parameter[] = []
-
-        if (this.content.operator1.type === OperatorType.VARIABLE) {
-            if (this.content.operator1.variableName != null) {
-                parameters.push(new Parameter(
-                    this.content.operator1.variableName,
-                    VariableType.INT.toString()))
-            }
-        }
-
-        if (this.content.operator2.type === OperatorType.VARIABLE) {
-            if (this.content.operator2.variableName != null) {
-                parameters.push(new Parameter(
-                    this.content.operator2.variableName,
-                    VariableType.INT.toString()))
-            }
-        }
-
-        let operationCode = ""
-        switch (this.content.operation) {
-            case ArithmeticOperationType.ADDITION:
-                operationCode = "+"
-                break
-            case ArithmeticOperationType.SUBTRACTION:
-                operationCode = "-"
-                break
-            case ArithmeticOperationType.MULTIPLICATION:
-                operationCode = "*"
-                break
-            case ArithmeticOperationType.DIVISION:
-                operationCode = "/"
-                break
-        }
-
-        let operator1Code = ""
-        let operator2Code = ""
-
-        switch (this.content.operator1.type) {
-            case OperatorType.CONSTANT:
-                operator1Code += this.content.operator1.constantValue
-                break
-            case OperatorType.VARIABLE:
-                operator1Code += this.content.operator1.variableName
-                break
-        }
-
-        switch (this.content.operator2.type) {
-            case OperatorType.CONSTANT:
-                operator2Code += this.content.operator2.constantValue
-                break
-            case OperatorType.VARIABLE:
-                operator2Code += this.content.operator2.variableName
-                break
-        }
-
-        functionLines.push(`return ${operator1Code} ${operationCode} ${operator2Code}`)
-
-        const func = new Func(
-            this.functionName(),
-            parameters,
-            VariableType.INT.toString(),
-            functionLines
-        )
-
-        CodeWriter.getInstance().writeFunction(func)
 
     }
 

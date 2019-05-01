@@ -1,6 +1,17 @@
 import {BaseFlow} from "../flows/BaseFlow"
 import {Func} from "../Func"
 import {Stack} from "stack-typescript"
+import {ProgrammingLanguage} from "../../models";
+import {CodeStrategy} from "./CodeStrategy";
+import {KotlinCodeStrategy} from "./kotlin/KotlinCodeStrategy";
+import {CodeStrategyFactory} from "./CodeStrategyFactory";
+import {instanceOf} from "prop-types";
+import {ArithmeticFlow, ArithmeticFlowContent} from "../flows/ArithmeticFlow";
+import {AssignmentFlow} from "../flows/AssignmentFlow";
+import {InputFlow} from "../flows/InputFlow";
+import {OutputFlow} from "../flows/OutputFlow";
+import {WhileFlow} from "../flows/WhileFlow";
+import {InitialFlow} from "../flows/InitialFlow";
 
 export class CodeWriter {
     static INITIAL_ID = "INITIAL_ID"
@@ -21,6 +32,8 @@ export class CodeWriter {
     private variableSet: Set<string> = new Set()
     private loopStack: Stack<string> = new Stack()
 
+    private codeStrategy: CodeStrategy = new KotlinCodeStrategy()
+
     private constructor() {
         this.loopStack.push(CodeWriter.TERMINATION_ID)
     }
@@ -36,9 +49,17 @@ export class CodeWriter {
         this.loopStack.push(CodeWriter.TERMINATION_ID)
     }
 
-    setFlows(flows: Map<string, BaseFlow>) {
+    init(programmingLanguage: ProgrammingLanguage, flows: Map<string, BaseFlow>) {
         console.log(flows)
         this.flows = flows
+        this.codeStrategy = CodeStrategyFactory.createCodeStrategy(programmingLanguage)
+
+        flows.forEach((value) => {
+            console.log("Creating function code")
+            this.writeFunctionCodeFromFlow(value)
+        })
+
+        this.generateMain()
     }
 
     writeLineToMainFunction(line: string) {
@@ -58,66 +79,66 @@ export class CodeWriter {
     }
 
     generateMain() {
-        this.writeLineToMainFunction(`fun main(args: Array<String\>) {`)
-        this.scopeCount++
+        this.codeStrategy.initMain()
 
         const initialFlow = this.flows.get(CodeWriter.INITIAL_ID)
         if (initialFlow !== undefined) {
-            initialFlow.createMainCode()
+            this.writeMainCodeFromFlow(CodeWriter.INITIAL_ID)
         } else {
             console.log("No initial defined please define it with " + CodeWriter.INITIAL_ID + "!")
         }
 
-        this.scopeCount--
-        this.writeLineToMainFunction("}")
-        this.writeLineToMainFunction("")
+        this.codeStrategy.finishMain()
     }
 
     writeFunction(func: Func) {
-        let returnTypeString = ""
-        if (func.returnType === undefined) {
-            returnTypeString += ""
-        } else {
-            returnTypeString += ": " + func.returnType
-        }
-
-        let parameterString = ""
-
-        func.parameters.forEach((value, index) => {
-            parameterString += `${value.name}: ${value.type}`
-            if (index !== func.parameters.length - 1) {
-                parameterString += ", "
-            }
-        })
-
-        this.writeLine(`fun ${func.functionName}(${parameterString})${returnTypeString}`)
-        this.appendToLastLine(" {")
-        this.scopeCount++
-
-        func.codeLines.forEach((value) => {
-                this.writeLine(value)
-            }
-        )
-
-        this.scopeCount--
-        this.writeLine("}")
-        this.writeLine("")
+        this.codeStrategy.writeFunctionSignature(func)
     }
 
     writeMainCodeFromFlow(id: string) {
         const top = this.loopStack.top
 
-        if (!this.removeFromStackIfEquals(id)) {
+        if (!this.removeFromStackIfTopEquals(id)) {
             const flow = this.flows.get(id)
             if (flow !== undefined) {
                 console.log("Code for id " + id + " is being created!")
-                return flow.createMainCode()
+
+                if (flow instanceof ArithmeticFlow) {
+                    this.codeStrategy.writeArithmeticMain(flow)
+                } else if (flow instanceof AssignmentFlow) {
+                    this.codeStrategy.writeAssignmentMain(flow)
+                } else if (flow instanceof InputFlow) {
+                    this.codeStrategy.writeInputMain(flow)
+                } else if (flow instanceof OutputFlow) {
+                    this.codeStrategy.writeOutputMain(flow)
+                } else if (flow instanceof WhileFlow) {
+                    this.codeStrategy.writeWhileMain(flow)
+                } else if (flow instanceof InitialFlow) {
+                    this.writeMainCodeFromFlow(flow.nextFlow())
+                }
+            } else {
+                console.log("Something went horribly wrong!")
             }
 
-            console.log("Something went horribly wrong!")
         } else {
             console.log("Top with id " + top + " is popped!")
         }
+    }
+
+    writeFunctionCodeFromFlow(flow: BaseFlow) {
+
+        if (flow instanceof ArithmeticFlow) {
+            this.codeStrategy.writeArithmeticFunction(flow)
+        } else if (flow instanceof AssignmentFlow) {
+            this.codeStrategy.writeAssignmentFunction(flow)
+        } else if (flow instanceof InputFlow) {
+            this.codeStrategy.writeInputFunction(flow)
+        } else if (flow instanceof OutputFlow) {
+            this.codeStrategy.writeOutputFunction(flow)
+        } else if (flow instanceof WhileFlow) {
+            this.codeStrategy.writeWhileFunction(flow)
+        }
+
     }
 
     /**
@@ -144,7 +165,7 @@ export class CodeWriter {
     /**
      * Returns true if top equals index and pops it returns false otherwise.
      */
-    removeFromStackIfEquals(id: string): boolean {
+    removeFromStackIfTopEquals(id: string): boolean {
         if (this.loopStack.top === id) {
             this.loopStack.pop()
             return true

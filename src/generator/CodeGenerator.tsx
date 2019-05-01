@@ -6,27 +6,14 @@ import {InputFlow} from "./flows/InputFlow";
 import {OutputFlow} from "./flows/OutputFlow";
 import {ArithmeticFlow} from "./flows/ArithmeticFlow";
 import {WhileFlow} from "./flows/WhileFlow";
-import {FlowType} from "../models";
+import {FlowType, ProgrammingLanguage} from "../models";
 import {InitialFlow} from "./flows/InitialFlow";
 
 export class CodeGenerator {
 
-    private readonly flowJson: string
-
-    constructor(flowJson: string) {
-        this.flowJson = flowJson
-    }
-
-    generate(): string {
+    generate(programmingLanguage: ProgrammingLanguage, flowJson: string): string {
         CodeWriter.getInstance().reset()
-        CodeWriter.getInstance().setFlows(this.convertToFlowObjects(JSON.parse(this.flowJson)))
-
-        CodeWriter.getInstance().flows.forEach((value) => {
-            console.log("Creating function code")
-            value.createFunctionCode()
-        })
-
-        CodeWriter.getInstance().generateMain()
+        CodeWriter.getInstance().init(programmingLanguage, this.convertToFlowObjects(JSON.parse(flowJson)))
 
         return CodeWriter.getInstance().codes.join("\n")
     }
