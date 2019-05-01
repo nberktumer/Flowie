@@ -18,7 +18,7 @@ export class InputFlowNode extends BaseVariableFlowNode {
 
     setVariable(variable: Variable) {
         super.setVariable(variable)
-        this.info = variable.name
+        this.updateInfo()
     }
 
     updateInfo(): void {
