@@ -30,20 +30,12 @@ export class ArithmeticFlow implements BaseFlow {
 
         let functionCode = `${this.functionName()}(`
 
-        switch (this.content.operator1.type) {
-            case OperatorType.CONSTANT:
-                break
-            case OperatorType.VARIABLE:
-                functionCode += this.content.operator1.variableName
-                break
+        if (this.content.operator1.name !== undefined) {
+            functionCode += this.content.operator1.name
         }
 
-        switch (this.content.operator2.type) {
-            case OperatorType.CONSTANT:
-                break
-            case OperatorType.VARIABLE:
-                functionCode += `, ${this.content.operator2.variableName}`
-                break
+        if (this.content.operator2.name !== undefined) {
+            functionCode += `, ${this.content.operator2.name}`
         }
 
         functionCode += ")"
@@ -67,39 +59,18 @@ export class ArithmeticFlow implements BaseFlow {
 export class ArithmeticFlowContent {
     variable: Variable
     operation: ArithmeticOperationType
-    operator1: Operator
-    operator2: Operator
+    operator1: Variable
+    operator2: Variable
 
     constructor(
         variable: Variable,
         operation: ArithmeticOperationType,
-        operator1: Operator,
-        operator2: Operator,
+        operator1: Variable,
+        operator2: Variable,
     ) {
         this.variable = variable
         this.operation = operation
         this.operator1 = operator1
         this.operator2 = operator2
     }
-}
-
-export class Operator {
-    type: OperatorType
-    variableName: string | undefined
-    constantValue: number | undefined
-
-    constructor(
-        type: OperatorType,
-        name: string | undefined,
-        value: number | undefined
-    ) {
-        this.type = type
-        this.variableName = name
-        this.constantValue = value
-    }
-}
-
-export enum OperatorType {
-    CONSTANT = "Constant",
-    VARIABLE = "Variable"
 }

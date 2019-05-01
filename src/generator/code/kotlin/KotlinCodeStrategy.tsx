@@ -1,7 +1,7 @@
 import {CodeStrategy} from "../CodeStrategy";
 import {Func, Parameter} from "../../Func";
 import {CodeWriter} from "../CodeWriter";
-import {ArithmeticFlow, OperatorType} from "../../flows/ArithmeticFlow";
+import {ArithmeticFlow} from "../../flows/ArithmeticFlow";
 import {InputFlow} from "../../flows/InputFlow";
 import {OutputFlow} from "../../flows/OutputFlow";
 import {WhileFlow} from "../../flows/WhileFlow";
@@ -70,20 +70,16 @@ export class KotlinCodeStrategy implements CodeStrategy {
 
         const parameters: Parameter[] = []
 
-        if (arithmeticFlow.content.operator1.type === OperatorType.VARIABLE) {
-            if (arithmeticFlow.content.operator1.variableName != null) {
-                parameters.push(new Parameter(
-                    arithmeticFlow.content.operator1.variableName,
-                    VariableType.INT.toString()))
-            }
+        if (arithmeticFlow.content.operator1.name !== undefined) {
+            parameters.push(new Parameter(
+                arithmeticFlow.content.operator1.name,
+                arithmeticFlow.content.operator1.type))
         }
 
-        if (arithmeticFlow.content.operator2.type === OperatorType.VARIABLE) {
-            if (arithmeticFlow.content.operator2.variableName != null) {
-                parameters.push(new Parameter(
-                    arithmeticFlow.content.operator2.variableName,
-                    VariableType.INT.toString()))
-            }
+        if (arithmeticFlow.content.operator2.name !== undefined) {
+            parameters.push(new Parameter(
+                arithmeticFlow.content.operator2.name,
+                arithmeticFlow.content.operator2.type))
         }
 
         let operationCode = ""
@@ -105,22 +101,16 @@ export class KotlinCodeStrategy implements CodeStrategy {
         let operator1Code = ""
         let operator2Code = ""
 
-        switch (arithmeticFlow.content.operator1.type) {
-            case OperatorType.CONSTANT:
-                operator1Code += arithmeticFlow.content.operator1.constantValue
-                break
-            case OperatorType.VARIABLE:
-                operator1Code += arithmeticFlow.content.operator1.variableName
-                break
+        if (arithmeticFlow.content.operator1.name !== undefined) {
+            operator1Code += arithmeticFlow.content.operator1.name
+        } else {
+            operator1Code += arithmeticFlow.content.operator1.value
         }
 
-        switch (arithmeticFlow.content.operator2.type) {
-            case OperatorType.CONSTANT:
-                operator2Code += arithmeticFlow.content.operator2.constantValue
-                break
-            case OperatorType.VARIABLE:
-                operator2Code += arithmeticFlow.content.operator2.variableName
-                break
+        if (arithmeticFlow.content.operator2.name !== undefined) {
+            operator2Code += arithmeticFlow.content.operator2.name
+        } else {
+            operator2Code += arithmeticFlow.content.operator2.value
         }
 
         functionLines.push(`return ${operator1Code} ${operationCode} ${operator2Code}`)
@@ -128,7 +118,7 @@ export class KotlinCodeStrategy implements CodeStrategy {
         const func = new Func(
             arithmeticFlow.functionName(),
             parameters,
-            VariableType.INT.toString(),
+            arithmeticFlow.content.variable.type,
             functionLines
         )
 
@@ -164,6 +154,7 @@ export class KotlinCodeStrategy implements CodeStrategy {
         let contentString = ""
         switch (assignmentFlow.content.variable.type) {
             case VariableType.INT:
+            case VariableType.DOUBLE:
                 contentString = assignmentFlow.content.variable.value.toString()
                 break
             case VariableType.STRING:
@@ -200,6 +191,9 @@ export class KotlinCodeStrategy implements CodeStrategy {
                 break
             case VariableType.BOOLEAN:
                 scanCode = "readLine()!!.toBoolean()"
+                break
+            case VariableType.DOUBLE:
+                scanCode = "readLine()!!.toDouble()"
             default:
                 break
         }

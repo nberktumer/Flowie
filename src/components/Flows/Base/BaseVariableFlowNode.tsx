@@ -7,7 +7,6 @@ import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {FlowModel} from "../../../generator/FlowModelJSON"
 import {WhileFlowNode} from "../While/WhileFlowNode"
 import {ArithmeticFlowNode} from "../Arithmetic/ArithmeticFlowNode"
-import {Operator} from "../../../generator/flows/ArithmeticFlow"
 import {InputFlowNode} from "../Input/InputFlowNode"
 
 export abstract class BaseVariableFlowNode extends BaseInfoFlowNode {
@@ -57,11 +56,11 @@ export abstract class BaseVariableFlowNode extends BaseInfoFlowNode {
                 if (node.getVariable().name === oldVariable.name) {
                     node.setVariable(newVariable)
                 }
-                if (node.getOperator1().variableName === oldVariable.name) {
-                    node.setOperator1(new Operator(node.getOperator1().type, newVariable.name, newVariable.value))
+                if (node.getOperator1().name === oldVariable.name) {
+                    node.setOperator1(newVariable)
                 }
-                if (node.getOperator2().variableName === oldVariable.name) {
-                    node.setOperator2(new Operator(node.getOperator2().type, newVariable.name, newVariable.value))
+                if (node.getOperator2().name === oldVariable.name) {
+                    node.setOperator2(newVariable)
                 }
                 break
             }

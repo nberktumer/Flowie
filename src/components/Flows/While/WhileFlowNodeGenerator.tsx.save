@@ -1,0 +1,30 @@
+import {BaseFlowNodeGenerator} from "../Base/BaseFlowNodeGenerator"
+import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
+import {BasePropertiesState} from "../Base/BaseProperties"
+import {Condition} from "../../../models/Condition"
+import {WhileFlowNode} from "./WhileFlowNode"
+
+export class WhileFlowNodeGenerator extends BaseFlowNodeGenerator {
+    create(data?: BasePropertiesState, node?: WhileFlowNode): BaseFlowNode | null {
+        if (!data || !data.conditions)
+            return null
+
+        const resultNode = node ? node : new WhileFlowNode()
+        resultNode.removeAllConditions()
+
+        for (const conditionData of data.conditions) {
+            const condition = new Condition(conditionData.variableType, JSON.parse(conditionData.first), JSON.parse(conditionData.second), conditionData.operation)
+
+            if (!condition.second.name && !condition.second.value)
+                return null
+
+            resultNode.addCondition(condition)
+        }
+
+        return resultNode
+    }
+
+    load(node: any): BaseFlowNode {
+        return new WhileFlowNode(true)
+    }
+}

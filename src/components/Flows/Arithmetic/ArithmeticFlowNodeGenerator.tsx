@@ -1,17 +1,16 @@
 import {BaseFlowNodeGenerator} from "../Base/BaseFlowNodeGenerator"
 import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {BasePropertiesState} from "../Base/BaseProperties"
-import {Operator} from "../../../generator/flows/ArithmeticFlow"
 import {ArithmeticFlowNode} from "./ArithmeticFlowNode"
+import {Variable} from "../../../models/Variable"
 
 export class ArithmeticFlowNodeGenerator extends BaseFlowNodeGenerator {
     create(data?: BasePropertiesState, node?: ArithmeticFlowNode): BaseFlowNode | null {
-        console.log(data)
         if (!data || data.variable === "" || data.operation === "" || data.operator1 === "" || data.operator2 === "")
             return null
-
-        const op1 = JSON.parse(data.operator1) as Operator
-        const op2 = JSON.parse(data.operator2) as Operator
+        
+        const op1 = JSON.parse(data.operator1) as Variable
+        const op2 = JSON.parse(data.operator2) as Variable
 
         if (node !== undefined) {
             node.setVariable(JSON.parse(data.variable))

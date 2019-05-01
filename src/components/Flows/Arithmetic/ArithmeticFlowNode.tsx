@@ -4,17 +4,16 @@ import {NodeColors} from "../../../config"
 import {DiagramEngine} from "nberktumer-react-diagrams"
 import {Variable} from "../../../models/Variable"
 import {ArithmeticOperationType, FlowType} from "../../../models"
-import {Operator, OperatorType} from "../../../generator/flows/ArithmeticFlow"
 import * as _ from "lodash"
 import {SignConverter} from "../../../utils"
 
 export class ArithmeticFlowNode extends BaseInfoFlowNode {
     private variable: Variable
     private operation: ArithmeticOperationType
-    private operator1: Operator
-    private operator2: Operator
+    private operator1: Variable
+    private operator2: Variable
 
-    constructor(variable: Variable, operation: ArithmeticOperationType, operator1: Operator, operator2: Operator, withoutPorts: boolean = false) {
+    constructor(variable: Variable, operation: ArithmeticOperationType, operator1: Variable, operator2: Variable, withoutPorts: boolean = false) {
         super(FlowType.ARITHMETIC, strings.arithmetic, NodeColors.ARITHMETIC)
 
         if (!withoutPorts) {
@@ -34,8 +33,8 @@ export class ArithmeticFlowNode extends BaseInfoFlowNode {
     }
 
     updateInfo = () => {
-        this.info = `${this.getVariable().name} = ${this.getOperator1().variableName} ${SignConverter.arithmeticOperation(this.getOperation())} 
-        ${this.getOperator2().type === OperatorType.CONSTANT ? this.getOperator2().constantValue : this.getOperator2().variableName}`
+        this.info = `${this.getVariable().name} = ${this.getOperator1().name} ${SignConverter.arithmeticOperation(this.getOperation())} 
+        ${!this.getOperator2().name ? this.getOperator2().value : this.getOperator2().name}`
     }
 
     getVariable(): Variable {
@@ -56,20 +55,20 @@ export class ArithmeticFlowNode extends BaseInfoFlowNode {
         this.updateInfo()
     }
 
-    getOperator1(): Operator {
+    getOperator1(): Variable {
         return this.operator1
     }
 
-    setOperator1(value: Operator) {
+    setOperator1(value: Variable) {
         this.operator1 = value
         this.updateInfo()
     }
 
-    getOperator2(): Operator {
+    getOperator2(): Variable {
         return this.operator2
     }
 
-    setOperator2(value: Operator) {
+    setOperator2(value: Variable) {
         this.operator2 = value
         this.updateInfo()
     }

@@ -4,8 +4,8 @@ import strings from "../../../lang"
 import {BaseProperties, BasePropertiesProps} from "../Base/BaseProperties"
 import {ArithmeticOperationType, VariableType} from "../../../models"
 import {ArithmeticFlowNode} from "./ArithmeticFlowNode"
-import {Operator, OperatorType} from "../../../generator/flows/ArithmeticFlow"
 import InputWithType from "../../InputWithType/InputWithType"
+import {Variable} from "../../../models/Variable"
 
 export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
 
@@ -20,8 +20,8 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                 operation: node.getOperation(),
                 operator1: JSON.stringify(node.getOperator1()),
                 operator2: JSON.stringify(node.getOperator2()),
-                isOp2Constant: node.getOperator2().type === OperatorType.CONSTANT,
-                op2initialValue: node.getOperator2().constantValue
+                isOp2Constant: node.getOperator2().name === undefined,
+                op2initialValue: node.getOperator2().value
             }
         } else {
             this.state = {
@@ -74,10 +74,10 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                     onChange={this.handleStringChange("operator1")}
                     margin="normal">
                     {this.props.variables.filter((value) => {
-                        return value.type === VariableType.INT
+                        return value.type === VariableType.INT || value.type === VariableType.DOUBLE
                     }).map((value) => (
                         <MenuItem key={value.name}
-                                  value={JSON.stringify(new Operator(OperatorType.VARIABLE, value.name, value.value))}>
+                                  value={JSON.stringify(new Variable(value.name, value.type, value.value))}>
                             {value.name}
                         </MenuItem>
                     ))}
@@ -95,10 +95,10 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                         onChange={this.handleStringChange("operator2")}
                         margin="normal">
                         {this.props.variables.filter((value) => {
-                            return value.type === VariableType.INT
+                            return value.type === VariableType.INT || value.type === VariableType.DOUBLE
                         }).map((value) => (
                             <MenuItem key={value.name}
-                                      value={JSON.stringify(new Operator(OperatorType.VARIABLE, value.name, value.value))}>
+                                      value={JSON.stringify(new Variable(value.name, value.type, value.value))}>
                                 {value.name}
                             </MenuItem>
                         ))}
@@ -106,7 +106,7 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                     <InputWithType
                         variableType={VariableType.INT}
                         onDataChanged={(data: any) => {
-                            this.setState({operator2: JSON.stringify(new Operator(OperatorType.CONSTANT, undefined, data.value))}, () => {
+                            this.setState({operator2: JSON.stringify(new Variable(undefined, VariableType.INT, data.value))}, () => {
                                 this.props.onDataChanged(this.state)
                             })
                         }}
