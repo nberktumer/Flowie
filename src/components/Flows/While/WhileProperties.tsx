@@ -6,7 +6,7 @@ import {VariableType} from "../../../models"
 import {ConditionOperation} from "../../../models/VariableEnums"
 import {WhileFlowNode} from "./WhileFlowNode"
 import InputWithType from "../../InputWithType/InputWithType"
-import {Value} from "../../../models/Condition"
+import {Variable} from "../../../models/Variable"
 
 export class WhileProperties extends BaseProperties<BasePropertiesProps> {
 
@@ -23,7 +23,7 @@ export class WhileProperties extends BaseProperties<BasePropertiesProps> {
                 second: JSON.stringify(node.conditionList[0].second),
                 operation: node.conditionList[0].operation,
                 op2initialValue: node.conditionList[0].second.value,
-                isOp2Constant: (node.conditionList[0].second as Value).variableType !== undefined
+                isOp2Constant: node.conditionList[0].second.name === undefined
             }
         } else {
             this.state = {
@@ -91,7 +91,7 @@ export class WhileProperties extends BaseProperties<BasePropertiesProps> {
                     <InputWithType
                         variableType={this.state.variableType}
                         onDataChanged={(data: any) => {
-                            this.setState({second: JSON.stringify(new Value(this.state.variableType, data.value))}, () => {
+                            this.setState({second: JSON.stringify(new Variable(undefined, this.state.variableType, data.value))}, () => {
                                 this.props.onDataChanged(this.state)
                             })
                         }}
@@ -102,7 +102,7 @@ export class WhileProperties extends BaseProperties<BasePropertiesProps> {
                             <Checkbox
                                 checked={this.state.isOp2Constant}
                                 onChange={this.handleBooleanChange("isOp2Constant", () => {
-                                    this.setState({second: JSON.stringify(new Value(this.state.variableType, this.state.op2initialValue))}, () => {
+                                    this.setState({second: JSON.stringify(new Variable(undefined, this.state.variableType, this.state.op2initialValue))}, () => {
                                         this.props.onDataChanged(this.state)
                                     })
                                 })}

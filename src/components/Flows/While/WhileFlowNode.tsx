@@ -3,7 +3,7 @@ import strings from "../../../lang"
 import {NodeColors} from "../../../config"
 import {DiagramEngine} from "nberktumer-react-diagrams"
 import * as _ from "lodash"
-import {Condition, Value} from "../../../models/Condition"
+import {Condition} from "../../../models/Condition"
 import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {DefaultPortType} from "../../CanvasItems/Ports/DefaultPort"
 import {FlowType} from "../../../models"
@@ -25,7 +25,7 @@ export class WhileFlowNode extends BaseInfoFlowNode {
 
     updateInfo = () => {
         this.info = this.conditionList.map((condition) => {
-            return `${condition.first.name} ${SignConverter.booleanOperation(condition.operation)} ${(condition.second as Value).variableType !== undefined ? condition.second.value : (condition.second as Variable).name}`
+            return `${condition.first.name} ${SignConverter.booleanOperation(condition.operation)} ${condition.second.name ? condition.second.name : condition.second.value}`
         }).join("\n")
     }
 
@@ -49,7 +49,7 @@ export class WhileFlowNode extends BaseInfoFlowNode {
             if (cond.first.name === oldVariable.name) {
                 cond.first = newVariable
             }
-            if (cond.second instanceof Variable && cond.second.name === oldVariable.name) {
+            if (cond.second.name && cond.second.name === oldVariable.name) {
                 cond.second = newVariable
             }
         })
