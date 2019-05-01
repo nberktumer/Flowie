@@ -366,9 +366,9 @@ export class JavaCodeStrategy implements CodeStrategy {
             CodeWriter.getInstance().writeMainCodeFromFlow(ifFlow.content.falseScopeId)
 
             CodeWriter.getInstance().scopeCount--
-            CodeWriter.getInstance().writeLineToMainFunction("}")
 
         }
+        CodeWriter.getInstance().writeLineToMainFunction("}")
 
         CodeWriter.getInstance().writeMainCodeFromFlow(ifFlow.nextFlow())
     }
