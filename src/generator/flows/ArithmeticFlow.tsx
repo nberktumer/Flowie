@@ -1,6 +1,5 @@
 import {BaseFlow} from "./BaseFlow"
-import {ArithmeticOperationType, FlowType, VariableType} from "../../models"
-import {Func, Parameter} from "../Func"
+import {ArithmeticOperationType, FlowType} from "../../models"
 import {CodeWriter} from "../code/CodeWriter"
 import {Variable} from "../../models/Variable"
 
