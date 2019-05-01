@@ -376,6 +376,9 @@ export class KotlinCodeStrategy implements CodeStrategy {
             CodeWriter.getInstance().addToLoopStack(ifFlow.id)
             CodeWriter.getInstance().writeMainCodeFromFlow(ifFlow.content.falseScopeId)
         }
+
+        CodeWriter.getInstance().scopeCount--
+
         CodeWriter.getInstance().writeMainCodeFromFlow(ifFlow.nextFlow())
     }
 
