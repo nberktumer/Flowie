@@ -9,6 +9,7 @@ import {AssignmentFlow} from "../../flows/AssignmentFlow";
 import {ArithmeticOperationType, VariableType} from "../../../models";
 import {ConditionOperation} from "../../../models/VariableEnums";
 import {Class} from "../Class";
+import {RandomFlow} from "../../flows/RandomFlow";
 
 export class KotlinCodeStrategy implements CodeStrategy {
 
@@ -318,11 +319,47 @@ export class KotlinCodeStrategy implements CodeStrategy {
         CodeWriter.getInstance().writeMainCodeFromFlow(whileFlow.nextFlow())
     }
 
-    addDependencies(dependencies
-                        :
-                        Set<string>
-    ):
-        void {
+    writeRandomFunction(randomFlow: RandomFlow): void {
+    }
+
+    writeRandomMain(randomFlow: RandomFlow): void {
+        CodeWriter.getInstance().addGlobalVariable("val random = Random()")
+        CodeWriter.getInstance().addDependency("import java.util.Random")
+
+        if (randomFlow.content == null)
+            return
+
+        let variableSetCode = ""
+        if (CodeWriter.getInstance().addVariable(randomFlow.content.variable.name)) {
+            variableSetCode = "var "
+        }
+
+        CodeWriter.getInstance().writeLineToMainFunction(
+            `${variableSetCode}${randomFlow.content.variable.name} = ${randomFlow.content.min} + (${randomFlow.content.max} - ${randomFlow.content.min}) * random.nextDouble()`
+        )
+
+        CodeWriter.getInstance().writeMainCodeFromFlow(randomFlow.nextFlow())
+
+    }
+
+    addDependenciesAndGlobalVariables(dependencies: Set<string>, globalVariables: Set<string>): void {
+        dependencies.add("")
+        let index = 0
+
+        dependencies.forEach((value => {
+                CodeWriter.getInstance().writeLineToIndex(value, index)
+                index++
+            }
+        ))
+
+        CodeWriter.getInstance().writeLineToIndex("", index)
+        index++
+
+        globalVariables.forEach((value => {
+            CodeWriter.getInstance().writeLineToIndex(value, index)
+            index++
+        }))
+
     }
 
 }

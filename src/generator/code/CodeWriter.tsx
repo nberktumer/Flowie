@@ -12,6 +12,7 @@ import {OutputFlow} from "../flows/OutputFlow";
 import {WhileFlow} from "../flows/WhileFlow";
 import {InitialFlow} from "../flows/InitialFlow";
 import {Class} from "./Class";
+import {RandomFlow} from "../flows/RandomFlow";
 
 export class CodeWriter {
     static INITIAL_ID = "INITIAL_ID"
@@ -30,6 +31,7 @@ export class CodeWriter {
     private mainFunctionLineIndex = 0
     private spacing = "\t"
     private variableSet: Set<string> = new Set()
+    private globalVariableSet: Set<string> = new Set()
     private dependencySet: Set<string> = new Set()
     private loopStack: Stack<string> = new Stack()
 
@@ -63,7 +65,7 @@ export class CodeWriter {
         })
 
         this.codeStrategy.finishClass()
-        this.addDependencies()
+        this.addDependenciesAndGlobalVariables()
     }
 
     writeLineToIndex(line: string, index: number) {
@@ -120,6 +122,8 @@ export class CodeWriter {
                     this.codeStrategy.writeOutputMain(flow)
                 } else if (flow instanceof WhileFlow) {
                     this.codeStrategy.writeWhileMain(flow)
+                } else if (flow instanceof RandomFlow) {
+                    this.codeStrategy.writeRandomMain(flow)
                 } else if (flow instanceof InitialFlow) {
                     this.writeMainCodeFromFlow(flow.nextFlow())
                 }
@@ -139,6 +143,8 @@ export class CodeWriter {
             this.codeStrategy.writeOutputFunction(flow)
         } else if (flow instanceof WhileFlow) {
             this.codeStrategy.writeWhileFunction(flow)
+        } else if (flow instanceof RandomFlow) {
+            this.codeStrategy.writeRandomFunction(flow)
         }
 
     }
@@ -160,6 +166,10 @@ export class CodeWriter {
 
     addDependency(dependency: string) {
         this.dependencySet.add(dependency)
+    }
+
+    addGlobalVariable(globalVariable: string) {
+        this.globalVariableSet.add(globalVariable)
     }
 
     addToLoopStack(id: string) {
@@ -187,8 +197,8 @@ export class CodeWriter {
         return spacing
     }
 
-    private addDependencies(): void {
-        this.codeStrategy.addDependencies(this.dependencySet)
+    private addDependenciesAndGlobalVariables(): void {
+        this.codeStrategy.addDependenciesAndGlobalVariables(this.dependencySet, this.globalVariableSet)
     }
 
 }
