@@ -8,6 +8,8 @@ import {ArithmeticFlow} from "./flows/ArithmeticFlow";
 import {WhileFlow} from "./flows/WhileFlow";
 import {FlowType, ProgrammingLanguage} from "../models";
 import {InitialFlow} from "./flows/InitialFlow";
+import {IfFlow} from "./flows/IfFlow";
+import {RandomFlow, RandomFlowContent} from "./flows/RandomFlow";
 
 export class CodeGenerator {
 
@@ -71,6 +73,23 @@ export class CodeGenerator {
                             value.whileFlowContent
                         ))
                         break
+                    case FlowType.IF:
+                        baseFlowMap.set(value.id, new IfFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.ifFlowContent
+                        ))
+                        break
+                    case FlowType.RANDOM:
+                        baseFlowMap.set(value.id, new RandomFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.randomFlowContent
+                        ))
+                        break
+
                     /*
                     case "if":
                         baseFlowList.push(new IfFlow(

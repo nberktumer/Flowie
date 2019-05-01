@@ -20,7 +20,8 @@ export enum FlowType {
     INPUT = "Input",
     OUTPUT = "Output",
     ARITHMETIC = "Arithmetic",
-    ASSIGNMENT = "Assignment"
+    ASSIGNMENT = "Assignment",
+    RANDOM = "Random"
 }
 
 export enum ConditionOperation {
