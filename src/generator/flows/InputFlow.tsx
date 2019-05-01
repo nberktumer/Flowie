@@ -1,6 +1,5 @@
 import {BaseFlow} from "./BaseFlow"
-import {FlowType, VariableType} from "../../models/VariableEnums"
-import {Func, Parameter} from "../Func"
+import {FlowType} from "../../models/VariableEnums"
 import {CodeWriter} from "../code/CodeWriter"
 import {Variable} from "../../models/Variable"
 

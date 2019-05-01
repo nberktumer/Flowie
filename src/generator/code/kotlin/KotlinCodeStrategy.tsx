@@ -10,8 +10,18 @@ import {ArithmeticOperationType, VariableType} from "../../../models";
 import {ConditionOperation} from "../../../models/VariableEnums";
 import {Variable} from "../../../models/Variable";
 import {Value} from "../../../models/Condition";
+import {Class} from "../Class";
 
 export class KotlinCodeStrategy implements CodeStrategy {
+
+    initClass(clazz: Class): void {
+
+    }
+
+    finishClass(): void {
+
+    }
+
     initMain(): void {
         CodeWriter.getInstance().writeLineToMainFunction(`fun main(args: Array<String\>) {`)
         CodeWriter.getInstance().scopeCount++
@@ -243,7 +253,15 @@ export class KotlinCodeStrategy implements CodeStrategy {
             functionLines
         )
 
-        functionLines.push(`println("Value of ${outputFlow.content.variable.name} is \${${outputFlow.content.variable.name}}")`)
+        let printString = ""
+
+        if (!outputFlow.content.variable.name) {
+            printString = outputFlow.content.variable.value
+        } else {
+            printString = `\${${outputFlow.content.variable.name}}`
+        }
+
+        functionLines.push(`println("Value of ${outputFlow.content.variable.name} is ${printString}")`)
         CodeWriter.getInstance().writeFunction(func)
     }
 
@@ -278,12 +296,11 @@ export class KotlinCodeStrategy implements CodeStrategy {
                         break
                 }
 
-                if (condition.second instanceof Variable) {
-                    conditionCode += " " + condition.second.name
-                } else if (condition.second instanceof Value) {
+                if ((condition.second as Value).variableType !== undefined) {
                     conditionCode += " " + condition.second.value
+                } else {
+                    conditionCode += " " + (condition.second as Variable).name
                 }
-
             }
         })
 
@@ -298,6 +315,10 @@ export class KotlinCodeStrategy implements CodeStrategy {
         CodeWriter.getInstance().scopeCount--
         CodeWriter.getInstance().writeLineToMainFunction("}")
         CodeWriter.getInstance().writeMainCodeFromFlow(whileFlow.nextFlow())
+    }
+
+    addDependencies(dependencies: Set<string>): void {
+
     }
 
 }

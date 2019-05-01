@@ -5,13 +5,13 @@ import {ProgrammingLanguage} from "../../models";
 import {CodeStrategy} from "./CodeStrategy";
 import {KotlinCodeStrategy} from "./kotlin/KotlinCodeStrategy";
 import {CodeStrategyFactory} from "./CodeStrategyFactory";
-import {instanceOf} from "prop-types";
-import {ArithmeticFlow, ArithmeticFlowContent} from "../flows/ArithmeticFlow";
+import {ArithmeticFlow} from "../flows/ArithmeticFlow";
 import {AssignmentFlow} from "../flows/AssignmentFlow";
 import {InputFlow} from "../flows/InputFlow";
 import {OutputFlow} from "../flows/OutputFlow";
 import {WhileFlow} from "../flows/WhileFlow";
 import {InitialFlow} from "../flows/InitialFlow";
+import {Class} from "./Class";
 
 export class CodeWriter {
     static INITIAL_ID = "INITIAL_ID"
@@ -30,6 +30,7 @@ export class CodeWriter {
     private mainFunctionLineIndex = 0
     private spacing = "\t"
     private variableSet: Set<string> = new Set()
+    private dependencySet: Set<string> = new Set()
     private loopStack: Stack<string> = new Stack()
 
     private codeStrategy: CodeStrategy = new KotlinCodeStrategy()
@@ -42,6 +43,7 @@ export class CodeWriter {
         this.flowIncrementalId = 0
         this.flows.clear()
         this.variableSet.clear()
+        this.dependencySet.clear()
         this.codes = []
         this.scopeCount = 0
         this.mainFunctionLineIndex = 0
@@ -54,12 +56,18 @@ export class CodeWriter {
         this.flows = flows
         this.codeStrategy = CodeStrategyFactory.createCodeStrategy(programmingLanguage)
 
+        this.generateMain()
+
         flows.forEach((value) => {
-            console.log("Creating function code")
             this.writeFunctionCodeFromFlow(value)
         })
 
-        this.generateMain()
+        this.codeStrategy.finishClass()
+        this.addDependencies()
+    }
+
+    writeLineToIndex(line: string, index: number) {
+        this.codes.splice(index, 0, line)
     }
 
     writeLineToMainFunction(line: string) {
@@ -79,6 +87,9 @@ export class CodeWriter {
     }
 
     generateMain() {
+        const mainClass = new Class("GeneratedCode")
+
+        this.codeStrategy.initClass(mainClass)
         this.codeStrategy.initMain()
 
         const initialFlow = this.flows.get(CodeWriter.INITIAL_ID)
@@ -101,8 +112,6 @@ export class CodeWriter {
         if (!this.removeFromStackIfTopEquals(id)) {
             const flow = this.flows.get(id)
             if (flow !== undefined) {
-                console.log("Code for id " + id + " is being created!")
-
                 if (flow instanceof ArithmeticFlow) {
                     this.codeStrategy.writeArithmeticMain(flow)
                 } else if (flow instanceof AssignmentFlow) {
@@ -116,12 +125,7 @@ export class CodeWriter {
                 } else if (flow instanceof InitialFlow) {
                     this.writeMainCodeFromFlow(flow.nextFlow())
                 }
-            } else {
-                console.log("Something went horribly wrong!")
             }
-
-        } else {
-            console.log("Top with id " + top + " is popped!")
         }
     }
 
@@ -148,7 +152,6 @@ export class CodeWriter {
     addVariable(name: string | undefined): boolean {
         name = name === undefined ? "" : name
 
-        console.log("Adding variable : " + name + " isContained: " + this.variableSet.has(name))
         if (this.variableSet.has(name)) {
             return false
         }
@@ -157,8 +160,11 @@ export class CodeWriter {
         return true
     }
 
+    addDependency(dependency: string) {
+        this.dependencySet.add(dependency)
+    }
+
     addToLoopStack(id: string) {
-        console.log("Pushed to stack " + id + "!")
         this.loopStack.push(id)
     }
 
@@ -181,6 +187,10 @@ export class CodeWriter {
         }
 
         return spacing
+    }
+
+    private addDependencies(): void {
+        this.codeStrategy.addDependencies(this.dependencySet)
     }
 
 }

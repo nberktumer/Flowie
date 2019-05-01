@@ -5,7 +5,7 @@ import {JavaCodeStrategy} from "./java/JavaCodeStrategy";
 
 export class CodeStrategyFactory {
     static createCodeStrategy(programmingLanguage: ProgrammingLanguage): CodeStrategy {
-        switch (programmingLanguage) {
+        switch (+programmingLanguage) {
             case ProgrammingLanguage.JAVA:
                 return new JavaCodeStrategy()
             case ProgrammingLanguage.KOTLIN:

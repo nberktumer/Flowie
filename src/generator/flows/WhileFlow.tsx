@@ -1,7 +1,7 @@
 import {BaseFlow} from "./BaseFlow"
 import {CodeWriter} from "../code/CodeWriter"
 import {Condition} from "../../models/Condition"
-import {FlowType} from "../../models/VariableEnums"
+import {FlowType} from "../../models"
 
 export class WhileFlow implements BaseFlow {
 

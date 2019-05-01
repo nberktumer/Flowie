@@ -4,8 +4,13 @@ import {InputFlow} from "../flows/InputFlow";
 import {OutputFlow} from "../flows/OutputFlow";
 import {WhileFlow} from "../flows/WhileFlow";
 import {AssignmentFlow} from "../flows/AssignmentFlow";
+import {Class} from "./Class";
 
 export interface CodeStrategy {
+
+    initClass(clazz: Class): void
+
+    finishClass(): void
 
     initMain(): void
 
@@ -32,5 +37,7 @@ export interface CodeStrategy {
     writeWhileMain(whileFlow: WhileFlow): void
 
     writeWhileFunction(whileFlow: WhileFlow): void
+
+    addDependencies(dependencies: Set<string>): void;
 
 }
