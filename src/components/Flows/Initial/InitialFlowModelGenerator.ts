@@ -19,6 +19,8 @@ export class InitialFlowModelGenerator extends BaseFlowModelGenerator {
             null,
             null,
             null,
+            null,
+            null,
             nextFlowId
         )
     }

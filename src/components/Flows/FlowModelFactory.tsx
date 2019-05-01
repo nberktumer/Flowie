@@ -7,6 +7,7 @@ import {ArithmeticFlowModelGenerator} from "./Arithmetic/ArithmeticFlowModelGene
 import {AssignmentFlowModelGenerator} from "./Assignment/AssignmentFlowModelGenerator"
 import {InitialFlowModelGenerator} from "./Initial/InitialFlowModelGenerator"
 import {BaseFlowNode} from "../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
+import {IfFlowModelGenerator} from "./If/IfFlowModelGenerator"
 
 export class FlowModelFactory {
     private constructor() {
@@ -17,7 +18,7 @@ export class FlowModelFactory {
             case FlowType.INITIAL:
                 return new InitialFlowModelGenerator().generate(baseFlow)
             case FlowType.IF:
-                return null // TODO
+                return new IfFlowModelGenerator().generate(baseFlow)
             case FlowType.WHILE:
                 return new WhileFlowModelGenerator().generate(baseFlow)
             case FlowType.FOR:

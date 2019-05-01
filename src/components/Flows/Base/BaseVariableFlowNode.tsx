@@ -8,6 +8,7 @@ import {FlowModel} from "../../../generator/FlowModelJSON"
 import {WhileFlowNode} from "../While/WhileFlowNode"
 import {ArithmeticFlowNode} from "../Arithmetic/ArithmeticFlowNode"
 import {InputFlowNode} from "../Input/InputFlowNode"
+import {IfFlowNode} from "../If/IfFlowNode"
 
 export abstract class BaseVariableFlowNode extends BaseInfoFlowNode {
     private variable: Variable
@@ -76,6 +77,13 @@ export abstract class BaseVariableFlowNode extends BaseInfoFlowNode {
                 const node = currentFlow as WhileFlowNode
                 node.updateVariableInConditions(oldVariable, newVariable)
                 this.updateNextFlowVariable((currentFlow as WhileFlowNode).getScopeFlow(), oldVariable, newVariable, flowModelList, currentFlow.getID())
+                break
+            }
+            case FlowType.IF: {
+                const node = currentFlow as IfFlowNode
+                node.updateVariableInConditions(oldVariable, newVariable)
+                this.updateNextFlowVariable((currentFlow as IfFlowNode).getTrueScopeFlow(), oldVariable, newVariable, flowModelList, currentFlow.getID())
+                this.updateNextFlowVariable((currentFlow as IfFlowNode).getFalseScopeFlow(), oldVariable, newVariable, flowModelList, currentFlow.getID())
                 break
             }
         }

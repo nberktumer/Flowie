@@ -4,6 +4,7 @@ import {FlowModelFactory} from "./FlowModelFactory"
 import {FlowType} from "../../models"
 import {WhileFlowNode} from "./While/WhileFlowNode"
 import * as _ from "lodash"
+import {IfFlowNode} from "./If/IfFlowNode"
 
 export class FlowModelGenerator {
 
@@ -29,6 +30,10 @@ export class FlowModelGenerator {
         switch (currentFlow.flowType) {
             case FlowType.WHILE:
                 this.generateFlowModel((currentFlow as WhileFlowNode).getScopeFlow(), flowModelList, currentFlow.getID())
+                break
+            case FlowType.IF:
+                this.generateFlowModel((currentFlow as IfFlowNode).getTrueScopeFlow(), flowModelList, currentFlow.getID())
+                this.generateFlowModel((currentFlow as IfFlowNode).getFalseScopeFlow(), flowModelList, currentFlow.getID())
                 break
         }
 

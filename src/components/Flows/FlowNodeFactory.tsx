@@ -13,6 +13,8 @@ import {WhileFlowNode} from "./While/WhileFlowNode"
 import {AssignmentFlowNode} from "./Assignment/AssignmentFlowNode"
 import {ArithmeticFlowNode} from "./Arithmetic/ArithmeticFlowNode"
 import {OutputFlowNode} from "./Output/OutputFlowNode"
+import {IfFlowNodeGenerator} from "./If/IfFlowNodeGenerator"
+import {IfFlowNode} from "./If/IfFlowNode"
 
 export class FlowNodeFactory {
     private constructor() {
@@ -23,7 +25,7 @@ export class FlowNodeFactory {
             case FlowType.INITIAL:
                 return new InitialFlowNodeGenerator().create(data)
             case FlowType.IF:
-                return null // TODO
+                return new IfFlowNodeGenerator().create(data)
             case FlowType.WHILE:
                 return new WhileFlowNodeGenerator().create(data)
             case FlowType.FOR:
@@ -45,8 +47,8 @@ export class FlowNodeFactory {
         switch (node.flowType) {
             case FlowType.INITIAL:
                 return new InitialFlowNodeGenerator().load(node)
-            // case FlowType.IF:
-            //     return null // TODO
+            case FlowType.IF:
+                return new IfFlowNodeGenerator().load(node)
             case FlowType.WHILE:
                 return new WhileFlowNodeGenerator().load(node)
             // case FlowType.FOR:
@@ -69,7 +71,7 @@ export class FlowNodeFactory {
             case FlowType.INITIAL:
                 return new InitialFlowNodeGenerator().create(data, node as InitialFlowNode)
             case FlowType.IF:
-                return null // TODO
+                return new IfFlowNodeGenerator().create(data, node as IfFlowNode)
             case FlowType.WHILE:
                 return new WhileFlowNodeGenerator().create(data, node as WhileFlowNode)
             case FlowType.FOR:

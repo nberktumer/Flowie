@@ -26,6 +26,8 @@ export class WhileFlowModelGenerator extends BaseFlowModelGenerator {
                 whileFlow.conditionType,
                 scopeFlowId
             ),
+            null,
+            null,
             nextFlowId
         )
     }

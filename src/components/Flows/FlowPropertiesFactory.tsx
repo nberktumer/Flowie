@@ -8,6 +8,7 @@ import {InputProperties} from "./Input/InputProperties"
 import {OutputProperties} from "./Output/OutputProperties"
 import React from "react"
 import {BaseFlowNode} from "../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
+import {IfProperties} from "./If/IfProperties"
 
 export class FlowPropertiesFactory {
     private constructor() {
@@ -17,6 +18,8 @@ export class FlowPropertiesFactory {
         switch (type) {
             case FlowType.WHILE:
                 return (<WhileProperties variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
+            case FlowType.IF:
+                return (<IfProperties variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
             case FlowType.ARITHMETIC:
                 return (<ArithmeticProperties variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
             case FlowType.ASSIGNMENT:
@@ -34,6 +37,8 @@ export class FlowPropertiesFactory {
         switch (type) {
             case FlowType.WHILE:
                 return (<WhileProperties variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
+            case FlowType.IF:
+                return (<IfProperties variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
             case FlowType.ARITHMETIC:
                 return (<ArithmeticProperties variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
             case FlowType.ASSIGNMENT:

@@ -57,6 +57,18 @@ export class BaseFlowNode extends NodeModel {
         return this.addPort(port)
     }
 
+    addTrueScopePort(label: string): DefaultPortModel {
+        const port = new DefaultPortModel(new DefaultPort(DefaultPortType.TRUE_SCOPE, DefaultPortLocation.RIGHT), Random.UID(), label)
+        port.addOnLinkChangedListener(this.onLinkChangedListener)
+        return this.addPort(port)
+    }
+
+    addFalseScopePort(label: string): DefaultPortModel {
+        const port = new DefaultPortModel(new DefaultPort(DefaultPortType.FALSE_SCOPE, DefaultPortLocation.RIGHT), Random.UID(), label)
+        port.addOnLinkChangedListener(this.onLinkChangedListener)
+        return this.addPort(port)
+    }
+
     deSerialize(object: any, engine: DiagramEngine) {
         super.deSerialize(object, engine)
         this.flowType = object.flowType

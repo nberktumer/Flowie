@@ -33,7 +33,6 @@ export class FlowModel {
         randomFlowContent: RandomFlowContent | null = null,
         nextFlowId: string | null
         // forFlowContent: ForFlowContent,
-        // ifFlowContent: IfFlowContent,
 
     ) {
         this.type = type
@@ -42,6 +41,7 @@ export class FlowModel {
         this.inputFlowContent = inputFlowContent
         this.outputFlowContent = outputFlowContent
         this.arithmeticFlowContent = arithmeticFlowContent
+        this.ifFlowContent = ifFlowContent
         this.whileFlowContent = whileFlowContent
         this.ifFlowContent = ifFlowContent
         this.randomFlowContent = randomFlowContent

@@ -35,5 +35,6 @@ export default {
     fileReadError: "Could not read file",
     variableExists: "Variable name already exists!",
     conditionType: "Condition Type",
-    invalid: "Invalid"
+    invalid: "Invalid",
+    nextFlow: "Next Flow"
 }

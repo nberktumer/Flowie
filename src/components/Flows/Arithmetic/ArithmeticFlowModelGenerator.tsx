@@ -25,6 +25,8 @@ export class ArithmeticFlowModelGenerator extends BaseFlowModelGenerator {
                 arithmeticFlow.getOperator2()
             ),
             null,
+            null,
+            null,
             nextFlowId
         )
     }

@@ -50,6 +50,8 @@ export class DefaultPortModel extends PortModel {
         return (this.portType.type === DefaultPortType.OUT && port.portType.type === DefaultPortType.IN)
             || (this.portType.type === DefaultPortType.OUT && port.portType.type === DefaultPortType.LOOP)
             || (this.portType.type === DefaultPortType.SCOPE && port.portType.type === DefaultPortType.IN)
+            || (this.portType.type === DefaultPortType.TRUE_SCOPE && port.portType.type === DefaultPortType.IN)
+            || (this.portType.type === DefaultPortType.FALSE_SCOPE && port.portType.type === DefaultPortType.IN)
     }
 
     addOnLinkChangedListener(listener: () => void) {
