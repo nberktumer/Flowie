@@ -18,13 +18,6 @@ export class InitialFlow implements BaseFlow {
         this.functionCallName = ""
     }
 
-    createFunctionCode(): void {
-    }
-
-    createMainCode(): void {
-        CodeWriter.getInstance().writeMainCodeFromFlow(this.nextFlow())
-    }
-
     functionInvocation(): string {
         return "";
     }

@@ -1,7 +1,7 @@
 import {BaseFlow} from "./BaseFlow"
 import {CodeWriter} from "../code/CodeWriter"
 import {Condition} from "../../models/Condition"
-import {ConditionOperation, FlowType} from "../../models/VariableEnums"
+import {FlowType} from "../../models/VariableEnums"
 
 export class WhileFlow implements BaseFlow {
 
@@ -21,49 +21,6 @@ export class WhileFlow implements BaseFlow {
         this.type = type
         this.content = content
         this.functionCallName = (CodeWriter.getInstance().flowIncrementalId++).toString()
-    }
-
-    createFunctionCode(): void {
-        //
-    }
-
-    createMainCode(): void {
-        if (this.content == null)
-            return
-
-        const nextScopeId = this.content.scopeId
-
-        let conditionCode = ""
-        this.content.conditions.forEach((condition) => {
-            conditionCode += condition.first.name
-
-            if (condition.second !== null) {
-                conditionCode += " "
-
-                switch (condition.operation) {
-                    case ConditionOperation.EQUALS:
-                        conditionCode += "=="
-                        break
-                    case ConditionOperation.NOT_EQUALS:
-                        conditionCode += "!="
-                        break
-                }
-
-                conditionCode += " " + condition.second.name
-            }
-        })
-
-        CodeWriter.getInstance().writeLineToMainFunction("while(" + conditionCode + ") {")
-        CodeWriter.getInstance().scopeCount++
-
-        if (nextScopeId != null) {
-            CodeWriter.getInstance().addToLoopStack(this.id)
-            CodeWriter.getInstance().writeMainCodeFromFlow(nextScopeId)
-        }
-
-        CodeWriter.getInstance().scopeCount--
-        CodeWriter.getInstance().writeLineToMainFunction("}")
-        CodeWriter.getInstance().writeMainCodeFromFlow(this.nextFlow())
     }
 
     functionInvocation(): string {

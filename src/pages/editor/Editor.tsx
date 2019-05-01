@@ -32,18 +32,17 @@ export interface EditorState {
     variableList: Variable[],
     properties: JSX.Element,
     selectedItem: string,
-    selectedLanguage: ProgrammingLanguage | undefined
+    selectedLanguage: ProgrammingLanguage
 }
 
 export default class Editor extends Component<EditorProps, EditorState> {
     readonly programmingLanguages = Object.keys(ProgrammingLanguage)
         .filter((k) => typeof ProgrammingLanguage[k as any] !== "number")
     canvasPanel = createRef<CanvasPanel>()
+    codeGenerator = new CodeGenerator()
 
     constructor(props: any) {
         super(props)
-
-        const generator = new CodeGenerator("[]")
 
         this.state = {
             height: "1px",
@@ -51,7 +50,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
             isModalOpen: false,
             flowType: null,
             flowPosition: {x: 0, y: 0},
-            generatedCode: generator.generate(),
+            generatedCode: this.codeGenerator.generate(ProgrammingLanguage.KOTLIN, []),
             variableList: [],
             properties: <div/>,
             selectedItem: "",
@@ -92,11 +91,10 @@ export default class Editor extends Component<EditorProps, EditorState> {
     onDiagramChanged() {
         if (!this.canvasPanel.current)
             return
-
+        
         const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current.initialNode)
         console.log(flowModelList)
-        const generator = new CodeGenerator(JSON.stringify(flowModelList))
-        this.setState({generatedCode: generator.generate()})
+        this.setState({generatedCode: this.codeGenerator.generate(this.state.selectedLanguage, flowModelList)})
     }
 
     onCanvasDrop(type: FlowType, position: { x: number, y: number }) {
@@ -269,7 +267,9 @@ export default class Editor extends Component<EditorProps, EditorState> {
                                     select
                                     value={this.state.selectedLanguage}
                                     onChange={(event: any) => {
-                                        this.setState({selectedLanguage: event.target.value})
+                                        this.setState({selectedLanguage: event.target.value}, () => {
+                                            this.onDiagramChanged()
+                                        })
                                     }}
                                     className={styles.languageSelector}
                                     margin="none">
