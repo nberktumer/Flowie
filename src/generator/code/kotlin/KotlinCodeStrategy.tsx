@@ -368,16 +368,18 @@ export class KotlinCodeStrategy implements CodeStrategy {
         }
 
         CodeWriter.getInstance().scopeCount--
-        CodeWriter.getInstance().writeLineToMainFunction("} else {")
-
-        CodeWriter.getInstance().scopeCount++
 
         if (ifFlow.content.falseScopeId != null) {
+            CodeWriter.getInstance().writeLineToMainFunction("} else {")
+
+            CodeWriter.getInstance().scopeCount++
+
             CodeWriter.getInstance().addToLoopStack(ifFlow.id)
             CodeWriter.getInstance().writeMainCodeFromFlow(ifFlow.content.falseScopeId)
-        }
 
-        CodeWriter.getInstance().scopeCount--
+            CodeWriter.getInstance().scopeCount--
+            CodeWriter.getInstance().writeLineToMainFunction("}")
+        }
 
         CodeWriter.getInstance().writeMainCodeFromFlow(ifFlow.nextFlow())
     }
