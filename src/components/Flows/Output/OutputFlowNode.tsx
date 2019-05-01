@@ -27,7 +27,6 @@ export class OutputFlowNode extends BaseInfoFlowNode {
 
     setVariable(variable: Variable) {
         this.variable = variable
-        this.info = variable.name
     }
 
     deSerialize(object: any, engine: DiagramEngine) {
@@ -39,5 +38,9 @@ export class OutputFlowNode extends BaseInfoFlowNode {
         return _.merge(super.serialize(), {
             variable: this.variable
         })
+    }
+
+    updateInfo(): void {
+        this.info = this.getVariable().name
     }
 }

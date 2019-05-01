@@ -1,10 +1,12 @@
 import React from "react"
-import {MenuItem, TextField} from "@material-ui/core"
+import {Checkbox, FormControlLabel, MenuItem, TextField} from "@material-ui/core"
 import strings from "../../../lang"
 import {BaseProperties, BasePropertiesProps} from "../Base/BaseProperties"
 import {VariableType} from "../../../models"
 import {ConditionOperation} from "../../../models/VariableEnums"
 import {WhileFlowNode} from "./WhileFlowNode"
+import InputWithType from "../../InputWithType/InputWithType"
+import {Value} from "../../../models/Condition"
 
 export class WhileProperties extends BaseProperties<BasePropertiesProps> {
 
@@ -19,14 +21,18 @@ export class WhileProperties extends BaseProperties<BasePropertiesProps> {
                 variableType: node.conditionList[0].variableType,
                 first: JSON.stringify(node.conditionList[0].first),
                 second: JSON.stringify(node.conditionList[0].second),
-                operation: node.conditionList[0].operation
+                operation: node.conditionList[0].operation,
+                op2initialValue: node.conditionList[0].second.value,
+                isOp2Constant: (node.conditionList[0].second as Value).variableType !== undefined
             }
         } else {
             this.state = {
                 variableType: "",
                 first: "",
                 second: "",
-                operation: ""
+                operation: "",
+                isOp2Constant: false,
+                op2initialValue: ""
             }
         }
     }
@@ -62,21 +68,52 @@ export class WhileProperties extends BaseProperties<BasePropertiesProps> {
                         </MenuItem>
                     ))}
                 </TextField>
-                <TextField
-                    id="data-type-selector"
-                    select
-                    label={strings.secondVariable}
-                    value={this.state.second}
-                    onChange={this.handleStringChange("second")}
-                    margin="normal">
-                    {this.props.variables.filter((value) => {
-                        return value.type === this.state.variableType
-                    }).map((value) => (
-                        <MenuItem key={value.name} value={JSON.stringify(value)}>
-                            {value.name}
-                        </MenuItem>
-                    ))}
-                </TextField>
+                <div style={{
+                    display: "flex",
+                    flexDirection: "row"
+                }}>
+                    <TextField
+                        id="data-type-selector"
+                        select
+                        style={{flex: 1, display: this.state.isOp2Constant ? "none" : "flex"}}
+                        label={strings.secondVariable}
+                        value={this.state.second}
+                        onChange={this.handleStringChange("second")}
+                        margin="normal">
+                        {this.props.variables.filter((value) => {
+                            return value.type === this.state.variableType
+                        }).map((value) => (
+                            <MenuItem key={value.name} value={JSON.stringify(value)}>
+                                {value.name}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                    <InputWithType
+                        variableType={this.state.variableType}
+                        onDataChanged={(data: any) => {
+                            this.setState({second: JSON.stringify(new Value(this.state.variableType, data.value))}, () => {
+                                this.props.onDataChanged(this.state)
+                            })
+                        }}
+                        value={this.state.op2initialValue}
+                        hide={!this.state.isOp2Constant}/>
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={this.state.isOp2Constant}
+                                onChange={this.handleBooleanChange("isOp2Constant", () => {
+                                    this.setState({second: JSON.stringify(new Value(this.state.variableType, this.state.op2initialValue))}, () => {
+                                        this.props.onDataChanged(this.state)
+                                    })
+                                })}
+                                value="true"
+                                color="primary"
+                            />
+                        }
+                        label={this.state.isOp2Constant ? strings.constant : strings.variable}
+                    />
+                </div>
+
                 <TextField
                     id="data-type-selector"
                     select

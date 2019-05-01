@@ -12,4 +12,8 @@ export class IfFlowModel extends BaseInfoFlowNode {
         this.addOutPort("False").setMaximumLinks(1)
         this.addOutPort("Next Flow").setMaximumLinks(1)
     }
+
+    updateInfo(): void {
+        this.info = ""
+    }
 }

@@ -3,7 +3,7 @@ import * as _ from "lodash"
 import {BaseFlowNode} from "../BaseFlow/BaseFlowNode"
 import {FlowType} from "../../../../models"
 
-export class BaseInfoFlowNode extends BaseFlowNode {
+export abstract class BaseInfoFlowNode extends BaseFlowNode {
     info: string | undefined
 
     constructor(flowType?: FlowType, name: string = "Untitled", color: string = "rgb(0,192,255)") {
@@ -21,4 +21,6 @@ export class BaseInfoFlowNode extends BaseFlowNode {
             info: this.info
         })
     }
+
+    abstract updateInfo(): void
 }
