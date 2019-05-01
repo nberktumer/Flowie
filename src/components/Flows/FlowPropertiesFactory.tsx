@@ -9,6 +9,7 @@ import {OutputProperties} from "./Output/OutputProperties"
 import React from "react"
 import {BaseFlowNode} from "../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {IfProperties} from "./If/IfProperties"
+import {RandomProperties} from "./Random/RandomProperties"
 
 export class FlowPropertiesFactory {
     private constructor() {
@@ -28,6 +29,8 @@ export class FlowPropertiesFactory {
                 return (<InputProperties variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
             case FlowType.OUTPUT:
                 return (<OutputProperties variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
+            case FlowType.RANDOM:
+                return (<RandomProperties variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
             default:
                 return (<div/>)
         }
@@ -47,6 +50,8 @@ export class FlowPropertiesFactory {
                 return (<InputProperties readonlyType variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
             case FlowType.OUTPUT:
                 return (<OutputProperties variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
+            case FlowType.RANDOM:
+                return (<RandomProperties readonlyType variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
             default:
                 return (<div/>)
         }

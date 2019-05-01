@@ -9,10 +9,9 @@ export class AssignmentFlowNodeGenerator extends BaseFlowNodeGenerator {
         if (!data || data.variableName === "" || data.variableType === "" || data.value === "")
             return null
 
-        // data.isNull
         const variable = new Variable(data.variableName, data.variableType, data.value)
 
-        if (node !== undefined) {
+        if (node) {
             node.setVariable(variable)
             return node
         } else {

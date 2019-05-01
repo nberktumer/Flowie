@@ -36,5 +36,8 @@ export default {
     variableExists: "Variable name already exists!",
     conditionType: "Condition Type",
     invalid: "Invalid",
-    nextFlow: "Next Flow"
+    nextFlow: "Next Flow",
+    random: "Random",
+    minValue: "Minimum Value",
+    maxValue: "Maximum Value"
 }

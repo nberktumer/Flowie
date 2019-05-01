@@ -15,6 +15,8 @@ import {ArithmeticFlowNode} from "./Arithmetic/ArithmeticFlowNode"
 import {OutputFlowNode} from "./Output/OutputFlowNode"
 import {IfFlowNodeGenerator} from "./If/IfFlowNodeGenerator"
 import {IfFlowNode} from "./If/IfFlowNode"
+import {RandomFlowNodeGenerator} from "./Random/RandomFlowNodeGenerator"
+import {RandomFlowNode} from "./Random/RandomFlowNode"
 
 export class FlowNodeFactory {
     private constructor() {
@@ -38,6 +40,8 @@ export class FlowNodeFactory {
                 return new ArithmeticFlowNodeGenerator().create(data)
             case FlowType.ASSIGNMENT:
                 return new AssignmentFlowNodeGenerator().create(data)
+            case FlowType.RANDOM:
+                return new RandomFlowNodeGenerator().create(data)
             default:
                 return null
         }
@@ -61,6 +65,8 @@ export class FlowNodeFactory {
                 return new ArithmeticFlowNodeGenerator().load(node)
             case FlowType.ASSIGNMENT:
                 return new AssignmentFlowNodeGenerator().load(node)
+            case FlowType.RANDOM:
+                return new RandomFlowNodeGenerator().load(node)
             default:
                 return new BaseFlowNode()
         }
@@ -84,6 +90,10 @@ export class FlowNodeFactory {
                 return new ArithmeticFlowNodeGenerator().create(data, node as ArithmeticFlowNode)
             case FlowType.ASSIGNMENT:
                 return new AssignmentFlowNodeGenerator().create(data, node as AssignmentFlowNode)
+            case FlowType.RANDOM:
+                return new RandomFlowNodeGenerator().create(data, node as RandomFlowNode)
+            case FlowType.RANDOM:
+                return new RandomFlowNodeGenerator().create(data, node as RandomFlowNode)
             default:
                 return null
         }

@@ -7,7 +7,8 @@ export interface InputWithTypeProps {
     variableType: VariableType,
     onDataChanged: (data: any) => void,
     value: string,
-    hide: boolean
+    hide: boolean,
+    label: string
 }
 
 export interface InputWithTypeState {
@@ -17,7 +18,8 @@ export interface InputWithTypeState {
 export default class InputWithType extends Component<InputWithTypeProps, InputWithTypeState> {
     static defaultProps = {
         value: "",
-        hide: false
+        hide: false,
+        label: strings.value
     }
 
     constructor(props: InputWithTypeProps) {
@@ -79,7 +81,7 @@ export default class InputWithType extends Component<InputWithTypeProps, InputWi
             <TextField
                 style={{flex: 1}}
                 id="string-value-input"
-                label={strings.value}
+                label={this.props.label}
                 value={this.state.isNull ? "NULL" : this.state.value}
                 type="text"
                 onChange={this.handleStringChange("value")}
@@ -105,7 +107,7 @@ export default class InputWithType extends Component<InputWithTypeProps, InputWi
         <TextField
             style={{display: "flex", flex: 1}}
             id="integer-value-input"
-            label={strings.value}
+            label={this.props.label}
             value={this.state.value}
             type="number"
             onChange={this.handleStringChange("value")}
@@ -118,7 +120,7 @@ export default class InputWithType extends Component<InputWithTypeProps, InputWi
             style={{display: "flex", flex: 1}}
             id="boolean-value-input"
             select
-            label={strings.value}
+            label={this.props.label}
             value={this.state.value}
             onChange={this.handleStringChange("value")}
             margin="normal">

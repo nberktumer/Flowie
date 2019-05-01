@@ -20,7 +20,7 @@ export class FlowModelGenerator {
     }
 
     private static generateFlowModel(currentFlow: BaseFlowNode | null, flowModelList: FlowModel[], scopeId: string | null = null) {
-        if (currentFlow == null || (scopeId != null && currentFlow.getID() === scopeId))
+        if (!currentFlow)
             return
 
         // Check if the node has been visited before

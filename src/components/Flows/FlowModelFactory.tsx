@@ -8,6 +8,7 @@ import {AssignmentFlowModelGenerator} from "./Assignment/AssignmentFlowModelGene
 import {InitialFlowModelGenerator} from "./Initial/InitialFlowModelGenerator"
 import {BaseFlowNode} from "../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {IfFlowModelGenerator} from "./If/IfFlowModelGenerator"
+import {RandomFlowModelGenerator} from "./Random/RandomFlowModelGenerator"
 
 export class FlowModelFactory {
     private constructor() {
@@ -31,6 +32,8 @@ export class FlowModelFactory {
                 return new ArithmeticFlowModelGenerator().generate(baseFlow)
             case FlowType.ASSIGNMENT:
                 return new AssignmentFlowModelGenerator().generate(baseFlow)
+            case FlowType.RANDOM:
+                return new RandomFlowModelGenerator().generate(baseFlow)
             default:
                 return null
         }
