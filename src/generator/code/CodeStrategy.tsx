@@ -5,6 +5,7 @@ import {OutputFlow} from "../flows/OutputFlow";
 import {WhileFlow} from "../flows/WhileFlow";
 import {AssignmentFlow} from "../flows/AssignmentFlow";
 import {Class} from "./Class";
+import {RandomFlow} from "../flows/RandomFlow";
 
 export interface CodeStrategy {
 
@@ -38,6 +39,10 @@ export interface CodeStrategy {
 
     writeWhileFunction(whileFlow: WhileFlow): void
 
-    addDependencies(dependencies: Set<string>): void;
+    writeRandomMain(randomFlow: RandomFlow): void
+
+    writeRandomFunction(randomFlow: RandomFlow): void
+
+    addDependenciesAndGlobalVariables(dependencies: Set<string>, globalVariables: Set<string>): void
 
 }

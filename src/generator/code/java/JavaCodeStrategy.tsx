@@ -10,6 +10,8 @@ import {ArithmeticOperationType, ProgrammingLanguage, VariableType} from "../../
 import {Class} from "../Class";
 import {ConditionOperation} from "../../../models/VariableEnums";
 import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
+import {Variable} from "../../../models/Variable";
+import {RandomFlow} from "../../flows/RandomFlow";
 
 export class JavaCodeStrategy implements CodeStrategy {
 
@@ -314,7 +316,29 @@ export class JavaCodeStrategy implements CodeStrategy {
         CodeWriter.getInstance().writeMainCodeFromFlow(whileFlow.nextFlow())
     }
 
-    addDependencies(dependencies: Set<string>): void {
+    writeRandomFunction(randomFlow: RandomFlow): void {
+    }
+
+    writeRandomMain(randomFlow: RandomFlow): void {
+        CodeWriter.getInstance().addGlobalVariable("Random random = Random();")
+        CodeWriter.getInstance().addDependency("import java.util.Random")
+
+        if (randomFlow.content == null)
+            return
+
+        let variableSetCode = ""
+        if (CodeWriter.getInstance().addVariable(randomFlow.content.variable.name)) {
+            variableSetCode = "double "
+        }
+
+        CodeWriter.getInstance().writeLineToMainFunction(
+            `${variableSetCode}${randomFlow.content.variable.name} = ${randomFlow.content.min} + (${randomFlow.content.max} - ${randomFlow.content.min}) * random.nextDouble();`
+        )
+
+        CodeWriter.getInstance().writeMainCodeFromFlow(randomFlow.nextFlow())
+    }
+
+    addDependenciesAndGlobalVariables(dependencies: Set<string>, globalVariables: Set<string>): void {
         dependencies.add("")
         let index = 0
 
@@ -323,5 +347,14 @@ export class JavaCodeStrategy implements CodeStrategy {
                 index++
             }
         ))
+
+        CodeWriter.getInstance().writeLineToIndex("", index)
+        index++
+
+        globalVariables.forEach((value => {
+            CodeWriter.getInstance().writeLineToIndex(value, index)
+            index++
+        }))
     }
+
 }
