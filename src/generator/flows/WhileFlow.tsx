@@ -2,6 +2,7 @@ import {BaseFlow} from "./BaseFlow"
 import {CodeWriter} from "../code/CodeWriter"
 import {Condition} from "../../models/Condition"
 import {FlowType} from "../../models"
+import {ConditionType} from "../../models/VariableEnums";
 
 export class WhileFlow implements BaseFlow {
 
@@ -43,13 +44,16 @@ export class WhileFlow implements BaseFlow {
 
 export class WhileFlowContent {
     conditions: Condition[]
+    conditionType: ConditionType
     scopeId: string | null
 
     constructor(
         conditions: Condition[],
+        conditionType: ConditionType,
         scopeId: string | null,
     ) {
         this.conditions = conditions
+        this.conditionType = conditionType
         this.scopeId = scopeId
     }
 

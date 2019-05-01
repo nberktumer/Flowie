@@ -198,6 +198,8 @@ export class KotlinCodeStrategy implements CodeStrategy {
             case VariableType.STRING:
                 scanCode = "readLine()"
                 break
+            case VariableType.BOOLEAN:
+                scanCode = "readLine()!!.toBoolean()"
             default:
                 break
         }
@@ -279,10 +281,13 @@ export class KotlinCodeStrategy implements CodeStrategy {
         const nextScopeId = whileFlow.content.scopeId
 
         let conditionCode = ""
-        whileFlow.content.conditions.forEach((condition) => {
+
+        for (let i = 0; i < whileFlow.content.conditions.length; i++) {
+            const condition = whileFlow.content.conditions[i]
+
             conditionCode += condition.first.name
 
-            if (condition.second !== null) {
+            if (condition.second !== undefined) {
                 conditionCode += " "
 
                 switch (condition.operation) {
@@ -300,7 +305,11 @@ export class KotlinCodeStrategy implements CodeStrategy {
                     conditionCode += " " + condition.second.name
                 }
             }
-        })
+
+            if (i !== whileFlow.content.conditions.length - 1) {
+                conditionCode += ` ${whileFlow.content.conditionType} `
+            }
+        }
 
         CodeWriter.getInstance().writeLineToMainFunction("while(" + conditionCode + ") {")
         CodeWriter.getInstance().scopeCount++
@@ -315,8 +324,11 @@ export class KotlinCodeStrategy implements CodeStrategy {
         CodeWriter.getInstance().writeMainCodeFromFlow(whileFlow.nextFlow())
     }
 
-    addDependencies(dependencies: Set<string>): void {
-
+    addDependencies(dependencies
+                        :
+                        Set<string>
+    ):
+        void {
     }
 
 }

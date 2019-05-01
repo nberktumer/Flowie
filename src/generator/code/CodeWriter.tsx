@@ -107,8 +107,6 @@ export class CodeWriter {
     }
 
     writeMainCodeFromFlow(id: string) {
-        const top = this.loopStack.top
-
         if (!this.removeFromStackIfTopEquals(id)) {
             const flow = this.flows.get(id)
             if (flow !== undefined) {
