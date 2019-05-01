@@ -1,15 +1,15 @@
-import {CodeStrategy} from "../CodeStrategy";
-import {Func, Parameter} from "../../Func";
-import {CodeWriter} from "../CodeWriter";
-import {ArithmeticFlow, OperatorType} from "../../flows/ArithmeticFlow";
-import {InputFlow} from "../../flows/InputFlow";
-import {OutputFlow} from "../../flows/OutputFlow";
-import {WhileFlow} from "../../flows/WhileFlow";
-import {AssignmentFlow} from "../../flows/AssignmentFlow";
-import {ArithmeticOperationType, ProgrammingLanguage, VariableType} from "../../../models";
-import {Class} from "../Class";
-import {ConditionOperation} from "../../../models/VariableEnums";
-import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
+import {CodeStrategy} from "../CodeStrategy"
+import {Func, Parameter} from "../../Func"
+import {CodeWriter} from "../CodeWriter"
+import {ArithmeticFlow, OperatorType} from "../../flows/ArithmeticFlow"
+import {InputFlow} from "../../flows/InputFlow"
+import {OutputFlow} from "../../flows/OutputFlow"
+import {WhileFlow} from "../../flows/WhileFlow"
+import {AssignmentFlow} from "../../flows/AssignmentFlow"
+import {ArithmeticOperationType, ProgrammingLanguage, VariableType} from "../../../models"
+import {Class} from "../Class"
+import {ConditionOperation} from "../../../models/VariableEnums"
+import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter"
 
 export class JavaCodeStrategy implements CodeStrategy {
 
@@ -278,7 +278,7 @@ export class JavaCodeStrategy implements CodeStrategy {
     }
 
     writeWhileMain(whileFlow: WhileFlow): void {
-        if (whileFlow.content == null)
+        if (!whileFlow.content)
             return
 
         const nextScopeId = whileFlow.content.scopeId
@@ -287,7 +287,7 @@ export class JavaCodeStrategy implements CodeStrategy {
         whileFlow.content.conditions.forEach((condition) => {
             conditionCode += condition.first.name
 
-            if (condition.second !== null) {
+            if (condition.second) {
                 conditionCode += " "
 
                 switch (condition.operation) {

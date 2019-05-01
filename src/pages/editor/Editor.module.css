@@ -35,18 +35,6 @@
     flex-direction: column;
 }
 
-.propertiesPanel * {
-    color: white !important;
-}
-
-.propertiesPanel div::before {
-    border-bottom-color: rgba(255, 255, 255, 0.42)
-}
-
-.propertiesPanel div::before:hover {
-    border-bottom-color: rgba(255, 255, 255, 0.87)
-}
-
 .languageSelector {
     width: 100%;
     text-align: center;

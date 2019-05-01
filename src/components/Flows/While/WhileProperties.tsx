@@ -1,12 +1,25 @@
 import React from "react"
-import {Checkbox, FormControlLabel, MenuItem, TextField} from "@material-ui/core"
-import strings from "../../../lang"
+import {
+    Checkbox,
+    ExpansionPanel,
+    ExpansionPanelDetails,
+    ExpansionPanelSummary,
+    FormControlLabel,
+    MenuItem,
+    Paper,
+    TextField,
+    Typography
+} from "@material-ui/core"
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever"
+import AddIcon from "@material-ui/icons/Add"
 import {BaseProperties, BasePropertiesProps} from "../Base/BaseProperties"
-import {VariableType} from "../../../models"
-import {ConditionOperation} from "../../../models/VariableEnums"
 import {WhileFlowNode} from "./WhileFlowNode"
+import strings from "../../../lang"
+import {VariableType} from "../../../models"
 import InputWithType from "../../InputWithType/InputWithType"
 import {Variable} from "../../../models/Variable"
+import {ConditionOperation, ConditionType} from "../../../models/VariableEnums"
+import {SignConverter} from "../../../utils"
 
 export class WhileProperties extends BaseProperties<BasePropertiesProps> {
 
@@ -16,117 +29,228 @@ export class WhileProperties extends BaseProperties<BasePropertiesProps> {
         if (props.node !== undefined) {
             const node = props.node as WhileFlowNode
 
-            // TODO: Change this to handle all conditions
             this.state = {
-                variableType: node.conditionList[0].variableType,
-                first: JSON.stringify(node.conditionList[0].first),
-                second: JSON.stringify(node.conditionList[0].second),
-                operation: node.conditionList[0].operation,
-                op2initialValue: node.conditionList[0].second.value,
-                isOp2Constant: node.conditionList[0].second.name === undefined
+                conditions: node.conditionList.map((value) => {
+                    return {
+                        variableType: value.variableType,
+                        first: JSON.stringify(value.first),
+                        second: JSON.stringify(value.second),
+                        operation: value.operation,
+                        op2initialValue: value.second ? value.second.value : "",
+                        isOp2Constant: value.second && value.second.name === undefined
+                    }
+                }),
+                conditionType: node.conditionType,
+                expanded: ""
             }
         } else {
             this.state = {
-                variableType: "",
-                first: "",
-                second: "",
-                operation: "",
-                isOp2Constant: false,
-                op2initialValue: ""
+                conditions: [{
+                    variableType: "",
+                    first: "",
+                    second: "",
+                    operation: "",
+                    isOp2Constant: false,
+                    op2initialValue: ""
+                }],
+                conditionType: ConditionType.AND,
+                expanded: ""
+
             }
+        }
+    }
+
+    renderConditionText = (condition: any) => {
+        if (!condition || !condition.first || !condition.second || !condition.operation)
+            return strings.invalid
+
+        const first = JSON.parse(condition.first)
+        const second = JSON.parse(condition.second)
+
+        if (second) {
+            return `${first.name} ${SignConverter.booleanOperation(condition.operation)} ${second.name ? second.name : second.value}`
+        } else {
+            return first.name
         }
     }
 
     render() {
         return (
             <div className="bodyContainer">
-                <TextField
-                    id="data-type-selector"
-                    select
-                    label={strings.variableType}
-                    value={this.state.variableType}
-                    onChange={this.handleStringChange("variableType")}
-                    margin="normal">
-                    {Object.keys(VariableType).map((value: any) => (
-                        <MenuItem key={value} value={VariableType[value]}>
-                            {VariableType[value]}
-                        </MenuItem>
-                    ))}
-                </TextField>
-                <TextField
-                    id="data-type-selector"
-                    select
-                    label={strings.firstVariable}
-                    value={this.state.first}
-                    onChange={this.handleStringChange("first")}
-                    margin="normal">
-                    {this.props.variables.filter((value) => {
-                        return value.type === this.state.variableType
-                    }).map((value) => (
-                        <MenuItem key={value.name} value={JSON.stringify(value)}>
-                            {value.name}
-                        </MenuItem>
-                    ))}
-                </TextField>
-                <div style={{
+                <Paper style={{
                     display: "flex",
-                    flexDirection: "row"
+                    flex: 1,
+                    padding: 24,
+                    marginBottom: 8
                 }}>
                     <TextField
-                        id="data-type-selector"
+                        style={{
+                            display: "flex",
+                            flex: 1,
+                            margin: 0
+                        }}
+                        id="condition-type-selector"
                         select
-                        style={{flex: 1, display: this.state.isOp2Constant ? "none" : "flex"}}
-                        label={strings.secondVariable}
-                        value={this.state.second}
-                        onChange={this.handleStringChange("second")}
+                        label={strings.conditionType}
+                        value={this.state.conditionType}
+                        onChange={this.handleStringChange("conditionType")}
                         margin="normal">
-                        {this.props.variables.filter((value) => {
-                            return value.type === this.state.variableType
-                        }).map((value) => (
-                            <MenuItem key={value.name} value={JSON.stringify(value)}>
-                                {value.name}
+                        {Object.keys(ConditionType).map((value: any) => (
+                            <MenuItem key={value} value={ConditionType[value]}>
+                                {ConditionType[value]}
                             </MenuItem>
                         ))}
                     </TextField>
-                    <InputWithType
-                        variableType={this.state.variableType}
-                        onDataChanged={(data: any) => {
-                            this.setState({second: JSON.stringify(new Variable(undefined, this.state.variableType, data.value))}, () => {
-                                this.props.onDataChanged(this.state)
-                            })
-                        }}
-                        value={this.state.op2initialValue}
-                        hide={!this.state.isOp2Constant}/>
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={this.state.isOp2Constant}
-                                onChange={this.handleBooleanChange("isOp2Constant", () => {
-                                    this.setState({second: JSON.stringify(new Variable(undefined, this.state.variableType, this.state.op2initialValue))}, () => {
-                                        this.props.onDataChanged(this.state)
-                                    })
-                                })}
-                                value="true"
-                                color="primary"
-                            />
-                        }
-                        label={this.state.isOp2Constant ? strings.constant : strings.variable}
-                    />
-                </div>
+                </Paper>
+                {this.state.conditions.map((condition: any, index: number) => (
+                    <ExpansionPanel key={index}
+                                    expanded={this.state.expanded === index}
+                                    onChange={(e, expanded) => {
+                                        this.setState({
+                                            expanded: expanded ? index : -1
+                                        })
+                                    }}>
+                        <ExpansionPanelSummary expandIcon={index === 0 ? (
+                            <AddIcon onClick={(e) => {
+                                e.stopPropagation()
+                                e.preventDefault()
 
-                <TextField
-                    id="data-type-selector"
-                    select
-                    label={strings.operation}
-                    value={this.state.operation}
-                    onChange={this.handleStringChange("operation")}
-                    margin="normal">
-                    {Object.keys(ConditionOperation).map((value: any) => (
-                        <MenuItem key={value} value={ConditionOperation[value]}>
-                            {ConditionOperation[value]}
-                        </MenuItem>
-                    ))}
-                </TextField>
+                                this.state.conditions.push({
+                                    variableType: "",
+                                    first: "",
+                                    second: "",
+                                    operation: "",
+                                    isOp2Constant: false,
+                                    op2initialValue: ""
+                                })
+                                this.props.onDataChanged(this.state)
+                                this.forceUpdate()
+                            }}/>
+                        ) : (
+                            <DeleteForeverIcon onClick={(e) => {
+                                e.stopPropagation()
+                                e.preventDefault()
+
+                                this.state.conditions.splice(this.state.conditions.indexOf(condition), 1)
+                                this.props.onDataChanged(this.state)
+                                this.forceUpdate()
+                            }}/>
+                        )}>
+                            <Typography>
+                                {this.renderConditionText(condition)}
+                            </Typography>
+                        </ExpansionPanelSummary>
+                        <ExpansionPanelDetails style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            flex: 1
+                        }}>
+                            <TextField
+                                id="data-type-selector"
+                                select
+                                label={strings.variableType}
+                                value={this.state.conditions[index].variableType}
+                                onChange={(e: any) => {
+                                    this.state.conditions[index].variableType = e.target.value
+                                    this.props.onDataChanged(this.state)
+                                    this.forceUpdate()
+                                }}
+                                margin="normal">
+                                {Object.keys(VariableType).map((value: any) => (
+                                    <MenuItem key={value} value={VariableType[value]}>
+                                        {VariableType[value]}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                            <TextField
+                                id="data-type-selector"
+                                select
+                                label={strings.firstVariable}
+                                value={this.state.conditions[index].first}
+                                onChange={(e: any) => {
+                                    this.state.conditions[index].first = e.target.value
+                                    this.props.onDataChanged(this.state)
+                                    this.forceUpdate()
+                                }}
+                                margin="normal">
+                                {this.props.variables.filter((value) => {
+                                    return value.type === condition.variableType
+                                }).map((value) => (
+                                    <MenuItem key={value.name} value={JSON.stringify(value)}>
+                                        {value.name}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                            <div style={{
+                                display: "flex",
+                                flexDirection: "row"
+                            }}>
+                                <TextField
+                                    id="data-type-selector"
+                                    select
+                                    style={{flex: 1, display: condition.isOp2Constant ? "none" : "flex"}}
+                                    label={strings.secondVariable}
+                                    value={this.state.conditions[index].second}
+                                    onChange={(e: any) => {
+                                        this.state.conditions[index].second = e.target.value
+                                        this.props.onDataChanged(this.state)
+                                        this.forceUpdate()
+                                    }}
+                                    margin="normal">
+                                    {this.props.variables.filter((value) => {
+                                        return value.type === condition.variableType
+                                    }).map((value) => (
+                                        <MenuItem key={value.name} value={JSON.stringify(value)}>
+                                            {value.name}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                                <InputWithType
+                                    variableType={this.state.conditions[index].variableType}
+                                    onDataChanged={(data: any) => {
+                                        this.state.conditions[index].second = JSON.stringify(new Variable(undefined, condition.variableType, data.value))
+                                        this.props.onDataChanged(this.state)
+                                        this.forceUpdate()
+                                    }}
+                                    value={condition.op2initialValue}
+                                    hide={!condition.isOp2Constant}/>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={this.state.conditions[index].isOp2Constant}
+                                            onChange={(e: any) => {
+                                                this.state.conditions[index].isOp2Constant = e.target.checked
+                                                this.state.conditions[index].second = JSON.stringify(new Variable(undefined, condition.variableType, condition.op2initialValue))
+                                                this.props.onDataChanged(this.state)
+                                                this.forceUpdate()
+                                            }}
+                                            value="true"
+                                            color="primary"
+                                        />
+                                    }
+                                    label={condition.isOp2Constant ? strings.constant : strings.variable}
+                                />
+                            </div>
+                            <TextField
+                                id="data-type-selector"
+                                select
+                                label={strings.operation}
+                                value={this.state.conditions[index].operation}
+                                onChange={(e: any) => {
+                                    this.state.conditions[index].operation = e.target.value
+                                    this.props.onDataChanged(this.state)
+                                    this.forceUpdate()
+                                }}
+                                margin="normal">
+                                {Object.keys(ConditionOperation).map((value: any) => (
+                                    <MenuItem key={value} value={ConditionOperation[value]}>
+                                        {ConditionOperation[value]}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        </ExpansionPanelDetails>
+                    </ExpansionPanel>
+                ))}
             </div>
         )
     }

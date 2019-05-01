@@ -140,6 +140,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
             this.setState({properties: <div/>}, () => {
                 const properties = FlowPropertiesFactory.createReadonlyVariableType((event.entity as BaseFlowNode).flowType,
                     this.state.variableList, (data: BasePropertiesState) => {
+                    console.log(data)
                         if (!data.errorMessage) {
                             if (event.entity instanceof BaseVariableFlowNode) {
                                 // tslint:disable-next-line:prefer-for-of

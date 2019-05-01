@@ -9,9 +9,11 @@ import {DefaultPortType} from "../../CanvasItems/Ports/DefaultPort"
 import {FlowType} from "../../../models"
 import {Variable} from "../../../models/Variable"
 import {SignConverter} from "../../../utils"
+import {ConditionType} from "../../../models/VariableEnums"
 
 export class WhileFlowNode extends BaseInfoFlowNode {
     conditionList: Condition[] = []
+    conditionType: ConditionType = ConditionType.AND
 
     constructor(withoutPorts: boolean = false) {
         super(FlowType.WHILE, strings.while, NodeColors.WHILE)
@@ -25,8 +27,17 @@ export class WhileFlowNode extends BaseInfoFlowNode {
 
     updateInfo = () => {
         this.info = this.conditionList.map((condition) => {
-            return `${condition.first.name} ${SignConverter.booleanOperation(condition.operation)} ${condition.second.name ? condition.second.name : condition.second.value}`
-        }).join("\n")
+            return `${condition.first.name} ${SignConverter.booleanOperation(condition.operation)} ${condition.second ? (condition.second.name ? condition.second.name : condition.second.value) : ""}`
+        }).join(` ${this.conditionType} `)
+    }
+
+    setConditionType(conditionType: ConditionType) {
+        this.conditionType = conditionType
+        this.updateInfo()
+    }
+
+    getConditionType(): ConditionType {
+        return this.conditionType
     }
 
     addCondition(condition: Condition) {
@@ -49,7 +60,7 @@ export class WhileFlowNode extends BaseInfoFlowNode {
             if (cond.first.name === oldVariable.name) {
                 cond.first = newVariable
             }
-            if (cond.second.name && cond.second.name === oldVariable.name) {
+            if (cond.second && cond.second.name && cond.second.name === oldVariable.name) {
                 cond.second = newVariable
             }
         })
@@ -59,11 +70,13 @@ export class WhileFlowNode extends BaseInfoFlowNode {
     deSerialize(object: any, engine: DiagramEngine) {
         super.deSerialize(object, engine)
         this.conditionList = object.conditionList
+        this.conditionType = object.conditionType
     }
 
     serialize() {
         return _.merge(super.serialize(), {
-            conditionList: this.conditionList
+            conditionList: this.conditionList,
+            conditionType: this.conditionType
         })
     }
 
