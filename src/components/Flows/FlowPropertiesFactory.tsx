@@ -20,9 +20,9 @@ export class FlowPropertiesFactory {
             case FlowType.ARITHMETIC:
                 return (<ArithmeticProperties variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
             case FlowType.ASSIGNMENT:
-                return (<AssignmentProperties node={node} onDataChanged={onDataChanged.bind(this)}/>)
+                return (<AssignmentProperties variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
             case FlowType.INPUT:
-                return (<InputProperties node={node} onDataChanged={onDataChanged.bind(this)}/>)
+                return (<InputProperties variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
             case FlowType.OUTPUT:
                 return (<OutputProperties variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
             default:
@@ -37,9 +37,9 @@ export class FlowPropertiesFactory {
             case FlowType.ARITHMETIC:
                 return (<ArithmeticProperties variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
             case FlowType.ASSIGNMENT:
-                return (<AssignmentProperties readonlyType node={node} onDataChanged={onDataChanged.bind(this)}/>)
+                return (<AssignmentProperties readonlyType variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
             case FlowType.INPUT:
-                return (<InputProperties readonlyType node={node} onDataChanged={onDataChanged.bind(this)}/>)
+                return (<InputProperties readonlyType variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
             case FlowType.OUTPUT:
                 return (<OutputProperties variables={variables} node={node} onDataChanged={onDataChanged.bind(this)}/>)
             default:

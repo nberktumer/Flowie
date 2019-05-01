@@ -32,5 +32,6 @@ export default {
     save: "Save",
     load: "Load",
     new: "New",
-    fileReadError: "Could not read file"
+    fileReadError: "Could not read file",
+    variableExists: "Variable name already exists!"
 }

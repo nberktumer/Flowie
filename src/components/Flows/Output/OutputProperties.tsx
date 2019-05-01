@@ -2,16 +2,11 @@ import React from "react"
 import {MenuItem, TextField} from "@material-ui/core"
 import strings from "../../../lang"
 import {BaseProperties, BasePropertiesProps} from "../Base/BaseProperties"
-import {Variable} from "../../../models/Variable"
 import {OutputFlowNode} from "./OutputFlowNode"
 
-export interface OutputPropertiesProps extends BasePropertiesProps {
-    variables: Variable[]
-}
+export class OutputProperties extends BaseProperties<BasePropertiesProps> {
 
-export class OutputProperties extends BaseProperties<OutputPropertiesProps> {
-
-    constructor(props: OutputPropertiesProps) {
+    constructor(props: BasePropertiesProps) {
         super(props)
 
         if (props.node !== undefined) {

@@ -26,14 +26,16 @@ export class AssignmentProperties extends BaseProperties<AssignmentPropertiesPro
                 variableName: node.getVariable().name,
                 variableType: node.getVariable().type,
                 value: node.getVariable().value,
-                isNull: node.getVariable().value === "NULL"
+                isNull: node.getVariable().value === "NULL",
+                variable: node.getVariable()
             }
         } else {
             this.state = {
                 variableName: "",
                 variableType: "",
                 value: "",
-                isNull: false
+                isNull: false,
+                variable: null
             }
         }
     }
@@ -44,9 +46,18 @@ export class AssignmentProperties extends BaseProperties<AssignmentPropertiesPro
                 <TextField
                     id="variable-name-input"
                     label={strings.variableName}
+                    disabled={this.props.readonlyType}
+                    error={this.state.errorMessage === strings.variableExists}
                     value={this.state.variableName}
                     inputProps={{maxLength: Rules.MAX_VAR_LENGTH}}
-                    onChange={this.handleStringChange("variableName")}
+                    onChange={this.handleStringChange("variableName", (data) => {
+                        const hasError = this.props.variables.find((item) => item.name === data)
+
+                        const errorMessage = hasError ? strings.variableExists : undefined
+                        this.setState({errorMessage}, () => {
+                            this.props.onDataChanged(this.state)
+                        })
+                    })}
                     margin="normal"
                 />
                 <TextField
@@ -55,7 +66,7 @@ export class AssignmentProperties extends BaseProperties<AssignmentPropertiesPro
                     disabled={this.props.readonlyType}
                     label={strings.dataType}
                     value={this.state.variableType}
-                    onChange={this.handleStringChange("variableType", (value) => {
+                    onChange={this.handleStringChange("variableType", () => {
                         this.setState({value: ""})
                     })}
                     margin="normal">

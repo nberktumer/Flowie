@@ -72,7 +72,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
     onModalSaveClick(data: BasePropertiesState | null) {
         this.onModalClose()
-        if (data && this.canvasPanel.current && this.state.flowType)
+        if (data && this.canvasPanel.current && this.state.flowType && !data.errorMessage)
             this.canvasPanel.current.addItem(this.state.flowType, data, this.state.flowPosition)
     }
 
@@ -91,7 +91,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
     onDiagramChanged() {
         if (!this.canvasPanel.current)
             return
-        
+
         const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current.initialNode)
         console.log(flowModelList)
         this.setState({generatedCode: this.codeGenerator.generate(this.state.selectedLanguage, flowModelList)})
@@ -140,18 +140,19 @@ export default class Editor extends Component<EditorProps, EditorState> {
             this.setState({properties: <div/>}, () => {
                 const properties = FlowPropertiesFactory.createReadonlyVariableType((event.entity as BaseFlowNode).flowType,
                     this.state.variableList, (data: BasePropertiesState) => {
-                        if (event.entity instanceof BaseVariableFlowNode) {
-                            // tslint:disable-next-line:prefer-for-of
-                            for (let i = 0; i < this.state.variableList.length; i++) {
-                                if (this.state.variableList[i].name === (event.entity as BaseVariableFlowNode).getVariable().name) {
-                                    this.state.variableList[i].name = data.variableName
-                                    break
+                        if (!data.errorMessage) {
+                            if (event.entity instanceof BaseVariableFlowNode) {
+                                // tslint:disable-next-line:prefer-for-of
+                                for (let i = 0; i < this.state.variableList.length; i++) {
+                                    if (this.state.variableList[i].name === (event.entity as BaseVariableFlowNode).getVariable().name) {
+                                        this.state.variableList[i].name = data.variableName
+                                        break
+                                    }
                                 }
                             }
+                            (event.entity as BaseFlowNode).updateNode(data)
+                            this.onDiagramChanged()
                         }
-                        console.log(this.state.variableList);
-                        (event.entity as BaseFlowNode).updateNode(data)
-                        this.onDiagramChanged()
                     }, event.entity as BaseFlowNode)
 
                 this.setState({properties, selectedItem: event.entity.getID()})

@@ -1,8 +1,11 @@
 import React, {Component} from "react"
 import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
+import {Variable} from "../../../models/Variable"
 
 export interface BasePropertiesProps {
-    onDataChanged: (data: BasePropertiesState) => void
+    onDataChanged: (data: BasePropertiesState) => void,
+    variables: Variable[],
+    errorMessage?: string,
     node?: BaseFlowNode
 }
 
@@ -13,19 +16,21 @@ export interface BasePropertiesState {
 export abstract class BaseProperties<T extends BasePropertiesProps = BasePropertiesProps, U extends BasePropertiesState = BasePropertiesState> extends Component<T, U> {
 
     handleStringChange = (key: string, callback?: (value: string) => void) => (event: any) => {
-        this.setState({[key]: event.target.value}, () => {
+        const value = event.target.value
+        this.setState({[key]: value}, () => {
             this.props.onDataChanged(this.state)
-            if (callback != null)
-                callback(event.target.value)
+            if (callback) {
+                callback(value)
+            }
         })
     }
 
     handleBooleanChange = (key: string, callback?: (value: boolean) => void) => (event: any) => {
-        const val = event.target.checked
-        this.setState({[key]: val}, () => {
+        const value = event.target.checked
+        this.setState({[key]: value}, () => {
             this.props.onDataChanged(this.state)
-            if (callback != null)
-                callback(val)
+            if (callback)
+                callback(value)
         })
     }
 }

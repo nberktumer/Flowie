@@ -2,18 +2,13 @@ import React from "react"
 import {MenuItem, TextField} from "@material-ui/core"
 import strings from "../../../lang"
 import {BaseProperties, BasePropertiesProps} from "../Base/BaseProperties"
-import {Variable} from "../../../models/Variable"
 import {VariableType} from "../../../models"
 import {ConditionOperation} from "../../../models/VariableEnums"
 import {WhileFlowNode} from "./WhileFlowNode"
 
-export interface WhilePropertiesProps extends BasePropertiesProps {
-    variables: Variable[]
-}
+export class WhileProperties extends BaseProperties<BasePropertiesProps> {
 
-export class WhileProperties extends BaseProperties<WhilePropertiesProps> {
-
-    constructor(props: WhilePropertiesProps) {
+    constructor(props: BasePropertiesProps) {
         super(props)
 
         if (props.node !== undefined) {

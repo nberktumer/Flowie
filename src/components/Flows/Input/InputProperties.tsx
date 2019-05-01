@@ -23,12 +23,14 @@ export class InputProperties extends BaseProperties<InputPropertiesProps> {
 
             this.state = {
                 variableName: node.getVariable().name,
-                variableType: node.getVariable().type
+                variableType: node.getVariable().type,
+                variable: node.getVariable()
             }
         } else {
             this.state = {
                 variableName: "",
-                variableType: ""
+                variableType: "",
+                variable: null
             }
         }
     }
@@ -39,9 +41,18 @@ export class InputProperties extends BaseProperties<InputPropertiesProps> {
                 <TextField
                     id="variable-name-input"
                     label={strings.variableName}
+                    disabled={this.props.readonlyType}
+                    error={this.state.errorMessage === strings.variableExists}
                     value={this.state.variableName}
                     inputProps={{maxLength: Rules.MAX_VAR_LENGTH}}
-                    onChange={this.handleStringChange("variableName")}
+                    onChange={this.handleStringChange("variableName", (data) => {
+                        const hasError = this.props.variables.find((item) => item.name === data)
+
+                        const errorMessage = hasError ? strings.variableExists : undefined
+                        this.setState({errorMessage}, () => {
+                            this.props.onDataChanged(this.state)
+                        })
+                    })}
                     margin="normal"
                 />
                 <TextField

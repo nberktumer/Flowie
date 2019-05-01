@@ -2,19 +2,14 @@ import React from "react"
 import {Checkbox, FormControlLabel, MenuItem, TextField} from "@material-ui/core"
 import strings from "../../../lang"
 import {BaseProperties, BasePropertiesProps} from "../Base/BaseProperties"
-import {Variable} from "../../../models/Variable"
 import {ArithmeticOperationType, VariableType} from "../../../models"
 import {ArithmeticFlowNode} from "./ArithmeticFlowNode"
 import {Operator, OperatorType} from "../../../generator/flows/ArithmeticFlow"
 import InputWithType from "../../InputWithType/InputWithType"
 
-export interface ArithmeticPropertiesProps extends BasePropertiesProps {
-    variables: Variable[]
-}
+export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
 
-export class ArithmeticProperties extends BaseProperties<ArithmeticPropertiesProps> {
-
-    constructor(props: ArithmeticPropertiesProps) {
+    constructor(props: BasePropertiesProps) {
         super(props)
 
         if (props.node !== undefined) {

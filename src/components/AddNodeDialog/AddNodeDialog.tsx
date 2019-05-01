@@ -1,5 +1,5 @@
 import React, {Component} from "react"
-import {Dialog, DialogTitle} from "@material-ui/core"
+import {Dialog, DialogTitle, Typography} from "@material-ui/core"
 import {DialogProps} from "@material-ui/core/Dialog"
 import Button from "@material-ui/core/Button"
 import strings from "../../lang"
@@ -38,7 +38,6 @@ export class AddNodeDialog extends Component<AddNodeDialogProps, AddNodeDialogSt
     }
 
     onSave() {
-        console.log(this.state.bodyData)
         if (this.props.onSaveClick != null)
             this.props.onSaveClick(this.state.bodyData)
     }
@@ -53,6 +52,9 @@ export class AddNodeDialog extends Component<AddNodeDialogProps, AddNodeDialogSt
             <Dialog aria-labelledby="simple-dialog-title" {...this.props}>
                 <DialogTitle id="simple-dialog-title">Set Properties</DialogTitle>
                 <div className={styles.addNodeDialogBody}>
+                    <Typography color="error">
+                        {(this.state.bodyData && this.state.bodyData.errorMessage) ? this.state.bodyData.errorMessage : ""}
+                    </Typography>
                     {FlowPropertiesFactory.create(this.props.type, this.props.variables, this.onBodyChanged.bind(this))}
                 </div>
                 <div className={styles.addNodeDialogButtonContainer}>
