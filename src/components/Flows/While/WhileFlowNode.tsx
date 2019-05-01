@@ -24,7 +24,7 @@ export class WhileFlowNode extends BaseInfoFlowNode {
 
     updateInfo = () => {
         this.info = this.conditionList.map((condition) => {
-            return `${condition.first.name} ${condition.operation} ${condition.second.name}`
+            return `${condition.first.name} ${condition.operation} ${condition.second instanceof Variable ? condition.second.name : condition.second.value}`
         }).join("\n")
     }
 
@@ -48,7 +48,7 @@ export class WhileFlowNode extends BaseInfoFlowNode {
             if (cond.first.name === oldVariable.name) {
                 cond.first = newVariable
             }
-            if (cond.second.name === oldVariable.name) {
+            if (cond.second instanceof Variable && cond.second.name === oldVariable.name) {
                 cond.second = newVariable
             }
         })
