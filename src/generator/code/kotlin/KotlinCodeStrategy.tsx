@@ -8,8 +8,6 @@ import {WhileFlow} from "../../flows/WhileFlow";
 import {AssignmentFlow} from "../../flows/AssignmentFlow";
 import {ArithmeticOperationType, VariableType} from "../../../models";
 import {ConditionOperation} from "../../../models/VariableEnums";
-import {Variable} from "../../../models/Variable";
-import {Value} from "../../../models/Condition";
 import {Class} from "../Class";
 
 export class KotlinCodeStrategy implements CodeStrategy {
@@ -296,10 +294,10 @@ export class KotlinCodeStrategy implements CodeStrategy {
                         break
                 }
 
-                if ((condition.second as Value).variableType !== undefined) {
+                if (!condition.second.name) {
                     conditionCode += " " + condition.second.value
                 } else {
-                    conditionCode += " " + (condition.second as Variable).name
+                    conditionCode += " " + condition.second.name
                 }
             }
         })
