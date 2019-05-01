@@ -24,7 +24,15 @@ export class OutputFlow implements BaseFlow {
     }
 
     functionInvocation(): string {
-        return this.content != null ? `${this.functionName()}(${this.content.variable.name})` : ""
+        if (this.content != null) {
+            if (this.content.variable.name) {
+                return `${this.functionName()}(${this.content.variable.name})`
+            } else {
+                return `${this.functionName()}()`
+            }
+        } else {
+            return ""
+        }
     }
 
     functionName(): string {
