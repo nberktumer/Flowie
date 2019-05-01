@@ -1,5 +1,5 @@
 import {VariableType} from "../../models"
-import {Checkbox, FormControlLabel, MenuItem, TextField} from "@material-ui/core"
+import {MenuItem, TextField} from "@material-ui/core"
 import strings from "../../lang"
 import React, {Component} from "react"
 
@@ -51,8 +51,8 @@ export default class InputWithType extends Component<InputWithTypeProps, InputWi
     }
 
     render() {
-        if(this.props.hide)
-            return (<div />)
+        if (this.props.hide)
+            return (<div/>)
         switch (this.props.variableType) {
             case VariableType.STRING:
                 return this.renderStringInput()
@@ -85,7 +85,7 @@ export default class InputWithType extends Component<InputWithTypeProps, InputWi
                 margin="normal"
                 disabled={this.state.isNull}
             />
-            <FormControlLabel
+            {/*<FormControlLabel
                 control={
                     <Checkbox
                         checked={this.state.isNull}
@@ -96,7 +96,7 @@ export default class InputWithType extends Component<InputWithTypeProps, InputWi
                         color="primary"/>
                 }
                 label="NULL"
-            />
+            />*/}
         </div>
     )
 
