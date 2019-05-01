@@ -189,7 +189,7 @@ export class KotlinCodeStrategy implements CodeStrategy {
                 scanCode = "readLine()!!.toInt()"
                 break
             case VariableType.STRING:
-                scanCode = "readLine()"
+                scanCode = "readLine()!!"
                 break
             case VariableType.BOOLEAN:
                 scanCode = "readLine()!!.toBoolean()"
@@ -231,16 +231,18 @@ export class KotlinCodeStrategy implements CodeStrategy {
     }
 
     writeOutputFunction(outputFlow: OutputFlow): void {
-        if (outputFlow.content == null || outputFlow.content.variable.name === undefined)
+        if (outputFlow.content == null)
             return
 
         const functionLines: string[] = []
-        const parameters: Parameter[] = [
-            new Parameter(
+
+        const parameters: Parameter[] = []
+        if (outputFlow.content.variable.name) {
+            parameters.push(new Parameter(
                 outputFlow.content.variable.name,
                 outputFlow.content.variable.type.toString()
-            )
-        ]
+            ))
+        }
 
         const func = new Func(
             outputFlow.functionName(),
@@ -252,12 +254,12 @@ export class KotlinCodeStrategy implements CodeStrategy {
         let printString = ""
 
         if (!outputFlow.content.variable.name) {
-            printString = outputFlow.content.variable.value
+            printString = `println("${outputFlow.content.variable.value}")`
         } else {
-            printString = `\${${outputFlow.content.variable.name}}`
+            printString = `println("Value of ${outputFlow.content.variable.name} is \${${outputFlow.content.variable.name}}")`
         }
 
-        functionLines.push(`println("Value of ${outputFlow.content.variable.name} is ${printString}")`)
+        functionLines.push(printString)
         CodeWriter.getInstance().writeFunction(func)
     }
 
