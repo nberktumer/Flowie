@@ -26,3 +26,8 @@ export enum ConditionOperation {
     EQUALS = "Equals",
     NOT_EQUALS = "NotEquals"
 }
+
+export enum ConditionType {
+    AND = "&&",
+    OR = "||"
+}
