@@ -22,8 +22,8 @@ export class WhileProperties extends BaseProperties<WhilePropertiesProps> {
             // TODO: Change this to handle all conditions
             this.state = {
                 variableType: node.conditionList[0].variableType,
-                first: node.conditionList[0].first,
-                second: node.conditionList[0].second,
+                first: JSON.stringify(node.conditionList[0].first),
+                second: JSON.stringify(node.conditionList[0].second),
                 operation: node.conditionList[0].operation
             }
         } else {

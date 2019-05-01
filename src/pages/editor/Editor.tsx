@@ -141,6 +141,16 @@ export default class Editor extends Component<EditorProps, EditorState> {
             // Workaround for updating the properties panel
             this.setState({properties: <div/>}, () => {
                 const properties = FlowPropertiesFactory.create((event.entity as BaseFlowNode).flowType, this.state.variableList, (data: BasePropertiesState) => {
+                    if (event.entity instanceof BaseVariableFlowNode) {
+                        // tslint:disable-next-line:prefer-for-of
+                        for (let i = 0; i < this.state.variableList.length; i++) {
+                            if (this.state.variableList[i].name === (event.entity as BaseVariableFlowNode).getVariable().name) {
+                                this.state.variableList[i].name = data.variableName
+                                break
+                            }
+                        }
+                    }
+                    console.log(this.state.variableList);
                     (event.entity as BaseFlowNode).updateNode(data)
                     this.onDiagramChanged()
                 }, event.entity as BaseFlowNode)

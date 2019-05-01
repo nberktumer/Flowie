@@ -1,4 +1,4 @@
-import React, {Component} from "react"
+import React, {Component, createRef} from "react"
 import styles from "./CanvasPanel.module.css"
 import * as _ from "lodash"
 import {BaseEvent, BaseModel, DiagramEngine, DiagramModel, DiagramWidget, NodeModel} from "nberktumer-react-diagrams"
