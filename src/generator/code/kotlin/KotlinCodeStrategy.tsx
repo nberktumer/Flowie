@@ -328,8 +328,6 @@ export class KotlinCodeStrategy implements CodeStrategy {
         if (ifFlow.content == null)
             return
 
-        const nextScopeId = ifFlow.content.scopeId
-
         let conditionCode = ""
 
         for (let i = 0; i < ifFlow.content.conditions.length; i++) {
@@ -364,13 +362,20 @@ export class KotlinCodeStrategy implements CodeStrategy {
         CodeWriter.getInstance().writeLineToMainFunction("if(" + conditionCode + ") {")
         CodeWriter.getInstance().scopeCount++
 
-        if (nextScopeId != null) {
+        if (ifFlow.content.trueScopeId != null) {
             CodeWriter.getInstance().addToLoopStack(ifFlow.id)
-            CodeWriter.getInstance().writeMainCodeFromFlow(nextScopeId)
+            CodeWriter.getInstance().writeMainCodeFromFlow(ifFlow.content.trueScopeId)
         }
 
         CodeWriter.getInstance().scopeCount--
-        CodeWriter.getInstance().writeLineToMainFunction("}")
+        CodeWriter.getInstance().writeLineToMainFunction("} else {")
+
+        CodeWriter.getInstance().scopeCount++
+
+        if (ifFlow.content.falseScopeId != null) {
+            CodeWriter.getInstance().addToLoopStack(ifFlow.id)
+            CodeWriter.getInstance().writeMainCodeFromFlow(ifFlow.content.falseScopeId)
+        }
         CodeWriter.getInstance().writeMainCodeFromFlow(ifFlow.nextFlow())
     }
 
