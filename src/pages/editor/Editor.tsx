@@ -72,7 +72,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
     onModalSaveClick(data: BasePropertiesState | null) {
         this.onModalClose()
-        if (data && this.canvasPanel.current && this.state.flowType && !data.errorMessage)
+        if (data && this.canvasPanel.current && this.state.flowType && !data.errorMessage && !data.errorField)
             this.canvasPanel.current.addItem(this.state.flowType, data, this.state.flowPosition)
     }
 
