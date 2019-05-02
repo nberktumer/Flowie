@@ -37,7 +37,8 @@ export class OutputProperties extends BaseProperties<BasePropertiesProps> {
             <div className="bodyContainer">
                 <div style={{
                     display: "flex",
-                    flexDirection: "row"
+                    flexDirection: "row",
+                    flex: 1
                 }}>
                     <TextField
                         id="variable-selector"
@@ -54,35 +55,15 @@ export class OutputProperties extends BaseProperties<BasePropertiesProps> {
                         ))}
                     </TextField>
 
-                    <div style={{
-                        display: this.state.isConstant ? "flex" : "none",
-                        flex: 1,
-                        flexDirection: "column"
-                    }}>
-                        <TextField
-                            id="data-type-selector"
-                            select
-                            label={strings.dataType}
-                            value={this.state.variableType}
-                            onChange={this.handleStringChange("variableType")}
-                            margin="normal">
-                            {Object.keys(VariableType).map((key: any) => (
-                                <MenuItem key={key} value={VariableType[key]}>
-                                    {VariableType[key]}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-
-                        <InputWithType
-                            variableType={this.state.variableType}
-                            onDataChanged={(data: any) => {
-                                this.setState({variable: JSON.stringify(new Variable(undefined, this.state.variableType, data.value))}, () => {
-                                    this.props.onDataChanged(this.state)
-                                })
-                            }}
-                            value={this.state.initialValue}
-                            hide={!this.state.isConstant || !this.state.variableType}/>
-                    </div>
+                    <InputWithType
+                        variableType={VariableType.STRING}
+                        onDataChanged={(data: any) => {
+                            this.setState({variable: JSON.stringify(new Variable(undefined, VariableType.STRING, data.value))}, () => {
+                                this.props.onDataChanged(this.state)
+                            })
+                        }}
+                        value={this.state.initialValue}
+                        hide={!this.state.isConstant}/>
 
                     <FormControlLabel
                         control={

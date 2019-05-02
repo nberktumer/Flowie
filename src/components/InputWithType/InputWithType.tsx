@@ -76,7 +76,8 @@ export default class InputWithType extends Component<InputWithTypeProps, InputWi
                 alignItems: "center",
                 justifyContent: "center",
                 alignContent: "center",
-                textAlign: "center"
+                textAlign: "center",
+                flex: 1
             }}>
             <TextField
                 style={{flex: 1}}

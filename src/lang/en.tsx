@@ -34,6 +34,8 @@ export default {
     new: "New",
     fileReadError: "Could not read file",
     variableExists: "Variable name already exists!",
+    variableFirstCharacterError: "First character of the variable name must be an alphabetic character!",
+    variableContainsInvalidCharacters: "Variable name contains invalid characters!",
     conditionType: "Condition Type",
     invalid: "Invalid",
     nextFlow: "Next Flow",

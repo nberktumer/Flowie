@@ -6,6 +6,7 @@ import {VariableType} from "../../../models"
 import {Rules} from "../../../config"
 import {RandomFlowNode} from "./RandomFlowNode"
 import InputWithType from "../../InputWithType/InputWithType"
+import {Validator} from "../../../utils"
 
 export interface RandomPropertiesProps extends BasePropertiesProps {
     readonlyType: boolean
@@ -43,14 +44,12 @@ export class RandomProperties extends BaseProperties<RandomPropertiesProps> {
                     id="variable-name-input"
                     label={strings.variableName}
                     disabled={this.props.readonlyType}
-                    error={this.state.errorMessage === strings.variableExists}
+                    error={this.state.errorField === "variableName"}
                     value={this.state.variableName}
                     inputProps={{maxLength: Rules.MAX_VAR_LENGTH}}
                     onChange={this.handleStringChange("variableName", (data) => {
-                        const hasError = this.props.variables.find((item) => item.name === data)
-
-                        const errorMessage = hasError ? strings.variableExists : undefined
-                        this.setState({errorMessage}, () => {
+                        const error = Validator.validateVariableName(data, this.props.variables)
+                        this.setState({errorMessage: error, errorField: error ? "variableName" : ""}, () => {
                             this.props.onDataChanged(this.state)
                         })
                     })}

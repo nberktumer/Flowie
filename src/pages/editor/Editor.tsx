@@ -72,7 +72,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
     onModalSaveClick(data: BasePropertiesState | null) {
         this.onModalClose()
-        if (data && this.canvasPanel.current && this.state.flowType && !data.errorMessage)
+        if (data && this.canvasPanel.current && this.state.flowType && !data.errorMessage && !data.errorField)
             this.canvasPanel.current.addItem(this.state.flowType, data, this.state.flowPosition)
     }
 
@@ -140,7 +140,6 @@ export default class Editor extends Component<EditorProps, EditorState> {
             this.setState({properties: <div/>}, () => {
                 const properties = FlowPropertiesFactory.createReadonlyVariableType((event.entity as BaseFlowNode).flowType,
                     this.state.variableList, (data: BasePropertiesState) => {
-                    console.log(data)
                         if (!data.errorMessage) {
                             if (event.entity instanceof BaseVariableFlowNode) {
                                 // tslint:disable-next-line:prefer-for-of
@@ -263,25 +262,36 @@ export default class Editor extends Component<EditorProps, EditorState> {
                             <ReflexSplitter/>
 
                             <ReflexElement className="right-pane" minSize={100}>
-                                <TextField
-                                    id="language-selector"
-                                    select
-                                    value={this.state.selectedLanguage}
-                                    onChange={(event: any) => {
-                                        this.setState({selectedLanguage: event.target.value}, () => {
-                                            this.onDiagramChanged()
-                                        })
-                                    }}
-                                    className={styles.languageSelector}
-                                    margin="none">
-                                    {this.programmingLanguages.map((key: any) => (
-                                        <MenuItem key={key} value={key}>
-                                            {ProgrammingLanguage[key]}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
-                                <CodePreviewPanel code={this.state.generatedCode}
-                                                  language={this.state.selectedLanguage}/>
+                                <div style={{display: "flex", height: "100%", width: "100%", flexDirection: "column"}}>
+                                    <TextField
+                                        id="language-selector"
+                                        select
+                                        value={this.state.selectedLanguage}
+                                        onChange={(event: any) => {
+                                            this.setState({selectedLanguage: event.target.value}, () => {
+                                                this.onDiagramChanged()
+                                            })
+                                        }}
+                                        className={styles.languageSelector}
+                                        margin="none">
+                                        {this.programmingLanguages.map((key: any) => (
+                                            <MenuItem key={key} value={key}>
+                                                {ProgrammingLanguage[key]}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                    <div style={{
+                                        display: "flex",
+                                        flex: 1,
+                                        height: "100%",
+                                        width: "100%",
+                                        flexDirection: "column"
+                                    }}>
+
+                                        <CodePreviewPanel code={this.state.generatedCode}
+                                                          language={this.state.selectedLanguage}/>
+                                    </div>
+                                </div>
                             </ReflexElement>
                         </ReflexContainer>
                     </ReflexElement>
