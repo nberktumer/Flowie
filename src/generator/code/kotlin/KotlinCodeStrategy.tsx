@@ -78,7 +78,7 @@ export class KotlinCodeStrategy implements CodeStrategy {
                 arithmeticFlow.content.operator1.type))
         }
 
-        if (arithmeticFlow.content.operator2.name !== undefined) {
+        if (arithmeticFlow.content.operator2.name !== undefined && arithmeticFlow.content.operator1.name !== arithmeticFlow.content.operator2.name) {
             parameters.push(new Parameter(
                 arithmeticFlow.content.operator2.name,
                 arithmeticFlow.content.operator2.type))
@@ -115,7 +115,15 @@ export class KotlinCodeStrategy implements CodeStrategy {
             operator2Code += arithmeticFlow.content.operator2.value
         }
 
-        functionLines.push(`return ${operator1Code} ${operationCode} ${operator2Code}`)
+        if (arithmeticFlow.content.operation == ArithmeticOperationType.ROOT) {
+            functionLines.push(`return Math.pow(${operator1Code}, 1 / ${operator2Code})`)
+        } else {
+            if (arithmeticFlow.content.variable.type == VariableType.DOUBLE) {
+
+            }
+
+            functionLines.push(`return ${operator1Code} ${operationCode} ${operator2Code}`)
+        }
 
         const func = new Func(
             arithmeticFlow.functionName(),
@@ -295,6 +303,18 @@ export class KotlinCodeStrategy implements CodeStrategy {
                     case ConditionOperation.NOT_EQUALS:
                         conditionCode += "!="
                         break
+                    case ConditionOperation.GREATER_THAN:
+                        conditionCode += ">"
+                        break;
+                    case ConditionOperation.GREATER_THAN_OR_EQUALS:
+                        conditionCode += ">="
+                        break;
+                    case ConditionOperation.LESS_THAN:
+                        conditionCode += "<"
+                        break;
+                    case ConditionOperation.LESS_THAN_OR_EQUALS:
+                        conditionCode += "<="
+                        break;
                 }
 
                 if (!condition.second.name) {
@@ -347,6 +367,18 @@ export class KotlinCodeStrategy implements CodeStrategy {
                     case ConditionOperation.NOT_EQUALS:
                         conditionCode += "!="
                         break
+                    case ConditionOperation.GREATER_THAN:
+                        conditionCode += ">"
+                        break;
+                    case ConditionOperation.GREATER_THAN_OR_EQUALS:
+                        conditionCode += ">="
+                        break;
+                    case ConditionOperation.LESS_THAN:
+                        conditionCode += "<"
+                        break;
+                    case ConditionOperation.LESS_THAN_OR_EQUALS:
+                        conditionCode += "<="
+                        break;
                 }
 
                 if (!condition.second.name) {
