@@ -9,7 +9,8 @@ export enum ArithmeticOperationType {
     ADDITION = "Addition",
     SUBTRACTION = "Subtraction",
     MULTIPLICATION = "Multiplication",
-    DIVISION = "Division"
+    DIVISION = "Division",
+    ROOT = "Root"
 }
 
 export enum FlowType {
@@ -26,7 +27,11 @@ export enum FlowType {
 
 export enum ConditionOperation {
     EQUALS = "Equals",
-    NOT_EQUALS = "NotEquals"
+    NOT_EQUALS = "NotEquals",
+    GREATER_THAN = "GreaterThan",
+    GREATER_THAN_OR_EQUALS = "GreaterThanOrEquals",
+    LESS_THAN = "LessThan",
+    LESS_THAN_OR_EQUALS = "LessThanOrEquals",
 }
 
 export enum ConditionType {

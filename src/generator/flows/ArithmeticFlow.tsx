@@ -34,7 +34,7 @@ export class ArithmeticFlow implements BaseFlow {
             functionCode += this.content.operator1.name
         }
 
-        if (this.content.operator2.name !== undefined) {
+        if (this.content.operator2.name !== undefined && this.content.operator1.name !== this.content.operator2.name) {
             functionCode += `, ${this.content.operator2.name}`
         }
 

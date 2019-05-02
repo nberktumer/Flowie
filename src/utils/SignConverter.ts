@@ -13,6 +13,8 @@ export class SignConverter {
                 return "*"
             case ArithmeticOperationType.DIVISION:
                 return "/"
+            case ArithmeticOperationType.ROOT:
+                return "root"
             default:
                 return "UNKNOWN"
         }
@@ -20,6 +22,14 @@ export class SignConverter {
 
     static booleanOperation(type: ConditionOperation): string {
         switch (type) {
+            case ConditionOperation.GREATER_THAN:
+                return ">"
+            case ConditionOperation.GREATER_THAN_OR_EQUALS:
+                return ">="
+            case ConditionOperation.LESS_THAN:
+                return "<"
+            case ConditionOperation.LESS_THAN_OR_EQUALS:
+                return "<="
             case ConditionOperation.EQUALS:
                 return "=="
             case ConditionOperation.NOT_EQUALS:

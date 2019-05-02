@@ -10,7 +10,6 @@ import {ArithmeticOperationType, ProgrammingLanguage, VariableType} from "../../
 import {Class} from "../Class";
 import {ConditionOperation} from "../../../models/VariableEnums";
 import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
-import {Variable} from "../../../models/Variable";
 import {RandomFlow} from "../../flows/RandomFlow";
 import {IfFlow} from "../../flows/IfFlow";
 
@@ -84,7 +83,7 @@ export class JavaCodeStrategy implements CodeStrategy {
                 ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, arithmeticFlow.content.operator1.type)))
         }
 
-        if (arithmeticFlow.content.operator2.name !== undefined) {
+        if (arithmeticFlow.content.operator2.name !== undefined && arithmeticFlow.content.operator1.name !== arithmeticFlow.content.operator2.name) {
             parameters.push(new Parameter(
                 arithmeticFlow.content.operator2.name,
                 ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, arithmeticFlow.content.operator2.type)))
@@ -121,7 +120,11 @@ export class JavaCodeStrategy implements CodeStrategy {
             operator2Code += arithmeticFlow.content.operator2.value
         }
 
-        functionLines.push(`return ${operator1Code} ${operationCode} ${operator2Code};`)
+        if (arithmeticFlow.content.operation == ArithmeticOperationType.ROOT) {
+            functionLines.push(`return Math.pow(${operator1Code}, 1 / ${operator2Code});`)
+        } else {
+            functionLines.push(`return ${operator1Code} ${operationCode} ${operator2Code};`)
+        }
 
         const func = new Func(
             arithmeticFlow.functionName(),
@@ -296,6 +299,18 @@ export class JavaCodeStrategy implements CodeStrategy {
                     case ConditionOperation.NOT_EQUALS:
                         conditionCode += "!="
                         break
+                    case ConditionOperation.GREATER_THAN:
+                        conditionCode += ">"
+                        break;
+                    case ConditionOperation.GREATER_THAN_OR_EQUALS:
+                        conditionCode += ">="
+                        break;
+                    case ConditionOperation.LESS_THAN:
+                        conditionCode += "<"
+                        break;
+                    case ConditionOperation.LESS_THAN_OR_EQUALS:
+                        conditionCode += "<="
+                        break;
                 }
 
                 if (!condition.second.name) {
@@ -340,6 +355,18 @@ export class JavaCodeStrategy implements CodeStrategy {
                     case ConditionOperation.NOT_EQUALS:
                         conditionCode += "!="
                         break
+                    case ConditionOperation.GREATER_THAN:
+                        conditionCode += ">"
+                        break;
+                    case ConditionOperation.GREATER_THAN_OR_EQUALS:
+                        conditionCode += ">="
+                        break;
+                    case ConditionOperation.LESS_THAN:
+                        conditionCode += "<"
+                        break;
+                    case ConditionOperation.LESS_THAN_OR_EQUALS:
+                        conditionCode += "<="
+                        break;
                 }
 
                 if (!condition.second.name) {
@@ -379,8 +406,8 @@ export class JavaCodeStrategy implements CodeStrategy {
     }
 
     writeRandomMain(randomFlow: RandomFlow): void {
-        CodeWriter.getInstance().addGlobalVariable("Random random = Random();")
-        CodeWriter.getInstance().addDependency("import java.util.Random")
+        CodeWriter.getInstance().addGlobalVariable("static Random random = new Random();")
+        CodeWriter.getInstance().addDependency("import java.util.Random;")
 
         if (randomFlow.content == null)
             return
@@ -411,7 +438,7 @@ export class JavaCodeStrategy implements CodeStrategy {
         index++
 
         globalVariables.forEach((value => {
-            CodeWriter.getInstance().writeLineToIndex(value, index)
+            CodeWriter.getInstance().writeLineToIndex(value, index + 1)
             index++
         }))
     }
