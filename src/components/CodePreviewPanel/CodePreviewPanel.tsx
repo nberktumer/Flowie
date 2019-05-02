@@ -56,7 +56,7 @@ export class CodePreviewPanel extends Component<ICodePreviewPanelProps, ICodePre
                             theme="tomorrow_night"
                             name="blah2"
                             fontSize={14}
-                            height={height + "px"}
+                            height={(height - 40) + "px"}
                             width={width + "px"}
                             wrapEnabled
                             value={this.props.code}
