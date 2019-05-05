@@ -1,9 +1,11 @@
+import {FlowType} from "../../models";
+
 export interface BaseFlow {
+    type: FlowType
+
+    functionCallName: string,
+
     hasExternalDependencies(): boolean,
-
-    createMainCode(): void,
-
-    createFunctionCode(): void,
 
     nextFlow(): string,
 

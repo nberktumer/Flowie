@@ -1,7 +1,8 @@
 import {BaseFlow} from "./BaseFlow"
 import {CodeWriter} from "../code/CodeWriter"
 import {Condition} from "../../models/Condition"
-import {ConditionOperation, FlowType} from "../../models/VariableEnums"
+import {FlowType} from "../../models"
+import {ConditionType} from "../../models/VariableEnums";
 
 export class WhileFlow implements BaseFlow {
 
@@ -9,6 +10,7 @@ export class WhileFlow implements BaseFlow {
     nextFlowId: string | null
     type: FlowType
     content: WhileFlowContent | null
+    functionCallName: string
 
     constructor(
         id: string,
@@ -19,49 +21,7 @@ export class WhileFlow implements BaseFlow {
         this.nextFlowId = nextFlowId
         this.type = type
         this.content = content
-    }
-
-    createFunctionCode(): void {
-        //
-    }
-
-    createMainCode(): void {
-        if (this.content == null)
-            return
-
-        const nextScopeId = this.content.scopeId
-
-        let conditionCode = ""
-        this.content.conditions.forEach((condition) => {
-            conditionCode += condition.first.name
-
-            if (condition.second !== null) {
-                conditionCode += " "
-
-                switch (condition.operation) {
-                    case ConditionOperation.EQUALS:
-                        conditionCode += "=="
-                        break
-                    case ConditionOperation.NOT_EQUALS:
-                        conditionCode += "!="
-                        break
-                }
-
-                conditionCode += " " + condition.second.name
-            }
-        })
-
-        CodeWriter.getInstance().writeLineToMainFunction("while(" + conditionCode + ") {")
-        CodeWriter.getInstance().scopeCount++
-
-        if (nextScopeId != null) {
-            CodeWriter.getInstance().addToLoopStack(this.id)
-            CodeWriter.getInstance().writeMainCodeFromFlow(nextScopeId)
-        }
-
-        CodeWriter.getInstance().scopeCount--
-        CodeWriter.getInstance().writeLineToMainFunction("}")
-        CodeWriter.getInstance().writeMainCodeFromFlow(this.nextFlow())
+        this.functionCallName = (CodeWriter.getInstance().flowIncrementalId++).toString()
     }
 
     functionInvocation(): string {
@@ -84,13 +44,16 @@ export class WhileFlow implements BaseFlow {
 
 export class WhileFlowContent {
     conditions: Condition[]
+    conditionType: ConditionType
     scopeId: string | null
 
     constructor(
         conditions: Condition[],
+        conditionType: ConditionType,
         scopeId: string | null,
     ) {
         this.conditions = conditions
+        this.conditionType = conditionType
         this.scopeId = scopeId
     }
 
