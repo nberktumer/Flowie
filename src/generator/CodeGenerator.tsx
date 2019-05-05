@@ -6,26 +6,16 @@ import {InputFlow} from "./flows/InputFlow";
 import {OutputFlow} from "./flows/OutputFlow";
 import {ArithmeticFlow} from "./flows/ArithmeticFlow";
 import {WhileFlow} from "./flows/WhileFlow";
-import {FlowType} from "../models";
+import {FlowType, ProgrammingLanguage} from "../models";
+import {InitialFlow} from "./flows/InitialFlow";
+import {IfFlow} from "./flows/IfFlow";
+import {RandomFlow, RandomFlowContent} from "./flows/RandomFlow";
 
 export class CodeGenerator {
 
-    private readonly flowJson: string
-
-    constructor(flowJson: string) {
-        this.flowJson = flowJson
-    }
-
-    generate(): string {
+    generate(programmingLanguage: ProgrammingLanguage, flowModels: FlowModel[]): string {
         CodeWriter.getInstance().reset()
-        CodeWriter.getInstance().setFlows(this.convertToFlowObjects(JSON.parse(this.flowJson)))
-
-        CodeWriter.getInstance().flows.forEach((value) => {
-            console.log("Creating function code")
-            value.createFunctionCode()
-        })
-
-        CodeWriter.getInstance().generateMain()
+        CodeWriter.getInstance().init(programmingLanguage, this.convertToFlowObjects(flowModels))
 
         return CodeWriter.getInstance().codes.join("\n")
     }
@@ -36,6 +26,13 @@ export class CodeGenerator {
         flowModels.forEach((value) => {
 
                 switch (value.type) {
+                    case FlowType.INITIAL:
+                        baseFlowMap.set(CodeWriter.INITIAL_ID, new InitialFlow(
+                            CodeWriter.INITIAL_ID,
+                            value.nextFlowId,
+                            value.type
+                        ))
+                        break
                     case FlowType.ASSIGNMENT:
                         baseFlowMap.set(value.id, new AssignmentFlow(
                             value.id,
@@ -76,6 +73,23 @@ export class CodeGenerator {
                             value.whileFlowContent
                         ))
                         break
+                    case FlowType.IF:
+                        baseFlowMap.set(value.id, new IfFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.ifFlowContent
+                        ))
+                        break
+                    case FlowType.RANDOM:
+                        baseFlowMap.set(value.id, new RandomFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.randomFlowContent
+                        ))
+                        break
+
                     /*
                     case "if":
                         baseFlowList.push(new IfFlow(

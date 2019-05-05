@@ -4,6 +4,8 @@ import {InputFlowContent} from "./flows/InputFlow"
 import {AssignmentFlowContent} from "./flows/AssignmentFlow"
 import {WhileFlowContent} from "./flows/WhileFlow"
 import {FlowType} from "../models"
+import {IfFlowContent} from "./flows/IfFlow";
+import {RandomFlowContent} from "./flows/RandomFlow";
 
 export class FlowModel {
     type: FlowType
@@ -13,6 +15,8 @@ export class FlowModel {
     outputFlowContent: OutputFlowContent | null
     arithmeticFlowContent: ArithmeticFlowContent | null
     whileFlowContent: WhileFlowContent | null
+    ifFlowContent: IfFlowContent | null
+    randomFlowContent: RandomFlowContent | null
     // forFlowContent: ForFlowContent,
     // ifFlowContent: IfFlowContent,
     nextFlowId: string | null
@@ -25,9 +29,10 @@ export class FlowModel {
         outputFlowContent: OutputFlowContent | null = null,
         arithmeticFlowContent: ArithmeticFlowContent | null = null,
         whileFlowContent: WhileFlowContent | null = null,
+        ifFlowContent: IfFlowContent | null = null,
+        randomFlowContent: RandomFlowContent | null = null,
         nextFlowId: string | null
         // forFlowContent: ForFlowContent,
-        // ifFlowContent: IfFlowContent,
 
     ) {
         this.type = type
@@ -36,7 +41,10 @@ export class FlowModel {
         this.inputFlowContent = inputFlowContent
         this.outputFlowContent = outputFlowContent
         this.arithmeticFlowContent = arithmeticFlowContent
+        this.ifFlowContent = ifFlowContent
         this.whileFlowContent = whileFlowContent
+        this.ifFlowContent = ifFlowContent
+        this.randomFlowContent = randomFlowContent
         this.nextFlowId = nextFlowId
     }
 }

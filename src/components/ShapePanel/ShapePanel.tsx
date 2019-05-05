@@ -1,16 +1,16 @@
 import React, {Component} from "react"
 import styles from "./ShapePanel.module.css"
 
-export interface IShapePanelProps {
+export interface ShapePanelProps {
 }
 
-export interface IShapePanelState {
+export interface ShapePanelState {
 }
 
-export class ShapePanel extends Component<IShapePanelProps, IShapePanelState> {
-    static defaultProps: IShapePanelProps = {}
+export class ShapePanel extends Component<ShapePanelProps, ShapePanelState> {
+    static defaultProps: ShapePanelProps = {}
 
-    constructor(props: IShapePanelProps) {
+    constructor(props: ShapePanelProps) {
         super(props)
         this.state = {}
     }

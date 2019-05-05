@@ -1,13 +1,13 @@
 export enum ProgrammingLanguage {
+    JAVA,
+    KOTLIN/*,
     TYPESCRIPT,
     JAVASCRIPT,
-    JAVA,
-    KOTLIN,
     SWIFT,
     PHP,
     C,
     CPP,
     CSHARP,
     PYTHON,
-    LISP
+    LISP*/
 }
