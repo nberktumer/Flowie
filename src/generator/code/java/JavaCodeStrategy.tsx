@@ -70,23 +70,17 @@ export class JavaCodeStrategy implements CodeStrategy {
     }
 
     writeArithmeticFunction(arithmeticFlow: ArithmeticFlow): void {
+    }
+
+    writeArithmeticMain(arithmeticFlow: ArithmeticFlow): void {
+
         if (arithmeticFlow.content == null)
             return
 
-        const functionLines: string[] = []
+        let variableSetCode = ""
 
-        const parameters: Parameter[] = []
-
-        if (arithmeticFlow.content.operator1.name !== undefined) {
-            parameters.push(new Parameter(
-                arithmeticFlow.content.operator1.name,
-                ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, arithmeticFlow.content.operator1.type)))
-        }
-
-        if (arithmeticFlow.content.operator2.name !== undefined && arithmeticFlow.content.operator1.name !== arithmeticFlow.content.operator2.name) {
-            parameters.push(new Parameter(
-                arithmeticFlow.content.operator2.name,
-                ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, arithmeticFlow.content.operator2.type)))
+        if (CodeWriter.getInstance().addVariable(arithmeticFlow.content.variable.name)) {
+            variableSetCode = `${ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, arithmeticFlow.content.variable.type)} `
         }
 
         let operationCode = ""
@@ -121,34 +115,11 @@ export class JavaCodeStrategy implements CodeStrategy {
         }
 
         if (arithmeticFlow.content.operation == ArithmeticOperationType.ROOT) {
-            functionLines.push(`return Math.pow(${operator1Code}, 1 / ${operator2Code});`)
+            CodeWriter.getInstance().writeLineToMainFunction(`${variableSetCode}${arithmeticFlow.content.variable.name} = Math.pow(${operator1Code}, 1 / ${operator2Code});`)
         } else {
-            functionLines.push(`return ${operator1Code} ${operationCode} ${operator2Code};`)
+            CodeWriter.getInstance().writeLineToMainFunction(`${variableSetCode}${arithmeticFlow.content.variable.name} = ${operator1Code} ${operationCode} ${operator2Code};`)
         }
 
-        const func = new Func(
-            arithmeticFlow.functionName(),
-            parameters,
-            ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, arithmeticFlow.content.variable.type),
-            functionLines
-        )
-
-        CodeWriter.getInstance().writeFunction(func)
-    }
-
-    writeArithmeticMain(arithmeticFlow: ArithmeticFlow): void {
-        if (arithmeticFlow.content == null)
-            return
-
-        let variableSetCode = ""
-
-        if (CodeWriter.getInstance().addVariable(arithmeticFlow.content.variable.name)) {
-            variableSetCode = `${ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, arithmeticFlow.content.variable.type)} `
-        }
-
-        CodeWriter.getInstance().writeLineToMainFunction(
-            `${variableSetCode}${arithmeticFlow.content.variable.name} = ${arithmeticFlow.functionInvocation()};`
-        )
         CodeWriter.getInstance().writeMainCodeFromFlow(arithmeticFlow.nextFlow())
     }
 

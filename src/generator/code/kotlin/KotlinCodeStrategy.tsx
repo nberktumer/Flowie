@@ -65,23 +65,17 @@ export class KotlinCodeStrategy implements CodeStrategy {
     }
 
     writeArithmeticFunction(arithmeticFlow: ArithmeticFlow): void {
+
+    }
+
+    writeArithmeticMain(arithmeticFlow: ArithmeticFlow): void {
         if (arithmeticFlow.content == null)
             return
 
-        const functionLines: string[] = []
+        let variableSetCode = ""
 
-        const parameters: Parameter[] = []
-
-        if (arithmeticFlow.content.operator1.name !== undefined) {
-            parameters.push(new Parameter(
-                arithmeticFlow.content.operator1.name,
-                arithmeticFlow.content.operator1.type))
-        }
-
-        if (arithmeticFlow.content.operator2.name !== undefined && arithmeticFlow.content.operator1.name !== arithmeticFlow.content.operator2.name) {
-            parameters.push(new Parameter(
-                arithmeticFlow.content.operator2.name,
-                arithmeticFlow.content.operator2.type))
+        if (CodeWriter.getInstance().addVariable(arithmeticFlow.content.variable.name)) {
+            variableSetCode = "var "
         }
 
         let operationCode = ""
@@ -116,39 +110,11 @@ export class KotlinCodeStrategy implements CodeStrategy {
         }
 
         if (arithmeticFlow.content.operation == ArithmeticOperationType.ROOT) {
-            functionLines.push(`return Math.pow(${operator1Code}, 1 / ${operator2Code})`)
+            CodeWriter.getInstance().writeLineToMainFunction(`${variableSetCode}${arithmeticFlow.content.variable.name} = Math.pow(${operator1Code}, 1 / ${operator2Code})`)
         } else {
-            if (arithmeticFlow.content.variable.type == VariableType.DOUBLE) {
-
-            }
-
-            functionLines.push(`return ${operator1Code} ${operationCode} ${operator2Code}`)
+            CodeWriter.getInstance().writeLineToMainFunction(`${variableSetCode}${arithmeticFlow.content.variable.name} = ${operator1Code} ${operationCode} ${operator2Code}`)
         }
 
-        const func = new Func(
-            arithmeticFlow.functionName(),
-            parameters,
-            arithmeticFlow.content.variable.type,
-            functionLines
-        )
-
-        CodeWriter.getInstance().writeFunction(func)
-
-    }
-
-    writeArithmeticMain(arithmeticFlow: ArithmeticFlow): void {
-        if (arithmeticFlow.content == null)
-            return
-
-        let variableSetCode = ""
-
-        if (CodeWriter.getInstance().addVariable(arithmeticFlow.content.variable.name)) {
-            variableSetCode = "var "
-        }
-
-        CodeWriter.getInstance().writeLineToMainFunction(
-            `${variableSetCode}${arithmeticFlow.content.variable.name} = ${arithmeticFlow.functionInvocation()}`
-        )
         CodeWriter.getInstance().writeMainCodeFromFlow(arithmeticFlow.nextFlow())
 
     }
