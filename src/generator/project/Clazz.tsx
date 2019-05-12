@@ -31,9 +31,10 @@ export class Clazz implements DirectoryItem {
     spacing = "\t"
     loopStack: Stack<string> = new Stack()
 
+    identationCount = 0
     declaredVariableSet: Set<string> = new Set()
-    globalVariableSet = new Code()
-    dependencySet = new Code()
+    globalVariableSet = new Code(this.identationCount)
+    dependencySet = new Code(this.identationCount)
 
     constructor(name: string, flowModels: FlowModel[]) {
         this.type = DirectoryItemType.CLASS
@@ -133,24 +134,39 @@ export class Clazz implements DirectoryItem {
     }
 
     generateCode() {
-        this.dependencySet.lines.forEach((dependencyLine) => {
+        Project.codeStrategy.initClazz(this).lines.forEach(clazzLine => {
+            this.generatedCode.push(this.createLineWithSpacing(clazzLine))
+        })
+
+        this.dependencySet.lines.forEach(dependencyLine => {
             this.generatedCode.push(this.createLineWithSpacing(dependencyLine))
         })
 
-        this.globalVariableSet.lines.forEach((globalVariableLine) => {
+        this.globalVariableSet.lines.forEach(globalVariableLine => {
             this.generatedCode.push(this.createLineWithSpacing(globalVariableLine))
         })
 
-        this.functions.forEach((func) => {
-                func.code.lines.forEach((codeLine) => {
+        this.functions.forEach(func => {
+                func.code.lines.forEach(codeLine => {
                     this.generatedCode.push(this.createLineWithSpacing(codeLine))
                 })
             }
         )
+        Project.codeStrategy.finishClass(this).lines.forEach(clazzLine => {
+            this.generatedCode.push(this.createLineWithSpacing(clazzLine))
+        })
     }
 
     getCode(): string {
         return this.generatedCode.join("\n")
+    }
+
+    incrementIdentation() {
+        this.identationCount++
+    }
+
+    decrementIdentation() {
+        this.identationCount--
     }
 
     /**

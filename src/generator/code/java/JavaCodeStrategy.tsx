@@ -10,6 +10,7 @@ import {JavaOutputFlowCode} from "./JavaOutputFlowCode";
 import {JavaRandomFlowCode} from "./JavaRandomFlowCode";
 import {Variable} from "../../../models/Variable";
 import {Code} from "../Code";
+import {MainClazz} from "../../project/MainClazz";
 
 export class JavaCodeStrategy implements CodeStrategy {
 
@@ -21,34 +22,39 @@ export class JavaCodeStrategy implements CodeStrategy {
     randomFlowCode = new JavaRandomFlowCode()
     whileFlowCode = new JavaWhileFlowCode()
 
-    initClazz(clazz: Clazz): void {
-        /*
-                clazz.mainFunction.functionName =
-                    clazz.mainFunction.writeLineToMainFunction(`public class ${clazz.name} {`)
-                CodeWriter.getInstance().scopeCount++
-        */
+    initClazz(clazz: Clazz): Code {
+        const code = new Code(clazz.identationCount)
+        code.insert(`public class ${clazz.name} {`)
+        clazz.incrementIdentation()
+        return code
     }
 
-    finishClass(clazz: Clazz): void {
-        /*
-              CodeWriter.getInstance().scopeCount--
-               CodeWriter.getInstance().writeLine("}")
-               CodeWriter.getInstance().writeLine("")
-       */
+    finishClass(clazz: Clazz): Code {
+        const code = new Code(clazz.identationCount)
+        code.insert(`}`)
+        code.insert("")
+        clazz.decrementIdentation()
+        return code
     }
 
     initMain(clazz: Clazz): void {
         const parameters: Variable[] = []
-        const mainFunctionLines = new Code()
+        const mainFunctionLines = new Code(clazz.identationCount)
+
+        if (clazz instanceof MainClazz) {
+            mainFunctionLines.insert(`public static void main(String args[]) {`)
+        } else {
+            //TODO
+        }
+
+        mainFunctionLines.incrementIdentation()
+
         clazz.mainFunction = new Func(
-            "Main",
+            clazz.name,
             parameters,
             undefined,
             mainFunctionLines
         )
-
-        mainFunctionLines.insert(`public static void main(String args[]) {`)
-        mainFunctionLines.incrementIdentation()
     }
 
     finishMain(clazz: Clazz): void {

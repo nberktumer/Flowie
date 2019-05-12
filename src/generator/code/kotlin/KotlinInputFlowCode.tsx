@@ -12,7 +12,7 @@ export class KotlinInputFlowCode implements InputFlowCode {
         if (inputFlow.content == null)
             return
 
-        const code = new Code()
+        const code = new Code(clazz.identationCount)
 
         code.insert(`println("Please enter value for ${inputFlow.content.variable.name}")`)
 

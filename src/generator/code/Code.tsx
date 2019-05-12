@@ -1,17 +1,21 @@
 export class Code {
     lines: CodeLine[] = []
-    currentIdentationAmount = 0
+    identationCount = 0
+
+    constructor(identationCount: number) {
+        this.identationCount = identationCount
+    }
 
     insert(line: string) {
-        this.lines.push(new CodeLine(line, this.currentIdentationAmount))
+        this.lines.push(new CodeLine(line, this.identationCount))
     }
 
     incrementIdentation() {
-        this.currentIdentationAmount++
+        this.identationCount++
     }
 
     decrementIdentation() {
-        this.currentIdentationAmount--
+        this.identationCount--
     }
 
 }

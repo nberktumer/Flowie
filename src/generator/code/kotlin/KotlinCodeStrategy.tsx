@@ -10,6 +10,7 @@ import {KotlinInputFlowCode} from "./KotlinInputFlowCode";
 import {KotlinOutputFlowCode} from "./KotlinOutputFlowCode";
 import {KotlinRandomFlowCode} from "./KotlinRandomFlowCode";
 import {KotlinWhileFlowCode} from "./KotlinWhileFlowCode";
+import {MainClazz} from "../../project/MainClazz";
 
 export class KotlinCodeStrategy implements CodeStrategy {
 
@@ -21,26 +22,32 @@ export class KotlinCodeStrategy implements CodeStrategy {
     randomFlowCode = new KotlinRandomFlowCode()
     whileFlowCode = new KotlinWhileFlowCode()
 
-    initClazz(clazz: Clazz): void {
-
+    initClazz(clazz: Clazz): Code {
+        return new Code(clazz.identationCount)
     }
 
-    finishClass(clazz: Clazz): void {
-
+    finishClass(clazz: Clazz): Code {
+        return new Code(clazz.identationCount)
     }
 
     initMain(clazz: Clazz): void {
         const parameters: Variable[] = []
-        const mainFunctionLines = new Code()
+        const mainFunctionLines = new Code(clazz.identationCount)
+
+        if (clazz instanceof MainClazz) {
+            mainFunctionLines.insert(`fun main(args: Array<String\>) {`)
+        } else {
+            //TODO
+        }
+
+        mainFunctionLines.incrementIdentation()
+
         clazz.mainFunction = new Func(
-            "Main",
+            clazz.name,
             parameters,
             undefined,
             mainFunctionLines
         )
-
-        mainFunctionLines.insert(`fun main(args: Array<String\>) {`)
-        mainFunctionLines.incrementIdentation()
     }
 
     finishMain(clazz: Clazz): void {
