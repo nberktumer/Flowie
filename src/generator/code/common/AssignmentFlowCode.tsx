@@ -6,6 +6,4 @@ export interface AssignmentFlowCode extends FlowCode {
 
     generateMain(assignmentFlow: AssignmentFlow, clazz: Clazz): void
 
-    generateFunc(assignmentFlow: AssignmentFlow, clazz: Clazz): void
-
 }

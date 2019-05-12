@@ -5,9 +5,6 @@ import {Clazz} from "../../project/Clazz";
 
 export class KotlinWhileFlowCode implements WhileFlowCode {
 
-    generateFunc(whileFlow: WhileFlow, clazz: Clazz): void {
-    }
-
     generateMain(whileFlow: WhileFlow, clazz: Clazz): void {
         if (whileFlow.content == null || clazz.mainFunction == null)
             return
@@ -21,7 +18,7 @@ export class KotlinWhileFlowCode implements WhileFlowCode {
 
             conditionCode += condition.first.name
 
-            if (condition.second !== undefined) {
+            if (condition.second) {
                 conditionCode += " "
 
                 switch (condition.operation) {
@@ -58,14 +55,14 @@ export class KotlinWhileFlowCode implements WhileFlowCode {
         }
 
         clazz.writeCodeToMainFunction("while(" + conditionCode + ") {")
-        clazz.mainFunction.code.incrementIdentation()
+        clazz.mainFunction.code.incrementIndentation()
 
         if (nextScopeId != null) {
             clazz.addToLoopStack(whileFlow.id)
             clazz.writeMainCodeFromFlow(nextScopeId)
         }
 
-        clazz.mainFunction.code.decrementIdentation()
+        clazz.mainFunction.code.decrementIndentation()
         clazz.writeCodeToMainFunction("}")
         clazz.writeMainCodeFromFlow(whileFlow.nextFlow())
     }

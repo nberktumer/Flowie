@@ -5,9 +5,6 @@ import {ArithmeticOperationType} from "../../../models";
 
 export class KotlinArithmeticFlowCode implements ArithmeticFlowCode {
 
-    generateFunc(arithmeticFlow: ArithmeticFlow, clazz: Clazz): void {
-    }
-
     generateMain(arithmeticFlow: ArithmeticFlow, clazz: Clazz): void {
         if (arithmeticFlow.content == null)
             return

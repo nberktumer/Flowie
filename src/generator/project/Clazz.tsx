@@ -31,13 +31,16 @@ export class Clazz implements DirectoryItem {
     spacing = "\t"
     loopStack: Stack<string> = new Stack()
 
+    indentationCount = 0
     declaredVariableSet: Set<string> = new Set()
-    globalVariableSet = new Code()
-    dependencySet = new Code()
+    globalVariableSet = new Code(this.indentationCount)
+    dependencySet = new Code(this.indentationCount)
 
-    constructor(name: string, flowModels: FlowModel[]) {
-        this.type = DirectoryItemType.CLASS
+    constructor(type: DirectoryItemType, name: string, flowModels: FlowModel[]) {
+        this.type = type
         this.name = name
+
+        console.log(this)
 
         this.functions = []
         this.mainFunction = null
@@ -49,7 +52,7 @@ export class Clazz implements DirectoryItem {
 
         const initialFlow = this.flowMap.get(Clazz.INITIAL_ID)
 
-        if (initialFlow !== undefined) {
+        if (initialFlow) {
             this.writeMainCodeFromFlow(Clazz.INITIAL_ID)
         }
 
@@ -102,7 +105,7 @@ export class Clazz implements DirectoryItem {
     writeMainCodeFromFlow(id: string) {
         if (!this.removeFromStackIfTopEquals(id)) {
             const flow = this.flowMap.get(id)
-            if (flow !== undefined) {
+            if (flow) {
                 if (flow instanceof ArithmeticFlow) {
                     Project.codeStrategy.arithmeticFlowCode.generateMain(flow, this)
                 } else if (flow instanceof AssignmentFlow) {
@@ -125,42 +128,47 @@ export class Clazz implements DirectoryItem {
     }
 
     writeFunctionCodeFromFlow(flow: BaseFlow) {
-        if (flow instanceof ArithmeticFlow) {
-            Project.codeStrategy.arithmeticFlowCode.generateFunc(flow, this)
-        } else if (flow instanceof AssignmentFlow) {
-            Project.codeStrategy.assignmentFlowCode.generateFunc(flow, this)
-        } else if (flow instanceof InputFlow) {
+        if (flow instanceof InputFlow) {
             Project.codeStrategy.inputFlowCode.generateFunc(flow, this)
         } else if (flow instanceof OutputFlow) {
             Project.codeStrategy.outputFlowCode.generateFunc(flow, this)
-        } else if (flow instanceof WhileFlow) {
-            Project.codeStrategy.whileFlowCode.generateFunc(flow, this)
-        } else if (flow instanceof IfFlow) {
-            Project.codeStrategy.ifFlowCode.generateFunc(flow, this)
-        } else if (flow instanceof RandomFlow) {
-            Project.codeStrategy.randomFlowCode.generateFunc(flow, this)
         }
     }
 
     generateCode() {
-        this.dependencySet.lines.forEach((dependencyLine) => {
+        Project.codeStrategy.initClazz(this).lines.forEach(clazzLine => {
+            this.generatedCode.push(this.createLineWithSpacing(clazzLine))
+        })
+
+        this.dependencySet.lines.forEach(dependencyLine => {
             this.generatedCode.push(this.createLineWithSpacing(dependencyLine))
         })
 
-        this.globalVariableSet.lines.forEach((globalVariableLine) => {
+        this.globalVariableSet.lines.forEach(globalVariableLine => {
             this.generatedCode.push(this.createLineWithSpacing(globalVariableLine))
         })
 
-        this.functions.forEach((func) => {
-                func.code.lines.forEach((codeLine) => {
+        this.functions.forEach(func => {
+                func.code.lines.forEach(codeLine => {
                     this.generatedCode.push(this.createLineWithSpacing(codeLine))
                 })
             }
         )
+        Project.codeStrategy.finishClass(this).lines.forEach(clazzLine => {
+            this.generatedCode.push(this.createLineWithSpacing(clazzLine))
+        })
     }
 
     getCode(): string {
         return this.generatedCode.join("\n")
+    }
+
+    incrementIdentation() {
+        this.indentationCount++
+    }
+
+    decrementIdentation() {
+        this.indentationCount--
     }
 
     /**
@@ -178,7 +186,7 @@ export class Clazz implements DirectoryItem {
 
     protected createLineWithSpacing(codeLine: CodeLine): string {
         let line = ""
-        for (let i = 0; i < codeLine.identationAmount; i++) {
+        for (let i = 0; i < codeLine.indentationCount; i++) {
             line += this.spacing
         }
 

@@ -18,7 +18,7 @@ export class JavaInputFlowCode implements InputFlowCode {
 
         clazz.addDependency("import java.util.Scanner;")
 
-        const code = new Code()
+        const code = new Code(clazz.indentationCount)
         code.insert(`System.out.println("Please enter value for ${inputFlow.content.variable.name}");`)
         code.insert(`Scanner scanner = new Scanner(System.in);`)
 

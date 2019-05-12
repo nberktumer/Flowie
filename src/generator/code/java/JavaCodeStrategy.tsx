@@ -10,6 +10,7 @@ import {JavaOutputFlowCode} from "./JavaOutputFlowCode";
 import {JavaRandomFlowCode} from "./JavaRandomFlowCode";
 import {Variable} from "../../../models/Variable";
 import {Code} from "../Code";
+import {DirectoryItemType} from "../../project/DirectoryItem";
 
 export class JavaCodeStrategy implements CodeStrategy {
 
@@ -21,51 +22,56 @@ export class JavaCodeStrategy implements CodeStrategy {
     randomFlowCode = new JavaRandomFlowCode()
     whileFlowCode = new JavaWhileFlowCode()
 
-    initClazz(clazz: Clazz): void {
-        /*
-                clazz.mainFunction.functionName =
-                    clazz.mainFunction.writeLineToMainFunction(`public class ${clazz.name} {`)
-                CodeWriter.getInstance().scopeCount++
-        */
+    initClazz(clazz: Clazz): Code {
+        const code = new Code(clazz.indentationCount)
+        code.insert(`public class ${clazz.name} {`)
+        clazz.incrementIdentation()
+        return code
     }
 
-    finishClass(clazz: Clazz): void {
-        /*
-              CodeWriter.getInstance().scopeCount--
-               CodeWriter.getInstance().writeLine("}")
-               CodeWriter.getInstance().writeLine("")
-       */
+    finishClass(clazz: Clazz): Code {
+        const code = new Code(clazz.indentationCount)
+        code.insert(`}`)
+        code.insert("")
+        clazz.decrementIdentation()
+        return code
     }
 
     initMain(clazz: Clazz): void {
         const parameters: Variable[] = []
-        const mainFunctionLines = new Code()
+        const mainFunctionLines = new Code(clazz.indentationCount)
+
+        if (clazz.type == DirectoryItemType.MAIN_CLASS) {
+            mainFunctionLines.insert(`public static void main(String args[]) {`)
+        } else {
+            //TODO
+        }
+
+        mainFunctionLines.incrementIndentation()
+
         clazz.mainFunction = new Func(
-            "Main",
+            clazz.name,
             parameters,
             undefined,
             mainFunctionLines
         )
-
-        mainFunctionLines.insert(`public static void main(String args[]) {`)
-        mainFunctionLines.incrementIdentation()
     }
 
     finishMain(clazz: Clazz): void {
         if (clazz.mainFunction == null)
             throw new Error("Main function is undefined!")
 
-        clazz.mainFunction.code.decrementIdentation()
+        clazz.mainFunction.code.decrementIndentation()
         clazz.mainFunction.code.insert("}")
         clazz.mainFunction.code.insert("")
     }
 
     generateFunctionCode(func: Func) {
         let returnTypeString = ""
-        if (func.returnType === undefined) {
-            returnTypeString += "void"
-        } else {
+        if (func.returnType) {
             returnTypeString += `${func.returnType}`
+        } else {
+            returnTypeString += "void"
         }
 
         let parameterString = ""
@@ -78,9 +84,9 @@ export class JavaCodeStrategy implements CodeStrategy {
         })
 
         func.code.insert(`private static ${returnTypeString} ${func.functionName}(${parameterString}) {`)
-        func.code.incrementIdentation()
+        func.code.incrementIndentation()
 
-        func.code.decrementIdentation()
+        func.code.decrementIndentation()
         func.code.insert("}")
         func.code.insert("")
     }

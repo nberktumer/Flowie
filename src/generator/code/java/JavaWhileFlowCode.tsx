@@ -5,9 +5,6 @@ import {ConditionOperation} from "../../../models/VariableEnums";
 
 export class JavaWhileFlowCode implements WhileFlowCode {
 
-    generateFunc(whileFlow: WhileFlow, clazz: Clazz) {
-    }
-
     generateMain(whileFlow: WhileFlow, clazz: Clazz) {
         if (!whileFlow.content || clazz.mainFunction == null)
             return
@@ -51,14 +48,14 @@ export class JavaWhileFlowCode implements WhileFlowCode {
         })
 
         clazz.writeCodeToMainFunction("while(" + conditionCode + ") {")
-        clazz.mainFunction.code.incrementIdentation()
+        clazz.mainFunction.code.incrementIndentation()
 
         if (nextScopeId != null) {
             clazz.addToLoopStack(whileFlow.id)
             clazz.writeMainCodeFromFlow(nextScopeId)
         }
 
-        clazz.mainFunction.code.decrementIdentation()
+        clazz.mainFunction.code.decrementIndentation()
         clazz.writeCodeToMainFunction("}")
         clazz.writeMainCodeFromFlow(whileFlow.nextFlow())
     }

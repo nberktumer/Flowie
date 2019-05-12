@@ -7,6 +7,7 @@ import {RandomFlowCode} from "./common/RandomFlowCode";
 import {WhileFlowCode} from "./common/WhileFlowCode";
 import {IfFlowCode} from "./common/IfFlowCode";
 import {InputFlowCode} from "./common/InputFlowCode";
+import {Code} from "./Code";
 
 export interface CodeStrategy {
     arithmeticFlowCode: ArithmeticFlowCode
@@ -17,9 +18,9 @@ export interface CodeStrategy {
     whileFlowCode: WhileFlowCode
     ifFlowCode: IfFlowCode
 
-    initClazz(clazz: Clazz): void
+    initClazz(clazz: Clazz): Code
 
-    finishClass(clazz: Clazz): void
+    finishClass(clazz: Clazz): Code
 
     initMain(clazz: Clazz): void
 

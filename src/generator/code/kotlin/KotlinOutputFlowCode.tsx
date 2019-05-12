@@ -11,7 +11,7 @@ export class KotlinOutputFlowCode implements OutputFlowCode {
         if (outputFlow.content == null)
             return
 
-        const code = new Code()
+        const code = new Code(clazz.indentationCount)
 
         const parameters: Variable[] = []
         if (outputFlow.content.variable.name) {

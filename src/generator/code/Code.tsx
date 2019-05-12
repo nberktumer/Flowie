@@ -1,30 +1,34 @@
 export class Code {
     lines: CodeLine[] = []
-    currentIdentationAmount = 0
+    indentationCount: number
+
+    constructor(indentationCount: number) {
+        this.indentationCount = indentationCount
+    }
 
     insert(line: string) {
-        this.lines.push(new CodeLine(line, this.currentIdentationAmount))
+        this.lines.push(new CodeLine(line, this.indentationCount))
     }
 
-    incrementIdentation() {
-        this.currentIdentationAmount++
+    incrementIndentation() {
+        this.indentationCount++
     }
 
-    decrementIdentation() {
-        this.currentIdentationAmount--
+    decrementIndentation() {
+        this.indentationCount--
     }
 
 }
 
 export class CodeLine {
     content: string
-    identationAmount: number
+    indentationCount: number
 
     constructor(
         content: string,
-        identationAmount: number
+        indentationCount: number
     ) {
         this.content = content
-        this.identationAmount = identationAmount
+        this.indentationCount = indentationCount
     }
 }

@@ -32,7 +32,4 @@ export class KotlinAssignmentFlowCode implements AssignmentFlowCode {
         clazz.writeMainCodeFromFlow(assignmentFlow.nextFlow())
     }
 
-    generateFunc(assignmentFlow: AssignmentFlow, clazz: Clazz): void {
-    }
-
 }

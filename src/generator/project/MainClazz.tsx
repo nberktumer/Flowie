@@ -1,13 +1,12 @@
 import {Clazz} from "./Clazz"
 import {Func} from "./Func"
-import {DirectoryItemType} from "./DirectoryItem"
+import {DirectoryItem, DirectoryItemType} from "./DirectoryItem"
 import {FlowModel} from "../FlowModelJSON"
 
-export class MainClazz extends Clazz {
+export class MainClazz extends Clazz implements DirectoryItem {
 
-    constructor(name: string, flowModels: FlowModel[]) {
-        super(name, flowModels)
-        this.type = DirectoryItemType.MAIN_CLASS
+    constructor(type: DirectoryItemType, name: string, flowModels: FlowModel[]) {
+        super(type, name, flowModels)
     }
 
     setMainFunction(mainFunction: Func) {

@@ -4,9 +4,6 @@ import {Clazz} from "../../project/Clazz";
 
 export class KotlinRandomFlowCode implements RandomFlowCode {
 
-    generateFunc(randomFlow: RandomFlow, clazz: Clazz): void {
-    }
-
     generateMain(randomFlow: RandomFlow, clazz: Clazz): void {
 
         clazz.addGlobalVariable("val random = Random()")
