@@ -69,8 +69,4 @@ export class JavaIfFlowCode implements IfFlowCode {
         clazz.writeCodeToMainFunction("}")
     }
 
-    generateFunc(ifFlow: IfFlow): Func | null {
-        return null
-    }
-
 }

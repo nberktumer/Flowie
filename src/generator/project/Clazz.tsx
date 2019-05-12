@@ -49,7 +49,7 @@ export class Clazz implements DirectoryItem {
 
         const initialFlow = this.flowMap.get(Clazz.INITIAL_ID)
 
-        if (initialFlow !== undefined) {
+        if (initialFlow) {
             this.writeMainCodeFromFlow(Clazz.INITIAL_ID)
         }
 
@@ -102,7 +102,7 @@ export class Clazz implements DirectoryItem {
     writeMainCodeFromFlow(id: string) {
         if (!this.removeFromStackIfTopEquals(id)) {
             const flow = this.flowMap.get(id)
-            if (flow !== undefined) {
+            if (flow) {
                 if (flow instanceof ArithmeticFlow) {
                     Project.codeStrategy.arithmeticFlowCode.generateMain(flow, this)
                 } else if (flow instanceof AssignmentFlow) {
@@ -125,20 +125,10 @@ export class Clazz implements DirectoryItem {
     }
 
     writeFunctionCodeFromFlow(flow: BaseFlow) {
-        if (flow instanceof ArithmeticFlow) {
-            Project.codeStrategy.arithmeticFlowCode.generateFunc(flow, this)
-        } else if (flow instanceof AssignmentFlow) {
-            Project.codeStrategy.assignmentFlowCode.generateFunc(flow, this)
-        } else if (flow instanceof InputFlow) {
+        if (flow instanceof InputFlow) {
             Project.codeStrategy.inputFlowCode.generateFunc(flow, this)
         } else if (flow instanceof OutputFlow) {
             Project.codeStrategy.outputFlowCode.generateFunc(flow, this)
-        } else if (flow instanceof WhileFlow) {
-            Project.codeStrategy.whileFlowCode.generateFunc(flow, this)
-        } else if (flow instanceof IfFlow) {
-            Project.codeStrategy.ifFlowCode.generateFunc(flow, this)
-        } else if (flow instanceof RandomFlow) {
-            Project.codeStrategy.randomFlowCode.generateFunc(flow, this)
         }
     }
 

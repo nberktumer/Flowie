@@ -23,8 +23,4 @@ export class JavaRandomFlowCode implements RandomFlowCode {
         clazz.writeMainCodeFromFlow(randomFlow.nextFlow())
     }
 
-    generateFunc(randomFlow: RandomFlow, clazz: Clazz) {
-
-    }
-
 }

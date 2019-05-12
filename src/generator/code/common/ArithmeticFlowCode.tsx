@@ -6,6 +6,4 @@ export interface ArithmeticFlowCode extends FlowCode {
 
     generateMain(arithmeticFlow: ArithmeticFlow, clazz: Clazz): void
 
-    generateFunc(arithmeticFlow: ArithmeticFlow, clazz: Clazz): void
-
 }

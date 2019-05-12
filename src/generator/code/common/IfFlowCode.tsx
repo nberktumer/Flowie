@@ -6,6 +6,4 @@ export interface IfFlowCode extends FlowCode {
 
     generateMain(ifFlow: IfFlow, clazz: Clazz): void
 
-    generateFunc(ifFlow: IfFlow, clazz: Clazz): void
-
 }

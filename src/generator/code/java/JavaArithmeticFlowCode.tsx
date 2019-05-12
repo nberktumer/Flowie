@@ -54,8 +54,4 @@ export class JavaArithmeticFlowCode implements ArithmeticFlowCode {
         }
     }
 
-    generateFunc(arithmeticFlow: ArithmeticFlow, clazz: Clazz) {
-
-    }
-
 }

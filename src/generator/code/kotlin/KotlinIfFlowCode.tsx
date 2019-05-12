@@ -78,7 +78,4 @@ export class KotlinIfFlowCode implements IfFlowCode {
         clazz.writeMainCodeFromFlow(ifFlow.nextFlow())
     }
 
-    generateFunc(ifFlow: IfFlow, clazz: Clazz): void {
-    }
-
 }

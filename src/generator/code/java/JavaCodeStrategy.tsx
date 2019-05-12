@@ -62,10 +62,10 @@ export class JavaCodeStrategy implements CodeStrategy {
 
     generateFunctionCode(func: Func) {
         let returnTypeString = ""
-        if (func.returnType === undefined) {
-            returnTypeString += "void"
-        } else {
+        if (func.returnType) {
             returnTypeString += `${func.returnType}`
+        } else {
+            returnTypeString += "void"
         }
 
         let parameterString = ""

@@ -6,6 +6,4 @@ export interface WhileFlowCode extends FlowCode {
 
     generateMain(whileFlow: WhileFlow, clazz: Clazz): void
 
-    generateFunc(whileFlow: WhileFlow, clazz: Clazz): void
-
 }

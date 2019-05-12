@@ -5,9 +5,6 @@ import {ConditionOperation} from "../../../models/VariableEnums";
 
 export class JavaWhileFlowCode implements WhileFlowCode {
 
-    generateFunc(whileFlow: WhileFlow, clazz: Clazz) {
-    }
-
     generateMain(whileFlow: WhileFlow, clazz: Clazz) {
         if (!whileFlow.content || clazz.mainFunction == null)
             return

@@ -6,6 +6,4 @@ export interface RandomFlowCode extends FlowCode {
 
     generateMain(randomFlow: RandomFlow, clazz: Clazz): void
 
-    generateFunc(randomFlow: RandomFlow, clazz: Clazz): void
-
 }

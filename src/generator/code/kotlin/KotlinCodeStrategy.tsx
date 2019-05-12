@@ -54,10 +54,10 @@ export class KotlinCodeStrategy implements CodeStrategy {
 
     generateFunctionCode(func: Func): void {
         let returnTypeString = ""
-        if (func.returnType === undefined) {
-            returnTypeString += ""
-        } else {
+        if (func.returnType) {
             returnTypeString += ": " + func.returnType
+        } else {
+            returnTypeString += ""
         }
 
         let parameterString = ""
