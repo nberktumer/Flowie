@@ -1,7 +1,7 @@
 import {BaseFlow} from "./BaseFlow"
-import {CodeWriter} from "../code/CodeWriter"
 import {Variable} from "../../models/Variable"
 import {FlowType} from "../../models"
+import {Clazz} from "../project/Clazz";
 
 export class OutputFlow implements BaseFlow {
 
@@ -20,7 +20,7 @@ export class OutputFlow implements BaseFlow {
         this.nextFlowId = nextFlowId
         this.type = type
         this.content = content
-        this.functionCallName = (CodeWriter.getInstance().flowIncrementalId++).toString()
+        this.functionCallName = (Clazz.flowIncrementalId++).toString()
     }
 
     functionInvocation(): string {
@@ -40,7 +40,7 @@ export class OutputFlow implements BaseFlow {
     }
 
     nextFlow(): string {
-        return this.nextFlowId != null ? this.nextFlowId : CodeWriter.TERMINATION_ID
+        return this.nextFlowId != null ? this.nextFlowId : Clazz.TERMINATION_ID
     }
 
     hasExternalDependencies(): boolean {

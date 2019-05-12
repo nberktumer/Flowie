@@ -1,6 +1,6 @@
 import {BaseFlow} from "./BaseFlow";
 import {FlowType} from "../../models";
-import {CodeWriter} from "../code/CodeWriter";
+import {Clazz} from "../project/Clazz";
 
 export class InitialFlow implements BaseFlow {
     id: string
@@ -31,6 +31,6 @@ export class InitialFlow implements BaseFlow {
     }
 
     nextFlow(): string {
-        return this.nextFlowId != null ? this.nextFlowId : CodeWriter.TERMINATION_ID
+        return this.nextFlowId != null ? this.nextFlowId : Clazz.TERMINATION_ID
     }
 }

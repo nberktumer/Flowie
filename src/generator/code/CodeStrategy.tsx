@@ -1,53 +1,30 @@
-import {Func} from "../Func";
-import {ArithmeticFlow} from "../flows/ArithmeticFlow";
-import {InputFlow} from "../flows/InputFlow";
-import {OutputFlow} from "../flows/OutputFlow";
-import {WhileFlow} from "../flows/WhileFlow";
-import {AssignmentFlow} from "../flows/AssignmentFlow";
-import {Class} from "./Class";
-import {RandomFlow} from "../flows/RandomFlow";
-import {IfFlow} from "../flows/IfFlow";
+import {Func} from "../project/Func";
+import {Clazz} from "../project/Clazz";
+import {ArithmeticFlowCode} from "./common/ArithmeticFlowCode";
+import {AssignmentFlowCode} from "./common/AssignmentFlowCode";
+import {OutputFlowCode} from "./common/OutputFlowCode";
+import {RandomFlowCode} from "./common/RandomFlowCode";
+import {WhileFlowCode} from "./common/WhileFlowCode";
+import {IfFlowCode} from "./common/IfFlowCode";
+import {InputFlowCode} from "./common/InputFlowCode";
 
 export interface CodeStrategy {
+    arithmeticFlowCode: ArithmeticFlowCode
+    assignmentFlowCode: AssignmentFlowCode
+    inputFlowCode: InputFlowCode
+    outputFlowCode: OutputFlowCode
+    randomFlowCode: RandomFlowCode
+    whileFlowCode: WhileFlowCode
+    ifFlowCode: IfFlowCode
 
-    initClass(clazz: Class): void
+    initClazz(clazz: Clazz): void
 
-    finishClass(): void
+    finishClass(clazz: Clazz): void
 
-    initMain(): void
+    initMain(clazz: Clazz): void
 
-    finishMain(): void
+    finishMain(clazz: Clazz): void
 
-    writeFunctionSignature(func: Func): void
-
-    writeArithmeticMain(arithmeticFlow: ArithmeticFlow): void
-
-    writeArithmeticFunction(arithmeticFlow: ArithmeticFlow): void
-
-    writeAssignmentMain(assignmentFlow: AssignmentFlow): void
-
-    writeAssignmentFunction(assignmentFlow: AssignmentFlow): void
-
-    writeInputMain(inputFlow: InputFlow): void
-
-    writeInputFunction(inputFlow: InputFlow): void
-
-    writeOutputMain(outputFlow: OutputFlow): void
-
-    writeOutputFunction(outputFlow: OutputFlow): void
-
-    writeWhileMain(whileFlow: WhileFlow): void
-
-    writeWhileFunction(whileFlow: WhileFlow): void
-
-    writeIfMain(ifFlow: IfFlow) : void
-
-    writeIfFunction(ifFlow: IfFlow) : void
-
-    writeRandomMain(randomFlow: RandomFlow): void
-
-    writeRandomFunction(randomFlow: RandomFlow): void
-
-    addDependenciesAndGlobalVariables(dependencies: Set<string>, globalVariables: Set<string>): void
+    generateFunctionCode(func: Func): void
 
 }
