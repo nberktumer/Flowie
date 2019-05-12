@@ -41,6 +41,6 @@ export default {
     nextFlow: "Next Flow",
     random: "Random",
     minValue: "Minimum Value",
-    maxValue: "Maximum Value"
-
+    maxValue: "Maximum Value",
+    properties: "Properties"
 }

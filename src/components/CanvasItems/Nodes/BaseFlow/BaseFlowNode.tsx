@@ -5,12 +5,15 @@ import {DefaultPort, DefaultPortLocation, DefaultPortModel, DefaultPortType} fro
 import {FlowType} from "../../../../models"
 import {BasePropertiesState} from "../../../Flows/Base/BaseProperties"
 import {FlowNodeFactory} from "../../../Flows"
+import * as React from "react"
 
 export class BaseFlowNode extends NodeModel {
     name: string
     color: string
     onLinkChangedListener: () => void
+    onEditClickListener: () => void
     flowType: FlowType | undefined
+    info: string | undefined
 
     constructor(flowType?: FlowType, name: string = "Untitled", color: string = "rgb(0,192,255)", nodeType: string = "base-flow") {
         super(nodeType)
@@ -18,7 +21,12 @@ export class BaseFlowNode extends NodeModel {
         this.color = color
         this.onLinkChangedListener = () => {
         }
+        this.onEditClickListener = () => {
+        }
         this.flowType = flowType
+    }
+
+    updateInfo() {
     }
 
     updateNode(data: BasePropertiesState) {
@@ -72,11 +80,13 @@ export class BaseFlowNode extends NodeModel {
     deSerialize(object: any, engine: DiagramEngine) {
         super.deSerialize(object, engine)
         this.flowType = object.flowType
+        this.info = object.info
     }
 
     serialize() {
         return _.merge(super.serialize(), {
-            flowType: this.flowType
+            flowType: this.flowType,
+            info: this.info
         })
     }
 

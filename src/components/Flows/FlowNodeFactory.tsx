@@ -22,7 +22,7 @@ export class FlowNodeFactory {
     private constructor() {
     }
 
-    static create(type: FlowType, data?: BasePropertiesState): BaseFlowNode | null {
+    static create(type: FlowType, data?: BasePropertiesState): BaseFlowNode | undefined {
         switch (type) {
             case FlowType.INITIAL:
                 return new InitialFlowNodeGenerator().create(data)
@@ -31,7 +31,7 @@ export class FlowNodeFactory {
             case FlowType.WHILE:
                 return new WhileFlowNodeGenerator().create(data)
             case FlowType.FOR:
-                return null // TODO
+                return undefined // TODO
             case FlowType.INPUT:
                 return new InputFlowNodeGenerator().create(data)
             case FlowType.OUTPUT:
@@ -42,12 +42,10 @@ export class FlowNodeFactory {
                 return new AssignmentFlowNodeGenerator().create(data)
             case FlowType.RANDOM:
                 return new RandomFlowNodeGenerator().create(data)
-            default:
-                return null
         }
     }
 
-    static load(node: any): BaseFlowNode {
+    static load(node: BaseFlowNode): BaseFlowNode {
         switch (node.flowType) {
             case FlowType.INITIAL:
                 return new InitialFlowNodeGenerator().load(node)
@@ -56,7 +54,7 @@ export class FlowNodeFactory {
             case FlowType.WHILE:
                 return new WhileFlowNodeGenerator().load(node)
             // case FlowType.FOR:
-            //     return null // TODO
+                // return undefined // TODO
             case FlowType.INPUT:
                 return new InputFlowNodeGenerator().load(node)
             case FlowType.OUTPUT:
@@ -72,7 +70,7 @@ export class FlowNodeFactory {
         }
     }
 
-    static update(node: BaseFlowNode, data?: BasePropertiesState): BaseFlowNode | null {
+    static update(node: BaseFlowNode, data?: BasePropertiesState): BaseFlowNode | undefined {
         switch (node.flowType) {
             case FlowType.INITIAL:
                 return new InitialFlowNodeGenerator().create(data, node as InitialFlowNode)
@@ -81,7 +79,7 @@ export class FlowNodeFactory {
             case FlowType.WHILE:
                 return new WhileFlowNodeGenerator().create(data, node as WhileFlowNode)
             case FlowType.FOR:
-                return null // TODO
+                return undefined // TODO
             case FlowType.INPUT:
                 return new InputFlowNodeGenerator().create(data, node as InputFlowNode)
             case FlowType.OUTPUT:
@@ -92,10 +90,6 @@ export class FlowNodeFactory {
                 return new AssignmentFlowNodeGenerator().create(data, node as AssignmentFlowNode)
             case FlowType.RANDOM:
                 return new RandomFlowNodeGenerator().create(data, node as RandomFlowNode)
-            case FlowType.RANDOM:
-                return new RandomFlowNodeGenerator().create(data, node as RandomFlowNode)
-            default:
-                return null
         }
     }
 }

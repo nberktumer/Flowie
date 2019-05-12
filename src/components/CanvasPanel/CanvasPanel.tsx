@@ -1,21 +1,18 @@
-import React, {Component} from "react"
+import React, {Component, useContext} from "react"
 import styles from "./CanvasPanel.module.css"
 import * as _ from "lodash"
 import {BaseEvent, BaseModel, DiagramEngine, DiagramModel, DiagramWidget, NodeModel} from "nberktumer-react-diagrams"
 import {FlowType} from "../../models"
 import {PortFactory} from "../CanvasItems/Ports/PortFactory"
 import {BaseFlowFactory} from "../CanvasItems/Nodes/BaseFlow/BaseFlowFactory"
-import {BaseInfoFlowFactory} from "../CanvasItems/Nodes/BaseInfoFlow/BaseInfoFlowFactory"
 import {BasePropertiesState} from "../Flows/Base/BaseProperties"
 import {DefaultPort, DefaultPortLocation, DefaultPortModel, DefaultPortType} from "../CanvasItems/Ports/DefaultPort"
-import {Variable} from "../../models/Variable"
 import {InitialFlowNode} from "../Flows/Initial/InitialFlowNode"
 import {FlowNodeFactory} from "../Flows"
 import {BaseFlowNode} from "../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
-import {BaseInfoFlowNode} from "../CanvasItems/Nodes/BaseInfoFlow/BaseInfoFlowNode"
+import {FlowContext} from "../../stores/FlowStore"
 
 export interface CanvasPanelProps {
-    variableList: Variable[]
     onDrop: (type: FlowType, position: { x: number, y: number }) => void,
     onDiagramChanged: () => void,
     onSelectionChanged: (event: BaseEvent<BaseModel> & { isSelected: boolean }) => void,
@@ -45,7 +42,6 @@ export default class CanvasPanel extends Component<CanvasPanelProps, CanvasPanel
         this.diagramEngine.installDefaultFactories()
 
         this.diagramEngine.registerNodeFactory(new BaseFlowFactory())
-        this.diagramEngine.registerNodeFactory(new BaseInfoFlowFactory())
         this.diagramEngine.registerPortFactory(new PortFactory("default", () => new DefaultPortModel(
             new DefaultPort(DefaultPortType.IN, DefaultPortLocation.LEFT), "unknown")))
 
@@ -65,9 +61,10 @@ export default class CanvasPanel extends Component<CanvasPanelProps, CanvasPanel
     }
 
     saveProject = () => {
+        const flowContext = useContext(FlowContext)
         const diagram = this.activeModel.serializeDiagram() as { [k: string]: any }
         diagram.canvasPanel = {
-            variableList: this.props.variableList,
+            variableList: flowContext.variableList,
             initialNodeId: this.initialNode.getID()
         }
         return diagram
@@ -80,15 +77,13 @@ export default class CanvasPanel extends Component<CanvasPanelProps, CanvasPanel
         model.deSerializeDiagram(diagram, this.diagramEngine)
 
         _.forEach(model.getNodes(), (node: NodeModel) => {
-            node.addListener({
+            const baseNode = node as BaseFlowNode
+            baseNode.addListener({
                 selectionChanged: (e: BaseEvent<BaseModel> & { isSelected: boolean }) => this.props.onSelectionChanged(e),
                 entityRemoved: (e: BaseEvent<BaseModel>) => this.props.onEntityRemoved(e)
-            });
-            (node as BaseFlowNode).addOnLinkChangedListener(this.props.onDiagramChanged)
-
-            if (node instanceof BaseInfoFlowNode) {
-                (node as BaseInfoFlowNode).updateInfo()
-            }
+            })
+            baseNode.addOnLinkChangedListener(this.props.onDiagramChanged)
+            baseNode.updateInfo()
         })
 
         this.diagramEngine.setDiagramModel(model)

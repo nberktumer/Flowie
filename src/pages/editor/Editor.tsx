@@ -8,54 +8,67 @@ import {FlowType, ProgrammingLanguage} from "../../models"
 import {ProjectTreePanel} from "../../components/ProjectTreePanel/ProjectTreePanel"
 import {AddNodeDialog} from "../../components/AddNodeDialog/AddNodeDialog"
 import {BasePropertiesState} from "../../components/Flows/Base/BaseProperties"
-import {CodeGenerator} from "../../generator/CodeGenerator"
 import {Variable} from "../../models/Variable"
 import CanvasPanel from "../../components/CanvasPanel/CanvasPanel"
-import {FlowModelGenerator, FlowPropertiesFactory} from "../../components/Flows"
+import {FlowModelGenerator} from "../../components/Flows"
 import {BaseEvent, BaseModel} from "nberktumer-react-diagrams"
 import {BaseFlowNode} from "../../components/CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {BaseVariableFlowNode} from "../../components/Flows/Base/BaseVariableFlowNode"
 import {EditorHeader} from "../../components/EditorHeader/EditorHeader"
 import {FileUtils} from "../../utils"
 import {MenuItem, TextField} from "@material-ui/core"
+import {FlowProvider} from "../../stores/FlowStore"
+import {Project} from "../../generator/project/Project"
+import {MainClazz} from "../../generator/project/MainClazz"
+import {Clazz} from "../../generator/project/Clazz"
+import {FileModel} from "../../models/FileModel"
+import {Directory} from "../../generator/project/Directory"
+import {ProjectConsumer, ProjectProvider} from "../../stores/ProjectStore"
 
 export interface EditorProps {
+    project: FileModel[]
 }
 
 export interface EditorState {
-    height: string | undefined,
-    width: string | undefined,
     isModalOpen: boolean,
     flowType: FlowType | null,
     flowPosition: { x: number, y: number },
     generatedCode: string,
     variableList: Variable[],
-    properties: JSX.Element,
-    selectedItem: string,
+    fileModelList: FileModel[],
     selectedLanguage: ProgrammingLanguage
 }
 
-export default class Editor extends Component<EditorProps, EditorState> {
+class Editor extends Component<EditorProps, EditorState> {
     readonly programmingLanguages = Object.keys(ProgrammingLanguage)
         .filter((k) => typeof ProgrammingLanguage[k as any] !== "number")
     canvasPanel = createRef<CanvasPanel>()
-    codeGenerator = new CodeGenerator()
+    project = new Project()
+    currentFileModel: FileModel
+    currentClass: Clazz
 
     constructor(props: any) {
         super(props)
 
+        const clazz = new MainClazz("FlowieProject", [])
+
+        this.currentFileModel = new FileModel("FlowieProject", "", false, true, [])
+        this.currentClass = clazz
+
+        this.project.rootDirectory.addDirectoryItem(clazz)
+        this.project.init(ProgrammingLanguage.KOTLIN)
+
         this.state = {
-            height: "1px",
-            width: "1px",
             isModalOpen: false,
             flowType: null,
             flowPosition: {x: 0, y: 0},
-            generatedCode: this.codeGenerator.generate(ProgrammingLanguage.KOTLIN, []),
+            generatedCode: this.currentClass.getCode(),
             variableList: [],
-            properties: <div/>,
-            selectedItem: "",
+            fileModelList: [],
             selectedLanguage: ProgrammingLanguage.KOTLIN
         }
+
+        props.project.push(this.currentClass)
     }
 
     resetState = () => {
@@ -64,8 +77,6 @@ export default class Editor extends Component<EditorProps, EditorState> {
             flowType: null,
             flowPosition: {x: 0, y: 0},
             variableList: [],
-            properties: <div/>,
-            selectedItem: "",
             selectedLanguage: ProgrammingLanguage.KOTLIN
         })
     }
@@ -92,9 +103,50 @@ export default class Editor extends Component<EditorProps, EditorState> {
         if (!this.canvasPanel.current)
             return
 
-        const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current.initialNode)
-        console.log(flowModelList)
-        this.setState({generatedCode: this.codeGenerator.generate(this.state.selectedLanguage, flowModelList)})
+        console.log(this.props)
+
+        this.props.project.forEach((item: FileModel) => {
+            this.generateDirectoryItems(item, this.project.rootDirectory)
+        })
+
+        this.project.init(this.state.selectedLanguage)
+        this.setState({generatedCode: this.currentClass.getCode()})
+    }
+
+    generateDirectoryItems(fileModel: FileModel, parent: Directory) {
+        if (fileModel.isDir) {
+            const directory = new Directory(fileModel.filename, [])
+            parent.addDirectoryItem(directory)
+            fileModel.children.forEach((item) => {
+                this.generateDirectoryItems(item, directory)
+            })
+        } else {
+            if (fileModel.isMainClass) {
+                if (this.currentFileModel === fileModel && this.canvasPanel.current) {
+                    const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current.initialNode)
+                    console.log(flowModelList)
+
+                    const clazz = new MainClazz(fileModel.filename, flowModelList)
+
+                    this.currentClass = clazz
+                    parent.addDirectoryItem(clazz)
+                } else {
+                    parent.addDirectoryItem(new MainClazz(fileModel.filename, []))
+                }
+            } else {
+                if (this.currentFileModel === fileModel && this.canvasPanel.current) {
+                    const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current.initialNode)
+                    console.log(flowModelList)
+
+                    const clazz = new Clazz(fileModel.filename, flowModelList)
+
+                    this.currentClass = clazz
+                    parent.addDirectoryItem(clazz)
+                } else {
+                    parent.addDirectoryItem(new Clazz(fileModel.filename, []))
+                }
+            }
+        }
     }
 
     onCanvasDrop(type: FlowType, position: { x: number, y: number }) {
@@ -111,55 +163,14 @@ export default class Editor extends Component<EditorProps, EditorState> {
         }
     }
 
+    // On item deleted
     onEntityRemoved(event: BaseEvent<BaseModel>) {
-        if (event.entity instanceof BaseVariableFlowNode) {
-            const newVariableList = this.state.variableList.filter((value) => {
-                return value.name !== (event.entity as BaseVariableFlowNode).getVariable().name
-            })
 
-            this.setState({variableList: newVariableList})
-        }
-
-        if (event.entity.getID() === this.state.selectedItem) {
-            this.setState({properties: (<div/>), selectedItem: ""})
-        }
     }
 
+    // On item selected
     onSelectionChanged(event: BaseEvent<BaseModel> & { isSelected: boolean }) {
-        if (!this.canvasPanel.current || !(event.entity instanceof BaseFlowNode))
-            return
 
-        const selectedItems = this.canvasPanel.current.diagramEngine.diagramModel.getSelectedItems().filter((item) => {
-            return item instanceof BaseFlowNode
-        })
-
-        if (selectedItems.length > 1 && this.state.selectedItem !== "") {
-            this.setState({properties: (<div/>), selectedItem: ""})
-        } else if (selectedItems.length === 1 && event.isSelected) {
-            // Workaround for updating the properties panel
-            this.setState({properties: <div/>}, () => {
-                const properties = FlowPropertiesFactory.createReadonlyVariableType((event.entity as BaseFlowNode).flowType,
-                    this.state.variableList, (data: BasePropertiesState) => {
-                        if (!data.errorMessage) {
-                            if (event.entity instanceof BaseVariableFlowNode) {
-                                // tslint:disable-next-line:prefer-for-of
-                                for (let i = 0; i < this.state.variableList.length; i++) {
-                                    if (this.state.variableList[i].name === (event.entity as BaseVariableFlowNode).getVariable().name) {
-                                        this.state.variableList[i].name = data.variableName
-                                        break
-                                    }
-                                }
-                            }
-                            (event.entity as BaseFlowNode).updateNode(data)
-                            this.onDiagramChanged()
-                        }
-                    }, event.entity as BaseFlowNode)
-
-                this.setState({properties, selectedItem: event.entity.getID()})
-            })
-        } else {
-            this.setState({properties: (<div/>), selectedItem: ""})
-        }
     }
 
     onHeaderMenuClickListener = (item: string) => {
@@ -204,65 +215,60 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
     render() {
         return (
-            <div className={styles.App}>
-                <AddNodeDialog onSaveClick={this.onModalSaveClick.bind(this)}
-                               onDismissClick={this.onModalDismissClick.bind(this)}
-                               onClose={this.onModalClose.bind(this)}
-                               aria-labelledby="simple-dialog-title"
-                               variables={this.state.variableList}
-                               open={this.state.isModalOpen}
-                               type={this.state.flowType}/>
-                <EditorHeader onClickListener={(item: string) => this.onHeaderMenuClickListener(item)}/>
-                <ReflexContainer orientation="vertical">
-                    <ReflexElement minSize={250}>
-                        <ReflexContainer orientation="horizontal" style={{height: "100vh"}}>
-                            <ReflexElement className="left-pane" flex={0.35} minSize={200}>
-                                <div style={{width: "100%", height: "100%", backgroundColor: "#1d1f21"}}>
-                                    <ProjectTreePanel/>
+            <FlowProvider value={{variableList: this.state.variableList}}>
+                <ProjectProvider value={{project: this.state.fileModelList}}>
+                    <div className={styles.App}>
+                        <AddNodeDialog onSaveClick={this.onModalSaveClick.bind(this)}
+                                       onDismissClick={this.onModalDismissClick.bind(this)}
+                                       onClose={this.onModalClose.bind(this)}
+                                       aria-labelledby="simple-dialog-title"
+                                       open={this.state.isModalOpen}
+                                       type={this.state.flowType}/>
+                        <EditorHeader onClickListener={(item: string) => this.onHeaderMenuClickListener(item)}/>
+                        <ReflexContainer orientation="vertical">
+                            <ReflexElement minSize={250}>
+                                <ReflexContainer orientation="horizontal" style={{height: "100vh"}}>
+                                    <ReflexElement className="left-pane" flex={0.35} minSize={200}>
+                                        <div style={{width: "100%", height: "100%", backgroundColor: "#1d1f21"}}>
+                                            <ProjectTreePanel/>
+                                        </div>
+                                    </ReflexElement>
+
+                                    <ReflexSplitter/>
+
+                                    <ReflexElement className="left-pane" minSize={200}>
+                                        <ShapePanel>
+                                            {Object.values(FlowType).filter((value) => value !== FlowType.INITIAL)
+                                                .map((value) => (
+                                                    <ShapeItem key={value} model={{type: value}} name={value}/>
+                                                ))}
+                                        </ShapePanel>
+                                    </ReflexElement>
+                                </ReflexContainer>
+                            </ReflexElement>
+
+                            <ReflexSplitter/>
+
+                            <ReflexElement className="middle-pane" flex={0.55} minSize={250}>
+                                <div className={styles.paneContent}>
+                                    <CanvasPanel ref={this.canvasPanel}
+                                                 onItemAdded={this.onItemAdded.bind(this)}
+                                                 onDiagramChanged={this.onDiagramChanged.bind(this)}
+                                                 onDrop={this.onCanvasDrop.bind(this)}
+                                                 onSelectionChanged={this.onSelectionChanged.bind(this)}
+                                                 onEntityRemoved={this.onEntityRemoved.bind(this)}/>
                                 </div>
                             </ReflexElement>
 
                             <ReflexSplitter/>
 
-                            <ReflexElement className="left-pane" minSize={200}>
-                                <ShapePanel>
-                                    {Object.values(FlowType).filter((value) => value !== FlowType.INITIAL)
-                                        .map((value) => (
-                                            <ShapeItem key={value} model={{type: value}} name={value}/>
-                                        ))}
-                                </ShapePanel>
-                            </ReflexElement>
-                        </ReflexContainer>
-                    </ReflexElement>
-
-                    <ReflexSplitter/>
-
-                    <ReflexElement className="middle-pane" flex={0.55} minSize={250}>
-                        <div className={styles.paneContent}>
-                            <CanvasPanel ref={this.canvasPanel}
-                                         variableList={this.state.variableList}
-                                         onItemAdded={this.onItemAdded.bind(this)}
-                                         onDiagramChanged={this.onDiagramChanged.bind(this)}
-                                         onDrop={this.onCanvasDrop.bind(this)}
-                                         onSelectionChanged={this.onSelectionChanged.bind(this)}
-                                         onEntityRemoved={this.onEntityRemoved.bind(this)}/>
-                        </div>
-                    </ReflexElement>
-
-                    <ReflexSplitter/>
-
-                    <ReflexElement minSize={250}>
-                        <ReflexContainer orientation="horizontal" style={{height: "100vh"}}>
-                            <ReflexElement className="right-pane" flex={0.5} minSize={200}>
-                                <div className={styles.propertiesPanel}>
-                                    {this.state.properties}
-                                </div>
-                            </ReflexElement>
-
-                            <ReflexSplitter/>
-
-                            <ReflexElement className="right-pane" minSize={100}>
-                                <div style={{display: "flex", height: "100%", width: "100%", flexDirection: "column"}}>
+                            <ReflexElement minSize={250}>
+                                <div style={{
+                                    display: "flex",
+                                    height: "100%",
+                                    width: "100%",
+                                    flexDirection: "column"
+                                }}>
                                     <TextField
                                         id="language-selector"
                                         select
@@ -294,9 +300,17 @@ export default class Editor extends Component<EditorProps, EditorState> {
                                 </div>
                             </ReflexElement>
                         </ReflexContainer>
-                    </ReflexElement>
-                </ReflexContainer>
-            </div>
+                    </div>
+                </ProjectProvider>
+            </FlowProvider>
         )
     }
 }
+
+export default (props: EditorProps) => (
+    <ProjectConsumer>
+        {({project}) => {
+            return <Editor {...props} project={project}/>
+        }}
+    </ProjectConsumer>
+)
