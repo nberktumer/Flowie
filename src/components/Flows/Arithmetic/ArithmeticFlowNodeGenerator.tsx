@@ -5,9 +5,9 @@ import {ArithmeticFlowNode} from "./ArithmeticFlowNode"
 import {Variable} from "../../../models/Variable"
 
 export class ArithmeticFlowNodeGenerator extends BaseFlowNodeGenerator {
-    create(data?: BasePropertiesState, node?: ArithmeticFlowNode): BaseFlowNode | null {
+    create(data?: BasePropertiesState, node?: ArithmeticFlowNode): BaseFlowNode | undefined {
         if (!data || data.variable === "" || data.operation === "" || data.operator1 === "" || data.operator2 === "")
-            return null
+            return undefined
 
         const op1 = JSON.parse(data.operator1) as Variable
         const op2 = JSON.parse(data.operator2) as Variable

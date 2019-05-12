@@ -4,7 +4,6 @@ import {Variable} from "../../../models/Variable"
 
 export interface BasePropertiesProps {
     onDataChanged: (data: BasePropertiesState) => void,
-    variables: Variable[],
     errorMessage?: string,
     errorField?: string,
     node?: BaseFlowNode

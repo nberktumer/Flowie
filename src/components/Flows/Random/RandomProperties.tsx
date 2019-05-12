@@ -7,6 +7,7 @@ import {Rules} from "../../../config"
 import {RandomFlowNode} from "./RandomFlowNode"
 import InputWithType from "../../InputWithType/InputWithType"
 import {Validator} from "../../../utils"
+import {FlowConsumer} from "../../../stores/FlowStore"
 
 export interface RandomPropertiesProps extends BasePropertiesProps {
     readonlyType: boolean
@@ -39,41 +40,45 @@ export class RandomProperties extends BaseProperties<RandomPropertiesProps> {
 
     render() {
         return (
-            <div className="bodyContainer">
-                <TextField
-                    id="variable-name-input"
-                    label={strings.variableName}
-                    disabled={this.props.readonlyType}
-                    error={this.state.errorField === "variableName"}
-                    value={this.state.variableName}
-                    inputProps={{maxLength: Rules.MAX_VAR_LENGTH}}
-                    onChange={this.handleStringChange("variableName", (data) => {
-                        const error = Validator.validateVariableName(data, this.props.variables)
-                        this.setState({errorMessage: error, errorField: error ? "variableName" : ""}, () => {
-                            this.props.onDataChanged(this.state)
-                        })
-                    })}
-                    margin="normal"
-                />
-                <InputWithType
-                    variableType={VariableType.DOUBLE}
-                    label={strings.minValue}
-                    onDataChanged={(data: any) => {
-                        this.setState({minValue: data.value}, () => {
-                            this.props.onDataChanged(this.state)
-                        })
-                    }}
-                    value={this.state.minValue}/>
-                <InputWithType
-                    variableType={VariableType.DOUBLE}
-                    label={strings.maxValue}
-                    onDataChanged={(data: any) => {
-                        this.setState({maxValue: data.value}, () => {
-                            this.props.onDataChanged(this.state)
-                        })
-                    }}
-                    value={this.state.maxValue}/>
-            </div>
+            <FlowConsumer>
+                {(flowConsumer) => (
+                    <div className="bodyContainer">
+                        <TextField
+                            id="variable-name-input"
+                            label={strings.variableName}
+                            disabled={this.props.readonlyType}
+                            error={this.state.errorField === "variableName"}
+                            value={this.state.variableName}
+                            inputProps={{maxLength: Rules.MAX_VAR_LENGTH}}
+                            onChange={this.handleStringChange("variableName", (data) => {
+                                const error = Validator.validateVariableName(data, flowConsumer.variableList)
+                                this.setState({errorMessage: error, errorField: error ? "variableName" : ""}, () => {
+                                    this.props.onDataChanged(this.state)
+                                })
+                            })}
+                            margin="normal"
+                        />
+                        <InputWithType
+                            variableType={VariableType.DOUBLE}
+                            label={strings.minValue}
+                            onDataChanged={(data: any) => {
+                                this.setState({minValue: data.value}, () => {
+                                    this.props.onDataChanged(this.state)
+                                })
+                            }}
+                            value={this.state.minValue}/>
+                        <InputWithType
+                            variableType={VariableType.DOUBLE}
+                            label={strings.maxValue}
+                            onDataChanged={(data: any) => {
+                                this.setState({maxValue: data.value}, () => {
+                                    this.props.onDataChanged(this.state)
+                                })
+                            }}
+                            value={this.state.maxValue}/>
+                    </div>
+                )}
+            </FlowConsumer>
         )
     }
 }
