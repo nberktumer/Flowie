@@ -10,7 +10,7 @@ import {JavaOutputFlowCode} from "./JavaOutputFlowCode";
 import {JavaRandomFlowCode} from "./JavaRandomFlowCode";
 import {Variable} from "../../../models/Variable";
 import {Code} from "../Code";
-import {MainClazz} from "../../project/MainClazz";
+import {DirectoryItemType} from "../../project/DirectoryItem";
 
 export class JavaCodeStrategy implements CodeStrategy {
 
@@ -23,14 +23,14 @@ export class JavaCodeStrategy implements CodeStrategy {
     whileFlowCode = new JavaWhileFlowCode()
 
     initClazz(clazz: Clazz): Code {
-        const code = new Code(clazz.identationCount)
+        const code = new Code(clazz.indentationCount)
         code.insert(`public class ${clazz.name} {`)
         clazz.incrementIdentation()
         return code
     }
 
     finishClass(clazz: Clazz): Code {
-        const code = new Code(clazz.identationCount)
+        const code = new Code(clazz.indentationCount)
         code.insert(`}`)
         code.insert("")
         clazz.decrementIdentation()
@@ -39,15 +39,15 @@ export class JavaCodeStrategy implements CodeStrategy {
 
     initMain(clazz: Clazz): void {
         const parameters: Variable[] = []
-        const mainFunctionLines = new Code(clazz.identationCount)
+        const mainFunctionLines = new Code(clazz.indentationCount)
 
-        if (clazz instanceof MainClazz) {
+        if (clazz.type == DirectoryItemType.MAIN_CLASS) {
             mainFunctionLines.insert(`public static void main(String args[]) {`)
         } else {
             //TODO
         }
 
-        mainFunctionLines.incrementIdentation()
+        mainFunctionLines.incrementIndentation()
 
         clazz.mainFunction = new Func(
             clazz.name,
@@ -61,7 +61,7 @@ export class JavaCodeStrategy implements CodeStrategy {
         if (clazz.mainFunction == null)
             throw new Error("Main function is undefined!")
 
-        clazz.mainFunction.code.decrementIdentation()
+        clazz.mainFunction.code.decrementIndentation()
         clazz.mainFunction.code.insert("}")
         clazz.mainFunction.code.insert("")
     }
@@ -84,9 +84,9 @@ export class JavaCodeStrategy implements CodeStrategy {
         })
 
         func.code.insert(`private static ${returnTypeString} ${func.functionName}(${parameterString}) {`)
-        func.code.incrementIdentation()
+        func.code.incrementIndentation()
 
-        func.code.decrementIdentation()
+        func.code.decrementIndentation()
         func.code.insert("}")
         func.code.insert("")
     }

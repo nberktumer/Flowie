@@ -10,7 +10,7 @@ import {KotlinInputFlowCode} from "./KotlinInputFlowCode";
 import {KotlinOutputFlowCode} from "./KotlinOutputFlowCode";
 import {KotlinRandomFlowCode} from "./KotlinRandomFlowCode";
 import {KotlinWhileFlowCode} from "./KotlinWhileFlowCode";
-import {MainClazz} from "../../project/MainClazz";
+import {DirectoryItemType} from "../../project/DirectoryItem";
 
 export class KotlinCodeStrategy implements CodeStrategy {
 
@@ -23,24 +23,24 @@ export class KotlinCodeStrategy implements CodeStrategy {
     whileFlowCode = new KotlinWhileFlowCode()
 
     initClazz(clazz: Clazz): Code {
-        return new Code(clazz.identationCount)
+        return new Code(clazz.indentationCount)
     }
 
     finishClass(clazz: Clazz): Code {
-        return new Code(clazz.identationCount)
+        return new Code(clazz.indentationCount)
     }
 
     initMain(clazz: Clazz): void {
         const parameters: Variable[] = []
-        const mainFunctionLines = new Code(clazz.identationCount)
+        const mainFunctionLines = new Code(clazz.indentationCount)
 
-        if (clazz instanceof MainClazz) {
+        if (clazz.type === DirectoryItemType.MAIN_CLASS) {
             mainFunctionLines.insert(`fun main(args: Array<String\>) {`)
         } else {
             //TODO
         }
 
-        mainFunctionLines.incrementIdentation()
+        mainFunctionLines.incrementIndentation()
 
         clazz.mainFunction = new Func(
             clazz.name,
@@ -54,7 +54,7 @@ export class KotlinCodeStrategy implements CodeStrategy {
         if (clazz.mainFunction == null)
             throw new Error("Main function is undefined!")
 
-        clazz.mainFunction.code.decrementIdentation()
+        clazz.mainFunction.code.decrementIndentation()
         clazz.mainFunction.code.insert("}")
         clazz.mainFunction.code.insert("")
     }
@@ -77,10 +77,10 @@ export class KotlinCodeStrategy implements CodeStrategy {
         })
 
         func.code.insert(`fun ${func.functionName}(${parameterString})${returnTypeString} {`)
-        func.code.incrementIdentation()
+        func.code.incrementIndentation()
 
         //TODO ALSO JAVA
-        func.code.decrementIdentation()
+        func.code.decrementIndentation()
         func.code.insert("}")
         func.code.insert("")
     }

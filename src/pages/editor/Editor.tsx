@@ -24,6 +24,7 @@ import {Clazz} from "../../generator/project/Clazz"
 import {FileModel} from "../../models/FileModel"
 import {Directory} from "../../generator/project/Directory"
 import {ProjectConsumer, ProjectProvider} from "../../stores/ProjectStore"
+import {DirectoryItemType} from "../../generator/project/DirectoryItem";
 
 export interface EditorProps {
     project: FileModel[]
@@ -50,7 +51,8 @@ class Editor extends Component<EditorProps, EditorState> {
     constructor(props: any) {
         super(props)
 
-        const clazz = new MainClazz("FlowieProject", [])
+        const clazz = new MainClazz(DirectoryItemType.MAIN_CLASS, "FlowieProject", [])
+        clazz.type = DirectoryItemType.MAIN_CLASS
 
         this.currentFileModel = new FileModel("FlowieProject", "", false, true, [])
         this.currentClass = clazz
@@ -126,24 +128,27 @@ class Editor extends Component<EditorProps, EditorState> {
                     const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current.initialNode)
                     console.log(flowModelList)
 
-                    const clazz = new MainClazz(fileModel.filename, flowModelList)
+                    const clazz = new MainClazz(DirectoryItemType.MAIN_CLASS, fileModel.filename, flowModelList)
+                    clazz.type = DirectoryItemType.MAIN_CLASS
 
                     this.currentClass = clazz
                     parent.addDirectoryItem(clazz)
                 } else {
-                    parent.addDirectoryItem(new MainClazz(fileModel.filename, []))
+                    const clazz = new MainClazz(DirectoryItemType.MAIN_CLASS, fileModel.filename, [])
+                    clazz.type = DirectoryItemType.MAIN_CLASS
+                    parent.addDirectoryItem(clazz)
                 }
             } else {
                 if (this.currentFileModel === fileModel && this.canvasPanel.current) {
                     const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current.initialNode)
                     console.log(flowModelList)
 
-                    const clazz = new Clazz(fileModel.filename, flowModelList)
+                    const clazz = new Clazz(DirectoryItemType.CLASS, fileModel.filename, flowModelList)
 
                     this.currentClass = clazz
                     parent.addDirectoryItem(clazz)
                 } else {
-                    parent.addDirectoryItem(new Clazz(fileModel.filename, []))
+                    parent.addDirectoryItem(new Clazz(DirectoryItemType.CLASS, fileModel.filename, []))
                 }
             }
         }

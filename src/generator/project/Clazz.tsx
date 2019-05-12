@@ -31,14 +31,16 @@ export class Clazz implements DirectoryItem {
     spacing = "\t"
     loopStack: Stack<string> = new Stack()
 
-    identationCount = 0
+    indentationCount = 0
     declaredVariableSet: Set<string> = new Set()
-    globalVariableSet = new Code(this.identationCount)
-    dependencySet = new Code(this.identationCount)
+    globalVariableSet = new Code(this.indentationCount)
+    dependencySet = new Code(this.indentationCount)
 
-    constructor(name: string, flowModels: FlowModel[]) {
-        this.type = DirectoryItemType.CLASS
+    constructor(type: DirectoryItemType, name: string, flowModels: FlowModel[]) {
+        this.type = type
         this.name = name
+
+        console.log(this)
 
         this.functions = []
         this.mainFunction = null
@@ -162,11 +164,11 @@ export class Clazz implements DirectoryItem {
     }
 
     incrementIdentation() {
-        this.identationCount++
+        this.indentationCount++
     }
 
     decrementIdentation() {
-        this.identationCount--
+        this.indentationCount--
     }
 
     /**
@@ -184,7 +186,7 @@ export class Clazz implements DirectoryItem {
 
     protected createLineWithSpacing(codeLine: CodeLine): string {
         let line = ""
-        for (let i = 0; i < codeLine.identationAmount; i++) {
+        for (let i = 0; i < codeLine.indentationCount; i++) {
             line += this.spacing
         }
 

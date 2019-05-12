@@ -47,23 +47,23 @@ export class JavaIfFlowCode implements IfFlowCode {
         })
 
         clazz.writeCodeToMainFunction("if(" + conditionCode + ") {")
-        clazz.mainFunction.code.incrementIdentation()
+        clazz.mainFunction.code.incrementIndentation()
 
         if (ifFlow.content.trueScopeId != null) {
             clazz.addToLoopStack(ifFlow.id)
             clazz.writeMainCodeFromFlow(ifFlow.content.trueScopeId)
         }
 
-        clazz.mainFunction.code.decrementIdentation()
+        clazz.mainFunction.code.decrementIndentation()
 
         if (ifFlow.content.falseScopeId != null) {
             clazz.writeCodeToMainFunction("} else {")
-            clazz.mainFunction.code.incrementIdentation()
+            clazz.mainFunction.code.incrementIndentation()
 
             clazz.addToLoopStack(ifFlow.id)
             clazz.writeMainCodeFromFlow(ifFlow.content.falseScopeId)
 
-            clazz.mainFunction.code.decrementIdentation()
+            clazz.mainFunction.code.decrementIndentation()
 
         }
         clazz.writeCodeToMainFunction("}")
