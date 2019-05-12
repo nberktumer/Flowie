@@ -42,6 +42,8 @@ export class Clazz implements DirectoryItem {
         this.functions = []
         this.mainFunction = null
 
+        Project.codeStrategy.initMain(this)
+
         this.flowMap = this.convertToFlowObjects(flowModels)
         this.loopStack.push(Clazz.TERMINATION_ID)
 
@@ -54,6 +56,8 @@ export class Clazz implements DirectoryItem {
         this.flowMap.forEach(flow => {
             this.writeFunctionCodeFromFlow(flow)
         })
+
+        Project.codeStrategy.finishMain(this)
     }
 
     writeCodeToMainFunction(line: string) {
