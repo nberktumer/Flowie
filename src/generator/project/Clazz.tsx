@@ -1,27 +1,27 @@
-import {DirectoryItem, DirectoryItemType} from "./DirectoryItem";
-import {Func} from "./Func";
-import {Code, CodeLine} from "../code/Code";
-import {BaseFlow} from "../flows/BaseFlow";
-import {Stack} from "stack-typescript";
-import {FlowModel} from "../FlowModelJSON";
-import {FlowType} from "../../models";
-import {InitialFlow} from "../flows/InitialFlow";
-import {AssignmentFlow} from "../flows/AssignmentFlow";
-import {InputFlow} from "../flows/InputFlow";
-import {OutputFlow} from "../flows/OutputFlow";
-import {ArithmeticFlow} from "../flows/ArithmeticFlow";
-import {WhileFlow} from "../flows/WhileFlow";
-import {IfFlow} from "../flows/IfFlow";
-import {RandomFlow} from "../flows/RandomFlow";
-import {Project} from "./Project";
+import {DirectoryItem, DirectoryItemType} from "./DirectoryItem"
+import {Func} from "./Func"
+import {Code, CodeLine} from "../code/Code"
+import {BaseFlow} from "../flows/BaseFlow"
+import {Stack} from "stack-typescript"
+import {FlowModel} from "../FlowModelJSON"
+import {FlowType} from "../../models"
+import {InitialFlow} from "../flows/InitialFlow"
+import {AssignmentFlow} from "../flows/AssignmentFlow"
+import {InputFlow} from "../flows/InputFlow"
+import {OutputFlow} from "../flows/OutputFlow"
+import {ArithmeticFlow} from "../flows/ArithmeticFlow"
+import {WhileFlow} from "../flows/WhileFlow"
+import {IfFlow} from "../flows/IfFlow"
+import {RandomFlow} from "../flows/RandomFlow"
+import {Project} from "./Project"
 
 export class Clazz implements DirectoryItem {
     static INITIAL_ID = "INITIAL_ID"
     static TERMINATION_ID = "TERMINATION_ID"
     static flowIncrementalId = 0
 
-    type: DirectoryItemType;
-    name: string;
+    type: DirectoryItemType
+    name: string
     mainFunction: Func | null = null
     functions: Func[]
 
@@ -35,8 +35,8 @@ export class Clazz implements DirectoryItem {
     globalVariableSet = new Code()
     dependencySet = new Code()
 
-    constructor(type: DirectoryItemType, name: string, flowModels: FlowModel[]) {
-        this.type = type
+    constructor(name: string, flowModels: FlowModel[]) {
+        this.type = DirectoryItemType.CLASS
         this.name = name
 
         this.functions = []
@@ -53,7 +53,7 @@ export class Clazz implements DirectoryItem {
             this.writeMainCodeFromFlow(Clazz.INITIAL_ID)
         }
 
-        this.flowMap.forEach(flow => {
+        this.flowMap.forEach((flow) => {
             this.writeFunctionCodeFromFlow(flow)
         })
 
@@ -143,16 +143,16 @@ export class Clazz implements DirectoryItem {
     }
 
     generateCode() {
-        this.dependencySet.lines.forEach(dependencyLine => {
+        this.dependencySet.lines.forEach((dependencyLine) => {
             this.generatedCode.push(this.createLineWithSpacing(dependencyLine))
         })
 
-        this.globalVariableSet.lines.forEach(globalVariableLine => {
+        this.globalVariableSet.lines.forEach((globalVariableLine) => {
             this.generatedCode.push(this.createLineWithSpacing(globalVariableLine))
         })
 
-        this.functions.forEach(func => {
-                func.code.lines.forEach(codeLine => {
+        this.functions.forEach((func) => {
+                func.code.lines.forEach((codeLine) => {
                     this.generatedCode.push(this.createLineWithSpacing(codeLine))
                 })
             }
