@@ -1,7 +1,7 @@
 import React from "react"
 import {FileModel} from "../models/FileModel"
 
-interface ProjectContextInterface {
+export interface ProjectContextInterface {
     project: FileModel[]
 }
 

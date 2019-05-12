@@ -42,5 +42,8 @@ export default {
     random: "Random",
     minValue: "Minimum Value",
     maxValue: "Maximum Value",
-    properties: "Properties"
+    properties: "Properties",
+    newProject: "New Project",
+    loadProject: "Load Project",
+    projectName: "Project Name"
 }

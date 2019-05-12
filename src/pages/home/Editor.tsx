@@ -1,5 +1,5 @@
 import React, {Component, createRef} from "react"
-import styles from "./Editor.module.css"
+import styles from "./Home.module.css"
 import {ReflexContainer, ReflexElement, ReflexSplitter} from "react-reflex"
 import {ShapePanel} from "../../components/ShapePanel/ShapePanel"
 import {ShapeItem} from "../../components/ShapePanel/ShapeItem"
@@ -23,8 +23,8 @@ import {MainClazz} from "../../generator/project/MainClazz"
 import {Clazz} from "../../generator/project/Clazz"
 import {FileModel} from "../../models/FileModel"
 import {Directory} from "../../generator/project/Directory"
-import {ProjectConsumer, ProjectProvider} from "../../stores/ProjectStore"
-import {DirectoryItemType} from "../../generator/project/DirectoryItem";
+import {ProjectProvider} from "../../stores/ProjectStore"
+import {DirectoryItemType} from "../../generator/project/DirectoryItem"
 
 export interface EditorProps {
     project: FileModel[]
@@ -40,7 +40,7 @@ export interface EditorState {
     selectedLanguage: ProgrammingLanguage
 }
 
-class Editor extends Component<EditorProps, EditorState> {
+export default class Editor extends Component<EditorProps, EditorState> {
     readonly programmingLanguages = Object.keys(ProgrammingLanguage)
         .filter((k) => typeof ProgrammingLanguage[k as any] !== "number")
     canvasPanel = createRef<CanvasPanel>()
@@ -48,29 +48,27 @@ class Editor extends Component<EditorProps, EditorState> {
     currentFileModel: FileModel
     currentClass: Clazz
 
-    constructor(props: any) {
+    constructor(props: EditorProps) {
         super(props)
 
-        const clazz = new MainClazz(DirectoryItemType.MAIN_CLASS, "FlowieProject", [])
-        clazz.type = DirectoryItemType.MAIN_CLASS
+        console.log(props)
 
-        this.currentFileModel = new FileModel("FlowieProject", "", false, true, [])
-        this.currentClass = clazz
-
-        this.project.rootDirectory.addDirectoryItem(clazz)
-        this.project.init(ProgrammingLanguage.KOTLIN)
-
+        this.currentClass = new MainClazz(DirectoryItemType.MAIN_CLASS, "", [])
         this.state = {
             isModalOpen: false,
             flowType: null,
             flowPosition: {x: 0, y: 0},
-            generatedCode: this.currentClass.getCode(),
+            generatedCode: "",
             variableList: [],
-            fileModelList: [],
+            fileModelList: props.project,
             selectedLanguage: ProgrammingLanguage.KOTLIN
         }
 
-        props.project.push(this.currentClass)
+        this.currentFileModel = props.project.find((value) => value.isMainClass)!
+    }
+
+    componentDidMount(): void {
+        this.onDiagramChanged()
     }
 
     resetState = () => {
@@ -102,12 +100,7 @@ class Editor extends Component<EditorProps, EditorState> {
     }
 
     onDiagramChanged() {
-        if (!this.canvasPanel.current)
-            return
-
-        console.log(this.props)
-
-        this.props.project.forEach((item: FileModel) => {
+        this.state.fileModelList.forEach((item: FileModel) => {
             this.generateDirectoryItems(item, this.project.rootDirectory)
         })
 
@@ -124,23 +117,20 @@ class Editor extends Component<EditorProps, EditorState> {
             })
         } else {
             if (fileModel.isMainClass) {
-                if (this.currentFileModel === fileModel && this.canvasPanel.current) {
-                    const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current.initialNode)
+                if (this.currentFileModel.id === fileModel.id) {
+                    const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current ? this.canvasPanel.current.initialNode : null)
                     console.log(flowModelList)
 
                     const clazz = new MainClazz(DirectoryItemType.MAIN_CLASS, fileModel.filename, flowModelList)
-                    clazz.type = DirectoryItemType.MAIN_CLASS
 
                     this.currentClass = clazz
                     parent.addDirectoryItem(clazz)
                 } else {
-                    const clazz = new MainClazz(DirectoryItemType.MAIN_CLASS, fileModel.filename, [])
-                    clazz.type = DirectoryItemType.MAIN_CLASS
-                    parent.addDirectoryItem(clazz)
+                    parent.addDirectoryItem(new MainClazz(DirectoryItemType.MAIN_CLASS, fileModel.filename, []))
                 }
             } else {
-                if (this.currentFileModel === fileModel && this.canvasPanel.current) {
-                    const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current.initialNode)
+                if (this.currentFileModel.id === fileModel.id) {
+                    const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current ? this.canvasPanel.current.initialNode : null)
                     console.log(flowModelList)
 
                     const clazz = new Clazz(DirectoryItemType.CLASS, fileModel.filename, flowModelList)
@@ -311,11 +301,3 @@ class Editor extends Component<EditorProps, EditorState> {
         )
     }
 }
-
-export default (props: EditorProps) => (
-    <ProjectConsumer>
-        {({project}) => {
-            return <Editor {...props} project={project}/>
-        }}
-    </ProjectConsumer>
-)
