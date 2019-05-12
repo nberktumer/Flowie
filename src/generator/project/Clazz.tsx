@@ -155,9 +155,14 @@ export class Clazz implements DirectoryItem {
         )
     }
 
+    getCode(): string {
+        return this.generatedCode.join("\n")
+    }
+
     /**
      * Returns true if top equals index and pops it returns false otherwise.
      */
+
     removeFromStackIfTopEquals(id: string): boolean {
         if (this.loopStack.top === id) {
             this.loopStack.pop()
