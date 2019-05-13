@@ -35,7 +35,8 @@ export class Clazz implements DirectoryItem {
     indentationCount = 0
     declaredVariableSet: Set<string> = new Set()
 
-    classCode = new Code(this.indentationCount)
+    classInitCode = new Code(this.indentationCount)
+    classFinishCode = new Code(this.indentationCount)
     globalVariableSet = new Code(this.indentationCount)
     dependencySet = new Code(this.indentationCount)
 
@@ -56,10 +57,12 @@ export class Clazz implements DirectoryItem {
         this.loopStack = new Stack()
         this.indentationCount = 0
         this.declaredVariableSet = new Set()
-        this.classCode = new Code(this.indentationCount)
+        this.classInitCode = new Code(this.indentationCount)
+        this.classFinishCode = new Code(this.indentationCount)
         this.globalVariableSet = new Code(this.indentationCount)
         this.dependencySet = new Code(this.indentationCount)
 
+        Project.codeStrategy.initClazz(this)
         Project.codeStrategy.initMain(this)
 
         this.loopStack.push(Clazz.TERMINATION_ID)
@@ -75,7 +78,7 @@ export class Clazz implements DirectoryItem {
         })
 
         Project.codeStrategy.finishMain(this)
-        this.decrementIndentation()
+        Project.codeStrategy.finishClazz(this)
     }
 
     writeCodeToMainFunction(line: string) {
@@ -151,7 +154,7 @@ export class Clazz implements DirectoryItem {
     }
 
     generateCode() {
-        Project.codeStrategy.initClazz(this)
+        Project.codeStrategy.initClazzCode(this)
 
         if (this.mainFunction == null) {
             throw new Error("Main function not defined!")
@@ -164,6 +167,10 @@ export class Clazz implements DirectoryItem {
         if (this.dependencySet.lines.length > 0) {
             this.generatedCode.push("")
         }
+
+        this.classInitCode.lines.forEach((classLine) => {
+            this.generatedCode.push(this.createLineWithSpacing(classLine))
+        })
 
         this.globalVariableSet.lines.forEach((globalVariableLine) => {
             this.generatedCode.push(this.createLineWithSpacing(globalVariableLine))
@@ -184,7 +191,12 @@ export class Clazz implements DirectoryItem {
             }
         )
 
-        Project.codeStrategy.finishClazz(this)
+        Project.codeStrategy.finishClazzCode(this)
+
+        this.classFinishCode.lines.forEach((classLine) => {
+            this.generatedCode.push(this.createLineWithSpacing(classLine))
+        })
+
     }
 
     getCode(): string {

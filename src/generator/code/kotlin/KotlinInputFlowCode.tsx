@@ -35,7 +35,8 @@ export class KotlinInputFlowCode implements InputFlowCode {
             inputFlow.functionName(),
             parameters,
             inputFlow.content.variable.type.toString(),
-            code
+            code,
+            false
         )
 
         Project.codeStrategy.initFunction(func)

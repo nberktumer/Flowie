@@ -21,6 +21,10 @@ export interface CodeStrategy {
 
     finishClazz(clazz: Clazz): void
 
+    initClazzCode(clazz: Clazz): void
+
+    finishClazzCode(clazz: Clazz): void
+
     initMain(clazz: Clazz): void
 
     finishMain(clazz: Clazz): void

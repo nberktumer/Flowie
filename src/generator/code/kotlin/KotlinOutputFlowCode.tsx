@@ -32,7 +32,8 @@ export class KotlinOutputFlowCode implements OutputFlowCode {
             outputFlow.functionName(),
             parameters,
             undefined,
-            code
+            code,
+            false
         )
 
         Project.codeStrategy.initFunction(func)

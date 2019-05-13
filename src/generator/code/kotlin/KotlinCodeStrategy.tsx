@@ -1,7 +1,6 @@
 import {CodeStrategy} from "../CodeStrategy";
 import {Func, Parameter} from "../../project/Func";
 import {Clazz} from "../../project/Clazz";
-import {Variable} from "../../../models/Variable";
 import {Code} from "../Code";
 import {KotlinArithmeticFlowCode} from "./KotlinArithmeticFlowCode";
 import {KotlinAssignmentFlowCode} from "./KotlinAssignmentFlowCode";
@@ -25,17 +24,44 @@ export class KotlinCodeStrategy implements CodeStrategy {
     whileFlowCode = new KotlinWhileFlowCode()
 
     initClazz(clazz: Clazz): void {
-        clazz.classCode.insert(`class ${clazz.name}`)
         clazz.incrementIndentation()
-        clazz.classCode.insert(`companion object {`)
         clazz.incrementIndentation()
+
+        clazz.globalVariableSet.incrementIndentation()
+        clazz.globalVariableSet.incrementIndentation()
     }
 
     finishClazz(clazz: Clazz): void {
         clazz.decrementIndentation()
-        clazz.classCode.insert("}")
         clazz.decrementIndentation()
-        clazz.classCode.insert("}")
+    }
+
+    initClazzCode(clazz: Clazz): void {
+        clazz.classInitCode.insert(`class ${clazz.name} {`)
+
+        clazz.classInitCode.incrementIndentation()
+        clazz.classFinishCode.incrementIndentation()
+        clazz.incrementIndentation()
+
+        clazz.classInitCode.insert(`companion object {`)
+
+        clazz.classInitCode.incrementIndentation()
+        clazz.classFinishCode.incrementIndentation()
+        clazz.incrementIndentation()
+    }
+
+    finishClazzCode(clazz: Clazz): void {
+        clazz.classInitCode.decrementIndentation()
+        clazz.classFinishCode.decrementIndentation()
+        clazz.decrementIndentation()
+
+        clazz.classFinishCode.insert("}")
+
+        clazz.classInitCode.decrementIndentation()
+        clazz.classFinishCode.decrementIndentation()
+        clazz.decrementIndentation()
+
+        clazz.classFinishCode.insert("}")
     }
 
     initMain(clazz: Clazz): void {
@@ -61,7 +87,8 @@ export class KotlinCodeStrategy implements CodeStrategy {
             mainFnName,
             parameters,
             undefined,
-            mainFunctionLines
+            mainFunctionLines,
+            clazz.type === DirectoryItemType.MAIN_CLASS
         )
 
         this.initFunction(clazz.mainFunction)
@@ -93,6 +120,9 @@ export class KotlinCodeStrategy implements CodeStrategy {
             }
         })
 
+        if (func.isMain)
+            func.code.insert(`@JvmStatic`)
+        
         func.code.insert(`fun ${func.functionName}(${parameterString})${returnTypeString} {`)
         func.code.incrementIndentation()
     }
