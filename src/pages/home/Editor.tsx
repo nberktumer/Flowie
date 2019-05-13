@@ -37,7 +37,8 @@ import {DirectoryItemType} from "../../generator/project/DirectoryItem"
 import strings from "../../lang"
 
 export interface EditorProps {
-    project: FileModel[]
+    project: FileModel[],
+    projectName: string
 }
 
 export interface EditorState {
@@ -58,7 +59,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
     readonly programmingLanguages = Object.keys(ProgrammingLanguage)
         .filter((k) => typeof ProgrammingLanguage[k as any] !== "number")
     canvasPanel = createRef<CanvasPanel>()
-    project = new Project()
+    project: Project
     currentFileModel: FileModel
     rootFileModel: FileModel
     currentClass: Clazz
@@ -67,6 +68,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
     constructor(props: EditorProps) {
         super(props)
 
+        this.project = new Project(this.props.projectName)
         this.currentClass = new MainClazz(DirectoryItemType.MAIN_CLASS, "", [])
         this.state = {
             isModalOpen: false,
@@ -270,8 +272,13 @@ export default class Editor extends Component<EditorProps, EditorState> {
                 if (!this.canvasPanel.current)
                     return
 
-                const base64 = JSON.stringify(this.canvasPanel.current.saveProject())
-                FileUtils.save("FlowieSave.flwie", base64)
+                this.currentFileModel.json = JSON.stringify(this.canvasPanel.current.saveProject())
+                const saveContent = {
+                    fileModelList: this.rootFileModel,
+                    projectName: this.props.projectName,
+                    currentFile: this.currentFileModel
+                }
+                FileUtils.save("FlowieSave.flwie", JSON.stringify(saveContent))
                 break
             }
             case "load": {
@@ -279,11 +286,29 @@ export default class Editor extends Component<EditorProps, EditorState> {
                     if (!this.canvasPanel.current)
                         return
 
-                    this.canvasPanel.current.loadProject(data, (variableList: any) => {
-                        this.resetState()
-                        this.setState({variableList})
-                        this.onDiagramChanged()
-                    })
+                    try {
+                        const loadedData = JSON.parse(data) as {fileModelList: FileModel[], projectName: string, currentFile: FileModel}
+
+                        if (loadedData.currentFile.json) {
+                            this.canvasPanel.current.loadProject(loadedData.currentFile.json, (variableList: any) => {
+                                this.project = new Project(loadedData.projectName)
+                                this.currentFileModel = loadedData.currentFile
+                                this.resetState()
+                                this.setState({variableList})
+                                this.updateDirectoryItems()
+                                this.onDiagramChanged()
+                            })
+                        } else {
+                            this.project = new Project(loadedData.projectName)
+                            this.currentFileModel = loadedData.currentFile
+                            this.canvasPanel.current.newProject()
+                            this.resetState()
+                            this.updateDirectoryItems()
+                            this.onDiagramChanged()
+                        }
+                    } catch (e) {
+                        console.error(e)
+                    }
                 }, (err: string) => {
                     console.error(err)
                 })

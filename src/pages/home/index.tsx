@@ -8,7 +8,8 @@ export interface HomePageProps {
 
 export interface HomePageState {
     isLoaded: boolean,
-    data: FileModel[]
+    data: FileModel[],
+    projectName: string
 }
 
 export default class HomePage extends Component<HomePageProps, HomePageState> {
@@ -18,15 +19,16 @@ export default class HomePage extends Component<HomePageProps, HomePageState> {
 
         this.state = {
             isLoaded: false,
-            data: []
+            data: [],
+            projectName: "Flowie"
         }
     }
 
     render() {
         return this.state.isLoaded ? (
-            <Editor project={this.state.data}/>
+            <Editor project={this.state.data} projectName={this.state.projectName}/>
         ) : (
-            <Home onLoad={(data) => this.setState({data, isLoaded: true})}/>
+            <Home onLoad={(projectName, data) => this.setState({projectName, data, isLoaded: true})}/>
         )
     }
 }
