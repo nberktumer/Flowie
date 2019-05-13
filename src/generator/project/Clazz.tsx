@@ -14,6 +14,7 @@ import {WhileFlow} from "../flows/WhileFlow"
 import {IfFlow} from "../flows/IfFlow"
 import {RandomFlow} from "../flows/RandomFlow"
 import {Project} from "./Project"
+import {DataClassFlow} from "../flows/DataClassFlow";
 
 export class Clazz implements DirectoryItem {
     static INITIAL_ID = "INITIAL_ID"
@@ -39,6 +40,12 @@ export class Clazz implements DirectoryItem {
     constructor(type: DirectoryItemType, name: string, flowModels: FlowModel[]) {
         this.type = type
         this.name = name
+        this.functions = []
+        this.reset(flowModels)
+    }
+
+    reset(flowModels: FlowModel[]) {
+        this.flowMap = this.convertToFlowObjects(flowModels)
 
         this.functions = []
         this.mainFunction = null
@@ -46,7 +53,6 @@ export class Clazz implements DirectoryItem {
         Project.codeStrategy.initClazz(this)
         Project.codeStrategy.initMain(this)
 
-        this.flowMap = this.convertToFlowObjects(flowModels)
         this.loopStack.push(Clazz.TERMINATION_ID)
 
         const initialFlow = this.flowMap.get(Clazz.INITIAL_ID)
@@ -271,6 +277,14 @@ export class Clazz implements DirectoryItem {
                             value.nextFlowId,
                             value.type,
                             value.randomFlowContent
+                        ))
+                        break
+                    case FlowType.DATA_CLASS:
+                        baseFlowMap.set(value.id, new DataClassFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.dataClassFlowContent
                         ))
                         break
                     /*
