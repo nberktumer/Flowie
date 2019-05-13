@@ -62,6 +62,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
     currentFileModel: FileModel
     rootFileModel: FileModel
     currentClass: Clazz
+    hasLoadedProject = false
 
     constructor(props: EditorProps) {
         super(props)
@@ -86,7 +87,15 @@ export default class Editor extends Component<EditorProps, EditorState> {
     }
 
     componentDidMount(): void {
-        this.onDiagramChanged()
+        this.forceUpdate()
+    }
+
+    componentDidUpdate(prevProps: Readonly<EditorProps>, prevState: Readonly<EditorState>, snapshot?: any): void {
+        if (!this.hasLoadedProject) {
+            this.updateDirectoryItems()
+            this.onDiagramChanged()
+            this.hasLoadedProject = true
+        }
     }
 
     resetState = () => {
@@ -120,49 +129,19 @@ export default class Editor extends Component<EditorProps, EditorState> {
     onDiagramChanged() {
         Project.setProgrammingLanguage(this.state.selectedLanguage)
 
-        this.rootFileModel.children.forEach((item: FileModel) => {
-            this.generateDirectoryItems(item, this.project.rootDirectory)
-        })
+        const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current ? this.canvasPanel.current.initialNode : null)
 
-        this.project.generateClazzCodes()
+        this.currentClass.reset(flowModelList)
+        this.currentClass.generateCode()
+        // this.project.generateClazzCodes() // TODO: use this for exporting the project
         this.setState({generatedCode: this.currentClass.getCode()})
     }
 
-    generateDirectoryItems(fileModel: FileModel, parent: Directory) {
-        if (fileModel.isDir) {
-            const directory = new Directory(fileModel.filename, [])
-            parent.addDirectoryItem(directory)
-            fileModel.children.forEach((item) => {
-                this.generateDirectoryItems(item, directory)
-            })
-        } else {
-            if (fileModel.isMainClass) {
-                if (this.currentFileModel.id === fileModel.id) {
-                    console.log(this.canvasPanel.current)
-                    const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current ? this.canvasPanel.current.initialNode : null)
-                    console.log(flowModelList)
-
-                    const clazz = new MainClazz(DirectoryItemType.MAIN_CLASS, fileModel.filename, flowModelList)
-
-                    this.currentClass = clazz
-                    parent.addDirectoryItem(clazz)
-                } else {
-                    parent.addDirectoryItem(new MainClazz(DirectoryItemType.MAIN_CLASS, fileModel.filename, []))
-                }
-            } else {
-                if (this.currentFileModel.id === fileModel.id) {
-                    const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current ? this.canvasPanel.current.initialNode : null)
-                    console.log(flowModelList)
-
-                    const clazz = new Clazz(DirectoryItemType.CLASS, fileModel.filename, flowModelList)
-
-                    this.currentClass = clazz
-                    parent.addDirectoryItem(clazz)
-                } else {
-                    parent.addDirectoryItem(new Clazz(DirectoryItemType.CLASS, fileModel.filename, []))
-                }
-            }
-        }
+    updateDirectoryItems() {
+        this.project.rootDirectory.items = []
+        this.rootFileModel.children.forEach((item: FileModel) => {
+            this.generateDirectoryItems(item, this.project.rootDirectory)
+        })
     }
 
     onNewClass(path: string) {
@@ -184,19 +163,30 @@ export default class Editor extends Component<EditorProps, EditorState> {
         pathList.forEach((path) => {
             if (lastFileModel) {
                 const result = lastFileModel.children.find((val) => val.isDir && val.filename === path)
-                if (result)
+                if (result) {
                     lastFileModel = result
+                }
             }
         })
 
         if (lastFileModel) {
             switch (this.state.newFileType) {
+                case "package":
                 case "class": {
-                    lastFileModel.children.push(new FileModel(this.state.newFileName, "", false, false, []))
-                    break
-                }
-                case "package": {
-                    lastFileModel.children.push(new FileModel(this.state.newFileName, "", true, false, []))
+                    let currentDir = this.project.rootDirectory
+                    pathList.forEach((path) => {
+                        currentDir.items.forEach((dirItem) => {
+                            if (dirItem.type === DirectoryItemType.DIRECTORY && dirItem.name === path) {
+                                currentDir = dirItem as Directory
+                            }
+                        })
+                    })
+                    if (this.state.newFileType === "package") {
+                        currentDir.addDirectoryItem(new Directory(this.state.newFileName, []))
+                    } else {
+                        currentDir.addDirectoryItem(new Clazz(DirectoryItemType.CLASS, this.state.newFileName, []))
+                    }
+                    lastFileModel.children.push(new FileModel(this.state.newFileName, "", this.state.newFileType === "package", false, []))
                     break
                 }
             }
@@ -204,6 +194,34 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
         this.onAddNewFileDialogClose()
         this.forceUpdate()
+    }
+
+    onFileDoubleClick(fileModel: FileModel & { path: string }) {
+        if (!fileModel.isDir && this.currentFileModel.id !== fileModel.id) {
+            if (!this.canvasPanel.current)
+                return
+
+            this.currentFileModel.json = JSON.stringify(this.canvasPanel.current.saveProject())
+            this.forceUpdate()
+
+            console.log(fileModel)
+
+            if (fileModel.json) {
+                this.canvasPanel.current.loadProject(fileModel.json, (variableList: any) => {
+                    this.resetState()
+                    this.setState({variableList})
+                    this.updateDirectoryItems()
+                    this.onDiagramChanged()
+                    this.currentFileModel = fileModel
+                })
+            } else {
+                this.canvasPanel.current.newProject()
+                this.resetState()
+                this.updateDirectoryItems()
+                this.onDiagramChanged()
+                this.currentFileModel = fileModel
+            }
+        }
     }
 
     onAddNewFileDialogClose() {
@@ -286,7 +304,8 @@ export default class Editor extends Component<EditorProps, EditorState> {
                             <DialogTitle id="form-dialog-title">{strings.newProject}</DialogTitle>
                             <DialogContent>
                                 <DialogContentText>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce a auctor dui. Nunc at pellentesque purus. Aliquam leo massa, pellentesque.
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce a auctor dui. Nunc at
+                                    pellentesque purus. Aliquam leo massa, pellentesque.
                                 </DialogContentText>
                                 <TextField
                                     autoFocus
@@ -319,6 +338,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
                                     <ReflexElement className="left-pane" flex={0.35} minSize={200}>
                                         <div style={{width: "100%", height: "100%", backgroundColor: "#1d1f21"}}>
                                             <ProjectTreePanel
+                                                onDoubleClickListener={(fileModel) => this.onFileDoubleClick(fileModel)}
                                                 onNewClass={(path) => this.onNewClass(path)}
                                                 onNewFunctionality={(path) => this.onNewFunctionality(path)}
                                                 onNewPackage={(path) => this.onNewPackage(path)}/>
@@ -395,5 +415,41 @@ export default class Editor extends Component<EditorProps, EditorState> {
                 </ProjectProvider>
             </FlowProvider>
         )
+    }
+
+    private generateDirectoryItems(fileModel: FileModel, parent: Directory) {
+        if (fileModel.isDir) {
+            const directory = new Directory(fileModel.filename, [])
+            parent.addDirectoryItem(directory)
+            fileModel.children.forEach((item) => {
+                this.generateDirectoryItems(item, directory)
+            })
+        } else {
+            if (fileModel.isMainClass) {
+                if (this.currentFileModel.id === fileModel.id) {
+                    const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current ? this.canvasPanel.current.initialNode : null)
+                    console.log(flowModelList)
+
+                    const clazz = new MainClazz(DirectoryItemType.MAIN_CLASS, fileModel.filename, flowModelList)
+
+                    this.currentClass = clazz
+                    parent.addDirectoryItem(clazz)
+                } else {
+                    parent.addDirectoryItem(new MainClazz(DirectoryItemType.MAIN_CLASS, fileModel.filename, []))
+                }
+            } else {
+                if (this.currentFileModel.id === fileModel.id) {
+                    const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current ? this.canvasPanel.current.initialNode : null)
+                    console.log(flowModelList)
+
+                    const clazz = new Clazz(DirectoryItemType.CLASS, fileModel.filename, flowModelList)
+
+                    this.currentClass = clazz
+                    parent.addDirectoryItem(clazz)
+                } else {
+                    parent.addDirectoryItem(new Clazz(DirectoryItemType.CLASS, fileModel.filename, []))
+                }
+            }
+        }
     }
 }

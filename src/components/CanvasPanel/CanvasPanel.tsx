@@ -10,7 +10,8 @@ import {DefaultPort, DefaultPortLocation, DefaultPortModel, DefaultPortType} fro
 import {InitialFlowNode} from "../Flows/Initial/InitialFlowNode"
 import {FlowNodeFactory} from "../Flows"
 import {BaseFlowNode} from "../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
-import {FlowContext} from "../../stores/FlowStore"
+import {FlowConsumer, FlowContext} from "../../stores/FlowStore"
+import {Variable} from "../../models/Variable"
 
 export interface CanvasPanelProps {
     onDrop: (type: FlowType, position: { x: number, y: number }) => void,
@@ -27,6 +28,8 @@ export default class CanvasPanel extends Component<CanvasPanelProps, CanvasPanel
     activeModel: DiagramModel
     diagramEngine: DiagramEngine
     initialNode: InitialFlowNode
+
+    variableList: Variable[] = []
 
     constructor(props: CanvasPanelProps) {
         super(props)
@@ -61,10 +64,9 @@ export default class CanvasPanel extends Component<CanvasPanelProps, CanvasPanel
     }
 
     saveProject = () => {
-        const flowContext = useContext(FlowContext)
         const diagram = this.activeModel.serializeDiagram() as { [k: string]: any }
         diagram.canvasPanel = {
-            variableList: flowContext.variableList,
+            variableList: this.variableList,
             initialNodeId: this.initialNode.getID()
         }
         return diagram
@@ -116,17 +118,24 @@ export default class CanvasPanel extends Component<CanvasPanelProps, CanvasPanel
 
     render() {
         return (
-            <div
-                className={styles.diagramLayer}
-                onDrop={(event) => this.onDrop(event)}
-                onDragOver={(event) => event.preventDefault()}>
+            <FlowConsumer>
+                {(flowContext) => {
+                    this.variableList = flowContext.variableList
+                    return (
+                        <div
+                            className={styles.diagramLayer}
+                            onDrop={(event) => this.onDrop(event)}
+                            onDragOver={(event) => event.preventDefault()}>
 
-                <DiagramWidget
-                    maxNumberPointsPerLink={0}
-                    allowLooseLinks={false}
-                    className={styles.srdDemoCanvas}
-                    diagramEngine={this.diagramEngine}/>
-            </div>
+                            <DiagramWidget
+                                maxNumberPointsPerLink={0}
+                                allowLooseLinks={false}
+                                className={styles.srdDemoCanvas}
+                                diagramEngine={this.diagramEngine}/>
+                        </div>
+                    )
+                }}
+            </FlowConsumer>
         )
     }
 

@@ -48,6 +48,13 @@ export class Clazz implements DirectoryItem {
 
         this.functions = []
         this.mainFunction = null
+        this.generatedCode = []
+        this.scopeCount = 0
+        this.loopStack = new Stack()
+        this.indentationCount = 0
+        this.declaredVariableSet = new Set()
+        this.globalVariableSet = new Code(this.indentationCount)
+        this.dependencySet = new Code(this.indentationCount)
 
         Project.codeStrategy.initClazz(this)
         Project.codeStrategy.initMain(this)

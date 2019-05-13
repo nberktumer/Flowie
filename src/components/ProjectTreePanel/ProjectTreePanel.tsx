@@ -3,51 +3,59 @@ import Tree, {TreeNode} from "rc-tree"
 import "rc-tree/assets/index.css"
 import {FileModel} from "../../models/FileModel"
 import {ProjectConsumer} from "../../stores/ProjectStore"
-import {Menu, MenuItem} from "@material-ui/core"
+import {Icon, Menu, MenuItem} from "@material-ui/core"
+import _ from "lodash"
 
 export interface ProjectTreePanelProps {
     onNewClass: (path: string) => void,
     onNewPackage: (path: string) => void,
-    onNewFunctionality: (path: string) => void
+    onNewFunctionality: (path: string) => void,
+    onDoubleClickListener: (fileModel: FileModel & { path: string }) => void
 }
 
 export interface ProjectTreePanelState {
     isContextMenuVisible: boolean,
-    itemPath: string
+    itemPath: string,
+    currentTarget: ((element: HTMLElement) => HTMLElement) | HTMLElement | undefined | null
 }
 
 export class ProjectTreePanel extends Component<ProjectTreePanelProps, ProjectTreePanelState> {
-    nodeMap: { [key: string]: string } = {}
+    nodeMap: { [key: string]: FileModel & { path: string } } = {}
 
     constructor(props: ProjectTreePanelProps) {
         super(props)
         this.state = {
             isContextMenuVisible: false,
-            itemPath: ""
+            itemPath: "",
+            currentTarget: null
         }
     }
 
     newClass = () => {
         this.props.onNewClass(this.state.itemPath)
-        this.setState({isContextMenuVisible: false, itemPath: ""})
+        this.setState({currentTarget: null, itemPath: ""})
     }
 
     newPackage = () => {
         this.props.onNewPackage(this.state.itemPath)
-        this.setState({isContextMenuVisible: false, itemPath: ""})
+        this.setState({currentTarget: null, itemPath: ""})
+    }
+
+    onDoubleClick = (fileModel: FileModel & { path: string }) => {
+        this.props.onDoubleClickListener(fileModel)
     }
 
     renderTree = (fileModel: FileModel, parent?: string) => {
-        this.nodeMap[fileModel.id] = parent ? `${parent}/${fileModel.filename}` : fileModel.filename
+        this.nodeMap[fileModel.id] = _.merge(fileModel, {path: parent ? `${parent}/${fileModel.filename}` : fileModel.filename})
 
         if (fileModel.isDir) {
             return (
-                <TreeNode title={fileModel.filename} key={fileModel.id} isLeaf={false}>
-                    {fileModel.children.map((value) => this.renderTree(value, parent ? `${parent}/${fileModel.filename}` : fileModel.filename))}
+                <TreeNode icon={<Icon style={{fontSize: 16}}>folder</Icon>} title={fileModel.filename} key={fileModel.id} isLeaf={false}>
+                    {fileModel.children.map((value) => this.renderTree(value, this.nodeMap[fileModel.id].path))}
                 </TreeNode>
             )
         } else {
-            return <TreeNode title={fileModel.filename} key={fileModel.id} isLeaf={true}/>
+            return <TreeNode icon={<Icon style={{fontSize: 16}}>insert_drive_file</Icon>} title={fileModel.filename} key={fileModel.id} isLeaf={true}/>
         }
     }
 
@@ -58,21 +66,29 @@ export class ProjectTreePanel extends Component<ProjectTreePanelProps, ProjectTr
                     <div style={{color: "white"}}>
                         <Menu
                             id="simple-menu"
-                            style={{position: "absolute", top: 0, left: 0}}
-                            open={this.state.isContextMenuVisible}
-                            onClose={() => this.setState({isContextMenuVisible: false})}>
+                            anchorEl={this.state.currentTarget}
+                            open={Boolean(this.state.currentTarget)}
+                            onClose={() => this.setState({currentTarget: null})}>
                             <MenuItem onClick={() => this.newClass()}>New Class</MenuItem>
                             <MenuItem onClick={() => this.newPackage()}>New Package</MenuItem>
                         </Menu>
-                        <Tree selectable={false}
+                        <Tree defaultExpandAll
+                              selectable={false}
+                              onMouseEnter={(e) => {
+                                  if (e.event.target)
+                                      e.event.target.addEventListener("dblclick", () => this.onDoubleClick(this.nodeMap[e.node.props.eventKey]))
+                              }}
+                              onMouseLeave={(e) => {
+                                  if (e.event.target)
+                                      e.event.target.removeEventListener("dblclick", () => this.onDoubleClick(this.nodeMap[e.node.props.eventKey]))
+                              }}
                               onRightClick={(props) => {
                                   if (!props.node.props.isLeaf)
                                       this.setState({
-                                          isContextMenuVisible: true,
-                                          itemPath: this.nodeMap[props.node.props.eventKey]
+                                          currentTarget: props.event.currentTarget as HTMLElement,
+                                          itemPath: this.nodeMap[props.node.props.eventKey].path
                                       })
-                              }}
-                              defaultExpandAll={true}>
+                              }}>
                             {projectContext.project.map((value) => this.renderTree(value))})}
                         </Tree>
                     </div>

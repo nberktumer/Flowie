@@ -23,7 +23,10 @@ export default class HomePage extends Component<HomePageProps, HomePageState> {
     }
 
     render() {
-        return this.state.isLoaded ? (<Editor project={this.state.data}/>) : (
-            <Home onLoad={(data) => this.setState({data, isLoaded: true})}/>)
+        return this.state.isLoaded ? (
+            <Editor project={this.state.data}/>
+        ) : (
+            <Home onLoad={(data) => this.setState({data, isLoaded: true})}/>
+        )
     }
 }
