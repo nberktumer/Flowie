@@ -1,5 +1,5 @@
 import {CodeStrategy} from "../CodeStrategy";
-import {Func} from "../../project/Func";
+import {Func, Parameter} from "../../project/Func";
 import {Clazz} from "../../project/Clazz";
 import {Variable} from "../../../models/Variable";
 import {Code} from "../Code";
@@ -11,6 +11,8 @@ import {KotlinOutputFlowCode} from "./KotlinOutputFlowCode";
 import {KotlinRandomFlowCode} from "./KotlinRandomFlowCode";
 import {KotlinWhileFlowCode} from "./KotlinWhileFlowCode";
 import {DirectoryItemType} from "../../project/DirectoryItem";
+import {ProgrammingLanguage, VariableType} from "../../../models";
+import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
 
 export class KotlinCodeStrategy implements CodeStrategy {
 
@@ -23,35 +25,46 @@ export class KotlinCodeStrategy implements CodeStrategy {
     whileFlowCode = new KotlinWhileFlowCode()
 
     initClazz(clazz: Clazz): void {
-
+        clazz.classCode.insert(`class ${clazz.name}`)
+        clazz.incrementIndentation()
+        clazz.classCode.insert(`companion object {`)
+        clazz.incrementIndentation()
     }
 
     finishClazz(clazz: Clazz): void {
-
-    }
-
-    getClazzSignature(clazz: Clazz): string {
-        return ""
+        clazz.decrementIndentation()
+        clazz.classCode.insert("}")
+        clazz.decrementIndentation()
+        clazz.classCode.insert("}")
     }
 
     initMain(clazz: Clazz): void {
-        const parameters: Variable[] = []
+        const parameters: Parameter[] = []
         const mainFunctionLines = new Code(clazz.indentationCount)
+        let mainFnName = ""
 
         if (clazz.type === DirectoryItemType.MAIN_CLASS) {
-            mainFunctionLines.insert(`fun main(args: Array<String\>) {`)
+            mainFnName = "main"
+            parameters.push(
+                new Parameter(
+                    "args",
+                    ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.KOTLIN, VariableType.MAIN_ARG)))
         } else {
-            //TODO
+            mainFnName = clazz.name
+            parameters.push(
+                new Parameter(
+                    clazz.name,
+                    ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.KOTLIN, VariableType.MAIN_ARG))) //TODO CHANGE TYPE TO ARG FROM FN
         }
 
-        mainFunctionLines.incrementIndentation()
-
         clazz.mainFunction = new Func(
-            clazz.name,
+            mainFnName,
             parameters,
             undefined,
             mainFunctionLines
         )
+
+        this.initFunction(clazz.mainFunction)
     }
 
     finishMain(clazz: Clazz): void {

@@ -10,6 +10,7 @@ import {DirectoryItemType} from "./project/DirectoryItem";
 import {Directory} from "./project/Directory";
 import {Clazz} from "./project/Clazz";
 import {MainClazz} from "./project/MainClazz";
+import {DataClassFlowContent} from "./flows/DataClassFlow";
 
 export class DirectoryItemModel {
     type: DirectoryItemType
@@ -48,6 +49,7 @@ export class FlowModel {
     whileFlowContent: WhileFlowContent | null
     ifFlowContent: IfFlowContent | null
     randomFlowContent: RandomFlowContent | null
+    dataClassFlowContent: DataClassFlowContent | null
     // forFlowContent: ForFlowContent,
     // ifFlowContent: IfFlowContent,
     nextFlowId: string | null
@@ -62,6 +64,7 @@ export class FlowModel {
         whileFlowContent: WhileFlowContent | null = null,
         ifFlowContent: IfFlowContent | null = null,
         randomFlowContent: RandomFlowContent | null = null,
+        dataClassFlowContent: DataClassFlowContent | null = null,
         nextFlowId: string | null
         // forFlowContent: ForFlowContent,
 
@@ -76,6 +79,7 @@ export class FlowModel {
         this.whileFlowContent = whileFlowContent
         this.ifFlowContent = ifFlowContent
         this.randomFlowContent = randomFlowContent
+        this.dataClassFlowContent = dataClassFlowContent
         this.nextFlowId = nextFlowId
     }
 }

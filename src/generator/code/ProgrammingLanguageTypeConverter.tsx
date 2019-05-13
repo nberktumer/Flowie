@@ -18,6 +18,10 @@ export class ProgrammingLanguageTypeConverter {
                         break
                     case VariableType.DOUBLE:
                         convertedType = "double"
+                        break
+                    case VariableType.MAIN_ARG:
+                        convertedType = `String[]`
+                        break
                 }
                 break
             case ProgrammingLanguage.KOTLIN:
@@ -33,6 +37,10 @@ export class ProgrammingLanguageTypeConverter {
                         break
                     case VariableType.DOUBLE:
                         convertedType = "Double"
+                        break
+                    case VariableType.MAIN_ARG:
+                        convertedType = `Array<String>`
+                        break
                 }
                 break
         }

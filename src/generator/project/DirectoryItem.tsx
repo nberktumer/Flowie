@@ -6,5 +6,6 @@ export interface DirectoryItem {
 export enum DirectoryItemType {
     MAIN_CLASS = "MainClass",
     CLASS = "Class",
+    DATA_CLASS = "DataClass",
     DIRECTORY = "Directory"
 }

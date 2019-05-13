@@ -2,7 +2,8 @@ export enum VariableType {
     INT = "Int",
     STRING = "String",
     BOOLEAN = "Boolean",
-    DOUBLE = "Double"
+    DOUBLE = "Double",
+    MAIN_ARG = "MainArg" //TODO FIX
 }
 
 export enum ArithmeticOperationType {
@@ -22,7 +23,8 @@ export enum FlowType {
     OUTPUT = "Output",
     ARITHMETIC = "Arithmetic",
     ASSIGNMENT = "Assignment",
-    RANDOM = "Random"
+    RANDOM = "Random",
+    DATA_CLASS = "DataClass"
 }
 
 export enum ConditionOperation {

@@ -1,5 +1,5 @@
 import {CodeStrategy} from "../CodeStrategy";
-import {Func} from "../../project/Func";
+import {Func, Parameter} from "../../project/Func";
 import {Clazz} from "../../project/Clazz";
 import {JavaArithmeticFlowCode} from "./JavaArithmeticFlowCode";
 import {JavaWhileFlowCode} from "./JavaWhileFlowCode";
@@ -8,9 +8,10 @@ import {JavaIfFlowCode} from "./JavaIfFlowCode";
 import {JavaInputFlowCode} from "./JavaInputFlowCode";
 import {JavaOutputFlowCode} from "./JavaOutputFlowCode";
 import {JavaRandomFlowCode} from "./JavaRandomFlowCode";
-import {Variable} from "../../../models/Variable";
 import {Code} from "../Code";
 import {DirectoryItemType} from "../../project/DirectoryItem";
+import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
+import {ProgrammingLanguage, VariableType} from "../../../models";
 
 export class JavaCodeStrategy implements CodeStrategy {
 
@@ -23,35 +24,42 @@ export class JavaCodeStrategy implements CodeStrategy {
     whileFlowCode = new JavaWhileFlowCode()
 
     initClazz(clazz: Clazz): void {
+        clazz.generatedCode.push(`public class ${clazz.name} {`)
         clazz.incrementIndentation()
     }
 
     finishClazz(clazz: Clazz): void {
         clazz.decrementIndentation()
-    }
-
-    getClazzSignature(clazz: Clazz): string {
-        return `public class ${clazz.name} {`
+        clazz.generatedCode.push(`}`)
     }
 
     initMain(clazz: Clazz): void {
-        const parameters: Variable[] = []
+        const parameters: Parameter[] = []
         const mainFunctionLines = new Code(clazz.indentationCount)
+        let mainFnName = ""
 
-        if (clazz.type == DirectoryItemType.MAIN_CLASS) {
-            mainFunctionLines.insert(`public static void main(String args[]) {`)
+        if (clazz.type === DirectoryItemType.MAIN_CLASS) {
+            mainFnName = "main"
+            parameters.push(
+                new Parameter(
+                    "args",
+                    ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, VariableType.MAIN_ARG)))
         } else {
-            //TODO
+            mainFnName = clazz.name
+            parameters.push(
+                new Parameter(
+                    clazz.name,
+                    ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, VariableType.MAIN_ARG))) //TODO CHANGE TYPE TO ARG FROM FN
         }
 
-        mainFunctionLines.incrementIndentation()
-
         clazz.mainFunction = new Func(
-            clazz.name,
+            mainFnName,
             parameters,
             undefined,
             mainFunctionLines
         )
+
+        this.initFunction(clazz.mainFunction)
     }
 
     finishMain(clazz: Clazz): void {

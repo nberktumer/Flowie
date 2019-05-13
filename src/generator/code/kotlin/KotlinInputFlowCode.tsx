@@ -1,8 +1,7 @@
 import {InputFlow} from "../../flows/InputFlow";
 import {InputFlowCode} from "../common/InputFlowCode";
 import {VariableType} from "../../../models";
-import {Variable} from "../../../models/Variable";
-import {Func} from "../../project/Func";
+import {Func, Parameter} from "../../project/Func";
 import {Clazz} from "../../project/Clazz";
 import {Code} from "../Code";
 import {Project} from "../../project/Project";
@@ -30,7 +29,7 @@ export class KotlinInputFlowCode implements InputFlowCode {
             return
 
         const code = new Code(clazz.indentationCount)
-        const parameters: Variable[] = []
+        const parameters: Parameter[] = []
 
         const func = new Func(
             inputFlow.functionName(),

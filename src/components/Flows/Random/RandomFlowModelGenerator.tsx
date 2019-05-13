@@ -22,6 +22,7 @@ export class RandomFlowModelGenerator extends BaseFlowModelGenerator {
             null,
             null,
             new RandomFlowContent(randomFlow.getVariable(), randomFlow.minValue, randomFlow.maxValue),
+            null,
             nextFlowId
         )
     }

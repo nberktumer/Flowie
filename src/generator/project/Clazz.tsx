@@ -14,6 +14,7 @@ import {WhileFlow} from "../flows/WhileFlow"
 import {IfFlow} from "../flows/IfFlow"
 import {RandomFlow} from "../flows/RandomFlow"
 import {Project} from "./Project"
+import {DataClassFlow} from "../flows/DataClassFlow";
 
 export class Clazz implements DirectoryItem {
     static INITIAL_ID = "INITIAL_ID"
@@ -33,6 +34,8 @@ export class Clazz implements DirectoryItem {
 
     indentationCount = 0
     declaredVariableSet: Set<string> = new Set()
+
+    classCode = new Code(this.indentationCount)
     globalVariableSet = new Code(this.indentationCount)
     dependencySet = new Code(this.indentationCount)
 
@@ -53,10 +56,10 @@ export class Clazz implements DirectoryItem {
         this.loopStack = new Stack()
         this.indentationCount = 0
         this.declaredVariableSet = new Set()
+        this.classCode = new Code(this.indentationCount)
         this.globalVariableSet = new Code(this.indentationCount)
         this.dependencySet = new Code(this.indentationCount)
 
-        Project.codeStrategy.initClazz(this)
         Project.codeStrategy.initMain(this)
 
         this.loopStack.push(Clazz.TERMINATION_ID)
@@ -72,7 +75,6 @@ export class Clazz implements DirectoryItem {
         })
 
         Project.codeStrategy.finishMain(this)
-        Project.codeStrategy.finishClazz(this)
         this.decrementIndentation()
     }
 
@@ -149,12 +151,13 @@ export class Clazz implements DirectoryItem {
     }
 
     generateCode() {
-        const clazzSignature = Project.codeStrategy.getClazzSignature(this)
-        if (clazzSignature) {
-            this.generatedCode.push(clazzSignature)
+        Project.codeStrategy.initClazz(this)
+
+        if (this.mainFunction == null) {
+            throw new Error("Main function not defined!")
         }
 
-        this.dependencySet.lines.forEach(dependencyLine => {
+        this.dependencySet.lines.forEach((dependencyLine) => {
             this.generatedCode.push(this.createLineWithSpacing(dependencyLine))
         })
 
@@ -162,7 +165,7 @@ export class Clazz implements DirectoryItem {
             this.generatedCode.push("")
         }
 
-        this.globalVariableSet.lines.forEach(globalVariableLine => {
+        this.globalVariableSet.lines.forEach((globalVariableLine) => {
             this.generatedCode.push(this.createLineWithSpacing(globalVariableLine))
         })
 
@@ -170,15 +173,18 @@ export class Clazz implements DirectoryItem {
             this.generatedCode.push("")
         }
 
-        this.functions.forEach(func => {
-            func.code.lines.forEach(codeLine => {
-                this.generatedCode.push(this.createLineWithSpacing(codeLine))
-            })
+        this.mainFunction.code.lines.forEach((codeLine) => {
+            this.generatedCode.push(this.createLineWithSpacing(codeLine))
         })
 
-        if (clazzSignature) {
-            this.generatedCode.push("}")
-        }
+        this.functions.forEach((func) => {
+                func.code.lines.forEach((codeLine) => {
+                    this.generatedCode.push(this.createLineWithSpacing(codeLine))
+                })
+            }
+        )
+
+        Project.codeStrategy.finishClazz(this)
     }
 
     getCode(): string {
@@ -285,7 +291,7 @@ export class Clazz implements DirectoryItem {
                             value.randomFlowContent
                         ))
                         break
-                    /*case FlowType.DATA_CLASS:
+                    case FlowType.DATA_CLASS:
                         baseFlowMap.set(value.id, new DataClassFlow(
                             value.id,
                             value.nextFlowId,

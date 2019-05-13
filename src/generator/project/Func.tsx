@@ -1,15 +1,14 @@
-import {Variable} from "../../models/Variable";
 import {Code} from "../code/Code";
 
 export class Func {
     functionName: string
-    parameters: Variable[]
+    parameters: Parameter[]
     returnType: string | undefined
     code: Code
 
     constructor(
         functionName: string,
-        parameters: Variable[],
+        parameters: Parameter[],
         returnType: string | undefined,
         codeLines: Code
     ) {
@@ -18,7 +17,6 @@ export class Func {
         this.returnType = returnType
         this.code = codeLines
     }
-
 }
 
 export class Parameter {
