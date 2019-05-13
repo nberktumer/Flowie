@@ -101,10 +101,14 @@ export default class Editor extends Component<EditorProps, EditorState> {
     resetState = () => {
         this.setState({
             isModalOpen: false,
+            isAddNewFileModalOpen: false,
             flowType: null,
             flowPosition: {x: 0, y: 0},
             variableList: [],
-            selectedLanguage: ProgrammingLanguage.KOTLIN
+            generatedCode: "",
+            newFileName: "",
+            newFileType: "",
+            newFilePath: ""
         })
     }
 
@@ -202,24 +206,23 @@ export default class Editor extends Component<EditorProps, EditorState> {
                 return
 
             this.currentFileModel.json = JSON.stringify(this.canvasPanel.current.saveProject())
-            this.forceUpdate()
 
             console.log(fileModel)
 
             if (fileModel.json) {
                 this.canvasPanel.current.loadProject(fileModel.json, (variableList: any) => {
+                    this.currentFileModel = fileModel
                     this.resetState()
                     this.setState({variableList})
                     this.updateDirectoryItems()
                     this.onDiagramChanged()
-                    this.currentFileModel = fileModel
                 })
             } else {
+                this.currentFileModel = fileModel
                 this.canvasPanel.current.newProject()
                 this.resetState()
                 this.updateDirectoryItems()
                 this.onDiagramChanged()
-                this.currentFileModel = fileModel
             }
         }
     }
