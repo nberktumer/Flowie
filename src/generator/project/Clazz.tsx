@@ -14,7 +14,6 @@ import {WhileFlow} from "../flows/WhileFlow"
 import {IfFlow} from "../flows/IfFlow"
 import {RandomFlow} from "../flows/RandomFlow"
 import {Project} from "./Project"
-import {DataClassFlow} from "../flows/DataClassFlow";
 
 export class Clazz implements DirectoryItem {
     static INITIAL_ID = "INITIAL_ID"
@@ -279,7 +278,7 @@ export class Clazz implements DirectoryItem {
                             value.randomFlowContent
                         ))
                         break
-                    case FlowType.DATA_CLASS:
+                    /*case FlowType.DATA_CLASS:
                         baseFlowMap.set(value.id, new DataClassFlow(
                             value.id,
                             value.nextFlowId,
