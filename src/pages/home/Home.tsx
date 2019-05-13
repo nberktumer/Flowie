@@ -9,7 +9,8 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    TextField
+    TextField,
+    Typography
 } from "@material-ui/core"
 import strings from "../../lang"
 import {FileUtils} from "../../utils"
@@ -17,7 +18,7 @@ import {FileModel} from "../../models/FileModel"
 import {Defaults} from "../../config"
 
 export interface HomeProps {
-    onLoad: (projectName: string, data: FileModel[]) => void
+    onLoad: (data: { rootFileModel: FileModel, projectName: string, currentFile: FileModel }) => void
 }
 
 export interface HomeState {
@@ -37,17 +38,26 @@ export default class Home extends Component<HomeProps, HomeState> {
 
     onLoadProjectClick = () => {
         FileUtils.load((data: string) => {
-            console.log(JSON.parse(data))
-            this.props.onLoad(this.state.projectName, JSON.parse(data))
+            try {
+                this.props.onLoad(JSON.parse(data) as { rootFileModel: FileModel, projectName: string, currentFile: FileModel })
+            } catch (e) {
+                console.error(e)
+            }
         }, (err: string) => {
             console.error(err)
         })
     }
 
     onCreateNewProjectClick = () => {
-        const fileModel = new FileModel(this.state.projectName, "", false, true, [])
-        const srcModel = new FileModel(Defaults.ROOT_FOLDER_NAME, "", true, false, [fileModel])
-        this.props.onLoad(this.state.projectName, [srcModel])
+        const mainFileModel = new FileModel(this.state.projectName, "", false, true, [])
+        const srcModel = new FileModel(Defaults.ROOT_FOLDER_NAME, "", true, false, [mainFileModel])
+
+        const data = {
+            rootFileModel: srcModel,
+            currentFile: mainFileModel,
+            projectName: this.state.projectName
+        }
+        this.props.onLoad(data)
     }
 
     onNewProjectClick = () => {
@@ -60,7 +70,7 @@ export default class Home extends Component<HomeProps, HomeState> {
 
     render() {
         return (
-            <div className={styles.App}>
+            <div className={styles.homeApp}>
                 <Dialog
                     open={this.state.isNewProjectDialogOpen}
                     onClose={() => this.onNewProjectDialogClose()}
@@ -89,6 +99,8 @@ export default class Home extends Component<HomeProps, HomeState> {
                         </Button>
                     </DialogActions>
                 </Dialog>
+
+                <Typography className={styles.homeLogoText}>Flowie</Typography>
 
                 <Card className={styles.homeContainer}>
                     <CardContent style={{display: "flex", justifyContent: "space-evenly"}}>

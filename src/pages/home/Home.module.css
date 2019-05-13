@@ -3,6 +3,16 @@
     height: 100vh;
 }
 
+.homeApp {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #1d1f21;
+}
+
 .paneContent {
     display: flex;
     flex-grow: 1;
@@ -74,9 +84,17 @@
     border-bottom: none;
 }
 
+.homeLogoText {
+    display: flex!important;
+    color: white!important;
+    font-size: 48px!important;
+    text-align: center!important;
+    margin-bottom: 48px!important;
+}
+
 .homeContainer {
     display: flex;
-    height: 200px;
+    height: 100px;
     width: 350px;
     justify-content: center;
     align-self: center;

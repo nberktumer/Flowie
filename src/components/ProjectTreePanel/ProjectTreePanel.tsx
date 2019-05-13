@@ -50,12 +50,16 @@ export class ProjectTreePanel extends Component<ProjectTreePanelProps, ProjectTr
 
         if (fileModel.isDir) {
             return (
-                <TreeNode icon={<Icon style={{fontSize: 16}}>folder</Icon>} title={fileModel.filename} key={fileModel.id} isLeaf={false}>
+                <TreeNode icon={<Icon style={{fontSize: 16}}>folder</Icon>}
+                          title={fileModel.filename}
+                          key={fileModel.id} isLeaf={false}>
                     {fileModel.children.map((value) => this.renderTree(value, this.nodeMap[fileModel.id].path))}
                 </TreeNode>
             )
         } else {
-            return <TreeNode icon={<Icon style={{fontSize: 16}}>insert_drive_file</Icon>} title={fileModel.filename} key={fileModel.id} isLeaf={true}/>
+            return <TreeNode icon={<Icon style={{fontSize: 16}}>insert_drive_file</Icon>}
+                             title={fileModel.filename}
+                             key={fileModel.id} isLeaf={true}/>
         }
     }
 
@@ -89,7 +93,7 @@ export class ProjectTreePanel extends Component<ProjectTreePanelProps, ProjectTr
                                           itemPath: this.nodeMap[props.node.props.eventKey].path
                                       })
                               }}>
-                            {projectContext.project.map((value) => this.renderTree(value))})}
+                            {this.renderTree(projectContext.project)}
                         </Tree>
                     </div>
                 )}

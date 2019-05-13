@@ -1,4 +1,5 @@
 import strings from "../lang"
+import {Defaults} from "../config"
 
 export class FileUtils {
 
@@ -19,7 +20,7 @@ export class FileUtils {
     static load(onLoad: (data: string) => void, onError: (err: string) => void) {
         const elem = window.document.createElement("input")
         elem.type = "file"
-        elem.accept = ".flwie"
+        elem.accept = `.${Defaults.SAVE_EXTENSION}`
         elem.onchange = (e: any) => {
             if (!e.target.files) {
                 onError(strings.fileReadError)

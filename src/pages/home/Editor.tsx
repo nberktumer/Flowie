@@ -35,10 +35,10 @@ import {Directory} from "../../generator/project/Directory"
 import {ProjectProvider} from "../../stores/ProjectStore"
 import {DirectoryItemType} from "../../generator/project/DirectoryItem"
 import strings from "../../lang"
+import {Defaults} from "../../config"
 
 export interface EditorProps {
-    project: FileModel[],
-    projectName: string
+    project: { rootFileModel: FileModel, projectName: string, currentFile: FileModel }
 }
 
 export interface EditorState {
@@ -51,7 +51,7 @@ export interface EditorState {
     newFileType: string,
     newFilePath: string,
     variableList: Variable[],
-    fileModelList: FileModel[],
+    rootFileModel: FileModel,
     selectedLanguage: ProgrammingLanguage
 }
 
@@ -61,14 +61,13 @@ export default class Editor extends Component<EditorProps, EditorState> {
     canvasPanel = createRef<CanvasPanel>()
     project: Project
     currentFileModel: FileModel
-    rootFileModel: FileModel
     currentClass: Clazz
     hasLoadedProject = false
 
     constructor(props: EditorProps) {
         super(props)
 
-        this.project = new Project(this.props.projectName)
+        this.project = new Project(props.project.projectName)
         this.currentClass = new MainClazz(DirectoryItemType.MAIN_CLASS, "", [])
         this.state = {
             isModalOpen: false,
@@ -80,12 +79,12 @@ export default class Editor extends Component<EditorProps, EditorState> {
             newFileType: "",
             newFilePath: "",
             variableList: [],
-            fileModelList: props.project,
+            rootFileModel: props.project.rootFileModel,
             selectedLanguage: ProgrammingLanguage.KOTLIN
         }
 
-        this.rootFileModel = props.project[0]
-        this.currentFileModel = props.project[0].children[0]
+        console.log(props.project)
+        this.currentFileModel = props.project.currentFile
     }
 
     componentDidMount(): void {
@@ -94,8 +93,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
     componentDidUpdate(prevProps: Readonly<EditorProps>, prevState: Readonly<EditorState>, snapshot?: any): void {
         if (!this.hasLoadedProject) {
-            this.updateDirectoryItems()
-            this.onDiagramChanged()
+            this.loadClass(this.currentFileModel, false)
             this.hasLoadedProject = true
         }
     }
@@ -145,7 +143,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
     updateDirectoryItems() {
         this.project.rootDirectory.items = []
-        this.rootFileModel.children.forEach((item: FileModel) => {
+        this.state.rootFileModel.children.forEach((item: FileModel) => {
             this.generateDirectoryItems(item, this.project.rootDirectory)
         })
     }
@@ -165,7 +163,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
     onNewFileSave() {
         const pathList = this.state.newFilePath.split("/")
 
-        let lastFileModel: FileModel | undefined = this.rootFileModel
+        let lastFileModel: FileModel | undefined = this.state.rootFileModel
         pathList.forEach((path) => {
             if (lastFileModel) {
                 const result = lastFileModel.children.find((val) => val.isDir && val.filename === path)
@@ -203,13 +201,15 @@ export default class Editor extends Component<EditorProps, EditorState> {
     }
 
     onFileDoubleClick(fileModel: FileModel & { path: string }) {
-        if (!fileModel.isDir && this.currentFileModel.id !== fileModel.id) {
-            if (!this.canvasPanel.current)
-                return
+        if (this.currentFileModel.id !== fileModel.id) {
+            this.loadClass(fileModel)
+        }
+    }
 
-            this.currentFileModel.json = JSON.stringify(this.canvasPanel.current.saveProject())
-
-            console.log(fileModel)
+    loadClass(fileModel: FileModel, saveCurrent: boolean = true) {
+        if (!fileModel.isDir && this.canvasPanel.current) {
+            if (saveCurrent)
+                this.currentFileModel.json = JSON.stringify(this.canvasPanel.current.saveProject())
 
             if (fileModel.json) {
                 this.canvasPanel.current.loadProject(fileModel.json, (variableList: any) => {
@@ -274,11 +274,11 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
                 this.currentFileModel.json = JSON.stringify(this.canvasPanel.current.saveProject())
                 const saveContent = {
-                    fileModelList: this.rootFileModel,
-                    projectName: this.props.projectName,
+                    rootFileModel: this.state.rootFileModel,
+                    projectName: this.project.projectName,
                     currentFile: this.currentFileModel
                 }
-                FileUtils.save("FlowieSave.flwie", JSON.stringify(saveContent))
+                FileUtils.save(`${this.project.projectName}.${Defaults.SAVE_EXTENSION}`, JSON.stringify(saveContent))
                 break
             }
             case "load": {
@@ -287,25 +287,10 @@ export default class Editor extends Component<EditorProps, EditorState> {
                         return
 
                     try {
-                        const loadedData = JSON.parse(data) as {fileModelList: FileModel[], projectName: string, currentFile: FileModel}
+                        const loadedData = JSON.parse(data) as { rootFileModel: FileModel, projectName: string, currentFile: FileModel }
 
-                        if (loadedData.currentFile.json) {
-                            this.canvasPanel.current.loadProject(loadedData.currentFile.json, (variableList: any) => {
-                                this.project = new Project(loadedData.projectName)
-                                this.currentFileModel = loadedData.currentFile
-                                this.resetState()
-                                this.setState({variableList})
-                                this.updateDirectoryItems()
-                                this.onDiagramChanged()
-                            })
-                        } else {
-                            this.project = new Project(loadedData.projectName)
-                            this.currentFileModel = loadedData.currentFile
-                            this.canvasPanel.current.newProject()
-                            this.resetState()
-                            this.updateDirectoryItems()
-                            this.onDiagramChanged()
-                        }
+                        this.project = new Project(loadedData.projectName)
+                        this.loadClass(loadedData.currentFile)
                     } catch (e) {
                         console.error(e)
                     }
@@ -323,7 +308,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
     render() {
         return (
             <FlowProvider value={{variableList: this.state.variableList}}>
-                <ProjectProvider value={{project: this.state.fileModelList}}>
+                <ProjectProvider value={{project: this.state.rootFileModel}}>
                     <div className={styles.App}>
                         <Dialog
                             open={this.state.isAddNewFileModalOpen}
