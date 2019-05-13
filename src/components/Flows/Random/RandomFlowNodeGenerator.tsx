@@ -6,11 +6,9 @@ import {RandomFlowNode} from "./RandomFlowNode"
 import {VariableType} from "../../../models"
 
 export class RandomFlowNodeGenerator extends BaseFlowNodeGenerator {
-    create(data?: BasePropertiesState, node?: RandomFlowNode): BaseFlowNode | null {
-        console.log(data)
+    create(data?: BasePropertiesState, node?: RandomFlowNode): BaseFlowNode | undefined {
         if (!data || data.variableName === "" || data.minValue === "" || data.maxValue === "" || data.minValue > data.maxValue)
-            return null
-        console.log(data)
+            return undefined
 
         const variable = new Variable(data.variableName, VariableType.DOUBLE, undefined)
 

@@ -1,53 +1,39 @@
-import {Func} from "../Func";
-import {ArithmeticFlow} from "../flows/ArithmeticFlow";
-import {InputFlow} from "../flows/InputFlow";
-import {OutputFlow} from "../flows/OutputFlow";
-import {WhileFlow} from "../flows/WhileFlow";
-import {AssignmentFlow} from "../flows/AssignmentFlow";
-import {Class} from "./Class";
-import {RandomFlow} from "../flows/RandomFlow";
-import {IfFlow} from "../flows/IfFlow";
+import {Func} from "../project/Func";
+import {Clazz} from "../project/Clazz";
+import {ArithmeticFlowCode} from "./common/ArithmeticFlowCode";
+import {AssignmentFlowCode} from "./common/AssignmentFlowCode";
+import {OutputFlowCode} from "./common/OutputFlowCode";
+import {RandomFlowCode} from "./common/RandomFlowCode";
+import {WhileFlowCode} from "./common/WhileFlowCode";
+import {IfFlowCode} from "./common/IfFlowCode";
+import {InputFlowCode} from "./common/InputFlowCode";
 
 export interface CodeStrategy {
+    arithmeticFlowCode: ArithmeticFlowCode
+    assignmentFlowCode: AssignmentFlowCode
+    inputFlowCode: InputFlowCode
+    outputFlowCode: OutputFlowCode
+    randomFlowCode: RandomFlowCode
+    whileFlowCode: WhileFlowCode
+    ifFlowCode: IfFlowCode
 
-    initClass(clazz: Class): void
+    initClazz(clazz: Clazz): void
 
-    finishClass(): void
+    finishClazz(clazz: Clazz): void
 
-    initMain(): void
+    initClazzCode(clazz: Clazz): void
 
-    finishMain(): void
+    finishClazzCode(clazz: Clazz): void
 
-    writeFunctionSignature(func: Func): void
+    initMain(clazz: Clazz): void
 
-    writeArithmeticMain(arithmeticFlow: ArithmeticFlow): void
+    finishMain(clazz: Clazz): void
 
-    writeArithmeticFunction(arithmeticFlow: ArithmeticFlow): void
+    initFunction(func: Func): void
 
-    writeAssignmentMain(assignmentFlow: AssignmentFlow): void
+    finishFunction(func: Func): void
 
-    writeAssignmentFunction(assignmentFlow: AssignmentFlow): void
+    //getDataClassSignature(dataClazz: DataClazz): string
 
-    writeInputMain(inputFlow: InputFlow): void
-
-    writeInputFunction(inputFlow: InputFlow): void
-
-    writeOutputMain(outputFlow: OutputFlow): void
-
-    writeOutputFunction(outputFlow: OutputFlow): void
-
-    writeWhileMain(whileFlow: WhileFlow): void
-
-    writeWhileFunction(whileFlow: WhileFlow): void
-
-    writeIfMain(ifFlow: IfFlow) : void
-
-    writeIfFunction(ifFlow: IfFlow) : void
-
-    writeRandomMain(randomFlow: RandomFlow): void
-
-    writeRandomFunction(randomFlow: RandomFlow): void
-
-    addDependenciesAndGlobalVariables(dependencies: Set<string>, globalVariables: Set<string>): void
-
+    //getDataClassCode(dataClazz: DataClazz): Code
 }

@@ -22,6 +22,7 @@ export class AssignmentFlowModelGenerator extends BaseFlowModelGenerator {
             null,
             null,
             null,
+            null,
             nextFlowId
         )
     }

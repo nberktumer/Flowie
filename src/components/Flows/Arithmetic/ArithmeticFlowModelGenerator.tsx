@@ -6,7 +6,7 @@ import {ArithmeticFlowNode} from "./ArithmeticFlowNode"
 import {ArithmeticFlowContent} from "../../../generator/flows/ArithmeticFlow"
 
 export class ArithmeticFlowModelGenerator extends BaseFlowModelGenerator {
-    generate(flow: BaseFlowNode): FlowModel {
+    generate = (flow: BaseFlowNode): FlowModel => {
         const arithmeticFlow = flow as ArithmeticFlowNode
 
         const nextFlow = arithmeticFlow.getNextFlow()
@@ -24,6 +24,7 @@ export class ArithmeticFlowModelGenerator extends BaseFlowModelGenerator {
                 arithmeticFlow.getOperator1(),
                 arithmeticFlow.getOperator2()
             ),
+            null,
             null,
             null,
             null,

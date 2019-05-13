@@ -1,19 +1,24 @@
+import {Code} from "../code/Code";
+
 export class Func {
     functionName: string
     parameters: Parameter[]
     returnType: string | undefined
-    codeLines: string[]
+    code: Code
+    isMain: boolean
 
     constructor(
         functionName: string,
         parameters: Parameter[],
         returnType: string | undefined,
-        codeLines: string[]
+        codeLines: Code,
+        isMain: boolean
     ) {
         this.functionName = functionName
         this.parameters = parameters
         this.returnType = returnType
-        this.codeLines = codeLines
+        this.code = codeLines
+        this.isMain = isMain
     }
 }
 

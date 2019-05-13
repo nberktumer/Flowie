@@ -1,6 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import {Editor} from "./pages"
+import {Home} from "./pages"
 import {BrowserRouter as Router, Route} from "react-router-dom"
 import "./index.css"
 import "nberktumer-react-diagrams/dist/style.min.css"
@@ -10,7 +10,7 @@ import * as serviceWorker from "./serviceWorker"
 ReactDOM.render((
     <Router basename="/Flowie">
         <div>
-            <Route path="/" component={Editor} exact/>
+            <Route path="/" component={Home} exact/>
         </div>
     </Router>
 ), document.getElementById("root"))

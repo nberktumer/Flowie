@@ -1,1 +1,1 @@
-export {default as Editor} from "./editor/Editor"
+export {default as Home} from "./home/index"

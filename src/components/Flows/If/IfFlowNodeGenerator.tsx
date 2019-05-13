@@ -5,9 +5,9 @@ import {Condition} from "../../../models/Condition"
 import {IfFlowNode} from "./IfFlowNode"
 
 export class IfFlowNodeGenerator extends BaseFlowNodeGenerator {
-    create(data?: BasePropertiesState, node?: IfFlowNode): BaseFlowNode | null {
+    create(data?: BasePropertiesState, node?: IfFlowNode): BaseFlowNode | undefined {
         if (!data || !data.conditions || !data.conditionType)
-            return null
+            return undefined
 
         const resultNode = node ? node : new IfFlowNode()
         resultNode.removeAllConditions()
@@ -21,7 +21,7 @@ export class IfFlowNodeGenerator extends BaseFlowNodeGenerator {
             const condition = new Condition(conditionData.variableType, JSON.parse(conditionData.first), JSON.parse(conditionData.second), conditionData.operation)
 
             if (!condition.second || (!condition.second.name && !condition.second.value))
-                return null
+                return undefined
 
             resultNode.addCondition(condition)
         }
@@ -29,7 +29,5 @@ export class IfFlowNodeGenerator extends BaseFlowNodeGenerator {
         return resultNode
     }
 
-    load(node: any): BaseFlowNode {
-        return new IfFlowNode(true)
-    }
+    load = (node: any): BaseFlowNode => new IfFlowNode(true)
 }

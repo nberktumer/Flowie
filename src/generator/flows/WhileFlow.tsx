@@ -1,8 +1,8 @@
 import {BaseFlow} from "./BaseFlow"
-import {CodeWriter} from "../code/CodeWriter"
 import {Condition} from "../../models/Condition"
 import {FlowType} from "../../models"
 import {ConditionType} from "../../models/VariableEnums";
+import {Clazz} from "../project/Clazz";
 
 export class WhileFlow implements BaseFlow {
 
@@ -21,7 +21,7 @@ export class WhileFlow implements BaseFlow {
         this.nextFlowId = nextFlowId
         this.type = type
         this.content = content
-        this.functionCallName = (CodeWriter.getInstance().flowIncrementalId++).toString()
+        this.functionCallName = (Clazz.flowIncrementalId++).toString()
     }
 
     functionInvocation(): string {
@@ -37,7 +37,7 @@ export class WhileFlow implements BaseFlow {
     }
 
     nextFlow(): string {
-        return this.nextFlowId != null ? this.nextFlowId : CodeWriter.TERMINATION_ID
+        return this.nextFlowId != null ? this.nextFlowId : Clazz.TERMINATION_ID
     }
 
 }

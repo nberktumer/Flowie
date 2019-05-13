@@ -1,4 +1,3 @@
-import {BaseInfoFlowNode} from "../../CanvasItems/Nodes/BaseInfoFlow/BaseInfoFlowNode"
 import strings from "../../../lang"
 import {NodeColors} from "../../../config"
 import {FlowType} from "../../../models"
@@ -11,7 +10,7 @@ import * as _ from "lodash"
 import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {DefaultPortType} from "../../CanvasItems/Ports/DefaultPort"
 
-export class IfFlowNode extends BaseInfoFlowNode {
+export class IfFlowNode extends BaseFlowNode {
     conditionList: Condition[] = []
     conditionType: ConditionType = ConditionType.AND
 
@@ -26,7 +25,7 @@ export class IfFlowNode extends BaseInfoFlowNode {
         }
     }
 
-    updateInfo = () => {
+    updateInfo() {
         this.info = this.conditionList.map((condition) => {
             return `${condition.first.name} ${SignConverter.booleanOperation(condition.operation)} ${condition.second ? (condition.second.name ? condition.second.name : condition.second.value) : ""}`
         }).join(` ${this.conditionType} `)

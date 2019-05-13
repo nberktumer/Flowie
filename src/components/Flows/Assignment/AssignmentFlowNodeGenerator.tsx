@@ -5,9 +5,9 @@ import {Variable} from "../../../models/Variable"
 import {AssignmentFlowNode} from "./AssignmentFlowNode"
 
 export class AssignmentFlowNodeGenerator extends BaseFlowNodeGenerator {
-    create(data?: BasePropertiesState, node?: AssignmentFlowNode): BaseFlowNode | null {
+    create(data?: BasePropertiesState, node?: AssignmentFlowNode): BaseFlowNode | undefined {
         if (!data || data.variableName === "" || data.variableType === "" || data.value === "")
-            return null
+            return undefined
 
         const variable = new Variable(data.variableName, data.variableType, data.value)
 
