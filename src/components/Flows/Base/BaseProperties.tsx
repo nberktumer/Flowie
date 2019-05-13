@@ -1,6 +1,5 @@
 import React, {Component} from "react"
 import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
-import {Variable} from "../../../models/Variable"
 
 export interface BasePropertiesProps {
     onDataChanged: (data: BasePropertiesState) => void,

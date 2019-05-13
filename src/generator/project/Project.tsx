@@ -6,6 +6,7 @@ import {Clazz} from "./Clazz"
 import {CodeStrategy} from "../code/CodeStrategy"
 import {KotlinCodeStrategy} from "../code/kotlin/KotlinCodeStrategy"
 import {CodeStrategyFactory} from "../code/CodeStrategyFactory"
+import {DataClazz} from "./DataClazz";
 import {Defaults} from "../../config"
 
 export class Project {
@@ -39,6 +40,10 @@ export class Project {
                 case DirectoryItemType.CLASS:
                     const clazz = item as Clazz
                     clazz.generateCode()
+                    break
+                case DirectoryItemType.DATA_CLASS:
+                    const dataClass = item as DataClazz
+                    dataClass.generateCode()
                     break
                 case DirectoryItemType.DIRECTORY:
                     const directory = item as Directory

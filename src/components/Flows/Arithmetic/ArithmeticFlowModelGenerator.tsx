@@ -27,6 +27,7 @@ export class ArithmeticFlowModelGenerator extends BaseFlowModelGenerator {
             null,
             null,
             null,
+            null,
             nextFlowId
         )
     }

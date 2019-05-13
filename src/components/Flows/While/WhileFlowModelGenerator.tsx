@@ -28,6 +28,7 @@ export class WhileFlowModelGenerator extends BaseFlowModelGenerator {
             ),
             null,
             null,
+            null,
             nextFlowId
         )
     }

@@ -21,8 +21,6 @@ export interface CodeStrategy {
 
     finishClazz(clazz: Clazz): void
 
-    getClazzSignature(clazz: Clazz): string
-
     initMain(clazz: Clazz): void
 
     finishMain(clazz: Clazz): void
@@ -31,4 +29,7 @@ export interface CodeStrategy {
 
     finishFunction(func: Func): void
 
+    //getDataClassSignature(dataClazz: DataClazz): string
+
+    //getDataClassCode(dataClazz: DataClazz): Code
 }

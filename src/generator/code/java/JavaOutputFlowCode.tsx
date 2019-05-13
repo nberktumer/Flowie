@@ -1,10 +1,11 @@
 import {OutputFlow} from "../../flows/OutputFlow";
 import {OutputFlowCode} from "../common/OutputFlowCode";
 import {Clazz} from "../../project/Clazz";
-import {Variable} from "../../../models/Variable";
-import {Func} from "../../project/Func";
+import {Func, Parameter} from "../../project/Func";
 import {Code} from "../Code";
 import {Project} from "../../project/Project";
+import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
+import {ProgrammingLanguage} from "../../../models";
 
 export class JavaOutputFlowCode implements OutputFlowCode {
 
@@ -19,13 +20,12 @@ export class JavaOutputFlowCode implements OutputFlowCode {
 
         const code = new Code(clazz.indentationCount)
 
-        const parameters: Variable[] = []
+        const parameters: Parameter[] = []
         if (outputFlow.content.variable.name) {
             parameters.push(
-                new Variable(
+                new Parameter(
                     outputFlow.content.variable.name,
-                    outputFlow.content.variable.type,
-                    undefined))
+                    ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, outputFlow.content.variable.type)))
         }
 
         const func = new Func(

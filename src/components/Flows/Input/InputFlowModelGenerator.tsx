@@ -22,6 +22,7 @@ export class InputFlowModelGenerator extends BaseFlowModelGenerator {
             null,
             null,
             null,
+            null,
             nextFlowId
         )
     }
