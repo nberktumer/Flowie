@@ -8,7 +8,7 @@ export interface HomePageProps {
 
 export interface HomePageState {
     isLoaded: boolean,
-    data: FileModel[]
+    data: { rootFileModel: FileModel, projectName: string, currentFile: FileModel }
 }
 
 export default class HomePage extends Component<HomePageProps, HomePageState> {
@@ -16,9 +16,11 @@ export default class HomePage extends Component<HomePageProps, HomePageState> {
     constructor(props: HomePageProps) {
         super(props)
 
+        const dummyFileModel = new FileModel("flowie", "", false, false, [])
+
         this.state = {
             isLoaded: false,
-            data: []
+            data: {rootFileModel: dummyFileModel, projectName: "Flowie", currentFile: dummyFileModel}
         }
     }
 

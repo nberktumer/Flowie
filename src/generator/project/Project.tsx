@@ -6,15 +6,18 @@ import {Clazz} from "./Clazz"
 import {CodeStrategy} from "../code/CodeStrategy"
 import {KotlinCodeStrategy} from "../code/kotlin/KotlinCodeStrategy"
 import {CodeStrategyFactory} from "../code/CodeStrategyFactory"
+import {Defaults} from "../../config"
 import {DataClazz} from "./DataClazz";
 
 export class Project {
     static codeStrategy: CodeStrategy = new KotlinCodeStrategy()
     static programmingLanguage: ProgrammingLanguage = ProgrammingLanguage.KOTLIN
+    projectName: string
     rootDirectory: Directory
 
-    constructor() {
-        this.rootDirectory = new Directory("src", [])
+    constructor(projectName: string) {
+        this.projectName = projectName
+        this.rootDirectory = new Directory(Defaults.ROOT_FOLDER_NAME, [])
     }
 
     static setProgrammingLanguage(programmingLanguage: ProgrammingLanguage) {
