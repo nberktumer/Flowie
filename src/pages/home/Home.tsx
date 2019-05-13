@@ -50,9 +50,9 @@ export default class Home extends Component<HomeProps, HomeState> {
 
     onCreateNewProjectClick = () => {
         const fileModel = new FileModel(this.state.projectName, "", false, true, [])
-        this.setState({projectList: [fileModel], isLoaded: true}, () => {
-            console.log(this.state)
-            this.props.onLoad([fileModel])
+        const srcModel = new FileModel("src", "", true, false, [fileModel])
+        this.setState({projectList: [srcModel], isLoaded: true}, () => {
+            this.props.onLoad([srcModel])
         })
     }
 
@@ -77,8 +77,7 @@ export default class Home extends Component<HomeProps, HomeState> {
                         <DialogTitle id="form-dialog-title">{strings.newProject}</DialogTitle>
                         <DialogContent>
                             <DialogContentText>
-                                To subscribe to this website, please enter your email address here. We will send
-                                updates occasionally.
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce a auctor dui. Nunc at pellentesque purus. Aliquam leo massa, pellentesque.
                             </DialogContentText>
                             <TextField
                                 autoFocus
@@ -91,10 +90,10 @@ export default class Home extends Component<HomeProps, HomeState> {
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={() => this.onNewProjectDialogClose()} color="primary">
-                                Cancel
+                                {strings.cancel}
                             </Button>
                             <Button onClick={() => this.onCreateNewProjectClick()} color="primary">
-                                Subscribe
+                                {strings.createProject}
                             </Button>
                         </DialogActions>
                     </Dialog>

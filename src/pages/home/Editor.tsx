@@ -16,7 +16,16 @@ import {BaseFlowNode} from "../../components/CanvasItems/Nodes/BaseFlow/BaseFlow
 import {BaseVariableFlowNode} from "../../components/Flows/Base/BaseVariableFlowNode"
 import {EditorHeader} from "../../components/EditorHeader/EditorHeader"
 import {FileUtils} from "../../utils"
-import {MenuItem, TextField} from "@material-ui/core"
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    MenuItem,
+    TextField
+} from "@material-ui/core"
 import {FlowProvider} from "../../stores/FlowStore"
 import {Project} from "../../generator/project/Project"
 import {MainClazz} from "../../generator/project/MainClazz"
@@ -25,6 +34,7 @@ import {FileModel} from "../../models/FileModel"
 import {Directory} from "../../generator/project/Directory"
 import {ProjectProvider} from "../../stores/ProjectStore"
 import {DirectoryItemType} from "../../generator/project/DirectoryItem"
+import strings from "../../lang"
 
 export interface EditorProps {
     project: FileModel[]
@@ -32,9 +42,13 @@ export interface EditorProps {
 
 export interface EditorState {
     isModalOpen: boolean,
+    isAddNewFileModalOpen: boolean,
     flowType: FlowType | null,
     flowPosition: { x: number, y: number },
     generatedCode: string,
+    newFileName: string,
+    newFileType: string,
+    newFilePath: string,
     variableList: Variable[],
     fileModelList: FileModel[],
     selectedLanguage: ProgrammingLanguage
@@ -46,25 +60,29 @@ export default class Editor extends Component<EditorProps, EditorState> {
     canvasPanel = createRef<CanvasPanel>()
     project = new Project()
     currentFileModel: FileModel
+    rootFileModel: FileModel
     currentClass: Clazz
 
     constructor(props: EditorProps) {
         super(props)
 
-        console.log(props)
-
         this.currentClass = new MainClazz(DirectoryItemType.MAIN_CLASS, "", [])
         this.state = {
             isModalOpen: false,
+            isAddNewFileModalOpen: false,
             flowType: null,
             flowPosition: {x: 0, y: 0},
             generatedCode: "",
+            newFileName: "",
+            newFileType: "",
+            newFilePath: "",
             variableList: [],
             fileModelList: props.project,
             selectedLanguage: ProgrammingLanguage.KOTLIN
         }
 
-        this.currentFileModel = props.project.find((value) => value.isMainClass)!
+        this.rootFileModel = props.project[0]
+        this.currentFileModel = props.project[0].children[0]
     }
 
     componentDidMount(): void {
@@ -102,7 +120,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
     onDiagramChanged() {
         Project.setProgrammingLanguage(this.state.selectedLanguage)
 
-        this.state.fileModelList.forEach((item: FileModel) => {
+        this.rootFileModel.children.forEach((item: FileModel) => {
             this.generateDirectoryItems(item, this.project.rootDirectory)
         })
 
@@ -120,6 +138,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
         } else {
             if (fileModel.isMainClass) {
                 if (this.currentFileModel.id === fileModel.id) {
+                    console.log(this.canvasPanel.current)
                     const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current ? this.canvasPanel.current.initialNode : null)
                     console.log(flowModelList)
 
@@ -144,6 +163,51 @@ export default class Editor extends Component<EditorProps, EditorState> {
                 }
             }
         }
+    }
+
+    onNewClass(path: string) {
+        this.setState({isAddNewFileModalOpen: true, newFileType: "class", newFilePath: path})
+    }
+
+    onNewPackage(path: string) {
+        this.setState({isAddNewFileModalOpen: true, newFileType: "package", newFilePath: path})
+    }
+
+    onNewFunctionality(path: string) {
+        this.setState({isAddNewFileModalOpen: true, newFileType: "functionality", newFilePath: path})
+    }
+
+    onNewFileSave() {
+        const pathList = this.state.newFilePath.split("/")
+
+        let lastFileModel: FileModel | undefined = this.rootFileModel
+        pathList.forEach((path) => {
+            if (lastFileModel) {
+                const result = lastFileModel.children.find((val) => val.isDir && val.filename === path)
+                if (result)
+                    lastFileModel = result
+            }
+        })
+
+        if (lastFileModel) {
+            switch (this.state.newFileType) {
+                case "class": {
+                    lastFileModel.children.push(new FileModel(this.state.newFileName, "", false, false, []))
+                    break
+                }
+                case "package": {
+                    lastFileModel.children.push(new FileModel(this.state.newFileName, "", true, false, []))
+                    break
+                }
+            }
+        }
+
+        this.onAddNewFileDialogClose()
+        this.forceUpdate()
+    }
+
+    onAddNewFileDialogClose() {
+        this.setState({isAddNewFileModalOpen: false, newFileName: ""})
     }
 
     onCanvasDrop(type: FlowType, position: { x: number, y: number }) {
@@ -215,6 +279,33 @@ export default class Editor extends Component<EditorProps, EditorState> {
             <FlowProvider value={{variableList: this.state.variableList}}>
                 <ProjectProvider value={{project: this.state.fileModelList}}>
                     <div className={styles.App}>
+                        <Dialog
+                            open={this.state.isAddNewFileModalOpen}
+                            onClose={() => this.onAddNewFileDialogClose()}
+                            aria-labelledby="form-dialog-title">
+                            <DialogTitle id="form-dialog-title">{strings.newProject}</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce a auctor dui. Nunc at pellentesque purus. Aliquam leo massa, pellentesque.
+                                </DialogContentText>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="projectName"
+                                    onChange={(e) => this.setState({newFileName: e.target.value})}
+                                    label={strings.projectName}
+                                    fullWidth
+                                />
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => this.onAddNewFileDialogClose()} color="primary">
+                                    {strings.cancel}
+                                </Button>
+                                <Button onClick={() => this.onNewFileSave()} color="primary">
+                                    {strings.create}
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
                         <AddNodeDialog onSaveClick={this.onModalSaveClick.bind(this)}
                                        onDismissClick={this.onModalDismissClick.bind(this)}
                                        onClose={this.onModalClose.bind(this)}
@@ -227,7 +318,10 @@ export default class Editor extends Component<EditorProps, EditorState> {
                                 <ReflexContainer orientation="horizontal" style={{height: "100vh"}}>
                                     <ReflexElement className="left-pane" flex={0.35} minSize={200}>
                                         <div style={{width: "100%", height: "100%", backgroundColor: "#1d1f21"}}>
-                                            <ProjectTreePanel/>
+                                            <ProjectTreePanel
+                                                onNewClass={(path) => this.onNewClass(path)}
+                                                onNewFunctionality={(path) => this.onNewFunctionality(path)}
+                                                onNewPackage={(path) => this.onNewPackage(path)}/>
                                         </div>
                                     </ReflexElement>
 

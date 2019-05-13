@@ -35,7 +35,9 @@ export default {
     fileReadError: "Could not read file",
     variableExists: "Variable name already exists!",
     variableFirstCharacterError: "First character of the variable name must be an alphabetic character!",
+    classFirstCharacterError: "First character of the class name must be a capital alphabetic character!",
     variableContainsInvalidCharacters: "Variable name contains invalid characters!",
+    classContainsInvalidCharacters: "Class name contains invalid characters!",
     conditionType: "Condition Type",
     invalid: "Invalid",
     nextFlow: "Next Flow",
@@ -45,5 +47,8 @@ export default {
     properties: "Properties",
     newProject: "New Project",
     loadProject: "Load Project",
-    projectName: "Project Name"
+    projectName: "Project Name",
+    createProject: "Create Project",
+    cancel: "Cancel",
+    create: "Create"
 }
