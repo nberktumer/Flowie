@@ -39,7 +39,8 @@ export class JavaInputFlowCode implements InputFlowCode {
             inputFlow.functionName(),
             parameters,
             ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, inputFlow.content.variable.type),
-            code
+            code,
+            false
         )
 
         Project.codeStrategy.initFunction(func)

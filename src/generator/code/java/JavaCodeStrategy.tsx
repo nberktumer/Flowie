@@ -24,13 +24,23 @@ export class JavaCodeStrategy implements CodeStrategy {
     whileFlowCode = new JavaWhileFlowCode()
 
     initClazz(clazz: Clazz): void {
-        clazz.generatedCode.push(`public class ${clazz.name} {`)
         clazz.incrementIndentation()
+
+        clazz.globalVariableSet.incrementIndentation()
     }
 
     finishClazz(clazz: Clazz): void {
         clazz.decrementIndentation()
-        clazz.generatedCode.push(`}`)
+    }
+
+    initClazzCode(clazz: Clazz): void {
+        clazz.classInitCode.insert(`public class ${clazz.name} {`)
+        clazz.incrementIndentation()
+    }
+
+    finishClazzCode(clazz: Clazz): void {
+        clazz.decrementIndentation()
+        clazz.classFinishCode.insert(`}`)
     }
 
     initMain(clazz: Clazz): void {
@@ -56,7 +66,8 @@ export class JavaCodeStrategy implements CodeStrategy {
             mainFnName,
             parameters,
             undefined,
-            mainFunctionLines
+            mainFunctionLines,
+            clazz.type === DirectoryItemType.MAIN_CLASS
         )
 
         this.initFunction(clazz.mainFunction)
@@ -88,7 +99,7 @@ export class JavaCodeStrategy implements CodeStrategy {
             }
         })
 
-        func.code.insert(`private static ${returnTypeString} ${func.functionName}(${parameterString}) {`)
+        func.code.insert(`public static ${returnTypeString} ${func.functionName}(${parameterString}) {`)
         func.code.incrementIndentation()
     }
 
