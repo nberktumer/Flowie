@@ -22,19 +22,16 @@ export class JavaCodeStrategy implements CodeStrategy {
     randomFlowCode = new JavaRandomFlowCode()
     whileFlowCode = new JavaWhileFlowCode()
 
-    initClazz(clazz: Clazz): Code {
-        const code = new Code(clazz.indentationCount)
-        code.insert(`public class ${clazz.name} {`)
-        clazz.incrementIdentation()
-        return code
+    initClazz(clazz: Clazz): void {
+        clazz.incrementIndentation()
     }
 
-    finishClass(clazz: Clazz): Code {
-        const code = new Code(clazz.indentationCount)
-        code.insert(`}`)
-        code.insert("")
-        clazz.decrementIdentation()
-        return code
+    finishClazz(clazz: Clazz): void {
+        clazz.decrementIndentation()
+    }
+
+    getClazzSignature(clazz: Clazz): string {
+        return `public class ${clazz.name} {`
     }
 
     initMain(clazz: Clazz): void {
@@ -66,7 +63,7 @@ export class JavaCodeStrategy implements CodeStrategy {
         clazz.mainFunction.code.insert("")
     }
 
-    generateFunctionCode(func: Func) {
+    initFunction(func: Func): void {
         let returnTypeString = ""
         if (func.returnType) {
             returnTypeString += `${func.returnType}`
@@ -85,7 +82,9 @@ export class JavaCodeStrategy implements CodeStrategy {
 
         func.code.insert(`private static ${returnTypeString} ${func.functionName}(${parameterString}) {`)
         func.code.incrementIndentation()
+    }
 
+    finishFunction(func: Func): void {
         func.code.decrementIndentation()
         func.code.insert("}")
         func.code.insert("")

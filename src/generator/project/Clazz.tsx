@@ -40,11 +40,10 @@ export class Clazz implements DirectoryItem {
         this.type = type
         this.name = name
 
-        console.log(this)
-
         this.functions = []
         this.mainFunction = null
 
+        Project.codeStrategy.initClazz(this)
         Project.codeStrategy.initMain(this)
 
         this.flowMap = this.convertToFlowObjects(flowModels)
@@ -61,6 +60,8 @@ export class Clazz implements DirectoryItem {
         })
 
         Project.codeStrategy.finishMain(this)
+        Project.codeStrategy.finishClazz(this)
+        this.decrementIndentation()
     }
 
     writeCodeToMainFunction(line: string) {
@@ -136,38 +137,47 @@ export class Clazz implements DirectoryItem {
     }
 
     generateCode() {
-        Project.codeStrategy.initClazz(this).lines.forEach(clazzLine => {
-            this.generatedCode.push(this.createLineWithSpacing(clazzLine))
-        })
+        const clazzSignature = Project.codeStrategy.getClazzSignature(this)
+        if (clazzSignature) {
+            this.generatedCode.push(clazzSignature)
+        }
 
         this.dependencySet.lines.forEach(dependencyLine => {
             this.generatedCode.push(this.createLineWithSpacing(dependencyLine))
         })
 
+        if (this.dependencySet.lines.length > 0) {
+            this.generatedCode.push("")
+        }
+
         this.globalVariableSet.lines.forEach(globalVariableLine => {
             this.generatedCode.push(this.createLineWithSpacing(globalVariableLine))
         })
 
+        if (this.globalVariableSet.lines.length > 0) {
+            this.generatedCode.push("")
+        }
+
         this.functions.forEach(func => {
-                func.code.lines.forEach(codeLine => {
-                    this.generatedCode.push(this.createLineWithSpacing(codeLine))
-                })
-            }
-        )
-        Project.codeStrategy.finishClass(this).lines.forEach(clazzLine => {
-            this.generatedCode.push(this.createLineWithSpacing(clazzLine))
+            func.code.lines.forEach(codeLine => {
+                this.generatedCode.push(this.createLineWithSpacing(codeLine))
+            })
         })
+
+        if (clazzSignature) {
+            this.generatedCode.push("}")
+        }
     }
 
     getCode(): string {
         return this.generatedCode.join("\n")
     }
 
-    incrementIdentation() {
+    incrementIndentation() {
         this.indentationCount++
     }
 
-    decrementIdentation() {
+    decrementIndentation() {
         this.indentationCount--
     }
 

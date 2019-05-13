@@ -16,9 +16,13 @@ export class Project {
         this.rootDirectory = new Directory("src", [])
     }
 
-    init(programmingLanguage: ProgrammingLanguage) {
+    static setProgrammingLanguage(programmingLanguage: ProgrammingLanguage) {
+        Clazz.flowIncrementalId = 0
         Project.programmingLanguage = programmingLanguage
         Project.codeStrategy = CodeStrategyFactory.createCodeStrategy(programmingLanguage)
+    }
+
+    generateClazzCodes() {
         this.recursivelyGenerateClazzCodes(this.rootDirectory)
     }
 
