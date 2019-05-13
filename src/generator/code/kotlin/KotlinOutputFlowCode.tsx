@@ -4,8 +4,14 @@ import {Clazz} from "../../project/Clazz";
 import {Variable} from "../../../models/Variable";
 import {Func} from "../../project/Func";
 import {Code} from "../Code";
+import {Project} from "../../project/Project";
 
 export class KotlinOutputFlowCode implements OutputFlowCode {
+
+    generateMain(outputFlow: OutputFlow, clazz: Clazz): void {
+        clazz.writeCodeToMainFunction(outputFlow.functionInvocation())
+        clazz.writeMainCodeFromFlow(outputFlow.nextFlow())
+    }
 
     generateFunc(outputFlow: OutputFlow, clazz: Clazz): void {
         if (outputFlow.content == null)
@@ -29,6 +35,8 @@ export class KotlinOutputFlowCode implements OutputFlowCode {
             code
         )
 
+        Project.codeStrategy.initFunction(func)
+
         let printString = ""
 
         if (!outputFlow.content.variable.name) {
@@ -38,12 +46,9 @@ export class KotlinOutputFlowCode implements OutputFlowCode {
         }
 
         code.insert(printString)
-        clazz.functions.push(func)
-    }
+        Project.codeStrategy.finishFunction(func)
 
-    generateMain(outputFlow: OutputFlow, clazz: Clazz): void {
-        clazz.writeCodeToMainFunction(outputFlow.functionInvocation())
-        clazz.writeMainCodeFromFlow(outputFlow.nextFlow())
+        clazz.addFunction(func)
     }
 
 }

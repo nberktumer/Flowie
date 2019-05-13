@@ -100,11 +100,13 @@ export default class Editor extends Component<EditorProps, EditorState> {
     }
 
     onDiagramChanged() {
+        Project.setProgrammingLanguage(this.state.selectedLanguage)
+
         this.state.fileModelList.forEach((item: FileModel) => {
             this.generateDirectoryItems(item, this.project.rootDirectory)
         })
 
-        this.project.init(this.state.selectedLanguage)
+        this.project.generateClazzCodes()
         this.setState({generatedCode: this.currentClass.getCode()})
     }
 

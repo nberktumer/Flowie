@@ -22,12 +22,16 @@ export class KotlinCodeStrategy implements CodeStrategy {
     randomFlowCode = new KotlinRandomFlowCode()
     whileFlowCode = new KotlinWhileFlowCode()
 
-    initClazz(clazz: Clazz): Code {
-        return new Code(clazz.indentationCount)
+    initClazz(clazz: Clazz): void {
+
     }
 
-    finishClass(clazz: Clazz): Code {
-        return new Code(clazz.indentationCount)
+    finishClazz(clazz: Clazz): void {
+
+    }
+
+    getClazzSignature(clazz: Clazz): string {
+        return ""
     }
 
     initMain(clazz: Clazz): void {
@@ -59,7 +63,7 @@ export class KotlinCodeStrategy implements CodeStrategy {
         clazz.mainFunction.code.insert("")
     }
 
-    generateFunctionCode(func: Func): void {
+    initFunction(func: Func): void {
         let returnTypeString = ""
         if (func.returnType) {
             returnTypeString += ": " + func.returnType
@@ -78,8 +82,9 @@ export class KotlinCodeStrategy implements CodeStrategy {
 
         func.code.insert(`fun ${func.functionName}(${parameterString})${returnTypeString} {`)
         func.code.incrementIndentation()
+    }
 
-        //TODO ALSO JAVA
+    finishFunction(func: Func): void {
         func.code.decrementIndentation()
         func.code.insert("}")
         func.code.insert("")
