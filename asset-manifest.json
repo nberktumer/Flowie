@@ -1,15 +1,17 @@
 {
-  "main.css": "/Flowie/static/css/main.f3050959.chunk.css",
-  "main.js": "/Flowie/static/js/main.9f149f08.chunk.js",
-  "main.js.map": "/Flowie/static/js/main.9f149f08.chunk.js.map",
-  "runtime~main.js": "/Flowie/static/js/runtime~main.e9c6ec87.js",
-  "runtime~main.js.map": "/Flowie/static/js/runtime~main.e9c6ec87.js.map",
-  "static/css/2.2bad0162.chunk.css": "/Flowie/static/css/2.2bad0162.chunk.css",
-  "static/js/2.bac7523f.chunk.js": "/Flowie/static/js/2.bac7523f.chunk.js",
-  "static/js/2.bac7523f.chunk.js.map": "/Flowie/static/js/2.bac7523f.chunk.js.map",
-  "index.html": "/Flowie/index.html",
-  "precache-manifest.ea03a5561e1093eb209efdb50c7b47b4.js": "/Flowie/precache-manifest.ea03a5561e1093eb209efdb50c7b47b4.js",
-  "service-worker.js": "/Flowie/service-worker.js",
-  "static/css/2.2bad0162.chunk.css.map": "/Flowie/static/css/2.2bad0162.chunk.css.map",
-  "static/css/main.f3050959.chunk.css.map": "/Flowie/static/css/main.f3050959.chunk.css.map"
+  "files": {
+    "main.css": "/Flowie/static/css/main.719be44c.chunk.css",
+    "main.js": "/Flowie/static/js/main.f4486798.chunk.js",
+    "main.js.map": "/Flowie/static/js/main.f4486798.chunk.js.map",
+    "runtime~main.js": "/Flowie/static/js/runtime~main.e952708d.js",
+    "runtime~main.js.map": "/Flowie/static/js/runtime~main.e952708d.js.map",
+    "static/css/2.93c88d9a.chunk.css": "/Flowie/static/css/2.93c88d9a.chunk.css",
+    "static/js/2.95afbb0e.chunk.js": "/Flowie/static/js/2.95afbb0e.chunk.js",
+    "static/js/2.95afbb0e.chunk.js.map": "/Flowie/static/js/2.95afbb0e.chunk.js.map",
+    "index.html": "/Flowie/index.html",
+    "precache-manifest.3bfde2682fd84eb8121ee73faac27dd7.js": "/Flowie/precache-manifest.3bfde2682fd84eb8121ee73faac27dd7.js",
+    "service-worker.js": "/Flowie/service-worker.js",
+    "static/css/2.93c88d9a.chunk.css.map": "/Flowie/static/css/2.93c88d9a.chunk.css.map",
+    "static/css/main.719be44c.chunk.css.map": "/Flowie/static/css/main.719be44c.chunk.css.map"
+  }
 }
