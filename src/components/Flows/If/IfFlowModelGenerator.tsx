@@ -31,6 +31,7 @@ export class IfFlowModelGenerator extends BaseFlowModelGenerator {
                 falseScopeFlowId
             ),
             null,
+            null,
             nextFlowId
         )
     }

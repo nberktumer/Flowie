@@ -1,4 +1,3 @@
-import {BaseInfoFlowNode} from "../../CanvasItems/Nodes/BaseInfoFlow/BaseInfoFlowNode"
 import strings from "../../../lang"
 import {NodeColors} from "../../../config"
 import {DiagramEngine} from "nberktumer-react-diagrams"
@@ -11,7 +10,7 @@ import {Variable} from "../../../models/Variable"
 import {SignConverter} from "../../../utils"
 import {ConditionType} from "../../../models/VariableEnums"
 
-export class WhileFlowNode extends BaseInfoFlowNode {
+export class WhileFlowNode extends BaseFlowNode {
     conditionList: Condition[] = []
     conditionType: ConditionType = ConditionType.AND
 
@@ -25,7 +24,7 @@ export class WhileFlowNode extends BaseInfoFlowNode {
         }
     }
 
-    updateInfo = () => {
+    updateInfo() {
         this.info = this.conditionList.map((condition) => {
             return `${condition.first.name} ${SignConverter.booleanOperation(condition.operation)} ${condition.second ? (condition.second.name ? condition.second.name : condition.second.value) : ""}`
         }).join(` ${this.conditionType} `)

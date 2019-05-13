@@ -1,4 +1,3 @@
-import {BaseInfoFlowNode} from "../../CanvasItems/Nodes/BaseInfoFlow/BaseInfoFlowNode"
 import strings from "../../../lang"
 import {NodeColors} from "../../../config"
 import {DiagramEngine} from "nberktumer-react-diagrams"
@@ -6,8 +5,9 @@ import {Variable} from "../../../models/Variable"
 import {ArithmeticOperationType, FlowType} from "../../../models"
 import * as _ from "lodash"
 import {SignConverter} from "../../../utils"
+import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 
-export class ArithmeticFlowNode extends BaseInfoFlowNode {
+export class ArithmeticFlowNode extends BaseFlowNode {
     private variable: Variable
     private operation: ArithmeticOperationType
     private operator1: Variable
@@ -32,7 +32,7 @@ export class ArithmeticFlowNode extends BaseInfoFlowNode {
         this.setOperator2(operator2)
     }
 
-    updateInfo = () => {
+    updateInfo() {
         this.info = `${this.getVariable().name} = ${this.getOperator1().name} ${SignConverter.arithmeticOperation(this.getOperation())} 
         ${!this.getOperator2().name ? this.getOperator2().value : this.getOperator2().name}`
     }

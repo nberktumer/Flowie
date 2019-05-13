@@ -1,12 +1,12 @@
-import {BaseInfoFlowNode} from "../../CanvasItems/Nodes/BaseInfoFlow/BaseInfoFlowNode"
 import strings from "../../../lang"
 import {NodeColors} from "../../../config"
 import {DiagramEngine} from "nberktumer-react-diagrams"
 import * as _ from "lodash"
 import {Variable} from "../../../models/Variable"
 import {FlowType} from "../../../models"
+import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 
-export class OutputFlowNode extends BaseInfoFlowNode {
+export class OutputFlowNode extends BaseFlowNode {
     private variable: Variable
 
     constructor(variable: Variable, withoutPorts: boolean = false) {

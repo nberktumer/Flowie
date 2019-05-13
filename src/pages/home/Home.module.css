@@ -3,6 +3,16 @@
     height: 100vh;
 }
 
+.homeApp {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #1d1f21;
+}
+
 .paneContent {
     display: flex;
     flex-grow: 1;
@@ -72,4 +82,25 @@
 .languageSelector .underline {
     background-color: transparent;
     border-bottom: none;
+}
+
+.homeLogoText {
+    display: flex!important;
+    color: white!important;
+    font-size: 48px!important;
+    text-align: center!important;
+    margin-bottom: 48px!important;
+}
+
+.homeContainer {
+    display: flex;
+    height: 100px;
+    width: 350px;
+    justify-content: center;
+    align-self: center;
+    flex-direction: column;
+}
+
+.homeContainer button {
+    margin: 8px;
 }

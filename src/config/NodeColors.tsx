@@ -5,5 +5,6 @@ export const NodeColors = {
     ARITHMETIC: "rgb(192, 255, 0)",
     FOR: "rgb(255, 0, 192)",
     INITIAL: "rgb(0, 255, 192)",
-    RANDOM: "rgb(192, 255, 192)"
+    RANDOM: "rgb(192, 255, 192)",
+    DATA_CLASS: "rgb(192, 192, 255)",
 }

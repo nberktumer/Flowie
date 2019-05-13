@@ -5,15 +5,13 @@ import Button from "@material-ui/core/Button"
 import strings from "../../lang"
 import styles from "./AddNodeDialog.module.css"
 import {BasePropertiesState} from "../Flows/Base/BaseProperties"
-import {Variable} from "../../models/Variable"
 import {FlowType} from "../../models"
 import {FlowPropertiesFactory} from "../Flows"
 
 export interface AddNodeDialogProps extends DialogProps {
     onSaveClick: (data: BasePropertiesState | null) => void,
     onDismissClick: () => void,
-    type: FlowType | null,
-    variables: Variable[]
+    type: FlowType | null
 }
 
 export interface AddNodeDialogState {
@@ -21,10 +19,6 @@ export interface AddNodeDialogState {
 }
 
 export class AddNodeDialog extends Component<AddNodeDialogProps, AddNodeDialogState> {
-    static defaultProps = {
-        variables: []
-    }
-
     constructor(props: AddNodeDialogProps) {
         super(props)
 
@@ -55,7 +49,7 @@ export class AddNodeDialog extends Component<AddNodeDialogProps, AddNodeDialogSt
                     <Typography color="error">
                         {(this.state.bodyData && this.state.bodyData.errorMessage) ? this.state.bodyData.errorMessage : ""}
                     </Typography>
-                    {FlowPropertiesFactory.create(this.props.type, this.props.variables, this.onBodyChanged.bind(this))}
+                    {FlowPropertiesFactory.create(this.props.type, this.onBodyChanged.bind(this))}
                 </div>
                 <div className={styles.addNodeDialogButtonContainer}>
                     <Button variant="contained" color="secondary" onClick={this.onDismiss.bind(this)}>

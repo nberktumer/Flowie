@@ -7,6 +7,8 @@
 
 .toolbar {
     min-height: 40px!important;
+    background-color: #1d1f21;
+    border-bottom: solid 1px #888;
 }
 
 .clickable {

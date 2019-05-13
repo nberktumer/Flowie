@@ -6,6 +6,38 @@ import {WhileFlowContent} from "./flows/WhileFlow"
 import {FlowType} from "../models"
 import {IfFlowContent} from "./flows/IfFlow";
 import {RandomFlowContent} from "./flows/RandomFlow";
+import {DirectoryItemType} from "./project/DirectoryItem";
+import {Directory} from "./project/Directory";
+import {Clazz} from "./project/Clazz";
+import {MainClazz} from "./project/MainClazz";
+import {DataClassFlowContent} from "./flows/DataClassFlow";
+
+export class DirectoryItemModel {
+    type: DirectoryItemType
+    directory: Directory | null = null
+    clazz: Clazz | null = null
+    mainClazz: MainClazz | null = null
+
+    constructor(type: DirectoryItemType) {
+        this.type = type
+    }
+
+    setDirectory(directory: Directory): DirectoryItemModel {
+        this.directory = directory
+        return this
+    }
+
+    setClazz(clazz: Clazz): DirectoryItemModel {
+        this.clazz = clazz
+        return this
+    }
+
+    setMainClazz(mainClazz: MainClazz): DirectoryItemModel {
+        this.mainClazz = mainClazz
+        return this
+    }
+
+}
 
 export class FlowModel {
     type: FlowType
@@ -17,6 +49,7 @@ export class FlowModel {
     whileFlowContent: WhileFlowContent | null
     ifFlowContent: IfFlowContent | null
     randomFlowContent: RandomFlowContent | null
+    dataClassFlowContent: DataClassFlowContent | null
     // forFlowContent: ForFlowContent,
     // ifFlowContent: IfFlowContent,
     nextFlowId: string | null
@@ -31,6 +64,7 @@ export class FlowModel {
         whileFlowContent: WhileFlowContent | null = null,
         ifFlowContent: IfFlowContent | null = null,
         randomFlowContent: RandomFlowContent | null = null,
+        dataClassFlowContent: DataClassFlowContent | null = null,
         nextFlowId: string | null
         // forFlowContent: ForFlowContent,
 
@@ -45,6 +79,7 @@ export class FlowModel {
         this.whileFlowContent = whileFlowContent
         this.ifFlowContent = ifFlowContent
         this.randomFlowContent = randomFlowContent
+        this.dataClassFlowContent = dataClassFlowContent
         this.nextFlowId = nextFlowId
     }
 }

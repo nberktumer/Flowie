@@ -1,7 +1,6 @@
 import {Variable} from "../../../models/Variable"
 import {DiagramEngine} from "nberktumer-react-diagrams"
 import * as _ from "lodash"
-import {BaseInfoFlowNode} from "../../CanvasItems/Nodes/BaseInfoFlow/BaseInfoFlowNode"
 import {FlowType, VariableType} from "../../../models"
 import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {FlowModel} from "../../../generator/FlowModelJSON"
@@ -10,7 +9,7 @@ import {ArithmeticFlowNode} from "../Arithmetic/ArithmeticFlowNode"
 import {InputFlowNode} from "../Input/InputFlowNode"
 import {IfFlowNode} from "../If/IfFlowNode"
 
-export abstract class BaseVariableFlowNode extends BaseInfoFlowNode {
+export abstract class BaseVariableFlowNode extends BaseFlowNode {
     private variable: Variable
 
     protected constructor(flowType?: FlowType, name: string = "Untitled", color: string = "rgb(0,192,255)") {

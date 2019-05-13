@@ -22,7 +22,7 @@ export class AssignmentFlowNode extends BaseVariableFlowNode {
         this.updateInfo()
     }
 
-    updateInfo(): void {
+    updateInfo() {
         this.info = `${this.getVariable().name} = ${this.getVariable().value}`
     }
 }

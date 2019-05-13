@@ -16,4 +16,13 @@ export class Validator {
 
         return ""
     }
+
+    static validateClassName(className: string) {
+        if (!className.charAt(0).match(/[A-Z]/i))
+            return strings.classFirstCharacterError
+        else if (!className.match(/^(?!-)(?!.*-)[A-Za-z]+$/))
+            return strings.classContainsInvalidCharacters
+
+        return ""
+    }
 }
