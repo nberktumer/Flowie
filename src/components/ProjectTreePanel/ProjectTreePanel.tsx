@@ -5,16 +5,17 @@ import {FileModel} from "../../models/FileModel"
 import {ProjectConsumer} from "../../stores/ProjectStore"
 import {Icon, Menu, MenuItem} from "@material-ui/core"
 import _ from "lodash"
+import strings from "../../lang"
 
 export interface ProjectTreePanelProps {
     onNewClass: (path: string) => void,
+    onNewDataClass: (path: string) => void,
     onNewPackage: (path: string) => void,
     onNewFunctionality: (path: string) => void,
     onDoubleClickListener: (fileModel: FileModel & { path: string }) => void
 }
 
 export interface ProjectTreePanelState {
-    isContextMenuVisible: boolean,
     itemPath: string,
     currentTarget: ((element: HTMLElement) => HTMLElement) | HTMLElement | undefined | null
 }
@@ -25,7 +26,6 @@ export class ProjectTreePanel extends Component<ProjectTreePanelProps, ProjectTr
     constructor(props: ProjectTreePanelProps) {
         super(props)
         this.state = {
-            isContextMenuVisible: false,
             itemPath: "",
             currentTarget: null
         }
@@ -33,6 +33,15 @@ export class ProjectTreePanel extends Component<ProjectTreePanelProps, ProjectTr
 
     newClass = () => {
         this.props.onNewClass(this.state.itemPath)
+        this.setState({currentTarget: null, itemPath: ""})
+    }
+
+    newDataClass = () => {
+        this.props.onNewDataClass(this.state.itemPath)
+        this.setState({currentTarget: null, itemPath: ""})
+    }
+
+    newFunction = () => {
         this.setState({currentTarget: null, itemPath: ""})
     }
 
@@ -73,8 +82,11 @@ export class ProjectTreePanel extends Component<ProjectTreePanelProps, ProjectTr
                             anchorEl={this.state.currentTarget}
                             open={Boolean(this.state.currentTarget)}
                             onClose={() => this.setState({currentTarget: null})}>
-                            <MenuItem onClick={() => this.newClass()}>New Class</MenuItem>
-                            <MenuItem onClick={() => this.newPackage()}>New Package</MenuItem>
+                            <MenuItem onClick={() => this.newPackage()}>{strings.newPackage}</MenuItem>
+                            {/* TODO: Change this to "new class" later */}
+                            <MenuItem onClick={() => this.newClass()}>{strings.newFunction}</MenuItem>
+                            <MenuItem onClick={() => this.newDataClass()}>{strings.newDataClass}</MenuItem>
+                            {/*<MenuItem onClick={() => this.newFunction()}>{strings.newFunction}</MenuItem>*/}
                         </Menu>
                         <Tree defaultExpandAll
                               selectable={false}

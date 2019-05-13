@@ -50,5 +50,10 @@ export default {
     projectName: "Project Name",
     createProject: "Create Project",
     cancel: "Cancel",
-    create: "Create"
+    create: "Create",
+    newClass: "New Class",
+    newDataClass: "New Data Class",
+    newPackage: "New Package",
+    newFunction: "New Function",
+    dataClass: "Data Class"
 }

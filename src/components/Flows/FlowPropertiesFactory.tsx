@@ -9,6 +9,7 @@ import React from "react"
 import {BaseFlowNode} from "../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {IfProperties} from "./If/IfProperties"
 import {RandomProperties} from "./Random/RandomProperties"
+import {DataClassProperties} from "./DataClass/DataClassProperties"
 
 export class FlowPropertiesFactory {
     private constructor() {
@@ -30,6 +31,8 @@ export class FlowPropertiesFactory {
                 return (<OutputProperties node={node} onDataChanged={onDataChanged.bind(this)}/>)
             case FlowType.RANDOM:
                 return (<RandomProperties node={node} onDataChanged={onDataChanged.bind(this)}/>)
+            case FlowType.DATA_CLASS:
+                return (<DataClassProperties node={node} onDataChanged={onDataChanged.bind(this)}/>)
             default:
                 return (<div/>)
         }
@@ -51,8 +54,19 @@ export class FlowPropertiesFactory {
                 return (<OutputProperties node={node} onDataChanged={onDataChanged.bind(this)}/>)
             case FlowType.RANDOM:
                 return (<RandomProperties readonlyType node={node} onDataChanged={onDataChanged.bind(this)}/>)
+            case FlowType.DATA_CLASS:
+                return (<DataClassProperties node={node} onDataChanged={onDataChanged.bind(this)}/>)
             default:
                 return (<div/>)
         }
     }
+    //
+    // static createFileProperties(type: FlowType | null | undefined): JSX.Element {
+    //     switch (type) {
+    //         case FlowType.DATA_CLASS:
+    //             return (<DataClassProperties node={node} onDataChanged={onDataChanged.bind(this)}/>)
+    //         default:
+    //             return (<div/>)
+    //     }
+    // }
 }

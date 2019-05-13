@@ -17,6 +17,8 @@ import {IfFlowNodeGenerator} from "./If/IfFlowNodeGenerator"
 import {IfFlowNode} from "./If/IfFlowNode"
 import {RandomFlowNodeGenerator} from "./Random/RandomFlowNodeGenerator"
 import {RandomFlowNode} from "./Random/RandomFlowNode"
+import {DataClassFlowNodeGenerator} from "./DataClass/DataClassFlowNodeGenerator"
+import {DataClassFlowNode} from "./DataClass/DataClassFlowNode"
 
 export class FlowNodeFactory {
     private constructor() {
@@ -42,6 +44,8 @@ export class FlowNodeFactory {
                 return new AssignmentFlowNodeGenerator().create(data)
             case FlowType.RANDOM:
                 return new RandomFlowNodeGenerator().create(data)
+            case FlowType.DATA_CLASS:
+                return new DataClassFlowNodeGenerator().create(data)
         }
     }
 
@@ -65,6 +69,8 @@ export class FlowNodeFactory {
                 return new AssignmentFlowNodeGenerator().load(node)
             case FlowType.RANDOM:
                 return new RandomFlowNodeGenerator().load(node)
+            case FlowType.DATA_CLASS:
+                return new DataClassFlowNodeGenerator().load(node)
             default:
                 return new BaseFlowNode()
         }
@@ -90,6 +96,8 @@ export class FlowNodeFactory {
                 return new AssignmentFlowNodeGenerator().create(data, node as AssignmentFlowNode)
             case FlowType.RANDOM:
                 return new RandomFlowNodeGenerator().create(data, node as RandomFlowNode)
+            case FlowType.DATA_CLASS:
+                return new DataClassFlowNodeGenerator().create(data, node as DataClassFlowNode)
         }
     }
 }

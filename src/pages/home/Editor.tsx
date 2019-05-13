@@ -48,6 +48,7 @@ export interface EditorState {
     flowPosition: { x: number, y: number },
     generatedCode: string,
     newFileName: string,
+    newFileTitle: string,
     newFileType: string,
     newFilePath: string,
     variableList: Variable[],
@@ -76,6 +77,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
             flowPosition: {x: 0, y: 0},
             generatedCode: "",
             newFileName: "",
+            newFileTitle: "",
             newFileType: "",
             newFilePath: "",
             variableList: [],
@@ -149,15 +151,39 @@ export default class Editor extends Component<EditorProps, EditorState> {
     }
 
     onNewClass(path: string) {
-        this.setState({isAddNewFileModalOpen: true, newFileType: "class", newFilePath: path})
+        this.setState({
+            isAddNewFileModalOpen: true,
+            newFileType: "class",
+            newFilePath: path,
+            newFileTitle: strings.newClass
+        })
+    }
+
+    onNewDataClass(path: string) {
+        this.setState({
+            isAddNewFileModalOpen: true,
+            newFileType: "data_class",
+            newFilePath: path,
+            newFileTitle: strings.newDataClass
+        })
     }
 
     onNewPackage(path: string) {
-        this.setState({isAddNewFileModalOpen: true, newFileType: "package", newFilePath: path})
+        this.setState({
+            isAddNewFileModalOpen: true,
+            newFileType: "package",
+            newFilePath: path,
+            newFileTitle: strings.newPackage
+        })
     }
 
     onNewFunctionality(path: string) {
-        this.setState({isAddNewFileModalOpen: true, newFileType: "functionality", newFilePath: path})
+        this.setState({
+            isAddNewFileModalOpen: true,
+            newFileType: "functionality",
+            newFilePath: path,
+            newFileTitle: strings.newFunction
+        })
     }
 
     onNewFileSave() {
@@ -176,6 +202,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
         if (lastFileModel) {
             switch (this.state.newFileType) {
                 case "package":
+                case "data_class":
                 case "class": {
                     let currentDir = this.project.rootDirectory
                     pathList.forEach((path) => {
@@ -198,6 +225,10 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
         this.onAddNewFileDialogClose()
         this.forceUpdate()
+    }
+
+    onAddNewFileDialogClose() {
+        this.setState({isAddNewFileModalOpen: false, newFileName: "", newFileTitle: "", newFileType: ""})
     }
 
     onFileDoubleClick(fileModel: FileModel & { path: string }) {
@@ -227,10 +258,6 @@ export default class Editor extends Component<EditorProps, EditorState> {
                 this.onDiagramChanged()
             }
         }
-    }
-
-    onAddNewFileDialogClose() {
-        this.setState({isAddNewFileModalOpen: false, newFileName: ""})
     }
 
     onCanvasDrop(type: FlowType, position: { x: number, y: number }) {
@@ -314,7 +341,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
                             open={this.state.isAddNewFileModalOpen}
                             onClose={() => this.onAddNewFileDialogClose()}
                             aria-labelledby="form-dialog-title">
-                            <DialogTitle id="form-dialog-title">{strings.newProject}</DialogTitle>
+                            <DialogTitle id="form-dialog-title">{this.state.newFileTitle}</DialogTitle>
                             <DialogContent>
                                 <DialogContentText>
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce a auctor dui. Nunc at
@@ -323,7 +350,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
                                 <TextField
                                     autoFocus
                                     margin="dense"
-                                    id="projectName"
+                                    id="fileName"
                                     onChange={(e) => this.setState({newFileName: e.target.value})}
                                     label={strings.projectName}
                                     fullWidth
@@ -353,6 +380,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
                                             <ProjectTreePanel
                                                 onDoubleClickListener={(fileModel) => this.onFileDoubleClick(fileModel)}
                                                 onNewClass={(path) => this.onNewClass(path)}
+                                                onNewDataClass={(path) => this.onNewDataClass(path)}
                                                 onNewFunctionality={(path) => this.onNewFunctionality(path)}
                                                 onNewPackage={(path) => this.onNewPackage(path)}/>
                                         </div>
