@@ -276,7 +276,13 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
     // On item deleted
     onEntityRemoved(event: BaseEvent<BaseModel>) {
+        if (event.entity instanceof BaseVariableFlowNode) {
+            const newVariableList = this.state.variableList.filter((value) => {
+                return value.name !== (event.entity as BaseVariableFlowNode).getVariable().name
+            })
 
+            this.setState({variableList: newVariableList})
+        }
     }
 
     // On item selected
