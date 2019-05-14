@@ -12,6 +12,8 @@ import {Code} from "../Code";
 import {DirectoryItemType} from "../../project/DirectoryItem";
 import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
 import {ProgrammingLanguage, VariableType} from "../../../models";
+import {DataClazz} from "../../project/DataClazz";
+import {JavaDataClassFlowCode} from "./JavaDataClassFlowCode";
 
 export class JavaCodeStrategy implements CodeStrategy {
 
@@ -22,6 +24,7 @@ export class JavaCodeStrategy implements CodeStrategy {
     outputFlowCode = new JavaOutputFlowCode()
     randomFlowCode = new JavaRandomFlowCode()
     whileFlowCode = new JavaWhileFlowCode()
+    dataClassFlowCode = new JavaDataClassFlowCode()
 
     initClazz(clazz: Clazz): void {
         clazz.incrementIndentation()
@@ -107,5 +110,9 @@ export class JavaCodeStrategy implements CodeStrategy {
         func.code.decrementIndentation()
         func.code.insert("}")
         func.code.insert("")
+    }
+
+    generateDataClazz(dataClazz: DataClazz): void {
+
     }
 }

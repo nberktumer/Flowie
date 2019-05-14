@@ -12,6 +12,8 @@ import {KotlinWhileFlowCode} from "./KotlinWhileFlowCode";
 import {DirectoryItemType} from "../../project/DirectoryItem";
 import {ProgrammingLanguage, VariableType} from "../../../models";
 import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
+import {DataClazz} from "../../project/DataClazz";
+import {KotlinDataClassFlowCode} from "./KotlinDataClassFlowCode";
 
 export class KotlinCodeStrategy implements CodeStrategy {
 
@@ -22,6 +24,7 @@ export class KotlinCodeStrategy implements CodeStrategy {
     outputFlowCode = new KotlinOutputFlowCode()
     randomFlowCode = new KotlinRandomFlowCode()
     whileFlowCode = new KotlinWhileFlowCode()
+    dataClassFlowCode = new KotlinDataClassFlowCode()
 
     initClazz(clazz: Clazz): void {
         clazz.incrementIndentation()
@@ -122,7 +125,7 @@ export class KotlinCodeStrategy implements CodeStrategy {
 
         if (func.isMain)
             func.code.insert(`@JvmStatic`)
-        
+
         func.code.insert(`fun ${func.functionName}(${parameterString})${returnTypeString} {`)
         func.code.incrementIndentation()
     }
@@ -131,5 +134,18 @@ export class KotlinCodeStrategy implements CodeStrategy {
         func.code.decrementIndentation()
         func.code.insert("}")
         func.code.insert("")
+    }
+
+    generateDataClazz(dataClazz: DataClazz): void {
+        let variableCode = ""
+
+        dataClazz.variables.forEach((variable, index) => {
+            variableCode += `${variable.name} : ${variable.type}`
+            if (index !== dataClazz.variables.length - 1) {
+                variableCode += ", "
+            }
+        })
+
+        dataClazz.generatedCode.push(`data class ${dataClazz.name} (${variableCode})`)
     }
 }

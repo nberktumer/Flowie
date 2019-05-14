@@ -41,11 +41,17 @@ export class DataClassFlow implements BaseFlow {
 }
 
 export class DataClassFlowContent {
+    name: string
+    dataClassName: string
     variables: Variable[]
 
     constructor(
-        variables: Variable[],
+        name: string,
+        dataClassName: string,
+        variables: Variable[]
     ) {
+        this.name = name
+        this.dataClassName = dataClassName
         this.variables = variables
     }
 }

@@ -1,5 +1,4 @@
 import {IfFlow} from "../../flows/IfFlow";
-import {Func} from "../../project/Func";
 import {ConditionOperation} from "../../../models/VariableEnums";
 import {IfFlowCode} from "../common/IfFlowCode";
 import {Clazz} from "../../project/Clazz";
