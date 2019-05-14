@@ -317,6 +317,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
                         const loadedData = JSON.parse(data) as { rootFileModel: FileModel, projectName: string, currentFile: FileModel }
 
                         this.project = new Project(loadedData.projectName)
+                        this.setState({rootFileModel: loadedData.rootFileModel})
                         this.loadClass(loadedData.currentFile)
                     } catch (e) {
                         console.error(e)
