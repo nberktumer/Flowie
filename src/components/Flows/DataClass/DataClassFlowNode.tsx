@@ -9,8 +9,8 @@ import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 export class DataClassFlowNode extends BaseFlowNode {
     fieldList: Variable[] = []
 
-    constructor(withoutPorts: boolean = false) {
-        super(FlowType.DATA_CLASS, strings.dataClass, NodeColors.DATA_CLASS)
+    constructor(className: string, withoutPorts: boolean = false) {
+        super(FlowType.DATA_CLASS, className, NodeColors.DATA_CLASS)
 
         if (!withoutPorts) {
             this.addInPort(strings.in).setMaximumLinks(1)
@@ -20,7 +20,13 @@ export class DataClassFlowNode extends BaseFlowNode {
 
     updateInfo() {
         this.info = this.fieldList.map((field) => {
-            return `${field.name}: ${field.type}`
+            if (field.value && field.value.name) {
+                return `${field.name}: ${field.type} = ${field.value.name}`
+            } else if (field.value && !field.value.name) {
+                return `${field.name}: ${field.type} = ${field.value.value}`
+            } else {
+                return `${field.name}: ${field.type}`
+            }
         }).join("\n")
     }
 

@@ -1,7 +1,7 @@
 import React from "react"
 import {MenuItem, TextField} from "@material-ui/core"
 import strings from "../../../lang"
-import {BaseProperties, BasePropertiesProps} from "../Base/BaseProperties"
+import {BaseProperties, BasePropertiesProps, BasePropertiesState} from "../Base/BaseProperties"
 import {VariableType} from "../../../models"
 import {Rules} from "../../../config"
 import {AssignmentFlowNode} from "./AssignmentFlowNode"
@@ -27,18 +27,24 @@ export class AssignmentProperties extends BaseProperties<AssignmentPropertiesPro
             this.state = {
                 variableName: node.getVariable().name,
                 variableType: node.getVariable().type,
-                value: node.getVariable().value,
-                isNull: node.getVariable().value === "NULL",
-                variable: node.getVariable()
+                value: node.getVariable().value
             }
         } else {
             this.state = {
                 variableName: "",
                 variableType: "",
-                value: "",
-                isNull: false,
-                variable: null
+                value: ""
             }
+        }
+    }
+
+    componentWillUpdate(nextProps: Readonly<BasePropertiesProps>, nextState: Readonly<BasePropertiesState>, nextContext: any): void {
+        if (this.props.isValidListener && nextState !== this.state) {
+            this.props.isValidListener(!nextState.errorMessage
+                && !nextState.errorField
+                && nextState.variableName
+                && nextState.variableType
+                && nextState.value)
         }
     }
 
@@ -83,7 +89,7 @@ export class AssignmentProperties extends BaseProperties<AssignmentPropertiesPro
                         <InputWithType
                             variableType={this.state.variableType}
                             onDataChanged={(data: any) => {
-                                this.setState({value: data.value, isNull: data.isNull}, () => {
+                                this.setState({value: data.value}, () => {
                                     this.props.onDataChanged(this.state)
                                 })
                             }}

@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core"
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever"
 import AddIcon from "@material-ui/icons/Add"
-import {BaseProperties, BasePropertiesProps} from "../Base/BaseProperties"
+import {BaseProperties, BasePropertiesProps, BasePropertiesState} from "../Base/BaseProperties"
 import {WhileFlowNode} from "./WhileFlowNode"
 import strings from "../../../lang"
 import {VariableType} from "../../../models"
@@ -55,9 +55,21 @@ export class WhileProperties extends BaseProperties<BasePropertiesProps> {
                     op2initialValue: ""
                 }],
                 conditionType: ConditionType.AND,
-                expanded: ""
+                expanded: 0
 
             }
+        }
+    }
+
+    componentWillUpdate(nextProps: Readonly<BasePropertiesProps>, nextState: Readonly<BasePropertiesState>, nextContext: any): void {
+        if (this.props.isValidListener && (nextState !== this.state)) {
+            this.props.isValidListener(nextState.conditions
+                && nextState.conditionType
+                && nextState.conditions.every((item: any) =>
+                    item.variableType && item.first && item.operation
+                    && ((item.isOp2Constant && item.second && JSON.parse(item.second).value)
+                        || (!item.isOp2Constant && item.second)
+                    )))
         }
     }
 
@@ -159,8 +171,8 @@ export class WhileProperties extends BaseProperties<BasePropertiesProps> {
                                         value={this.state.conditions[index].variableType}
                                         onChange={(e: any) => {
                                             this.state.conditions[index].variableType = e.target.value
+                                            this.setState({conditions: this.state.conditions, ...this.state})
                                             this.props.onDataChanged(this.state)
-                                            this.forceUpdate()
                                         }}
                                         margin="normal">
                                         {Object.keys(VariableType).map((value: any) => (
@@ -176,8 +188,8 @@ export class WhileProperties extends BaseProperties<BasePropertiesProps> {
                                         value={this.state.conditions[index].first}
                                         onChange={(e: any) => {
                                             this.state.conditions[index].first = e.target.value
+                                            this.setState({conditions: this.state.conditions, ...this.state})
                                             this.props.onDataChanged(this.state)
-                                            this.forceUpdate()
                                         }}
                                         margin="normal">
                                         {flowContext.variableList.filter((value) => {
@@ -200,8 +212,8 @@ export class WhileProperties extends BaseProperties<BasePropertiesProps> {
                                             value={this.state.conditions[index].second}
                                             onChange={(e: any) => {
                                                 this.state.conditions[index].second = e.target.value
+                                                this.setState({conditions: this.state.conditions, ...this.state})
                                                 this.props.onDataChanged(this.state)
-                                                this.forceUpdate()
                                             }}
                                             margin="normal">
                                             {flowContext.variableList.filter((value) => {
@@ -216,8 +228,8 @@ export class WhileProperties extends BaseProperties<BasePropertiesProps> {
                                             variableType={this.state.conditions[index].variableType}
                                             onDataChanged={(data: any) => {
                                                 this.state.conditions[index].second = JSON.stringify(new Variable(undefined, condition.variableType, data.value))
+                                                this.setState({conditions: this.state.conditions, ...this.state})
                                                 this.props.onDataChanged(this.state)
-                                                this.forceUpdate()
                                             }}
                                             value={condition.op2initialValue}
                                             hide={!condition.isOp2Constant}/>
@@ -227,9 +239,9 @@ export class WhileProperties extends BaseProperties<BasePropertiesProps> {
                                                     checked={this.state.conditions[index].isOp2Constant}
                                                     onChange={(e: any) => {
                                                         this.state.conditions[index].isOp2Constant = e.target.checked
-                                                        this.state.conditions[index].second = JSON.stringify(new Variable(undefined, condition.variableType, condition.op2initialValue))
+                                                        this.state.conditions[index].second = null
+                                                        this.setState({conditions: this.state.conditions, ...this.state})
                                                         this.props.onDataChanged(this.state)
-                                                        this.forceUpdate()
                                                     }}
                                                     value="true"
                                                     color="primary"
@@ -245,13 +257,13 @@ export class WhileProperties extends BaseProperties<BasePropertiesProps> {
                                         value={this.state.conditions[index].operation}
                                         onChange={(e: any) => {
                                             this.state.conditions[index].operation = e.target.value
+                                            this.setState({conditions: this.state.conditions, ...this.state})
                                             this.props.onDataChanged(this.state)
-                                            this.forceUpdate()
                                         }}
                                         margin="normal">
                                         {Object.keys(ConditionOperation).map((value: any) => (
                                             <MenuItem key={value} value={ConditionOperation[value]}>
-                                                {ConditionOperation[value]}
+                                                {SignConverter.booleanOperation(ConditionOperation[value] as ConditionOperation)}
                                             </MenuItem>
                                         ))}
                                     </TextField>

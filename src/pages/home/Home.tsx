@@ -16,6 +16,7 @@ import strings from "../../lang"
 import {FileUtils} from "../../utils"
 import {FileModel} from "../../models/FileModel"
 import {Defaults} from "../../config"
+import {DirectoryItemType} from "../../generator/project/DirectoryItem"
 
 export interface HomeProps {
     onLoad: (data: { rootFileModel: FileModel, projectName: string, currentFile: FileModel }) => void
@@ -49,8 +50,8 @@ export default class Home extends Component<HomeProps, HomeState> {
     }
 
     onCreateNewProjectClick = () => {
-        const mainFileModel = new FileModel(this.state.projectName, "", false, true, [])
-        const srcModel = new FileModel(Defaults.ROOT_FOLDER_NAME, "", true, false, [mainFileModel])
+        const mainFileModel = new FileModel(this.state.projectName, "", DirectoryItemType.MAIN_CLASS, [])
+        const srcModel = new FileModel(Defaults.ROOT_FOLDER_NAME, "", DirectoryItemType.DIRECTORY, [mainFileModel])
 
         const data = {
             rootFileModel: srcModel,
@@ -83,7 +84,7 @@ export default class Home extends Component<HomeProps, HomeState> {
                         </DialogContentText>
                         <TextField
                             autoFocus
-                            margin="dense"
+                            margin="normal"
                             id="projectName"
                             onChange={(e) => this.setState({projectName: e.target.value})}
                             label={strings.projectName}

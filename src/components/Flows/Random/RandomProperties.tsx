@@ -1,7 +1,7 @@
 import React from "react"
 import {TextField} from "@material-ui/core"
 import strings from "../../../lang"
-import {BaseProperties, BasePropertiesProps} from "../Base/BaseProperties"
+import {BaseProperties, BasePropertiesProps, BasePropertiesState} from "../Base/BaseProperties"
 import {VariableType} from "../../../models"
 import {Rules} from "../../../config"
 import {RandomFlowNode} from "./RandomFlowNode"
@@ -35,6 +35,17 @@ export class RandomProperties extends BaseProperties<RandomPropertiesProps> {
                 minValue: 0,
                 maxValue: 1
             }
+        }
+    }
+
+    componentWillUpdate(nextProps: Readonly<BasePropertiesProps>, nextState: Readonly<BasePropertiesState>, nextContext: any): void {
+        if (this.props.isValidListener && nextState !== this.state) {
+            this.props.isValidListener(!nextState.errorMessage
+                && !nextState.errorField
+                && nextState.variableName
+                && nextState.minValue.toString()
+                && nextState.maxValue.toString()
+                && nextState.maxValue >= nextState.minValue)
         }
     }
 

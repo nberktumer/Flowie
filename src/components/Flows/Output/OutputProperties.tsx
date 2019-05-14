@@ -1,7 +1,7 @@
 import React from "react"
 import {Checkbox, FormControlLabel, MenuItem, TextField} from "@material-ui/core"
 import strings from "../../../lang"
-import {BaseProperties, BasePropertiesProps} from "../Base/BaseProperties"
+import {BaseProperties, BasePropertiesProps, BasePropertiesState} from "../Base/BaseProperties"
 import {OutputFlowNode} from "./OutputFlowNode"
 import {VariableType} from "../../../models"
 import InputWithType from "../../InputWithType/InputWithType"
@@ -19,7 +19,6 @@ export class OutputProperties extends BaseProperties<BasePropertiesProps> {
             this.state = {
                 variable: JSON.stringify(node.getVariable()),
                 isConstant: node.getVariable().name === undefined,
-                variableType: node.getVariable().type,
                 initialValue: node.getVariable().value
 
             }
@@ -27,9 +26,18 @@ export class OutputProperties extends BaseProperties<BasePropertiesProps> {
             this.state = {
                 variable: "",
                 isConstant: false,
-                variableType: "",
                 initialValue: ""
             }
+        }
+    }
+
+    componentWillUpdate(nextProps: Readonly<BasePropertiesProps>, nextState: Readonly<BasePropertiesState>, nextContext: any): void {
+        if (this.props.isValidListener && nextState !== this.state) {
+            this.props.isValidListener(!nextState.errorMessage
+                && !nextState.errorField
+                && ((nextState.isConstant && nextState.variable && JSON.parse(nextState.variable).value)
+                    || (!nextState.isConstant && nextState.variable)
+                ))
         }
     }
 
@@ -72,7 +80,11 @@ export class OutputProperties extends BaseProperties<BasePropertiesProps> {
                                 control={
                                     <Checkbox
                                         checked={this.state.isConstant}
-                                        onChange={this.handleBooleanChange("isConstant")}
+                                        onChange={this.handleBooleanChange("isConstant", () => {
+                                            this.setState({variable: null}, () => {
+                                                this.props.onDataChanged(this.state)
+                                            })
+                                        })}
                                         value="true"
                                         color="primary"
                                     />

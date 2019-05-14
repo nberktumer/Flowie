@@ -1,7 +1,7 @@
 import React from "react"
 import {Checkbox, FormControlLabel, MenuItem, TextField} from "@material-ui/core"
 import strings from "../../../lang"
-import {BaseProperties, BasePropertiesProps} from "../Base/BaseProperties"
+import {BaseProperties, BasePropertiesProps, BasePropertiesState} from "../Base/BaseProperties"
 import {ArithmeticOperationType, VariableType} from "../../../models"
 import {ArithmeticFlowNode} from "./ArithmeticFlowNode"
 import InputWithType from "../../InputWithType/InputWithType"
@@ -33,6 +33,19 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                 isOp2Constant: false,
                 op2initialValue: ""
             }
+        }
+    }
+
+    componentWillUpdate(nextProps: Readonly<BasePropertiesProps>, nextState: Readonly<BasePropertiesState>, nextContext: any): void {
+        if (this.props.isValidListener && nextState !== this.state) {
+            this.props.isValidListener(!nextState.errorMessage
+                && !nextState.errorField
+                && nextState.variable
+                && nextState.operation
+                && nextState.operator1
+                && ((nextState.isOp2Constant && nextState.operator2 && JSON.parse(nextState.operator2).value)
+                    || (!nextState.isOp2Constant && nextState.operator2)
+                ))
         }
     }
 
@@ -119,7 +132,11 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                                 control={
                                     <Checkbox
                                         checked={this.state.isOp2Constant}
-                                        onChange={this.handleBooleanChange("isOp2Constant")}
+                                        onChange={this.handleBooleanChange("isOp2Constant", () => {
+                                            this.setState({operator2: null}, () => {
+                                                this.props.onDataChanged(this.state)
+                                            })
+                                        })}
                                         value="true"
                                         color="primary"
                                     />

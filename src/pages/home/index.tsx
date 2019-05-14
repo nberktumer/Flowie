@@ -2,6 +2,7 @@ import React, {Component} from "react"
 import Editor from "./Editor"
 import Home from "./Home"
 import {FileModel} from "../../models/FileModel"
+import {DirectoryItemType} from "../../generator/project/DirectoryItem"
 
 export interface HomePageProps {
 }
@@ -16,7 +17,7 @@ export default class HomePage extends Component<HomePageProps, HomePageState> {
     constructor(props: HomePageProps) {
         super(props)
 
-        const dummyFileModel = new FileModel("flowie", "", false, false, [])
+        const dummyFileModel = new FileModel("flowie", "", DirectoryItemType.CLASS, [])
 
         this.state = {
             isLoaded: false,
