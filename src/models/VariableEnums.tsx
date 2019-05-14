@@ -24,7 +24,9 @@ export enum FlowType {
     ARITHMETIC = "Arithmetic",
     ASSIGNMENT = "Assignment",
     RANDOM = "Random",
-    DATA_CLASS = "DataClass"
+    DATA_CLASS = "Data Class",
+    CLASS = "Class",
+    PACKAGE = "Package"
 }
 
 export enum ConditionOperation {

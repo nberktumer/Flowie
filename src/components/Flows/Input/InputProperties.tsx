@@ -1,7 +1,7 @@
 import React from "react"
 import {MenuItem, TextField} from "@material-ui/core"
 import strings from "../../../lang"
-import {BaseProperties, BasePropertiesProps} from "../Base/BaseProperties"
+import {BaseProperties, BasePropertiesProps, BasePropertiesState} from "../Base/BaseProperties"
 import {VariableType} from "../../../models"
 import {Rules} from "../../../config"
 import {InputFlowNode} from "./InputFlowNode"
@@ -25,15 +25,22 @@ export class InputProperties extends BaseProperties<InputPropertiesProps> {
 
             this.state = {
                 variableName: node.getVariable().name,
-                variableType: node.getVariable().type,
-                variable: node.getVariable()
+                variableType: node.getVariable().type
             }
         } else {
             this.state = {
                 variableName: "",
-                variableType: "",
-                variable: null
+                variableType: ""
             }
+        }
+    }
+
+    componentWillUpdate(nextProps: Readonly<BasePropertiesProps>, nextState: Readonly<BasePropertiesState>, nextContext: any): void {
+        if (this.props.isValidListener && nextState !== this.state) {
+            this.props.isValidListener(!nextState.errorMessage
+                && !nextState.errorField
+                && nextState.variableName
+                && nextState.variableType)
         }
     }
 

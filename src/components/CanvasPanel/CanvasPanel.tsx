@@ -1,4 +1,4 @@
-import React, {Component, useContext} from "react"
+import React, {Component} from "react"
 import styles from "./CanvasPanel.module.css"
 import * as _ from "lodash"
 import {BaseEvent, BaseModel, DiagramEngine, DiagramModel, DiagramWidget, NodeModel} from "nberktumer-react-diagrams"
@@ -10,7 +10,7 @@ import {DefaultPort, DefaultPortLocation, DefaultPortModel, DefaultPortType} fro
 import {InitialFlowNode} from "../Flows/Initial/InitialFlowNode"
 import {FlowNodeFactory} from "../Flows"
 import {BaseFlowNode} from "../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
-import {FlowConsumer, FlowContext} from "../../stores/FlowStore"
+import {FlowConsumer} from "../../stores/FlowStore"
 import {Variable} from "../../models/Variable"
 
 export interface CanvasPanelProps {
