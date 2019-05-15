@@ -3,17 +3,14 @@ import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {BasePropertiesState} from "../Base/BaseProperties"
 import {DataClassFlowNode} from "./DataClassFlowNode"
 import {Variable} from "../../../models/Variable"
-import {DataClazz} from "../../../generator/project/DataClazz"
 
 export class DataClassFlowNodeGenerator extends BaseFlowNodeGenerator {
     create(data?: BasePropertiesState, node?: DataClassFlowNode): BaseFlowNode | undefined {
-        if (!data || !data.selectedClass || !data.fields || !data.variableName)
+        if (!data || !data.selectedClassName || !data.fields || !data.variableName)
             return undefined
 
         try {
-            const clazz = JSON.parse(data.selectedClass) as DataClazz
-
-            const resultNode = node ? node : new DataClassFlowNode(data.variableName, clazz.name)
+            const resultNode = node ? node : new DataClassFlowNode(data.variableName, data.selectedClassName)
             resultNode.removeAllFields()
 
             for (const field of data.fields) {

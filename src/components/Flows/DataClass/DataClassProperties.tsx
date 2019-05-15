@@ -17,7 +17,6 @@ import InputWithType from "../../InputWithType/InputWithType"
 import {Variable} from "../../../models/Variable"
 import {DataClassFlowNode} from "./DataClassFlowNode"
 import {FlowConsumer} from "../../../stores/FlowStore"
-import {DataClazz} from "../../../generator/project/DataClazz"
 import {Validator} from "../../../utils"
 
 export class DataClassProperties extends BaseProperties<BasePropertiesProps> {
@@ -32,19 +31,19 @@ export class DataClassProperties extends BaseProperties<BasePropertiesProps> {
                 fields: node.fieldList.map((item) => {
                     return {
                         field: item,
-                        variable: JSON.stringify(item),
-                        isConstant: !Boolean(item.name),
-                        initialValue: !Boolean(item.name) ? item.value : ""
+                        variable: JSON.stringify(item.value),
+                        isConstant: !Boolean(item.value.name),
+                        initialValue: !Boolean(item.value.name) ? item.value.value : ""
                     }
                 }),
-                selectedClass: JSON.stringify(new DataClazz(node.name, node.fieldList)),
+                selectedClassName: node.name,
                 expanded: "",
                 variableName: node.variableName
             }
         } else {
             this.state = {
                 fields: [],
-                selectedClass: "",
+                selectedClassName: "",
                 expanded: "",
                 variableName: ""
             }
@@ -56,8 +55,9 @@ export class DataClassProperties extends BaseProperties<BasePropertiesProps> {
             this.props.isValidListener(!nextState.errorMessage
                 && !nextState.errorField
                 && nextState.fields
-                && nextState.fields.every((item: any) => item.field && item.variable && JSON.parse(item.variable).value)
-                && nextState.selectedClass)
+                && nextState.fields.every((item: any) => item.field && item.variable
+                    && (item.isConstant ? Boolean(JSON.parse(item.variable).value.toString()) : Boolean(item.variable)))
+                && nextState.selectedClassName)
         }
     }
 
@@ -110,11 +110,11 @@ export class DataClassProperties extends BaseProperties<BasePropertiesProps> {
                                 select
                                 fullWidth
                                 label={strings.dataClass}
-                                value={this.state.selectedClass}
+                                value={this.state.selectedClassName}
                                 onChange={(e: any) => {
-                                    const dataClass = JSON.parse(e.target.value) as DataClazz
+                                    const dataClass = flowContext.dataClassList.find((item) => item.name === e.target.value)!
                                     this.setState({
-                                        selectedClass: e.target.value,
+                                        selectedClassName: dataClass.name,
                                         fields: dataClass.variables.map((item) => {
                                             const isConstant = item.value !== undefined && item.value != null && item.value !== ""
                                             return {
@@ -130,7 +130,7 @@ export class DataClassProperties extends BaseProperties<BasePropertiesProps> {
                                 }}
                                 margin="normal">
                                 {flowContext.dataClassList.map((value) => (
-                                    <MenuItem key={value.name} value={JSON.stringify(value)}>
+                                    <MenuItem key={value.name} value={value.name}>
                                         {value.name}
                                     </MenuItem>
                                 ))}
