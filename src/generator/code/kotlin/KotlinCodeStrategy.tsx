@@ -1,5 +1,5 @@
 import {CodeStrategy} from "../CodeStrategy";
-import {Func, Parameter} from "../../project/Func";
+import {Func} from "../../project/Func";
 import {Clazz} from "../../project/Clazz";
 import {Code} from "../Code";
 import {KotlinArithmeticFlowCode} from "./KotlinArithmeticFlowCode";
@@ -16,6 +16,7 @@ import {DataClazz} from "../../project/DataClazz";
 import {KotlinDataClassFlowCode} from "./KotlinDataClassFlowCode";
 import {KotlinReturnFlowCode} from "./KotlinReturnFlowCode";
 import {KotlinFunctionalityFlowCode} from "./KotlinFunctionalityFlowCode";
+import {Variable} from "../../../models/Variable";
 
 export class KotlinCodeStrategy implements CodeStrategy {
 
@@ -72,22 +73,24 @@ export class KotlinCodeStrategy implements CodeStrategy {
     }
 
     initMain(clazz: Clazz): void {
-        const parameters: Parameter[] = []
+        const parameters: Variable[] = []
         const mainFunctionLines = new Code(clazz.indentationCount)
         let mainFnName = ""
 
         if (clazz.type === DirectoryItemType.MAIN_CLASS) {
             mainFnName = "main"
             parameters.push(
-                new Parameter(
+                new Variable(
                     "args",
-                    ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.KOTLIN, VariableType.MAIN_ARG)))
+                    VariableType.MAIN_ARG,
+                    null))
         } else {
             mainFnName = clazz.name
             parameters.push(
-                new Parameter(
+                new Variable(
                     clazz.name,
-                    ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.KOTLIN, VariableType.MAIN_ARG))) //TODO CHANGE TYPE TO ARG FROM FN
+                    VariableType.MAIN_ARG,
+                    null)) //TODO CHANGE TYPE TO ARG FROM FN
         }
 
         clazz.mainFunction = new Func(
@@ -121,7 +124,7 @@ export class KotlinCodeStrategy implements CodeStrategy {
         let parameterString = ""
 
         func.parameters.forEach((value, index) => {
-            parameterString += `${value.name}: ${value.type}`
+            parameterString += `${value.name}: ${ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.KOTLIN, value.type)}`
             if (index !== func.parameters.length - 1) {
                 parameterString += ", "
             }
