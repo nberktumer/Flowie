@@ -15,6 +15,7 @@ import {IfFlow} from "../flows/IfFlow"
 import {RandomFlow} from "../flows/RandomFlow"
 import {Project} from "./Project"
 import {DataClassFlow} from "../flows/DataClassFlow";
+import {ReturnFlow} from "../flows/ReturnFlow";
 
 export class Clazz implements DirectoryItem {
     static INITIAL_ID = "INITIAL_ID"
@@ -311,6 +312,14 @@ export class Clazz implements DirectoryItem {
                             value.nextFlowId,
                             value.type,
                             value.dataClassFlowContent
+                        ))
+                        break
+                    case FlowType.RETURN:
+                        baseFlowMap.set(value.id, new ReturnFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.returnFlowContent
                         ))
                         break
                     /*

@@ -10,6 +10,7 @@ import {BaseFlowNode} from "../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {IfFlowModelGenerator} from "./If/IfFlowModelGenerator"
 import {RandomFlowModelGenerator} from "./Random/RandomFlowModelGenerator"
 import {DataClassFlowModelGenerator} from "./DataClass/DataClassFlowModelGenerator"
+import {ReturnFlowModelGenerator} from "./Return/ReturnFlowModelGenerator";
 
 export class FlowModelFactory {
     private constructor() {
@@ -35,6 +36,8 @@ export class FlowModelFactory {
                 return new RandomFlowModelGenerator().generate(baseFlow)
             case FlowType.DATA_CLASS:
                 return new DataClassFlowModelGenerator().generate(baseFlow)
+            case FlowType.RETURN:
+                return new ReturnFlowModelGenerator().generate(baseFlow)
             default:
                 return null
         }
