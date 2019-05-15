@@ -1,6 +1,6 @@
 import {Variable} from "../../models/Variable";
 import {DirectoryItem, DirectoryItemType} from "./DirectoryItem";
-import {Code} from "../code/Code";
+import {Code, CodeLine} from "../code/Code";
 import {Project} from "./Project";
 
 export class DataClazz implements DirectoryItem {
@@ -8,21 +8,15 @@ export class DataClazz implements DirectoryItem {
     name: string
     variables: Variable[] = []
     generatedCode: string[] = []
-    private indentationCount = 0
-    code = new Code(this.indentationCount)
+    code = new Code(0)
+    spacing = "\t"
 
     constructor(name: string, variables: Variable[]) {
         this.type = DirectoryItemType.DATA_CLASS
         this.name = name
         this.variables = variables
-    }
 
-    incrementIndentation() {
-        this.indentationCount++
-    }
-
-    decrementIndentation() {
-        this.indentationCount--
+        Project.codeStrategy.generateDataClazz(this)
     }
 
     addVariable(variable: Variable) {
@@ -30,6 +24,22 @@ export class DataClazz implements DirectoryItem {
     }
 
     generateCode() {
-        Project.codeStrategy.generateDataClazz(this)
+        this.code.lines.forEach((line) => {
+            this.generatedCode.push(this.createLineWithSpacing(line))
+        })
+    }
+
+    getCode(): string {
+        return this.generatedCode.join("\n")
+    }
+
+    private createLineWithSpacing(codeLine: CodeLine): string {
+        let line = ""
+        for (let i = 0; i < codeLine.indentationCount; i++) {
+            line += this.spacing
+        }
+
+        line += codeLine.content
+        return line
     }
 }

@@ -114,7 +114,7 @@ export class JavaCodeStrategy implements CodeStrategy {
 
     generateDataClazz(dataClazz: DataClazz): void {
         dataClazz.code.insert(`public class ${dataClazz.name} {`)
-        dataClazz.incrementIndentation()
+        dataClazz.code.incrementIndentation()
 
         dataClazz.variables.forEach((variable) => {
             dataClazz.code.insert(`${ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, variable.type)} ${variable.name};`)
@@ -130,7 +130,7 @@ export class JavaCodeStrategy implements CodeStrategy {
         })
 
         dataClazz.code.insert(`${dataClazz.name}(${variableCode}) {`)
-        dataClazz.incrementIndentation()
+        dataClazz.code.incrementIndentation()
 
         dataClazz.variables.forEach((variable) => {
             dataClazz.code.insert(`this.${variable.name} = ${variable.name};`)
