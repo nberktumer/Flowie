@@ -1,5 +1,6 @@
 export enum VariableType {
     INT = "Int",
+    LONG = "Long",
     STRING = "String",
     BOOLEAN = "Boolean",
     DOUBLE = "Double",
@@ -27,6 +28,7 @@ export enum FlowType {
     DATA_CLASS = "Data Class",
     CLASS = "Class",
     PACKAGE = "Package",
+    CURRENT_TIME = "Current Time",
     RETURN = "Return"
 }
 

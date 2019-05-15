@@ -17,6 +17,7 @@ import {Project} from "./Project"
 import {DataClassFlow} from "../flows/DataClassFlow";
 import {ReturnFlow} from "../flows/ReturnFlow";
 import {FunctionalityFlow} from "../flows/FunctionalityFlow";
+import {CurrentTimeFlow} from "../flows/CurrentTimeFlow";
 
 export class Clazz implements DirectoryItem {
     static INITIAL_ID = "INITIAL_ID"
@@ -140,6 +141,8 @@ export class Clazz implements DirectoryItem {
                     Project.codeStrategy.ifFlowCode.generateMain(flow, this)
                 } else if (flow instanceof RandomFlow) {
                     Project.codeStrategy.randomFlowCode.generateMain(flow, this)
+                } else if (flow instanceof CurrentTimeFlow) {
+                    Project.codeStrategy.currentTimeFlowCode.generateMain(flow, this)
                 } else if (flow instanceof DataClassFlow) {
                     Project.codeStrategy.dataClassFlowCode.generateMain(flow, this)
                 } else if (flow instanceof ReturnFlow) {
@@ -301,6 +304,14 @@ export class Clazz implements DirectoryItem {
                             value.nextFlowId,
                             value.type,
                             value.ifFlowContent
+                        ))
+                        break
+                    case FlowType.CURRENT_TIME:
+                        baseFlowMap.set(value.id, new CurrentTimeFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.currentTimeFlowContent
                         ))
                         break
                     case FlowType.RANDOM:

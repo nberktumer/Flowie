@@ -17,6 +17,7 @@ import {KotlinDataClassFlowCode} from "./KotlinDataClassFlowCode";
 import {KotlinReturnFlowCode} from "./KotlinReturnFlowCode";
 import {KotlinFunctionalityFlowCode} from "./KotlinFunctionalityFlowCode";
 import {Variable} from "../../../models/Variable";
+import {KotlinCurrentTimeFlowCode} from "./KotlinCurrentTimeFlowCode";
 
 export class KotlinCodeStrategy implements CodeStrategy {
 
@@ -30,6 +31,7 @@ export class KotlinCodeStrategy implements CodeStrategy {
     dataClassFlowCode = new KotlinDataClassFlowCode()
     returnFlowCode = new KotlinReturnFlowCode()
     functionalityFlowCode = new KotlinFunctionalityFlowCode()
+    currentTimeFlowCode = new KotlinCurrentTimeFlowCode()
 
     initClazz(clazz: Clazz): void {
         clazz.incrementIndentation()
@@ -98,7 +100,7 @@ export class KotlinCodeStrategy implements CodeStrategy {
             parameters,
             undefined,
             mainFunctionLines,
-            clazz.type === DirectoryItemType.MAIN_CLASS
+            true
         )
 
         this.initFunction(clazz.mainFunction)
@@ -124,7 +126,7 @@ export class KotlinCodeStrategy implements CodeStrategy {
         let parameterString = ""
 
         func.parameters.forEach((value, index) => {
-            parameterString += `${value.name}: ${ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.KOTLIN, value.type)}`
+            parameterString += `${value.name}: ${ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.KOTLIN, value.type)}`
             if (index !== func.parameters.length - 1) {
                 parameterString += ", "
             }
@@ -147,7 +149,7 @@ export class KotlinCodeStrategy implements CodeStrategy {
         let variableCode = ""
 
         dataClazz.variables.forEach((variable, index) => {
-            variableCode += `${variable.name} : ${ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.KOTLIN, variable.type)}`
+            variableCode += `val ${variable.name} : ${ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.KOTLIN, variable.type)}`
             if (index !== dataClazz.variables.length - 1) {
                 variableCode += ", "
             }

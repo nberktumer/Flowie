@@ -11,6 +11,7 @@ import {IfFlowModelGenerator} from "./If/IfFlowModelGenerator"
 import {RandomFlowModelGenerator} from "./Random/RandomFlowModelGenerator"
 import {DataClassFlowModelGenerator} from "./DataClass/DataClassFlowModelGenerator"
 import {ReturnFlowModelGenerator} from "./Return/ReturnFlowModelGenerator";
+import {CurrentTimeFlowModelGenerator} from "./CurrentTime/CurrentTimeFlowModelGenerator";
 
 export class FlowModelFactory {
     private constructor() {
@@ -34,6 +35,8 @@ export class FlowModelFactory {
                 return new AssignmentFlowModelGenerator().generate(baseFlow)
             case FlowType.RANDOM:
                 return new RandomFlowModelGenerator().generate(baseFlow)
+            case FlowType.CURRENT_TIME:
+                return new CurrentTimeFlowModelGenerator().generate(baseFlow)
             case FlowType.DATA_CLASS:
                 return new DataClassFlowModelGenerator().generate(baseFlow)
             case FlowType.RETURN:

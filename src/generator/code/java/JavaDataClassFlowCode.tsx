@@ -2,7 +2,8 @@ import {DataClassFlowCode} from "../common/DataClassFlowCode";
 import {Clazz} from "../../project/Clazz";
 import {DataClassFlow} from "../../flows/DataClassFlow";
 import {Variable} from "../../../models/Variable";
-import {VariableType} from "../../../models";
+import {ProgrammingLanguage, VariableType} from "../../../models";
+import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
 
 export class JavaDataClassFlowCode implements DataClassFlowCode {
 
@@ -18,11 +19,7 @@ export class JavaDataClassFlowCode implements DataClassFlowCode {
                 if (valueAsVariable.name) {
                     variableCode += valueAsVariable.name
                 } else {
-                    if (valueAsVariable.type === VariableType.STRING) {
-                        variableCode += `"${valueAsVariable.value}"`
-                    } else {
-                        variableCode += valueAsVariable.value
-                    }
+                    variableCode += ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.JAVA, valueAsVariable)
                 }
             } else {
                 variableCode += variable.name

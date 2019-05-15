@@ -1,7 +1,8 @@
 import {ProgrammingLanguage, VariableType} from "../../models";
+import {Variable} from "../../models/Variable";
 
 export class ProgrammingLanguageTypeConverter {
-    static convert(programmingLanguage: ProgrammingLanguage, variableType: VariableType): string {
+    static convertType(programmingLanguage: ProgrammingLanguage, variableType: VariableType): string {
         let convertedType = ""
 
         switch (+programmingLanguage) {
@@ -18,6 +19,9 @@ export class ProgrammingLanguageTypeConverter {
                         break
                     case VariableType.DOUBLE:
                         convertedType = "double"
+                        break
+                    case VariableType.LONG:
+                        convertedType = "long"
                         break
                     case VariableType.MAIN_ARG:
                         convertedType = `String[]`
@@ -38,6 +42,9 @@ export class ProgrammingLanguageTypeConverter {
                     case VariableType.DOUBLE:
                         convertedType = "Double"
                         break
+                    case VariableType.LONG:
+                        convertedType = "Long"
+                        break
                     case VariableType.MAIN_ARG:
                         convertedType = `Array<String>`
                         break
@@ -46,5 +53,68 @@ export class ProgrammingLanguageTypeConverter {
         }
 
         return convertedType
+    }
+
+    static convertConstantVariable(programmingLanguage: ProgrammingLanguage, variable: Variable): string {
+        let convertedConstant = ""
+
+        switch (+programmingLanguage) {
+            case ProgrammingLanguage.JAVA:
+                switch (variable.type) {
+                    case VariableType.INT:
+                        convertedConstant = variable.value
+                        break
+                    case VariableType.BOOLEAN:
+                        console.log(variable.value)
+                        if (variable.value === "true") {
+                            convertedConstant = "true"
+                        } else if (variable.value === "false") {
+                            convertedConstant = "false"
+                        }
+                        break
+                    case VariableType.STRING:
+                        convertedConstant = `"${variable.value}"`
+                        break
+                    case VariableType.DOUBLE:
+                        convertedConstant = variable.value
+                        break
+                    case VariableType.LONG:
+                        convertedConstant = `${variable.value}L`
+                        break
+                    case VariableType.MAIN_ARG:
+                        convertedConstant = `String[]`
+                        break
+                }
+                break
+            case ProgrammingLanguage.KOTLIN:
+                switch (variable.type) {
+                    case VariableType.INT:
+                        convertedConstant = variable.value
+                        break
+                    case VariableType.BOOLEAN:
+                        console.log(variable.value)
+                        if (variable.value === "true") {
+                            convertedConstant = "true"
+                        } else if (variable.value === "false") {
+                            convertedConstant = "false"
+                        }
+                        break
+                    case VariableType.STRING:
+                        convertedConstant = `"${variable.value}"`
+                        break
+                    case VariableType.DOUBLE:
+                        convertedConstant = variable.value
+                        break
+                    case VariableType.LONG:
+                        convertedConstant = `${variable.value}L`
+                        break
+                    case VariableType.MAIN_ARG:
+                        convertedConstant = `String[]`
+                        break
+                }
+                break
+        }
+
+        return convertedConstant
     }
 }

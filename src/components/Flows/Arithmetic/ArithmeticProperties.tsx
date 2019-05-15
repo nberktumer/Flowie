@@ -62,7 +62,7 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                             onChange={this.handleStringChange("variable")}
                             margin="normal">
                             {flowContext.variableList.filter((value) => {
-                                return value.type === VariableType.INT || value.type === VariableType.DOUBLE
+                                return value.type === VariableType.INT || value.type === VariableType.DOUBLE || value.type === VariableType.LONG
                             }).map((value) => (
                                 <MenuItem key={value.name} value={JSON.stringify(value)}>
                                     {value.name}
@@ -90,7 +90,7 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                             onChange={this.handleStringChange("operator1")}
                             margin="normal">
                             {flowContext.variableList.filter((value) => {
-                                return value.type === VariableType.INT || value.type === VariableType.DOUBLE
+                                return value.type === VariableType.INT || value.type === VariableType.DOUBLE || value.type === VariableType.LONG
                             }).map((value) => (
                                 <MenuItem key={value.name}
                                           value={JSON.stringify(new Variable(value.name, value.type, value.value))}>
@@ -111,7 +111,7 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                                 onChange={this.handleStringChange("operator2")}
                                 margin="normal">
                                 {flowContext.variableList.filter((value) => {
-                                    return value.type === VariableType.INT || value.type === VariableType.DOUBLE
+                                    return value.type === VariableType.INT || value.type === VariableType.DOUBLE || value.type === VariableType.LONG
                                 }).map((value) => (
                                     <MenuItem key={value.name}
                                               value={JSON.stringify(new Variable(value.name, value.type, value.value))}>

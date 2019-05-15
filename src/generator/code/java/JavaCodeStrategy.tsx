@@ -17,6 +17,7 @@ import {JavaDataClassFlowCode} from "./JavaDataClassFlowCode";
 import {JavaReturnFlowCode} from "./JavaReturnFlowCode";
 import {JavaFunctionalityFlowCode} from "./JavaFunctionalityFlowCode";
 import {Variable} from "../../../models/Variable";
+import {JavaCurrentTimeFlowCode} from "./JavaCurrentTimeFlowCode";
 
 export class JavaCodeStrategy implements CodeStrategy {
 
@@ -30,6 +31,7 @@ export class JavaCodeStrategy implements CodeStrategy {
     dataClassFlowCode = new JavaDataClassFlowCode()
     returnFlowCode = new JavaReturnFlowCode()
     functionalityFlowCode = new JavaFunctionalityFlowCode()
+    currentTimeFlowCode = new JavaCurrentTimeFlowCode()
 
     initClazz(clazz: Clazz): void {
         clazz.incrementIndentation()
@@ -77,7 +79,7 @@ export class JavaCodeStrategy implements CodeStrategy {
             parameters,
             undefined,
             mainFunctionLines,
-            clazz.type === DirectoryItemType.MAIN_CLASS
+            true
         )
 
         this.initFunction(clazz.mainFunction)
@@ -103,13 +105,20 @@ export class JavaCodeStrategy implements CodeStrategy {
         let parameterString = ""
 
         func.parameters.forEach((value, index) => {
-            parameterString += `${ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, value.type)} ${value.name}`
+            parameterString += `${ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.JAVA, value.type)} ${value.name}`
             if (index !== func.parameters.length - 1) {
                 parameterString += ", "
             }
         })
 
-        func.code.insert(`public static ${returnTypeString} ${func.functionName}(${parameterString}) {`)
+        let visibilityString = ""
+        if (func.isMain) {
+            visibilityString = "public"
+        } else {
+            visibilityString = "private"
+        }
+
+        func.code.insert(`${visibilityString} static ${returnTypeString} ${func.functionName}(${parameterString}) {`)
         func.code.incrementIndentation()
     }
 
@@ -121,20 +130,23 @@ export class JavaCodeStrategy implements CodeStrategy {
 
     generateDataClazz(dataClazz: DataClazz): void {
         dataClazz.code.insert(`public class ${dataClazz.name} {`)
+        dataClazz.code.insert("")
         dataClazz.code.incrementIndentation()
 
         dataClazz.variables.forEach((variable) => {
-            dataClazz.code.insert(`${ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, variable.type)} ${variable.name};`)
+            dataClazz.code.insert(`${ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.JAVA, variable.type)} ${variable.name};`)
         })
 
         let variableCode = ""
 
         dataClazz.variables.forEach((variable, index) => {
-            variableCode += `${ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, variable.type)} ${variable.name}`
+            variableCode += `${ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.JAVA, variable.type)} ${variable.name}`
             if (index !== dataClazz.variables.length - 1) {
                 variableCode += ", "
             }
         })
+
+        dataClazz.code.insert("")
 
         dataClazz.code.insert(`${dataClazz.name}(${variableCode}) {`)
         dataClazz.code.incrementIndentation()
@@ -148,7 +160,5 @@ export class JavaCodeStrategy implements CodeStrategy {
 
         dataClazz.code.decrementIndentation()
         dataClazz.code.insert("}")
-
-        dataClazz.generatedCode.push(`data class ${dataClazz.name} (${variableCode})`)
     }
 }

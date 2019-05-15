@@ -48,6 +48,7 @@ export default {
     random: "Random",
     minValue: "Minimum Value",
     maxValue: "Maximum Value",
+    currentTime: "Current Time",
     properties: "Properties",
     newProject: "New Project",
     loadProject: "Load Project",
