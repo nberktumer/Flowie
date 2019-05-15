@@ -11,6 +11,7 @@ import {Directory} from "./project/Directory";
 import {Clazz} from "./project/Clazz";
 import {MainClazz} from "./project/MainClazz";
 import {DataClassFlowContent} from "./flows/DataClassFlow";
+import {ReturnFlowContent} from "./flows/ReturnFlow";
 
 export class DirectoryItemModel {
     type: DirectoryItemType
@@ -42,14 +43,15 @@ export class DirectoryItemModel {
 export class FlowModel {
     type: FlowType
     id: string
-    assignmentFlowContent: AssignmentFlowContent | null
-    inputFlowContent: InputFlowContent | null
-    outputFlowContent: OutputFlowContent | null
-    arithmeticFlowContent: ArithmeticFlowContent | null
-    whileFlowContent: WhileFlowContent | null
-    ifFlowContent: IfFlowContent | null
-    randomFlowContent: RandomFlowContent | null
-    dataClassFlowContent: DataClassFlowContent | null
+    assignmentFlowContent: AssignmentFlowContent | null = null
+    inputFlowContent: InputFlowContent | null = null
+    outputFlowContent: OutputFlowContent | null = null
+    arithmeticFlowContent: ArithmeticFlowContent | null = null
+    whileFlowContent: WhileFlowContent | null = null
+    ifFlowContent: IfFlowContent | null = null
+    randomFlowContent: RandomFlowContent | null = null
+    dataClassFlowContent: DataClassFlowContent | null = null
+    returnFlowContent: ReturnFlowContent | null = null
     // forFlowContent: ForFlowContent,
     // ifFlowContent: IfFlowContent,
     nextFlowId: string | null
@@ -57,29 +59,77 @@ export class FlowModel {
     constructor(
         type: FlowType,
         id: string,
-        assignmentFlowContent: AssignmentFlowContent | null = null,
-        inputFlowContent: InputFlowContent | null = null,
-        outputFlowContent: OutputFlowContent | null = null,
-        arithmeticFlowContent: ArithmeticFlowContent | null = null,
-        whileFlowContent: WhileFlowContent | null = null,
-        ifFlowContent: IfFlowContent | null = null,
-        randomFlowContent: RandomFlowContent | null = null,
-        dataClassFlowContent: DataClassFlowContent | null = null,
         nextFlowId: string | null
         // forFlowContent: ForFlowContent,
 
     ) {
         this.type = type
         this.id = id
-        this.assignmentFlowContent = assignmentFlowContent
-        this.inputFlowContent = inputFlowContent
-        this.outputFlowContent = outputFlowContent
-        this.arithmeticFlowContent = arithmeticFlowContent
-        this.ifFlowContent = ifFlowContent
-        this.whileFlowContent = whileFlowContent
-        this.ifFlowContent = ifFlowContent
-        this.randomFlowContent = randomFlowContent
-        this.dataClassFlowContent = dataClassFlowContent
         this.nextFlowId = nextFlowId
     }
+}
+
+export class FlowModelBuilder {
+    private flowModel: FlowModel
+    private type: FlowType
+    private id: string
+    // forFlowContent: ForFlowContent,
+    // ifFlowContent: IfFlowContent,
+    private nextFlowId: string | null
+
+    constructor(
+        type: FlowType,
+        id: string,
+        nextFlowId: string | null
+    ) {
+        this.type = type
+        this.id = id
+        this.nextFlowId = nextFlowId
+        this.flowModel = new FlowModel(type, id, nextFlowId)
+    }
+
+    setFlowContent(flowContent: any): FlowModelBuilder {
+        switch (this.type) {
+            case FlowType.INITIAL:
+                break;
+            case FlowType.IF:
+                this.flowModel.ifFlowContent = flowContent
+                break;
+            case FlowType.WHILE:
+                this.flowModel.whileFlowContent = flowContent
+                break;
+            case FlowType.INPUT:
+                this.flowModel.inputFlowContent = flowContent
+                break;
+            case FlowType.OUTPUT:
+                this.flowModel.outputFlowContent = flowContent
+                break;
+            case FlowType.ARITHMETIC:
+                this.flowModel.arithmeticFlowContent = flowContent
+                break;
+            case FlowType.ASSIGNMENT:
+                this.flowModel.assignmentFlowContent = flowContent
+                break;
+            case FlowType.RANDOM:
+                this.flowModel.randomFlowContent = flowContent
+                break;
+            case FlowType.DATA_CLASS:
+                this.flowModel.dataClassFlowContent = flowContent
+                break;
+            case FlowType.CLASS:
+                break;
+            case FlowType.PACKAGE:
+                break;
+            case FlowType.RETURN:
+                this.flowModel.returnFlowContent = flowContent
+                break;
+        }
+
+        return this
+    }
+
+    build(): FlowModel {
+        return this.flowModel
+    }
+
 }
