@@ -12,6 +12,7 @@ import {BaseVariableFlowNode} from "../../../Flows/Base/BaseVariableFlowNode"
 import {FlowConsumer} from "../../../../stores/FlowStore"
 import {Card, CardContent, CardHeader, IconButton} from "@material-ui/core"
 import strings from "../../../../lang"
+import {FlowStateConsumer} from "../../../../stores/FlowStateStore"
 
 export interface RectangleNodeWidgetProps extends BaseWidgetProps {
     node: BaseFlowNode;
@@ -55,58 +56,65 @@ export class BaseFlowWidget extends BaseWidget<RectangleNodeWidgetProps, Rectang
 
     render() {
         return (
-            <FlowConsumer>
-                {(flowContext) => (
-                    <div {...this.getProps()} style={{background: this.props.node.color}} ref={this.widgetRef}>
-                        <Card className={styles.nodePropertiesWindow}
-                              style={{
-                                  display: this.state.isPropertiesOpen ? "flex" : "none",
-                                  left: this.state.width - 12,
-                                  bottom: this.state.height - 12
-                              }}>
-                            <CardHeader title={strings.properties} action={
-                                <IconButton onClick={() => {
-                                    this.setState({isPropertiesOpen: false})
-                                }}>
-                                    <Icon style={{color: "black"}}>close</Icon>
-                                </IconButton>
-                            }/>
-                            <CardContent>
-                                {FlowPropertiesFactory.createReadonlyVariableType(this.props.node.flowType, (data: BasePropertiesState) => {
-                                    if (!data.errorMessage) {
-                                        if (this.props.node instanceof BaseVariableFlowNode) {
-                                            // tslint:disable-next-line:prefer-for-of
-                                            for (let i = 0; i < flowContext.variableList.length; i++) {
-                                                if (flowContext.variableList[i].name === (this.props.node as BaseVariableFlowNode).getVariable().name) {
-                                                    flowContext.variableList[i].name = data.variableName
-                                                    break
+            <FlowStateConsumer>
+                {(flowStateContext) => (
+                    <FlowConsumer>
+                        {(flowContext) => (
+                            <div {...this.getProps()} style={{background: this.props.node.color}}
+                                 ref={this.widgetRef}>
+                                <Card className={styles.nodePropertiesWindow}
+                                      style={{
+                                          display: this.state.isPropertiesOpen ? "flex" : "none",
+                                          left: this.state.width - 12,
+                                          bottom: this.state.height - 12
+                                      }}>
+                                    <CardHeader title={strings.properties} action={
+                                        <IconButton onClick={() => {
+                                            this.setState({isPropertiesOpen: false})
+                                        }}>
+                                            <Icon style={{color: "black"}}>close</Icon>
+                                        </IconButton>
+                                    }/>
+                                    <CardContent>
+                                        {FlowPropertiesFactory.createReadonlyVariableType(this.props.node.flowType, (data: BasePropertiesState) => {
+                                            if (!data.errorMessage) {
+                                                if (this.props.node instanceof BaseVariableFlowNode) {
+                                                    // tslint:disable-next-line:prefer-for-of
+                                                    for (let i = 0; i < flowContext.variableList.length; i++) {
+                                                        if (flowContext.variableList[i].name === (this.props.node as BaseVariableFlowNode).getVariable().name) {
+                                                            flowContext.variableList[i].name = data.variableName
+                                                            break
+                                                        }
+                                                    }
                                                 }
+                                                this.props.node.updateNode(data)
+                                                flowStateContext.flowChangedListener()
                                             }
-                                        }
-                                        this.props.node.updateNode(data)
-                                    }
-                                }, this.props.node)}
-                            </CardContent>
-                        </Card>
-                        <div className={styles.rectangleNodeTitle}>
-                            <div className={styles.rectangleNodeName}>{this.props.node.name}</div>
-                            <Icon onClick={(e) => this.editClickListener(e)} className={styles.editIcon}>edit</Icon>
-                        </div>
-                        <div className={styles.rectangleNodeInfo}
-                             style={{display: this.props.node.info ? "flex" : "none"}}>
-                            <div className={styles.rectangleNodeName}>{this.props.node.info}</div>
-                        </div>
-                        <div className={styles.rectangleNodePorts}>
-                            <div className={styles.rectangleNodeIn}>
-                                {_.map(this.props.node.getPortListByLocation(DefaultPortLocation.LEFT), this.generatePort.bind(this))}
+                                        }, this.props.node)}
+                                    </CardContent>
+                                </Card>
+                                <div className={styles.rectangleNodeTitle}>
+                                    <div className={styles.rectangleNodeName}>{this.props.node.name}</div>
+                                    <Icon onClick={(e) => this.editClickListener(e)}
+                                          className={styles.editIcon}>edit</Icon>
+                                </div>
+                                <div className={styles.rectangleNodeInfo}
+                                     style={{display: this.props.node.info ? "flex" : "none"}}>
+                                    <div className={styles.rectangleNodeName}>{this.props.node.info}</div>
+                                </div>
+                                <div className={styles.rectangleNodePorts}>
+                                    <div className={styles.rectangleNodeIn}>
+                                        {_.map(this.props.node.getPortListByLocation(DefaultPortLocation.LEFT), this.generatePort.bind(this))}
+                                    </div>
+                                    <div className={styles.rectangleNodeOut}>
+                                        {_.map(this.props.node.getPortListByLocation(DefaultPortLocation.RIGHT), this.generatePort.bind(this))}
+                                    </div>
+                                </div>
                             </div>
-                            <div className={styles.rectangleNodeOut}>
-                                {_.map(this.props.node.getPortListByLocation(DefaultPortLocation.RIGHT), this.generatePort.bind(this))}
-                            </div>
-                        </div>
-                    </div>
+                        )}
+                    </FlowConsumer>
                 )}
-            </FlowConsumer>
+            </FlowStateConsumer>
         )
     }
 }

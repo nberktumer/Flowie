@@ -30,6 +30,7 @@ import {DataClazz} from "../../generator/project/DataClazz"
 import ClassModel from "../../models/ClassModel"
 import {HOLDER} from "../../bigNoNoPackage/ReturnTypeHolder"
 import {DataClassFlowNode} from "../../components/Flows/DataClass/DataClassFlowNode"
+import {FlowStateProvider} from "../../stores/FlowStateStore"
 
 export interface EditorProps {
     project: { rootFileModel: FileModel, projectName: string, currentFile: FileModel }
@@ -332,107 +333,112 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
     render() {
         return (
-            <FlowProvider value={{
-                variableList: this.state.variableList,
-                classList: this.state.classList,
-                dataClassList: this.state.dataClassList,
-                classNameList: this.state.classNameList,
-                packageNameList: this.state.packageNameList
-            }}>
-                <ProjectProvider value={{project: this.state.rootFileModel}}>
-                    <div className={styles.App}>
-                        <AddNodeDialog
-                            onSaveClick={this.state.dialogProps.isCreateFile ? this.onNewFileSave.bind(this) : this.onModalSaveClick.bind(this)}
-                            onDismissClick={this.onModalDismissClick.bind(this)}
-                            onClose={this.onModalClose.bind(this)}
-                            aria-labelledby="simple-dialog-title"
-                            open={this.state.dialogProps.isOpen}
-                            file={this.state.dialogProps.isCreateFile}
-                            type={this.state.dialogProps.flowType}/>
-                        <EditorHeader onClickListener={(item: string) => this.onHeaderMenuClickListener(item)}/>
-                        <ReflexContainer orientation="vertical">
-                            <ReflexElement minSize={250}>
-                                <ReflexContainer orientation="horizontal" style={{height: "100vh"}}>
-                                    <ReflexElement className="left-pane" flex={0.35} minSize={200}>
-                                        <div style={{width: "100%", height: "100%", backgroundColor: "#1d1f21"}}>
-                                            <ProjectTreePanel
-                                                onDoubleClickListener={(fileModel) => this.onFileDoubleClick(fileModel)}
-                                                onNewClass={(path) => this.onNewClass(path)}
-                                                onNewDataClass={(path) => this.onNewDataClass(path)}
-                                                onNewFunctionality={(path) => this.onNewFunctionality(path)}
-                                                onNewPackage={(path) => this.onNewPackage(path)}/>
-                                        </div>
-                                    </ReflexElement>
+            <FlowStateProvider value={{flowChangedListener: () => {
+                    this.onDiagramChanged()
+                }}}>
+                <FlowProvider value={{
+                    variableList: this.state.variableList,
+                    classList: this.state.classList,
+                    dataClassList: this.state.dataClassList,
+                    classNameList: this.state.classNameList,
+                    packageNameList: this.state.packageNameList
+                }}>
+                    <ProjectProvider value={{project: this.state.rootFileModel}}>
+                        <div className={styles.App}>
+                            <AddNodeDialog
+                                onSaveClick={this.state.dialogProps.isCreateFile ? this.onNewFileSave.bind(this) : this.onModalSaveClick.bind(this)}
+                                onDismissClick={this.onModalDismissClick.bind(this)}
+                                onClose={this.onModalClose.bind(this)}
+                                aria-labelledby="simple-dialog-title"
+                                open={this.state.dialogProps.isOpen}
+                                file={this.state.dialogProps.isCreateFile}
+                                type={this.state.dialogProps.flowType}/>
+                            <EditorHeader onClickListener={(item: string) => this.onHeaderMenuClickListener(item)}/>
+                            <ReflexContainer orientation="vertical">
+                                <ReflexElement minSize={250}>
+                                    <ReflexContainer orientation="horizontal" style={{height: "100vh"}}>
+                                        <ReflexElement className="left-pane" flex={0.35} minSize={200}>
+                                            <div
+                                                style={{width: "100%", height: "100%", backgroundColor: "#1d1f21"}}>
+                                                <ProjectTreePanel
+                                                    onDoubleClickListener={(fileModel) => this.onFileDoubleClick(fileModel)}
+                                                    onNewClass={(path) => this.onNewClass(path)}
+                                                    onNewDataClass={(path) => this.onNewDataClass(path)}
+                                                    onNewFunctionality={(path) => this.onNewFunctionality(path)}
+                                                    onNewPackage={(path) => this.onNewPackage(path)}/>
+                                            </div>
+                                        </ReflexElement>
 
-                                    <ReflexSplitter/>
+                                        <ReflexSplitter/>
 
-                                    <ReflexElement className="left-pane" minSize={200}>
-                                        <ShapePanel>
-                                            {Object.values(FlowType).filter((value) => value !== FlowType.INITIAL)
-                                                .map((value) => (
-                                                    <ShapeItem key={value} model={{type: value}} name={value}/>
-                                                ))}
-                                        </ShapePanel>
-                                    </ReflexElement>
-                                </ReflexContainer>
-                            </ReflexElement>
+                                        <ReflexElement className="left-pane" minSize={200}>
+                                            <ShapePanel>
+                                                {Object.values(FlowType).filter((value) => value !== FlowType.INITIAL)
+                                                    .map((value) => (
+                                                        <ShapeItem key={value} model={{type: value}} name={value}/>
+                                                    ))}
+                                            </ShapePanel>
+                                        </ReflexElement>
+                                    </ReflexContainer>
+                                </ReflexElement>
 
-                            <ReflexSplitter/>
+                                <ReflexSplitter/>
 
-                            <ReflexElement className="middle-pane" flex={0.55} minSize={250}>
-                                <div className={styles.paneContent}>
-                                    <CanvasPanel ref={this.canvasPanel}
-                                                 onItemAdded={this.onItemAdded.bind(this)}
-                                                 onDiagramChanged={this.onDiagramChanged.bind(this)}
-                                                 onDrop={this.onCanvasDrop.bind(this)}
-                                                 onSelectionChanged={this.onSelectionChanged.bind(this)}
-                                                 onEntityRemoved={this.onEntityRemoved.bind(this)}/>
-                                </div>
-                            </ReflexElement>
+                                <ReflexElement className="middle-pane" flex={0.55} minSize={250}>
+                                    <div className={styles.paneContent}>
+                                        <CanvasPanel ref={this.canvasPanel}
+                                                     onItemAdded={this.onItemAdded.bind(this)}
+                                                     onDiagramChanged={this.onDiagramChanged.bind(this)}
+                                                     onDrop={this.onCanvasDrop.bind(this)}
+                                                     onSelectionChanged={this.onSelectionChanged.bind(this)}
+                                                     onEntityRemoved={this.onEntityRemoved.bind(this)}/>
+                                    </div>
+                                </ReflexElement>
 
-                            <ReflexSplitter/>
+                                <ReflexSplitter/>
 
-                            <ReflexElement minSize={250}>
-                                <div style={{
-                                    display: "flex",
-                                    height: "100%",
-                                    width: "100%",
-                                    flexDirection: "column"
-                                }}>
-                                    <TextField
-                                        id="language-selector"
-                                        select
-                                        value={this.state.selectedLanguage}
-                                        onChange={(event: any) => {
-                                            this.setState({selectedLanguage: event.target.value}, () => {
-                                                this.onDiagramChanged()
-                                            })
-                                        }}
-                                        className={styles.languageSelector}
-                                        margin="none">
-                                        {this.programmingLanguages.map((key: any) => (
-                                            <MenuItem key={key} value={key}>
-                                                {ProgrammingLanguage[key]}
-                                            </MenuItem>
-                                        ))}
-                                    </TextField>
+                                <ReflexElement minSize={250}>
                                     <div style={{
                                         display: "flex",
-                                        flex: 1,
                                         height: "100%",
                                         width: "100%",
                                         flexDirection: "column"
                                     }}>
+                                        <TextField
+                                            id="language-selector"
+                                            select
+                                            value={this.state.selectedLanguage}
+                                            onChange={(event: any) => {
+                                                this.setState({selectedLanguage: event.target.value}, () => {
+                                                    this.onDiagramChanged()
+                                                })
+                                            }}
+                                            className={styles.languageSelector}
+                                            margin="none">
+                                            {this.programmingLanguages.map((key: any) => (
+                                                <MenuItem key={key} value={key}>
+                                                    {ProgrammingLanguage[key]}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                        <div style={{
+                                            display: "flex",
+                                            flex: 1,
+                                            height: "100%",
+                                            width: "100%",
+                                            flexDirection: "column"
+                                        }}>
 
-                                        <CodePreviewPanel code={this.state.generatedCode}
-                                                          language={this.state.selectedLanguage}/>
+                                            <CodePreviewPanel code={this.state.generatedCode}
+                                                              language={this.state.selectedLanguage}/>
+                                        </div>
                                     </div>
-                                </div>
-                            </ReflexElement>
-                        </ReflexContainer>
-                    </div>
-                </ProjectProvider>
-            </FlowProvider>
+                                </ReflexElement>
+                            </ReflexContainer>
+                        </div>
+                    </ProjectProvider>
+                </FlowProvider>
+            </FlowStateProvider>
         )
     }
 
