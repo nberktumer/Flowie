@@ -6,8 +6,8 @@ import {Clazz} from "./Clazz"
 import {CodeStrategy} from "../code/CodeStrategy"
 import {KotlinCodeStrategy} from "../code/kotlin/KotlinCodeStrategy"
 import {CodeStrategyFactory} from "../code/CodeStrategyFactory"
-import {DataClazz} from "./DataClazz";
 import {Defaults} from "../../config"
+import {DataClazz} from "./DataClazz";
 
 export class Project {
     static codeStrategy: CodeStrategy = new KotlinCodeStrategy()

@@ -138,6 +138,8 @@ export class Clazz implements DirectoryItem {
                     Project.codeStrategy.ifFlowCode.generateMain(flow, this)
                 } else if (flow instanceof RandomFlow) {
                     Project.codeStrategy.randomFlowCode.generateMain(flow, this)
+                } else if (flow instanceof DataClassFlow) {
+                    Project.codeStrategy.dataClassFlowCode.generateMain(flow, this)
                 } else if (flow instanceof InitialFlow) {
                     this.writeMainCodeFromFlow(flow.nextFlow())
                 }

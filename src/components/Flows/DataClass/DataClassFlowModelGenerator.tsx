@@ -22,7 +22,7 @@ export class DataClassFlowModelGenerator extends BaseFlowModelGenerator {
             null,
             null,
             null,
-            new DataClassFlowContent(dataClassFlow.fieldList),
+            new DataClassFlowContent("berkPlsAddThisFeature", "AddThisTooPls", dataClassFlow.fieldList),
             nextFlowId
         )
     }
