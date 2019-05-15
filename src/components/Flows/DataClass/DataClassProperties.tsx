@@ -18,6 +18,7 @@ import {Variable} from "../../../models/Variable"
 import {DataClassFlowNode} from "./DataClassFlowNode"
 import {FlowConsumer} from "../../../stores/FlowStore"
 import {DataClazz} from "../../../generator/project/DataClazz"
+import {Validator} from "../../../utils"
 
 export class DataClassProperties extends BaseProperties<BasePropertiesProps> {
 
@@ -37,13 +38,15 @@ export class DataClassProperties extends BaseProperties<BasePropertiesProps> {
                     }
                 }),
                 selectedClass: JSON.stringify(new DataClazz(node.name, node.fieldList)),
-                expanded: ""
+                expanded: "",
+                variableName: node.variableName
             }
         } else {
             this.state = {
                 fields: [],
                 selectedClass: "",
-                expanded: ""
+                expanded: "",
+                variableName: ""
             }
         }
     }
@@ -82,9 +85,26 @@ export class DataClassProperties extends BaseProperties<BasePropertiesProps> {
                                style={{
                                    display: "flex",
                                    flex: 1,
+                                   flexDirection: "column",
                                    padding: 24,
                                    marginBottom: 8
                                }}>
+                            <TextField
+                                fullWidth
+                                id="variable-name"
+                                label={strings.variableName}
+                                value={this.state.variableName}
+                                error={this.state.errorField === "variableName"}
+                                onChange={this.handleStringChange("variableName", (data) => {
+                                    const error = Validator.validateVariableName(data, flowContext.variableList)
+                                    this.setState({
+                                        errorMessage: error,
+                                        errorField: error ? "variableName" : ""
+                                    }, () => {
+                                        this.props.onDataChanged(this.state)
+                                    })
+                                })}
+                                margin="normal"/>
                             <TextField
                                 id="data-type-selector"
                                 select

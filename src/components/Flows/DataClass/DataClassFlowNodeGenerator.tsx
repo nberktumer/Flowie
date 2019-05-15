@@ -7,13 +7,13 @@ import {DataClazz} from "../../../generator/project/DataClazz"
 
 export class DataClassFlowNodeGenerator extends BaseFlowNodeGenerator {
     create(data?: BasePropertiesState, node?: DataClassFlowNode): BaseFlowNode | undefined {
-        if (!data || !data.selectedClass || !data.fields)
+        if (!data || !data.selectedClass || !data.fields || !data.variableName)
             return undefined
 
         try {
             const clazz = JSON.parse(data.selectedClass) as DataClazz
 
-            const resultNode = node ? node : new DataClassFlowNode(clazz.name)
+            const resultNode = node ? node : new DataClassFlowNode(data.variableName, clazz.name)
             resultNode.removeAllFields()
 
             for (const field of data.fields) {
@@ -30,5 +30,5 @@ export class DataClassFlowNodeGenerator extends BaseFlowNodeGenerator {
         }
     }
 
-    load = (node: any): BaseFlowNode => new DataClassFlowNode((node as DataClassFlowNode).name, true)
+    load = (node: any): BaseFlowNode => new DataClassFlowNode((node as DataClassFlowNode).variableName, (node as DataClassFlowNode).name, true)
 }
