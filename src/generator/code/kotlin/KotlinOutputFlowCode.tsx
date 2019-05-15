@@ -1,11 +1,10 @@
 import {OutputFlow} from "../../flows/OutputFlow";
 import {OutputFlowCode} from "../common/OutputFlowCode";
 import {Clazz} from "../../project/Clazz";
-import {Func, Parameter} from "../../project/Func";
+import {Func} from "../../project/Func";
 import {Code} from "../Code";
 import {Project} from "../../project/Project";
-import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
-import {ProgrammingLanguage} from "../../../models";
+import {Variable} from "../../../models/Variable";
 
 export class KotlinOutputFlowCode implements OutputFlowCode {
 
@@ -20,12 +19,13 @@ export class KotlinOutputFlowCode implements OutputFlowCode {
 
         const code = new Code(clazz.indentationCount)
 
-        const parameters: Parameter[] = []
+        const parameters: Variable[] = []
         if (outputFlow.content.variable.name) {
-            parameters.push(new Parameter(
+            parameters.push(new Variable(
                 outputFlow.content.variable.name,
-                ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.KOTLIN, outputFlow.content.variable.type)
-            ))
+                outputFlow.content.variable.type,
+                null)
+            )
         }
 
         const func = new Func(

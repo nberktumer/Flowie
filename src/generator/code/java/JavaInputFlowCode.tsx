@@ -3,7 +3,7 @@ import {InputFlowCode} from "../common/InputFlowCode";
 import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
 import {ProgrammingLanguage, VariableType} from "../../../models";
 import {Variable} from "../../../models/Variable";
-import {Func, Parameter} from "../../project/Func";
+import {Func} from "../../project/Func";
 import {Clazz} from "../../project/Clazz";
 import {Code} from "../Code";
 import {Project} from "../../project/Project";
@@ -33,7 +33,7 @@ export class JavaInputFlowCode implements InputFlowCode {
         clazz.addDependency("import java.util.Scanner;")
 
         const code = new Code(clazz.indentationCount)
-        const parameters: Parameter[] = []
+        const parameters: Variable[] = []
 
         const func = new Func(
             inputFlow.functionName(),

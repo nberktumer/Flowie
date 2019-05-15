@@ -1,5 +1,5 @@
 import {CodeStrategy} from "../CodeStrategy";
-import {Func, Parameter} from "../../project/Func";
+import {Func} from "../../project/Func";
 import {Clazz} from "../../project/Clazz";
 import {JavaArithmeticFlowCode} from "./JavaArithmeticFlowCode";
 import {JavaWhileFlowCode} from "./JavaWhileFlowCode";
@@ -16,6 +16,7 @@ import {DataClazz} from "../../project/DataClazz";
 import {JavaDataClassFlowCode} from "./JavaDataClassFlowCode";
 import {JavaReturnFlowCode} from "./JavaReturnFlowCode";
 import {JavaFunctionalityFlowCode} from "./JavaFunctionalityFlowCode";
+import {Variable} from "../../../models/Variable";
 
 export class JavaCodeStrategy implements CodeStrategy {
 
@@ -51,22 +52,24 @@ export class JavaCodeStrategy implements CodeStrategy {
     }
 
     initMain(clazz: Clazz): void {
-        const parameters: Parameter[] = []
+        const parameters: Variable[] = []
         const mainFunctionLines = new Code(clazz.indentationCount)
         let mainFnName = ""
 
         if (clazz.type === DirectoryItemType.MAIN_CLASS) {
             mainFnName = "main"
             parameters.push(
-                new Parameter(
+                new Variable(
                     "args",
-                    ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, VariableType.MAIN_ARG)))
+                    VariableType.MAIN_ARG,
+                    undefined))
         } else {
             mainFnName = clazz.name
             parameters.push(
-                new Parameter(
+                new Variable(
                     clazz.name,
-                    ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, VariableType.MAIN_ARG))) //TODO CHANGE TYPE TO ARG FROM FN
+                    VariableType.MAIN_ARG,
+                    undefined)) //TODO CHANGE TYPE TO ARG FROM FN
         }
 
         clazz.mainFunction = new Func(
@@ -100,7 +103,7 @@ export class JavaCodeStrategy implements CodeStrategy {
         let parameterString = ""
 
         func.parameters.forEach((value, index) => {
-            parameterString += `${value.type} ${value.name}`
+            parameterString += `${ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, value.type)} ${value.name}`
             if (index !== func.parameters.length - 1) {
                 parameterString += ", "
             }
