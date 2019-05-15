@@ -8,10 +8,12 @@ import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 
 export class DataClassFlowNode extends BaseFlowNode {
     fieldList: Variable[] = []
+    variableName: string
 
-    constructor(className: string, withoutPorts: boolean = false) {
+    constructor(variableName: string, className: string, withoutPorts: boolean = false) {
         super(FlowType.DATA_CLASS, className, NodeColors.DATA_CLASS)
 
+        this.variableName = variableName
         if (!withoutPorts) {
             this.addInPort(strings.in).setMaximumLinks(1)
             this.addOutPort(strings.nextFlow).setMaximumLinks(1)
@@ -57,11 +59,13 @@ export class DataClassFlowNode extends BaseFlowNode {
     deSerialize(object: any, engine: DiagramEngine) {
         super.deSerialize(object, engine)
         this.fieldList = object.fieldList
+        this.variableName = object.variableName
     }
 
     serialize() {
         return _.merge(super.serialize(), {
-            fieldList: this.fieldList
+            fieldList: this.fieldList,
+            variableName: this.variableName
         })
     }
 }

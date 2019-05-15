@@ -64,6 +64,7 @@ export class CreateDataClassProperties extends BaseProperties<BasePropertiesProp
                             <Paper id="paper"
                                    style={{
                                        display: "flex",
+                                       flexDirection: "column",
                                        flex: 1,
                                        padding: 24,
                                        marginBottom: 8

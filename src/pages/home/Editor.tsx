@@ -29,6 +29,7 @@ import {Defaults} from "../../config"
 import {DataClazz} from "../../generator/project/DataClazz"
 import ClassModel from "../../models/ClassModel"
 import {HOLDER} from "../../bigNoNoPackage/ReturnTypeHolder"
+import {DataClassFlowNode} from "../../components/Flows/DataClass/DataClassFlowNode"
 
 export interface EditorProps {
     project: { rootFileModel: FileModel, projectName: string, currentFile: FileModel }
@@ -259,6 +260,8 @@ export default class Editor extends Component<EditorProps, EditorState> {
     onItemAdded(flow: BaseFlowNode) {
         if (flow instanceof BaseVariableFlowNode) {
             this.setState((prevState) => ({variableList: [...prevState.variableList, (flow as BaseVariableFlowNode).getVariable()]}))
+        } else if (flow instanceof DataClassFlowNode) {
+            this.setState((prevState) => ({variableList: [...prevState.variableList, new Variable((flow as DataClassFlowNode).variableName, VariableType.NONE, null)]}))
         }
     }
 
