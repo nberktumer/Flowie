@@ -7,4 +7,5 @@ export const NodeColors = {
     INITIAL: "rgb(0, 255, 192)",
     RANDOM: "rgb(192, 255, 192)",
     DATA_CLASS: "rgb(192, 192, 255)",
+    RETURN: "rgb(255, 192, 192)"
 }

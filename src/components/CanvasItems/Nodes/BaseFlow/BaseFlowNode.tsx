@@ -103,6 +103,9 @@ export class BaseFlowNode extends NodeModel {
     }
 
     getNextFlow(): BaseFlowNode | null {
+        if (this.getPortListByType(DefaultPortType.OUT).length === 0)
+            return null
+
         const links = Object.values(this.getPortListByType(DefaultPortType.OUT)[0].getLinks())
 
         if (links.length > 0) {

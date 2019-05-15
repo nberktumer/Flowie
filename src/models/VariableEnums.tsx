@@ -3,6 +3,7 @@ export enum VariableType {
     STRING = "String",
     BOOLEAN = "Boolean",
     DOUBLE = "Double",
+    NONE = "None",
     MAIN_ARG = "MainArg" //TODO FIX
 }
 
@@ -18,7 +19,6 @@ export enum FlowType {
     INITIAL = "Initial",
     IF = "If",
     WHILE = "While",
-    FOR = "For",
     INPUT = "Input",
     OUTPUT = "Output",
     ARITHMETIC = "Arithmetic",
@@ -26,7 +26,8 @@ export enum FlowType {
     RANDOM = "Random",
     DATA_CLASS = "Data Class",
     CLASS = "Class",
-    PACKAGE = "Package"
+    PACKAGE = "Package",
+    RETURN = "Return"
 }
 
 export enum ConditionOperation {

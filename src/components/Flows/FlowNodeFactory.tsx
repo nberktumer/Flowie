@@ -19,6 +19,8 @@ import {RandomFlowNodeGenerator} from "./Random/RandomFlowNodeGenerator"
 import {RandomFlowNode} from "./Random/RandomFlowNode"
 import {DataClassFlowNodeGenerator} from "./DataClass/DataClassFlowNodeGenerator"
 import {DataClassFlowNode} from "./DataClass/DataClassFlowNode"
+import {ReturnFlowNodeGenerator} from "./Return/ReturnFlowNodeGenerator"
+import {ReturnFlowNode} from "./Return/ReturnFlowNode"
 
 export class FlowNodeFactory {
     private constructor() {
@@ -32,8 +34,6 @@ export class FlowNodeFactory {
                 return new IfFlowNodeGenerator().create(data)
             case FlowType.WHILE:
                 return new WhileFlowNodeGenerator().create(data)
-            case FlowType.FOR:
-                return undefined // TODO
             case FlowType.INPUT:
                 return new InputFlowNodeGenerator().create(data)
             case FlowType.OUTPUT:
@@ -46,6 +46,8 @@ export class FlowNodeFactory {
                 return new RandomFlowNodeGenerator().create(data)
             case FlowType.DATA_CLASS:
                 return new DataClassFlowNodeGenerator().create(data)
+            case FlowType.RETURN:
+                return new ReturnFlowNodeGenerator().create(data)
         }
     }
 
@@ -57,8 +59,6 @@ export class FlowNodeFactory {
                 return new IfFlowNodeGenerator().load(node)
             case FlowType.WHILE:
                 return new WhileFlowNodeGenerator().load(node)
-            // case FlowType.FOR:
-                // return undefined // TODO
             case FlowType.INPUT:
                 return new InputFlowNodeGenerator().load(node)
             case FlowType.OUTPUT:
@@ -71,6 +71,8 @@ export class FlowNodeFactory {
                 return new RandomFlowNodeGenerator().load(node)
             case FlowType.DATA_CLASS:
                 return new DataClassFlowNodeGenerator().load(node)
+            case FlowType.RETURN:
+                return new ReturnFlowNodeGenerator().load(node)
             default:
                 return new BaseFlowNode()
         }
@@ -84,8 +86,6 @@ export class FlowNodeFactory {
                 return new IfFlowNodeGenerator().create(data, node as IfFlowNode)
             case FlowType.WHILE:
                 return new WhileFlowNodeGenerator().create(data, node as WhileFlowNode)
-            case FlowType.FOR:
-                return undefined // TODO
             case FlowType.INPUT:
                 return new InputFlowNodeGenerator().create(data, node as InputFlowNode)
             case FlowType.OUTPUT:
@@ -98,6 +98,8 @@ export class FlowNodeFactory {
                 return new RandomFlowNodeGenerator().create(data, node as RandomFlowNode)
             case FlowType.DATA_CLASS:
                 return new DataClassFlowNodeGenerator().create(data, node as DataClassFlowNode)
+            case FlowType.RETURN:
+                return new ReturnFlowNodeGenerator().create(data, node as ReturnFlowNode)
         }
     }
 }

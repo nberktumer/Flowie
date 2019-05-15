@@ -8,7 +8,7 @@ export class InitialFlowNodeGenerator extends BaseFlowNodeGenerator {
         return new InitialFlowNode()
     }
 
-    load(node: InitialFlowNode): BaseFlowNode {
+    load(node: BaseFlowNode): BaseFlowNode {
        return new InitialFlowNode(true)
     }
 }
