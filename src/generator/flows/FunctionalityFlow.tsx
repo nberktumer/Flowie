@@ -1,20 +1,20 @@
 import {BaseFlow} from "./BaseFlow";
-import {FlowType} from "../../models";
+import {FlowType, VariableType} from "../../models";
 import {Clazz} from "../project/Clazz";
 import {Variable} from "../../models/Variable";
 
-export class DataClassFlow implements BaseFlow {
+export class FunctionalityFlow implements BaseFlow {
     id: string
     nextFlowId: string | null
     type: FlowType
-    content: DataClassFlowContent | null
+    content: FunctionalityFlowContent | null
     functionCallName: string
 
     constructor(
         id: string,
         nextFlowId: string | null,
         type: FlowType,
-        content: DataClassFlowContent | null) {
+        content: FunctionalityFlowContent | null) {
         this.id = id
         this.nextFlowId = nextFlowId
         this.type = type
@@ -27,7 +27,7 @@ export class DataClassFlow implements BaseFlow {
     }
 
     functionName(): string {
-        return `dataClassFlow${this.functionCallName}`
+        return `functionalityFlow${this.functionCallName}`
     }
 
     nextFlow(): string {
@@ -40,18 +40,24 @@ export class DataClassFlow implements BaseFlow {
 
 }
 
-export class DataClassFlowContent {
-    name: string
-    dataClassName: string
+export class FunctionalityFlowContent {
+    clazzName: string
+    functionName: string
     variables: Variable[]
+    assignVariable: Variable
+    returnType: VariableType
 
     constructor(
-        name: string,
-        dataClassName: string,
-        variables: Variable[]
+        clazzName: string,
+        functionName: string,
+        variables: Variable[],
+        assignVariable: Variable,
+        returnType: VariableType
     ) {
-        this.name = name
-        this.dataClassName = dataClassName
+        this.clazzName = clazzName
+        this.functionName = functionName
         this.variables = variables
+        this.assignVariable = assignVariable
+        this.returnType = returnType
     }
 }
