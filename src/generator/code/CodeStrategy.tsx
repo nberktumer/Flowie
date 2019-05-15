@@ -9,6 +9,8 @@ import {IfFlowCode} from "./common/IfFlowCode";
 import {InputFlowCode} from "./common/InputFlowCode";
 import {DataClazz} from "../project/DataClazz";
 import {DataClassFlowCode} from "./common/DataClassFlowCode";
+import {ReturnFlowCode} from "./common/ReturnFlowCode";
+import {FunctionalityFlowCode} from "./common/FunctionalityFlowCode";
 
 export interface CodeStrategy {
     arithmeticFlowCode: ArithmeticFlowCode
@@ -18,7 +20,9 @@ export interface CodeStrategy {
     randomFlowCode: RandomFlowCode
     whileFlowCode: WhileFlowCode
     ifFlowCode: IfFlowCode
-    dataClassFlowCode : DataClassFlowCode
+    dataClassFlowCode: DataClassFlowCode
+    returnFlowCode: ReturnFlowCode
+    functionalityFlowCode: FunctionalityFlowCode
 
     initClazz(clazz: Clazz): void
 
@@ -36,7 +40,7 @@ export interface CodeStrategy {
 
     finishFunction(func: Func): void
 
-    generateDataClazz(dataClazz : DataClazz) : void
+    generateDataClazz(dataClazz: DataClazz): void
 
     //getDataClassSignature(dataClazz: DataClazz): string
 

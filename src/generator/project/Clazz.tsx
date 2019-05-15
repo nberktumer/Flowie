@@ -16,6 +16,7 @@ import {RandomFlow} from "../flows/RandomFlow"
 import {Project} from "./Project"
 import {DataClassFlow} from "../flows/DataClassFlow";
 import {ReturnFlow} from "../flows/ReturnFlow";
+import {FunctionalityFlow} from "../flows/FunctionalityFlow";
 
 export class Clazz implements DirectoryItem {
     static INITIAL_ID = "INITIAL_ID"
@@ -141,6 +142,10 @@ export class Clazz implements DirectoryItem {
                     Project.codeStrategy.randomFlowCode.generateMain(flow, this)
                 } else if (flow instanceof DataClassFlow) {
                     Project.codeStrategy.dataClassFlowCode.generateMain(flow, this)
+                } else if (flow instanceof ReturnFlow) {
+                    Project.codeStrategy.returnFlowCode.generateMain(flow, this)
+                } else if (flow instanceof FunctionalityFlow) {
+                    Project.codeStrategy.functionalityFlowCode.generateMain(flow, this)
                 } else if (flow instanceof InitialFlow) {
                     this.writeMainCodeFromFlow(flow.nextFlow())
                 }

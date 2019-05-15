@@ -14,6 +14,8 @@ import {ProgrammingLanguage, VariableType} from "../../../models";
 import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
 import {DataClazz} from "../../project/DataClazz";
 import {KotlinDataClassFlowCode} from "./KotlinDataClassFlowCode";
+import {KotlinReturnFlowCode} from "./KotlinReturnFlowCode";
+import {KotlinFunctionalityFlowCode} from "./KotlinFunctionalityFlowCode";
 
 export class KotlinCodeStrategy implements CodeStrategy {
 
@@ -25,6 +27,8 @@ export class KotlinCodeStrategy implements CodeStrategy {
     randomFlowCode = new KotlinRandomFlowCode()
     whileFlowCode = new KotlinWhileFlowCode()
     dataClassFlowCode = new KotlinDataClassFlowCode()
+    returnFlowCode = new KotlinReturnFlowCode()
+    functionalityFlowCode = new KotlinFunctionalityFlowCode()
 
     initClazz(clazz: Clazz): void {
         clazz.incrementIndentation()

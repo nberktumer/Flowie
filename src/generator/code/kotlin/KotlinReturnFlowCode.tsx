@@ -8,6 +8,18 @@ export class KotlinReturnFlowCode implements ReturnFlowCode {
         if (returnFlow.content == null)
             return
 
+        const returnVariable = returnFlow.content.returnVariable
+
+        if (returnVariable) {
+            if (returnVariable.name) {
+                clazz.writeCodeToMainFunction(`return ${returnVariable.name}`)
+            } else {
+                clazz.writeCodeToMainFunction(`return ${returnVariable.value}`)
+            }
+        } else {
+            clazz.writeCodeToMainFunction(`return`)
+        }
+
         clazz.writeMainCodeFromFlow(returnFlow.nextFlow())
     }
 

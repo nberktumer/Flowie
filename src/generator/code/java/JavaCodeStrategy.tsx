@@ -14,6 +14,8 @@ import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConver
 import {ProgrammingLanguage, VariableType} from "../../../models";
 import {DataClazz} from "../../project/DataClazz";
 import {JavaDataClassFlowCode} from "./JavaDataClassFlowCode";
+import {JavaReturnFlowCode} from "./JavaReturnFlowCode";
+import {JavaFunctionalityFlowCode} from "./JavaFunctionalityFlowCode";
 
 export class JavaCodeStrategy implements CodeStrategy {
 
@@ -25,6 +27,8 @@ export class JavaCodeStrategy implements CodeStrategy {
     randomFlowCode = new JavaRandomFlowCode()
     whileFlowCode = new JavaWhileFlowCode()
     dataClassFlowCode = new JavaDataClassFlowCode()
+    returnFlowCode = new JavaReturnFlowCode()
+    functionalityFlowCode = new JavaFunctionalityFlowCode()
 
     initClazz(clazz: Clazz): void {
         clazz.incrementIndentation()
