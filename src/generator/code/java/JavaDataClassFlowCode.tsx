@@ -1,6 +1,8 @@
 import {DataClassFlowCode} from "../common/DataClassFlowCode";
 import {Clazz} from "../../project/Clazz";
 import {DataClassFlow} from "../../flows/DataClassFlow";
+import {Variable} from "../../../models/Variable";
+import {VariableType} from "../../../models";
 
 export class JavaDataClassFlowCode implements DataClassFlowCode {
 
@@ -12,7 +14,16 @@ export class JavaDataClassFlowCode implements DataClassFlowCode {
         let variableCode = ""
         dataClassFlow.content.variables.forEach((variable, index) => {
             if (variable.value) {
-                variableCode += variable.value
+                const valueAsVariable = variable.value as Variable
+                if (valueAsVariable.name) {
+                    variableCode += valueAsVariable.name
+                } else {
+                    if (valueAsVariable.type === VariableType.STRING) {
+                        variableCode += `"${valueAsVariable.value}"`
+                    } else {
+                        variableCode += valueAsVariable.value
+                    }
+                }
             } else {
                 variableCode += variable.name
             }
