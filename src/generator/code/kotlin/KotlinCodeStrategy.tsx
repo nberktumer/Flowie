@@ -140,12 +140,12 @@ export class KotlinCodeStrategy implements CodeStrategy {
         let variableCode = ""
 
         dataClazz.variables.forEach((variable, index) => {
-            variableCode += `${variable.name} : ${variable.type}`
+            variableCode += `${variable.name} : ${ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.KOTLIN, variable.type)}`
             if (index !== dataClazz.variables.length - 1) {
                 variableCode += ", "
             }
         })
 
-        dataClazz.generatedCode.push(`data class ${dataClazz.name} (${variableCode})`)
+        dataClazz.code.insert(`data class ${dataClazz.name} (${variableCode})`)
     }
 }

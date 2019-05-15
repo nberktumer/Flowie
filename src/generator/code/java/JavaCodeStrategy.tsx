@@ -113,6 +113,35 @@ export class JavaCodeStrategy implements CodeStrategy {
     }
 
     generateDataClazz(dataClazz: DataClazz): void {
+        dataClazz.code.insert(`public class ${dataClazz.name} {`)
+        dataClazz.incrementIndentation()
 
+        dataClazz.variables.forEach((variable) => {
+            dataClazz.code.insert(`${ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, variable.type)} ${variable.name};`)
+        })
+
+        let variableCode = ""
+
+        dataClazz.variables.forEach((variable, index) => {
+            variableCode += `${ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, variable.type)} ${variable.name}`
+            if (index !== dataClazz.variables.length - 1) {
+                variableCode += ", "
+            }
+        })
+
+        dataClazz.code.insert(`${dataClazz.name}(${variableCode}) {`)
+        dataClazz.incrementIndentation()
+
+        dataClazz.variables.forEach((variable) => {
+            dataClazz.code.insert(`this.${variable.name} = ${variable.name};`)
+        })
+
+        dataClazz.code.decrementIndentation()
+        dataClazz.code.insert("}")
+
+        dataClazz.code.decrementIndentation()
+        dataClazz.code.insert("}")
+
+        dataClazz.generatedCode.push(`data class ${dataClazz.name} (${variableCode})`)
     }
 }

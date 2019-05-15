@@ -8,7 +8,7 @@ export class DataClazz implements DirectoryItem {
     name: string
     variables: Variable[] = []
     generatedCode: string[] = []
-    indentationCount = 0
+    private indentationCount = 0
     code = new Code(this.indentationCount)
 
     constructor(name: string, variables: Variable[]) {
