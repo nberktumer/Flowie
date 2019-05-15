@@ -4,7 +4,7 @@ import {ReflexContainer, ReflexElement, ReflexSplitter} from "react-reflex"
 import {ShapePanel} from "../../components/ShapePanel/ShapePanel"
 import {ShapeItem} from "../../components/ShapePanel/ShapeItem"
 import {CodePreviewPanel} from "../../components/CodePreviewPanel/CodePreviewPanel"
-import {FlowType, ProgrammingLanguage} from "../../models"
+import {FlowType, ProgrammingLanguage, VariableType} from "../../models"
 import {ProjectTreePanel} from "../../components/ProjectTreePanel/ProjectTreePanel"
 import {AddNodeDialog} from "../../components/AddNodeDialog/AddNodeDialog"
 import {BasePropertiesState} from "../../components/Flows/Base/BaseProperties"
@@ -28,6 +28,7 @@ import {DirectoryItemType} from "../../generator/project/DirectoryItem"
 import {Defaults} from "../../config"
 import {DataClazz} from "../../generator/project/DataClazz"
 import ClassModel from "../../models/ClassModel"
+import {HOLDER} from "../../bigNoNoPackage/ReturnTypeHolder"
 
 export interface EditorProps {
     project: { rootFileModel: FileModel, projectName: string, currentFile: FileModel }
@@ -245,9 +246,14 @@ export default class Editor extends Component<EditorProps, EditorState> {
     }
 
     onCanvasDrop(type: FlowType, position: { x: number, y: number }) {
-        this.setState({
-            dialogProps: {isOpen: true, flowType: type, flowPosition: position}
-        })
+        if (type === FlowType.RETURN && HOLDER.ReturnType === VariableType.NONE) {
+            if (this.canvasPanel.current)
+                this.canvasPanel.current.addItem(type, {}, position)
+        } else {
+            this.setState({
+                dialogProps: {isOpen: true, flowType: type, flowPosition: position}
+            })
+        }
     }
 
     onItemAdded(flow: BaseFlowNode) {

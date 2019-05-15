@@ -14,6 +14,8 @@ import {CreateDataClassProperties} from "./DataClass/CreateDataClassProperties"
 import strings from "../../lang"
 import {CreatePackageProperties} from "./Package/CreatePackageProperties"
 import {CreateClassProperties} from "./Class/CreateClassProperties"
+import {InitialFlowProperties} from "./Initial/InitialFlowProperties"
+import {ReturnFlowProperties} from "./Return/ReturnFlowProperties"
 
 export class FlowPropertiesFactory {
     private constructor() {
@@ -21,6 +23,9 @@ export class FlowPropertiesFactory {
 
     static create(type: FlowType | null | undefined, onDataChanged: (data: BasePropertiesState) => void, isValidListener: (isValid: boolean) => void): JSX.Element {
         switch (type) {
+            case FlowType.INITIAL:
+                return (<InitialFlowProperties onDataChanged={(data) => onDataChanged(data)}
+                                               isValidListener={((isValid) => isValidListener(isValid))}/>)
             case FlowType.WHILE:
                 return (<WhileProperties onDataChanged={(data) => onDataChanged(data)}
                                          isValidListener={((isValid) => isValidListener(isValid))}/>)
@@ -45,6 +50,9 @@ export class FlowPropertiesFactory {
             case FlowType.DATA_CLASS:
                 return (<DataClassProperties onDataChanged={(data) => onDataChanged(data)}
                                              isValidListener={((isValid) => isValidListener(isValid))}/>)
+            case FlowType.RETURN:
+                return (<ReturnFlowProperties onDataChanged={(data) => onDataChanged(data)}
+                                              isValidListener={((isValid) => isValidListener(isValid))}/>)
             default:
                 return (<div/>)
         }
@@ -52,6 +60,8 @@ export class FlowPropertiesFactory {
 
     static createReadonlyVariableType(type: FlowType | null | undefined, onDataChanged: (data: BasePropertiesState) => void, node?: BaseFlowNode): JSX.Element {
         switch (type) {
+            case FlowType.INITIAL:
+                return (<InitialFlowProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             case FlowType.WHILE:
                 return (<WhileProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             case FlowType.IF:
@@ -68,6 +78,8 @@ export class FlowPropertiesFactory {
                 return (<RandomProperties readonlyType node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             case FlowType.DATA_CLASS:
                 return (<DataClassProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
+            case FlowType.RETURN:
+                return (<ReturnFlowProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             default:
                 return (<div/>)
         }
@@ -76,11 +88,14 @@ export class FlowPropertiesFactory {
     static createFileProperties(type: FlowType | null | undefined, onDataChanged: (data: BasePropertiesState) => void, isValidListener: (isValid: boolean) => void): JSX.Element {
         switch (type) {
             case FlowType.CLASS:
-                return (<CreateClassProperties onDataChanged={(data) => onDataChanged(data)} isValidListener={(isValid) => isValidListener(isValid)}/>)
+                return (<CreateClassProperties onDataChanged={(data) => onDataChanged(data)}
+                                               isValidListener={(isValid) => isValidListener(isValid)}/>)
             case FlowType.DATA_CLASS:
-                return (<CreateDataClassProperties onDataChanged={(data) => onDataChanged(data)} isValidListener={(isValid) => isValidListener(isValid)}/>)
+                return (<CreateDataClassProperties onDataChanged={(data) => onDataChanged(data)}
+                                                   isValidListener={(isValid) => isValidListener(isValid)}/>)
             case FlowType.PACKAGE:
-                return (<CreatePackageProperties onDataChanged={(data) => onDataChanged(data)} isValidListener={(isValid) => isValidListener(isValid)}/>)
+                return (<CreatePackageProperties onDataChanged={(data) => onDataChanged(data)}
+                                                 isValidListener={(isValid) => isValidListener(isValid)}/>)
             default:
                 return (<div/>)
         }
@@ -88,12 +103,14 @@ export class FlowPropertiesFactory {
 
     static getTitleAndDescription(type: FlowType | null | undefined): { title: string, contextText: string } {
         switch (type) {
+            case FlowType.INITIAL:
             case FlowType.WHILE:
             case FlowType.IF:
             case FlowType.ARITHMETIC:
             case FlowType.ASSIGNMENT:
             case FlowType.INPUT:
             case FlowType.OUTPUT:
+            case FlowType.RETURN:
             case FlowType.RANDOM:
                 return {title: strings.setProperties, contextText: ""}
             case FlowType.DATA_CLASS:

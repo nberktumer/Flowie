@@ -61,5 +61,10 @@ export default {
     newFunction: "New Function",
     dataClass: "Data Class",
     setProperties: "Set Properties",
-    defaultValue: "Default Value"
+    defaultValue: "Default Value",
+    returnType: "Return Type",
+    addArg: "Add Argument",
+    argName: "Argument Name",
+    argType: "Argument Type",
+    return: "Return"
 }

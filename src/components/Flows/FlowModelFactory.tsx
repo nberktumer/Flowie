@@ -23,8 +23,6 @@ export class FlowModelFactory {
                 return new IfFlowModelGenerator().generate(baseFlow)
             case FlowType.WHILE:
                 return new WhileFlowModelGenerator().generate(baseFlow)
-            case FlowType.FOR:
-                return null // TODO
             case FlowType.INPUT:
                 return new InputFlowModelGenerator().generate(baseFlow)
             case FlowType.OUTPUT:
