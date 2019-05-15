@@ -11,10 +11,10 @@ export class KotlinDataClassFlowCode implements DataClassFlowCode {
 
         let variableCode = ""
         dataClassFlow.content.variables.forEach((variable, index) => {
-            if (variable.name) {
-                variableCode += variable.name
-            } else {
+            if (variable.value) {
                 variableCode += variable.value
+            } else {
+                variableCode += variable.name
             }
 
             if (index !== variableCount - 1) {
