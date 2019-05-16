@@ -15,7 +15,7 @@ export class JavaListUpdateFlowCode implements ListUpdateFlowCode {
         if (listUpdateFlow.content.element.name) {
             addedElementStr = listUpdateFlow.content.element.name
         } else {
-            addedElementStr = ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.JAVA, listUpdateFlow.content.element.value)
+            addedElementStr = ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.JAVA, listUpdateFlow.content.element)
         }
 
         clazz.writeCodeToMainFunction(listUpdateFlow.content.list.name + ".set(" + listUpdateFlow.content.index + "," + addedElementStr + ");")

@@ -13,7 +13,7 @@ export class KotlinListAddFlowCode implements ListAddFlowCode {
         if (listAddFlow.content.element.name) {
             addedElementStr = listAddFlow.content.element.name
         } else {
-            addedElementStr = ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.KOTLIN, listAddFlow.content.element.value)
+            addedElementStr = ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.KOTLIN, listAddFlow.content.element)
         }
 
         clazz.writeCodeToMainFunction(listAddFlow.content.list.name + ".add(" + addedElementStr + ")")
