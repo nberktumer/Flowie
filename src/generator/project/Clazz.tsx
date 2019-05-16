@@ -20,7 +20,7 @@ import {FunctionalityFlow} from "../flows/FunctionalityFlow";
 import {CurrentTimeFlow} from "../flows/CurrentTimeFlow";
 import {UpdateVariableFlow} from "../flows/UpdateVariableFlow";
 import {Variable} from "../../models/Variable";
-import {NewListFlow} from "../flows/NewListFlow";
+import {ListNewFlow} from "../flows/ListNewFlow";
 
 export class Clazz implements DirectoryItem {
     static INITIAL_ID = "INITIAL_ID"
@@ -154,7 +154,7 @@ export class Clazz implements DirectoryItem {
                     Project.codeStrategy.functionalityFlowCode.generateMain(flow, this)
                 } else if (flow instanceof UpdateVariableFlow) {
                     Project.codeStrategy.updateVariableFlowCode.generateMain(flow, this)
-                } else if (flow instanceof NewListFlow) {
+                } else if (flow instanceof ListNewFlow) {
                     Project.codeStrategy.newListFlowCode.generateMain(flow, this)
                 } else if (flow instanceof InitialFlow) {
                     this.writeMainCodeFromFlow(flow.nextFlow())

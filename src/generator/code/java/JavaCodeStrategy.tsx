@@ -19,7 +19,7 @@ import {JavaFunctionalityFlowCode} from "./JavaFunctionalityFlowCode";
 import {Variable} from "../../../models/Variable";
 import {JavaCurrentTimeFlowCode} from "./JavaCurrentTimeFlowCode";
 import {JavaUpdateVariableFlowCode} from "./JavaUpdateVariableFlowCode";
-import {JavaNewListFlowCode} from "./JavaNewListFlowCode";
+import {JavaListNewFlowCode} from "./JavaListNewFlowCode";
 
 export class JavaCodeStrategy implements CodeStrategy {
 
@@ -35,7 +35,7 @@ export class JavaCodeStrategy implements CodeStrategy {
     functionalityFlowCode = new JavaFunctionalityFlowCode()
     currentTimeFlowCode = new JavaCurrentTimeFlowCode()
     updateVariableFlowCode = new JavaUpdateVariableFlowCode()
-    newListFlowCode = new JavaNewListFlowCode()
+    newListFlowCode = new JavaListNewFlowCode()
 
     initClazz(clazz: Clazz): void {
         clazz.incrementIndentation()
