@@ -19,7 +19,6 @@ export enum ArithmeticOperationType {
 
 export enum FlowType {
     INITIAL = "Initial",
-
     ASSIGNMENT = "Set Variable",
     UPDATE_VARIABLE = "Update Variable",
     ARITHMETIC = "Arithmetic Operations",
@@ -27,14 +26,17 @@ export enum FlowType {
     INPUT = "Get User Input",
     OUTPUT = "Print",
     RANDOM = "Random Number",
-
     IF = "If",
     WHILE = "While",
-
     PACKAGE = "Package",
     CLASS = "Function",
     DATA_CLASS = "Variable Holder",
     RETURN = "Return",
+    LIST_NEW = "New List",
+    LIST_ADD = "Add to List",
+    LIST_UPDATE = "Update List Item",
+    LIST_REMOVE = "Remove List Item",
+    LIST_CLEAR = "Clear List"
 }
 
 export enum ConditionOperation {
