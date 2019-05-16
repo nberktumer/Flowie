@@ -31,7 +31,7 @@ export class ReturnFlowNode extends BaseFlowNode {
         this.updateInfo()
     }
 
-    getVariable() {
+    getVariable(): Variable | undefined {
         return this.variable
     }
 
@@ -45,4 +45,5 @@ export class ReturnFlowNode extends BaseFlowNode {
             variable: this.variable
         })
     }
+
 }

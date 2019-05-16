@@ -5,8 +5,6 @@ import {BaseVariableFlowNode} from "../Base/BaseVariableFlowNode"
 import {FlowType} from "../../../models"
 
 export class CurrentTimeFlowNode extends BaseVariableFlowNode {
-    minValue: number = 0
-    maxValue: number = 1
 
     constructor(variable: Variable, withoutPorts: boolean = false) {
         super(FlowType.CURRENT_TIME, strings.variable + " (" + strings.currentTime + ")", NodeColors.CURRENT_TIME)

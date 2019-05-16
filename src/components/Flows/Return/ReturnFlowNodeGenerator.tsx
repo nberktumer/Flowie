@@ -13,12 +13,11 @@ export class ReturnFlowNodeGenerator extends BaseFlowNodeGenerator {
                 return new ReturnFlowNode(JSON.parse(data.variable))
             }
         } else {
-            console.log("asd")
             return new ReturnFlowNode()
         }
     }
 
-    load(node: BaseFlowNode): BaseFlowNode {
-        return new ReturnFlowNode((node as ReturnFlowNode).getVariable(), true)
+    load(node: any): BaseFlowNode {
+        return new ReturnFlowNode(node.variable, true)
     }
 }

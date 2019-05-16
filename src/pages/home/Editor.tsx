@@ -238,6 +238,8 @@ export default class Editor extends Component<EditorProps, EditorState> {
             if (saveCurrent)
                 this.currentFileModel.json = JSON.stringify(this.canvasPanel.current.saveProject())
 
+            console.log(JSON.stringify(this.canvasPanel.current.saveProject()))
+
             if (fileModel.json) {
                 this.canvasPanel.current.loadProject(fileModel.json, (variableList: any) => {
                     this.currentFileModel = fileModel
