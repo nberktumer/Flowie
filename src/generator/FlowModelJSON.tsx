@@ -15,6 +15,11 @@ import {ReturnFlowContent} from "./flows/ReturnFlow";
 import {CurrentTimeFlowContent} from "./flows/CurrentTimeFlow";
 import {FunctionalityFlowContent} from "./flows/FunctionalityFlow"
 import {UpdateVariableFlowContent} from "./flows/UpdateVariableFlow";
+import {ListNewFlowContent} from "./flows/ListNewFlow";
+import {ListAddFlowContent} from "./flows/ListAddFlow";
+import {ListUpdateFlowContent} from "./flows/ListUpdateFlow";
+import {ListRemoveFlowContent} from "./flows/ListRemoveFlow";
+import {ListClearFlowContent} from "./flows/ListClearFlow";
 
 export class DirectoryItemModel {
     type: DirectoryItemType
@@ -58,6 +63,11 @@ export class FlowModel {
     dataClassFlowContent: DataClassFlowContent | null = null
     returnFlowContent: ReturnFlowContent | null = null
     updateVariableFlowContent: UpdateVariableFlowContent | null = null
+    listNewFlowContent: ListNewFlowContent | null = null
+    listAddFlowContent: ListAddFlowContent| null = null
+    listUpdateFlowContent: ListUpdateFlowContent| null = null
+    listRemoveFlowContent: ListRemoveFlowContent| null = null
+    listClearFlowContent: ListClearFlowContent| null = null
     // forFlowContent: ForFlowContent,
     // ifFlowContent: IfFlowContent,
     nextFlowId: string | null

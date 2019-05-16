@@ -3,19 +3,19 @@ import {FlowType} from "../../models"
 import {Clazz} from "../project/Clazz";
 import {Variable} from "../../models/Variable";
 
-export class ListNewFlow implements BaseFlow {
+export class ListClearFlow implements BaseFlow {
 
     id: string
     nextFlowId: string | null
     type: FlowType
-    content: ListNewFlowContent | null
+    content: ListClearFlowContent | null
     functionCallName: string
 
     constructor(
         id: string,
         nextFlowId: string | null,
         type: FlowType,
-        content: ListNewFlowContent | null) {
+        content: ListClearFlowContent | null) {
         this.id = id
         this.nextFlowId = nextFlowId
         this.type = type
@@ -28,7 +28,7 @@ export class ListNewFlow implements BaseFlow {
     }
 
     functionName(): string {
-        return `listNewFlow${this.functionCallName}`
+        return `listClearFlow${this.functionCallName}`
     }
 
     nextFlow(): string {
@@ -41,7 +41,7 @@ export class ListNewFlow implements BaseFlow {
 
 }
 
-export class ListNewFlowContent {
+export class ListClearFlowContent {
     list: Variable
 
     constructor(
