@@ -7,6 +7,8 @@ import {ArithmeticFlowNode} from "./ArithmeticFlowNode"
 import InputWithType from "../../InputWithType/InputWithType"
 import {Variable} from "../../../models/Variable"
 import {FlowConsumer} from "../../../stores/FlowStore"
+import {SignConverter, Validator} from "../../../utils"
+import {Rules} from "../../../config"
 
 export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
 
@@ -22,7 +24,10 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                 operator1: JSON.stringify(node.getOperator1()),
                 operator2: JSON.stringify(node.getOperator2()),
                 isOp2Constant: node.getOperator2().name === undefined,
-                op2initialValue: node.getOperator2().value
+                op2initialValue: node.getOperator2().value,
+                variableName: "",
+                variableType: node.getVariable().type,
+                assignToVariableStatus: "assign"
             }
         } else {
             this.state = {
@@ -31,7 +36,10 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                 operator1: "",
                 operator2: "",
                 isOp2Constant: false,
-                op2initialValue: ""
+                op2initialValue: "",
+                variableName: "",
+                variableType: VariableType.INT,
+                assignToVariableStatus: "new"
             }
         }
     }
@@ -57,8 +65,61 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                         <TextField
                             id="data-type-selector"
                             select
-                            label={strings.variable}
+                            label={strings.assignToVariable}
+                            value={this.state.assignToVariableStatus}
+                            onChange={this.handleStringChange("assignToVariableStatus")}
+                            margin="normal">
+                            <MenuItem key={"new"} value={"new"}>
+                                {strings.createNewVariable}
+                            </MenuItem>
+                            <MenuItem key={"assign"} value={"assign"}>
+                                {strings.assignToVariable}
+                            </MenuItem>
+                        </TextField>
+                        <TextField
+                            id="variable-name-input"
+                            fullWidth
+                            label={strings.variableName}
+                            error={this.state.errorField === "variableName"}
+                            style={{display: this.state.assignToVariableStatus === "new" ? "flex" : "none"}}
+                            value={this.state.variableName}
+                            inputProps={{maxLength: Rules.MAX_VAR_LENGTH}}
+                            onChange={(e) => {
+                                const error = Validator.validateVariableName(e.target.value, flowContext.variableList)
+                                this.setState({
+                                    variableName: e.target.value,
+                                    variable: e.target.value ? JSON.stringify(new Variable(e.target.value, this.state.variableType, undefined)) : "",
+                                    errorMessage: error,
+                                    errorField: error ? "variableName" : ""
+                                }, () => {
+                                    this.props.onDataChanged(this.state)
+                                })
+                            }}
+                            margin="normal"/>
+                        <TextField
+                            id="variable-type-input"
+                            fullWidth
+                            select
+                            label={strings.variableType}
+                            error={this.state.errorField === "variableType"}
+                            style={{display: this.state.assignToVariableStatus === "new" ? "flex" : "none"}}
+                            value={this.state.variableType}
+                            onChange={this.handleStringChange("variableType")}
+                            margin="normal">
+                            {Object.keys(VariableType).filter((item: any) => {
+                                return VariableType[item] === VariableType.INT || VariableType[item] === VariableType.DOUBLE || VariableType[item] === VariableType.LONG
+                            }).map((key: any) => (
+                                <MenuItem key={key} value={VariableType[key]}>
+                                    {VariableType[key]}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        <TextField
+                            id="variable-selector"
+                            select
+                            label={strings.assignToVariable}
                             value={this.state.variable}
+                            style={{display: this.state.assignToVariableStatus === "new" ? "none" : "flex"}}
                             onChange={this.handleStringChange("variable")}
                             margin="normal">
                             {flowContext.variableList.filter((value) => {
@@ -70,7 +131,7 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                             ))}
                         </TextField>
                         <TextField
-                            id="data-type-selector"
+                            id="operation-selector"
                             select
                             label={strings.operation}
                             value={this.state.operation}
@@ -78,12 +139,12 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                             margin="normal">
                             {Object.keys(ArithmeticOperationType).map((value: any) => (
                                 <MenuItem key={value} value={ArithmeticOperationType[value]}>
-                                    {ArithmeticOperationType[value]}
+                                    {SignConverter.arithmeticOperation(ArithmeticOperationType[value] as ArithmeticOperationType)}
                                 </MenuItem>
                             ))}
                         </TextField>
                         <TextField
-                            id="data-type-selector"
+                            id="first-operator-selector"
                             select
                             label={strings.firstOperator}
                             value={this.state.operator1}
@@ -103,7 +164,7 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                             flexDirection: "row"
                         }}>
                             <TextField
-                                id="data-type-selector"
+                                id="second-operator-selector"
                                 select
                                 style={{flex: 1, display: this.state.isOp2Constant ? "none" : "flex"}}
                                 label={strings.secondOperator}

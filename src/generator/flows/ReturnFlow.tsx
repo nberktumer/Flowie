@@ -1,7 +1,7 @@
-import {BaseFlow} from "./BaseFlow";
-import {FlowType} from "../../models";
-import {Clazz} from "../project/Clazz";
-import {Variable} from "../../models/Variable";
+import {BaseFlow} from "./BaseFlow"
+import {FlowType} from "../../models"
+import {Clazz} from "../project/Clazz"
+import {Variable} from "../../models/Variable"
 
 export class ReturnFlow implements BaseFlow {
     id: string
@@ -31,7 +31,7 @@ export class ReturnFlow implements BaseFlow {
     }
 
     hasExternalDependencies(): boolean {
-        return false;
+        return false
     }
 
     nextFlow(): string {
@@ -40,10 +40,10 @@ export class ReturnFlow implements BaseFlow {
 }
 
 export class ReturnFlowContent {
-    returnVariable: Variable | undefined
+    returnVariable?: Variable
 
     constructor(
-        returnVariable: Variable
+        returnVariable?: Variable
     ) {
         this.returnVariable = returnVariable
     }

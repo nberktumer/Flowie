@@ -3,14 +3,13 @@ import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {BasePropertiesState} from "../Base/BaseProperties"
 import {Variable} from "../../../models/Variable"
 import {CurrentTimeFlowNode} from "./CurrentTimeFlowNode"
-import {VariableType} from "../../../models"
 
 export class CurrentTimeFlowNodeGenerator extends BaseFlowNodeGenerator {
     create(data?: BasePropertiesState, node?: CurrentTimeFlowNode): BaseFlowNode | undefined {
-        if (!data || data.variableName === "")
+        if (!data || !data.variable)
             return undefined
 
-        const variable = new Variable(data.variableName, VariableType.LONG, undefined)
+        const variable = JSON.parse(data.variable) as Variable
 
         if (node) {
             node.setVariable(variable)

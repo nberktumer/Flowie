@@ -36,7 +36,7 @@ import {ClassFlowNode} from "../../components/Flows/Class/ClassFlowNode"
 import ClazzModel from "../../models/ClazzModel"
 
 export interface EditorProps {
-    project: { rootFileModel: FileModel, projectName: string, currentFile: FileModel, bigBigNoPackage: {ReturnType: VariableType, classList: ClazzModel[]} }
+    project: { rootFileModel: FileModel, projectName: string, currentFile: FileModel, bigBigNoPackage: { ReturnType: VariableType, classList: ClazzModel[], currentClass: Clazz } }
 }
 
 export interface EditorState {
@@ -238,6 +238,8 @@ export default class Editor extends Component<EditorProps, EditorState> {
             if (saveCurrent)
                 this.currentFileModel.json = JSON.stringify(this.canvasPanel.current.saveProject())
 
+            console.log(JSON.stringify(this.canvasPanel.current.saveProject()))
+
             if (fileModel.json) {
                 this.canvasPanel.current.loadProject(fileModel.json, (variableList: any) => {
                     this.currentFileModel = fileModel
@@ -324,7 +326,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
                         return
 
                     try {
-                        const loadedData = JSON.parse(data) as { rootFileModel: FileModel, projectName: string, currentFile: FileModel, bigBigNoPackage: {ReturnType: VariableType, classList: ClazzModel[]} }
+                        const loadedData = JSON.parse(data) as { rootFileModel: FileModel, projectName: string, currentFile: FileModel, bigBigNoPackage: { ReturnType: VariableType, classList: ClazzModel[] } }
                         Object.assign(HOLDER.classList, loadedData.bigBigNoPackage.classList)
                         HOLDER.ReturnType = loadedData.bigBigNoPackage.ReturnType
                         this.project = new Project(loadedData.projectName)
@@ -365,7 +367,6 @@ export default class Editor extends Component<EditorProps, EditorState> {
                                     return item
                                 }
                             })
-                            console.log(currentClassData)
                             Object.assign(HOLDER.classList, currentClassData)
                             this.setState({classList: currentClassData})
                         }
@@ -410,7 +411,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
                                         <ReflexElement className="left-pane" minSize={200}>
                                             <ShapePanel>
-                                                {Object.values(FlowType).filter((value) => value !== FlowType.INITIAL)
+                                                {Object.values(FlowType).filter((value) => value !== FlowType.INITIAL && value !== FlowType.PACKAGE)
                                                     .map((value) => (
                                                         <ShapeItem key={value} model={{type: value}} name={value}/>
                                                     ))}
@@ -498,6 +499,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
                     const clazz = new MainClazz(DirectoryItemType.MAIN_CLASS, fileModel.filename, flowModelList)
                     this.currentClass = clazz
+                    HOLDER.currentClass = clazz
                     this.currentClassData = new ClazzModel(fileModel.filename, this.canvasPanel.current!.initialNode.argList, this.canvasPanel.current!.initialNode.returnType)
                     parent.addDirectoryItem(clazz)
                 } else {
@@ -516,6 +518,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
                     const clazz = new Clazz(DirectoryItemType.CLASS, fileModel.filename, flowModelList)
                     const clazzModel = new ClazzModel(fileModel.filename, this.canvasPanel.current!.initialNode.argList, this.canvasPanel.current!.initialNode.returnType)
                     this.currentClass = clazz
+                    HOLDER.currentClass = clazz
                     this.currentClassData = clazzModel
                     this.setState((prevState) => ({classList: [...prevState.classList, clazzModel]}))
 

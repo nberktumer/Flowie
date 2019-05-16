@@ -18,18 +18,22 @@ export enum ArithmeticOperationType {
 
 export enum FlowType {
     INITIAL = "Initial",
+
+    ASSIGNMENT = "Set Variable",
+    UPDATE_VARIABLE = "Update Variable",
+    ARITHMETIC = "Arithmetic Operations",
+    CURRENT_TIME = "Get Current Time",
+    INPUT = "Get User Input",
+    OUTPUT = "Print",
+    RANDOM = "Random Number",
+
     IF = "If",
     WHILE = "While",
-    INPUT = "Input",
-    OUTPUT = "Output",
-    ARITHMETIC = "Arithmetic",
-    ASSIGNMENT = "Assignment",
-    RANDOM = "Random",
-    DATA_CLASS = "Data Class",
-    CLASS = "Class",
+
     PACKAGE = "Package",
-    CURRENT_TIME = "Current Time",
-    RETURN = "Return"
+    CLASS = "Function",
+    DATA_CLASS = "Variable Holder",
+    RETURN = "Return",
 }
 
 export enum ConditionOperation {

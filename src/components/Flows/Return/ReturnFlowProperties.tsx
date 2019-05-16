@@ -19,7 +19,7 @@ export class ReturnFlowProperties extends BaseProperties<BasePropertiesProps> {
 
             this.state = {
                 variable: JSON.stringify(node.getVariable()),
-                isConstant: node.getVariable() && Boolean(node.getVariable()!.name),
+                isConstant: node.getVariable() && !Boolean(node.getVariable()!.name),
                 expanded: ""
             }
         } else {
