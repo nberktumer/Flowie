@@ -75,7 +75,9 @@ export class InputProperties extends BaseProperties<InputPropertiesProps> {
                             value={this.state.variableType}
                             onChange={this.handleStringChange("variableType")}
                             margin="normal">
-                            {Object.keys(VariableType).map((key: any) => (
+                            {Object.keys(VariableType).filter((type: any) => {
+                                return VariableType[type] !== VariableType.MAIN_ARG && VariableType[type] !== VariableType.NONE
+                            }).map((key: any) => (
                                 <MenuItem key={key} value={VariableType[key]}>
                                     {VariableType[key]}
                                 </MenuItem>

@@ -81,7 +81,9 @@ export class AssignmentProperties extends BaseProperties<AssignmentPropertiesPro
                                 this.setState({value: ""})
                             })}
                             margin="normal">
-                            {Object.keys(VariableType).map((key: any) => (
+                            {Object.keys(VariableType).filter((value: any) => {
+                                return VariableType[value] !== VariableType.NONE && VariableType[value] !== VariableType.MAIN_ARG
+                            }).map((key: any) => (
                                 <MenuItem key={key} value={VariableType[key]}>
                                     {VariableType[key]}
                                 </MenuItem>
