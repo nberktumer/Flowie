@@ -13,7 +13,7 @@ export class JavaArithmeticFlowCode implements ArithmeticFlowCode {
         let variableSetCode = ""
 
         if (clazz.addVariable(arithmeticFlow.content.variable.name)) {
-            variableSetCode = `${ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, arithmeticFlow.content.variable.type)} `
+            variableSetCode = `${ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.JAVA, arithmeticFlow.content.variable.type)} `
         }
 
         let operationCode = ""

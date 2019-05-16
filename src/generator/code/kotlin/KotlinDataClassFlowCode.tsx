@@ -2,7 +2,8 @@ import {DataClassFlowCode} from "../common/DataClassFlowCode";
 import {Clazz} from "../../project/Clazz";
 import {DataClassFlow} from "../../flows/DataClassFlow";
 import {Variable} from "../../../models/Variable";
-import {VariableType} from "../../../models";
+import {ProgrammingLanguage} from "../../../models";
+import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
 
 export class KotlinDataClassFlowCode implements DataClassFlowCode {
 
@@ -18,11 +19,7 @@ export class KotlinDataClassFlowCode implements DataClassFlowCode {
                 if (valueAsVariable.name) {
                     variableCode += valueAsVariable.name
                 } else {
-                    if (valueAsVariable.type === VariableType.STRING) {
-                        variableCode += `"${valueAsVariable.value}"`
-                    } else {
-                        variableCode += valueAsVariable.value
-                    }
+                    variableCode += ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.KOTLIN, valueAsVariable)
                 }
             } else {
                 variableCode += variable.name

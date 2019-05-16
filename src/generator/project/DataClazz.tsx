@@ -2,6 +2,7 @@ import {Variable} from "../../models/Variable";
 import {DirectoryItem, DirectoryItemType} from "./DirectoryItem";
 import {Code, CodeLine} from "../code/Code";
 import {Project} from "./Project";
+import generate from "@babel/generator";
 
 export class DataClazz implements DirectoryItem {
     type: DirectoryItemType;
@@ -17,6 +18,9 @@ export class DataClazz implements DirectoryItem {
         this.variables = variables
 
         Project.codeStrategy.generateDataClazz(this)
+
+        this.generateCode()
+        console.log(this.getCode())
     }
 
     addVariable(variable: Variable) {

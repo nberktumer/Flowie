@@ -21,6 +21,8 @@ import {DataClassFlowNodeGenerator} from "./DataClass/DataClassFlowNodeGenerator
 import {DataClassFlowNode} from "./DataClass/DataClassFlowNode"
 import {ReturnFlowNodeGenerator} from "./Return/ReturnFlowNodeGenerator"
 import {ReturnFlowNode} from "./Return/ReturnFlowNode"
+import {CurrentTimeFlowNodeGenerator} from "./CurrentTime/CurrentTimeFlowNodeGenerator";
+import {CurrentTimeFlowNode} from "./CurrentTime/CurrentTimeFlowNode";
 import {ClassFlowNodeGenerator} from "./Class/ClassFlowNodeGenerator"
 import {ClassFlowNode} from "./Class/ClassFlowNode"
 
@@ -46,6 +48,8 @@ export class FlowNodeFactory {
                 return new AssignmentFlowNodeGenerator().create(data)
             case FlowType.RANDOM:
                 return new RandomFlowNodeGenerator().create(data)
+            case FlowType.CURRENT_TIME:
+                return new CurrentTimeFlowNodeGenerator().create(data)
             case FlowType.CLASS:
                 return new ClassFlowNodeGenerator().create(data)
             case FlowType.DATA_CLASS:
@@ -75,6 +79,8 @@ export class FlowNodeFactory {
                 return new RandomFlowNodeGenerator().load(node)
             case FlowType.CLASS:
                 return new ClassFlowNodeGenerator().load(node)
+            case FlowType.CURRENT_TIME:
+                return new CurrentTimeFlowNodeGenerator().load(node)
             case FlowType.DATA_CLASS:
                 return new DataClassFlowNodeGenerator().load(node)
             case FlowType.RETURN:
@@ -102,6 +108,8 @@ export class FlowNodeFactory {
                 return new AssignmentFlowNodeGenerator().create(data, node as AssignmentFlowNode)
             case FlowType.RANDOM:
                 return new RandomFlowNodeGenerator().create(data, node as RandomFlowNode)
+            case FlowType.CURRENT_TIME:
+                return new CurrentTimeFlowNodeGenerator().create(data, node as CurrentTimeFlowNode)
             case FlowType.CLASS:
                 return new ClassFlowNodeGenerator().create(data, node as ClassFlowNode)
             case FlowType.DATA_CLASS:

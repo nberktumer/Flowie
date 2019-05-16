@@ -17,6 +17,7 @@ import {CreateClassProperties} from "./Class/CreateClassProperties"
 import {InitialFlowProperties} from "./Initial/InitialFlowProperties"
 import {ReturnFlowProperties} from "./Return/ReturnFlowProperties"
 import {ClassProperties} from "./Class/ClassProperties"
+import {CurrentTimeProperties} from "./CurrentTime/CurrentTimeProperties";
 
 export class FlowPropertiesFactory {
     private constructor() {
@@ -45,6 +46,9 @@ export class FlowPropertiesFactory {
             case FlowType.RANDOM:
                 return (<RandomProperties onDataChanged={(data) => onDataChanged(data)}
                                           isValidListener={((isValid) => isValidListener(isValid))}/>)
+            case FlowType.CURRENT_TIME:
+                return (<CurrentTimeProperties onDataChanged={(data) => onDataChanged(data)}
+                                               isValidListener={((isValid) => isValidListener(isValid))}/>)
             case FlowType.CLASS:
                 return (<ClassProperties onDataChanged={(data) => onDataChanged(data)}
                                          isValidListener={((isValid) => isValidListener(isValid))}/>)
@@ -79,6 +83,8 @@ export class FlowPropertiesFactory {
                 return (<RandomProperties readonlyType node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             case FlowType.CLASS:
                 return (<ClassProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
+            case FlowType.CURRENT_TIME:
+                return (<CurrentTimeProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             case FlowType.DATA_CLASS:
                 return (<DataClassProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             case FlowType.RETURN:
@@ -115,6 +121,7 @@ export class FlowPropertiesFactory {
             case FlowType.OUTPUT:
             case FlowType.RETURN:
             case FlowType.RANDOM:
+            case FlowType.CURRENT_TIME:
                 return {title: strings.setProperties, contextText: ""}
             case FlowType.DATA_CLASS:
                 return {title: strings.newDataClass, contextText: ""}

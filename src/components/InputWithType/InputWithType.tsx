@@ -66,6 +66,7 @@ export default class InputWithType extends Component<InputWithTypeProps, InputWi
                 return this.renderStringInput()
             case VariableType.INT:
             case VariableType.DOUBLE:
+            case VariableType.LONG:
                 return this.renderIntegerInput()
             case VariableType.BOOLEAN:
                 return this.renderBooleanInput()

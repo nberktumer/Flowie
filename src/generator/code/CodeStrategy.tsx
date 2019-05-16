@@ -11,6 +11,7 @@ import {DataClazz} from "../project/DataClazz";
 import {DataClassFlowCode} from "./common/DataClassFlowCode";
 import {ReturnFlowCode} from "./common/ReturnFlowCode";
 import {FunctionalityFlowCode} from "./common/FunctionalityFlowCode";
+import {CurrentTimeFlowCode} from "./common/CurrentTimeFlowCode";
 
 export interface CodeStrategy {
     arithmeticFlowCode: ArithmeticFlowCode
@@ -23,6 +24,7 @@ export interface CodeStrategy {
     dataClassFlowCode: DataClassFlowCode
     returnFlowCode: ReturnFlowCode
     functionalityFlowCode: FunctionalityFlowCode
+    currentTimeFlowCode: CurrentTimeFlowCode
 
     initClazz(clazz: Clazz): void
 
