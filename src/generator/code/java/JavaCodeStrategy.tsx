@@ -56,7 +56,7 @@ export class JavaCodeStrategy implements CodeStrategy {
         clazz.classFinishCode.insert(`}`)
     }
 
-    initMain(clazz: Clazz): void {
+    initMain(classParameters: Variable[], classReturnType: VariableType, clazz: Clazz): void {
         const parameters: Variable[] = []
         const mainFunctionLines = new Code(clazz.indentationCount)
         let mainFnName = ""

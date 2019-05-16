@@ -76,7 +76,7 @@ export class KotlinCodeStrategy implements CodeStrategy {
         clazz.classFinishCode.insert("}")
     }
 
-    initMain(clazz: Clazz): void {
+    initMain(classParameters: Variable[], classReturnType: VariableType, clazz: Clazz): void {
         const parameters: Variable[] = []
         const mainFunctionLines = new Code(clazz.indentationCount)
         let mainFnName = ""
@@ -90,11 +90,6 @@ export class KotlinCodeStrategy implements CodeStrategy {
                     null))
         } else {
             mainFnName = clazz.name
-            parameters.push(
-                new Variable(
-                    clazz.name,
-                    VariableType.MAIN_ARG,
-                    null)) //TODO CHANGE TYPE TO ARG FROM FN
         }
 
         clazz.mainFunction = new Func(
