@@ -8,6 +8,7 @@ import {Validator} from "../../../utils"
 import {FlowConsumer} from "../../../stores/FlowStore"
 import {Variable} from "../../../models/Variable"
 import {VariableType} from "../../../models"
+import _ from "lodash"
 
 export interface CurrentTimePropertiesProps extends BasePropertiesProps {
     readonlyType: boolean
@@ -54,6 +55,8 @@ export class CurrentTimeProperties extends BaseProperties<CurrentTimePropertiesP
                         <TextField
                             id="data-type-selector"
                             select
+                            fullWidth
+                            disabled={this.props.readonlyType}
                             label={strings.createNewAndExistingVariable}
                             value={this.state.assignToVariableStatus}
                             onChange={this.handleStringChange("assignToVariableStatus")}
@@ -69,12 +72,13 @@ export class CurrentTimeProperties extends BaseProperties<CurrentTimePropertiesP
                             id="variable-name-input"
                             fullWidth
                             label={strings.variableName}
+                            disabled={this.props.readonlyType}
                             error={this.state.errorField === "variableName"}
                             style={{display: this.state.assignToVariableStatus === "new" ? "flex" : "none"}}
                             value={this.state.variableName}
                             inputProps={{maxLength: Rules.MAX_VAR_LENGTH}}
                             onChange={(e) => {
-                                const error = Validator.validateVariableName(e.target.value, flowContext.variableList)
+                                const error = Validator.validateVariableName(e.target.value, _.merge(flowContext.variableList, flowContext.argList))
                                 this.setState({
                                     variableName: e.target.value,
                                     variable: e.target.value ? JSON.stringify(new Variable(e.target.value, VariableType.LONG, undefined)) : "",

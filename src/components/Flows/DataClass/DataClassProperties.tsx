@@ -18,6 +18,7 @@ import {Variable} from "../../../models/Variable"
 import {DataClassFlowNode} from "./DataClassFlowNode"
 import {FlowConsumer} from "../../../stores/FlowStore"
 import {Validator} from "../../../utils"
+import _ from "lodash"
 
 export class DataClassProperties extends BaseProperties<BasePropertiesProps> {
 
@@ -96,7 +97,7 @@ export class DataClassProperties extends BaseProperties<BasePropertiesProps> {
                                 value={this.state.variableName}
                                 error={this.state.errorField === "variableName"}
                                 onChange={this.handleStringChange("variableName", (data) => {
-                                    const error = Validator.validateVariableName(data, flowContext.variableList)
+                                    const error = Validator.validateVariableName(data, _.merge(flowContext.variableList, flowContext.argList))
                                     this.setState({
                                         errorMessage: error,
                                         errorField: error ? "variableName" : ""
@@ -174,9 +175,9 @@ export class DataClassProperties extends BaseProperties<BasePropertiesProps> {
                                                 this.props.onDataChanged(this.state)
                                             }}
                                             margin="normal">
-                                            {flowContext.variableList.filter((value) => {
+                                            {_.merge(flowContext.variableList, flowContext.argList).filter((value: Variable) => {
                                                 return value.type === field.field.type
-                                            }).map((value) => (
+                                            }).map((value: Variable) => (
                                                 <MenuItem key={value.name} value={JSON.stringify(value)}>
                                                     {value.name}
                                                 </MenuItem>

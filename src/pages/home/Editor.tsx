@@ -43,6 +43,7 @@ export interface EditorState {
     dialogProps: { isOpen: boolean, flowType: FlowType | null, isCreateFile?: boolean, flowPosition?: { x: number, y: number }, filePath?: string },
     generatedCode: string,
     variableList: Variable[],
+    argList: Variable[],
     classList: ClazzModel[],
     dataClassList: DataClazz[],
     classNameList: ClassModel[],
@@ -72,6 +73,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
             dialogProps: {isOpen: false, flowType: null},
             generatedCode: "",
             variableList: [],
+            argList: [],
             classList: [],
             dataClassList: [],
             classNameList: [],
@@ -98,6 +100,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
         this.setState({
             dialogProps: {isOpen: false, flowType: null},
             variableList: [],
+            argList: [],
             classList: [],
             dataClassList: [],
             classNameList: [],
@@ -241,9 +244,10 @@ export default class Editor extends Component<EditorProps, EditorState> {
                 this.canvasPanel.current.loadProject(fileModel.json, (variableList: any) => {
                     this.currentFileModel = fileModel
                     this.resetState()
-                    this.setState({variableList})
-                    this.updateDirectoryItems()
-                    this.onDiagramChanged()
+                    this.setState({variableList}, () => {
+                        this.updateDirectoryItems()
+                        this.onDiagramChanged()
+                    })
                 })
             } else {
                 this.currentFileModel = fileModel
@@ -365,7 +369,10 @@ export default class Editor extends Component<EditorProps, EditorState> {
                                 }
                             })
                             Object.assign(HOLDER.classList, currentClassData)
-                            this.setState({classList: currentClassData})
+                            this.setState({
+                                classList: currentClassData,
+                                argList: this.canvasPanel.current.initialNode.argList
+                            })
                         }
                     }
                     this.onDiagramChanged()
@@ -373,6 +380,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
             }}>
                 <FlowProvider value={{
                     variableList: this.state.variableList,
+                    argList: this.state.argList,
                     classList: this.state.classList,
                     dataClassList: this.state.dataClassList,
                     classNameList: this.state.classNameList,
@@ -517,7 +525,10 @@ export default class Editor extends Component<EditorProps, EditorState> {
                     this.currentClass = clazz
                     HOLDER.currentClass = clazz
                     this.currentClassData = clazzModel
-                    this.setState((prevState) => ({classList: [...prevState.classList, clazzModel]}))
+                    this.setState((prevState) => ({
+                        classList: [...prevState.classList, clazzModel],
+                        argList: this.canvasPanel.current!.initialNode.argList
+                    }))
 
                     parent.addDirectoryItem(clazz)
                 } else {

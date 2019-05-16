@@ -13,7 +13,7 @@ import {FlowConsumer} from "../../../../stores/FlowStore"
 import {Card, CardContent, CardHeader, IconButton} from "@material-ui/core"
 import strings from "../../../../lang"
 import {FlowStateConsumer} from "../../../../stores/FlowStateStore"
-import {FlowType} from "../../../../models"
+import {FlowType, VariableType} from "../../../../models"
 import {InitialNodeProvider} from "../../../../stores/InitialNodeStore"
 import {InitialFlowNode} from "../../../Flows/Initial/InitialFlowNode"
 import {HOLDER} from "../../../../bigNoNoPackage/ReturnTypeHolder"
@@ -116,7 +116,8 @@ export class BaseFlowWidget extends BaseWidget<RectangleNodeWidgetProps, Rectang
                                 <div className={styles.rectangleNodeTitle}>
                                     <div className={styles.rectangleNodeName}>{this.props.node.name}</div>
                                     <Icon
-                                        style={{display: HOLDER.currentClass.type === DirectoryItemType.MAIN_CLASS && this.props.node.flowType === FlowType.INITIAL ? "none" : "flex"}}
+                                        style={{display: (HOLDER.currentClass.type === DirectoryItemType.MAIN_CLASS && this.props.node.flowType === FlowType.INITIAL)
+                                                || (HOLDER.ReturnType === VariableType.NONE && this.props.node.flowType === FlowType.RETURN) ? "none" : "flex"}}
                                         onClick={(e) => this.editClickListener(e)}
                                         className={styles.editIcon}>edit</Icon>
                                 </div>

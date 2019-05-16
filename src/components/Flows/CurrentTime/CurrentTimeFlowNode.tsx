@@ -23,6 +23,6 @@ export class CurrentTimeFlowNode extends BaseVariableFlowNode {
     }
 
     updateInfo(): void {
-        this.info = `${strings.currentTime} = ${this.getVariable().name}`
+        this.info = `${this.getVariable().name} = ${strings.currentTime}`
     }
 }

@@ -6,6 +6,7 @@ import ClazzModel from "../models/ClazzModel"
 
 interface FlowContextInterface {
     variableList: Variable[],
+    argList: Variable[],
     classList: ClazzModel[],
     dataClassList: DataClazz[],
     classNameList: ClassModel[],
@@ -14,6 +15,7 @@ interface FlowContextInterface {
 
 export const FlowContext = React.createContext<FlowContextInterface>({
     variableList: [],
+    argList: [],
     classList: [],
     dataClassList: [],
     classNameList: [],

@@ -21,6 +21,7 @@ import {ClassFlowNode} from "./ClassFlowNode"
 import {VariableType} from "../../../models"
 import {HOLDER} from "../../../bigNoNoPackage/ReturnTypeHolder"
 import ClazzModel from "../../../models/ClazzModel"
+import _ from "lodash"
 
 export class ClassProperties extends BaseProperties<BasePropertiesProps> {
 
@@ -102,7 +103,7 @@ export class ClassProperties extends BaseProperties<BasePropertiesProps> {
                                 value={this.state.variableName}
                                 error={this.state.errorField === "variable"}
                                 onChange={(e) => {
-                                    const error = Validator.validateVariableName(e.target.value, flowContext.variableList)
+                                    const error = Validator.validateVariableName(e.target.value, _.merge(flowContext.variableList, flowContext.argList))
                                     this.setState({
                                         variable: JSON.stringify(new Variable(e.target.value, this.state.returnType, undefined)),
                                         errorMessage: error,
@@ -183,9 +184,9 @@ export class ClassProperties extends BaseProperties<BasePropertiesProps> {
                                                 this.props.onDataChanged(this.state)
                                             }}
                                             margin="normal">
-                                            {flowContext.variableList.filter((value) => {
+                                            {_.merge(flowContext.variableList, flowContext.argList).filter((value: Variable) => {
                                                 return value.type === field.field.type
-                                            }).map((value) => (
+                                            }).map((value: Variable) => (
                                                 <MenuItem key={value.name} value={JSON.stringify(value)}>
                                                     {value.name}
                                                 </MenuItem>

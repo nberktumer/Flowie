@@ -7,6 +7,7 @@ import InputWithType from "../../InputWithType/InputWithType"
 import {FlowConsumer} from "../../../stores/FlowStore"
 import {Variable} from "../../../models/Variable"
 import {VariableType} from "../../../models"
+import _ from "lodash"
 
 export class UpdateVariableProperties extends BaseProperties {
 
@@ -100,7 +101,7 @@ export class UpdateVariableProperties extends BaseProperties {
                             style={{display: this.state.assignToVariableStatus === "constant" || !this.state.variable ? "none" : "flex"}}
                             onChange={this.handleStringChange("variableValue")}
                             margin="normal">
-                            {flowContext.variableList.filter((item: Variable) => {
+                            {_.merge(flowContext.variableList, flowContext.argList).filter((item: Variable) => {
                                 return item.type === this.state.variableType as VariableType && item.name !== this.state.variableName
                             }).map((value) => (
                                 <MenuItem key={value.name} value={JSON.stringify(value)}>

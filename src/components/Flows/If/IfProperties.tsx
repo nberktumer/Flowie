@@ -21,6 +21,7 @@ import {ConditionOperation, ConditionType} from "../../../models/VariableEnums"
 import {SignConverter} from "../../../utils"
 import {IfFlowNode} from "./IfFlowNode"
 import {FlowConsumer} from "../../../stores/FlowStore"
+import _ from "lodash"
 
 export class IfProperties extends BaseProperties<BasePropertiesProps> {
 
@@ -174,7 +175,7 @@ export class IfProperties extends BaseProperties<BasePropertiesProps> {
                                             this.props.onDataChanged(this.state)
                                         }}
                                         margin="normal">
-                                        {Object.keys(VariableType).map((value: any) => (
+                                        {Object.keys(VariableType).filter((item: any) => VariableType[item] !== VariableType.MAIN_ARG && VariableType[item] !== VariableType.NONE).map((value: any) => (
                                             <MenuItem key={value} value={VariableType[value]}>
                                                 {VariableType[value]}
                                             </MenuItem>
@@ -191,9 +192,9 @@ export class IfProperties extends BaseProperties<BasePropertiesProps> {
                                             this.props.onDataChanged(this.state)
                                         }}
                                         margin="normal">
-                                        {flowContext.variableList.filter((value) => {
+                                        {_.merge(flowContext.variableList, flowContext.argList).filter((value: Variable) => {
                                             return value.type === condition.variableType
-                                        }).map((value) => (
+                                        }).map((value: Variable) => (
                                             <MenuItem key={value.name} value={JSON.stringify(value)}>
                                                 {value.name}
                                             </MenuItem>
@@ -215,9 +216,9 @@ export class IfProperties extends BaseProperties<BasePropertiesProps> {
                                                 this.props.onDataChanged(this.state)
                                             }}
                                             margin="normal">
-                                            {flowContext.variableList.filter((value) => {
+                                            {_.merge(flowContext.variableList, flowContext.argList).filter((value: Variable) => {
                                                 return value.type === condition.variableType
-                                            }).map((value) => (
+                                            }).map((value: Variable) => (
                                                 <MenuItem key={value.name} value={JSON.stringify(value)}>
                                                     {value.name}
                                                 </MenuItem>

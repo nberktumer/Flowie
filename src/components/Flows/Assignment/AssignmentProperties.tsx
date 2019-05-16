@@ -8,6 +8,7 @@ import {AssignmentFlowNode} from "./AssignmentFlowNode"
 import InputWithType from "../../InputWithType/InputWithType"
 import {Validator} from "../../../utils"
 import {FlowConsumer} from "../../../stores/FlowStore"
+import _ from "lodash"
 
 export interface AssignmentPropertiesProps extends BasePropertiesProps {
     readonlyType: boolean
@@ -62,7 +63,7 @@ export class AssignmentProperties extends BaseProperties<AssignmentPropertiesPro
                             value={this.state.variableName}
                             inputProps={{maxLength: Rules.MAX_VAR_LENGTH}}
                             onChange={this.handleStringChange("variableName", (data) => {
-                                const error = Validator.validateVariableName(data, flowContext.variableList)
+                                const error = Validator.validateVariableName(data, _.merge(flowContext.variableList, flowContext.argList))
                                 this.setState({errorMessage: error, errorField: error ? "variableName" : ""}, () => {
                                     this.props.onDataChanged(this.state)
                                 })

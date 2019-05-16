@@ -9,6 +9,7 @@ import {Variable} from "../../../models/Variable"
 import {FlowConsumer} from "../../../stores/FlowStore"
 import {SignConverter, Validator} from "../../../utils"
 import {Rules} from "../../../config"
+import _ from "lodash"
 
 export interface ArithmeticPropertiesProps extends BasePropertiesProps {
     readonlyType: boolean
@@ -99,7 +100,7 @@ export class ArithmeticProperties extends BaseProperties<ArithmeticPropertiesPro
                             value={this.state.variableName}
                             inputProps={{maxLength: Rules.MAX_VAR_LENGTH}}
                             onChange={(e) => {
-                                const error = Validator.validateVariableName(e.target.value, flowContext.variableList)
+                                const error = Validator.validateVariableName(e.target.value, _.merge(flowContext.variableList, flowContext.argList))
                                 this.setState({
                                     variableName: e.target.value,
                                     variable: e.target.value ? JSON.stringify(new Variable(e.target.value, this.state.variableType, undefined)) : "",
@@ -155,9 +156,9 @@ export class ArithmeticProperties extends BaseProperties<ArithmeticPropertiesPro
                             value={this.state.operator1}
                             onChange={this.handleStringChange("operator1")}
                             margin="normal">
-                            {flowContext.variableList.filter((value) => {
+                            {_.merge(flowContext.variableList, flowContext.argList).filter((value: Variable) => {
                                 return value.type === VariableType.INT || value.type === VariableType.DOUBLE || value.type === VariableType.LONG
-                            }).map((value) => (
+                            }).map((value: Variable) => (
                                 <MenuItem key={value.name}
                                           value={JSON.stringify(new Variable(value.name, value.type, value.value))}>
                                     {value.name}
@@ -190,9 +191,9 @@ export class ArithmeticProperties extends BaseProperties<ArithmeticPropertiesPro
                                 value={this.state.operator2}
                                 onChange={this.handleStringChange("operator2")}
                                 margin="normal">
-                                {flowContext.variableList.filter((value) => {
+                                {_.merge(flowContext.variableList, flowContext.argList).filter((value: Variable) => {
                                     return value.type === VariableType.INT || value.type === VariableType.DOUBLE || value.type === VariableType.LONG
-                                }).map((value) => (
+                                }).map((value: Variable) => (
                                     <MenuItem key={value.name}
                                               value={JSON.stringify(new Variable(value.name, value.type, value.value))}>
                                         {value.name}

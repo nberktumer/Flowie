@@ -90,7 +90,7 @@ export class FlowPropertiesFactory {
             case FlowType.CLASS:
                 return (<ClassProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             case FlowType.CURRENT_TIME:
-                return (<CurrentTimeProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
+                return (<CurrentTimeProperties readonlyType node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             case FlowType.DATA_CLASS:
                 return (<DataClassProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             case FlowType.RETURN:
