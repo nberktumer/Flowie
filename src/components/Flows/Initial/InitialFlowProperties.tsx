@@ -30,7 +30,7 @@ export class InitialFlowProperties extends BaseProperties<BasePropertiesProps> {
                         type: item.type
                     }
                 }),
-                returnType: VariableType.NONE,
+                returnType: node.returnType,
                 expanded: ""
             }
         } else {
@@ -146,7 +146,7 @@ export class InitialFlowProperties extends BaseProperties<BasePropertiesProps> {
                                     this.props.onDataChanged(this.state)
                                 }}
                                 margin="normal">
-                                {Object.keys(VariableType).map((value: any) => (
+                                {Object.keys(VariableType).filter((item) => item !== VariableType.MAIN_ARG).map((value: any) => (
                                     <MenuItem key={value} value={VariableType[value]}>
                                         {VariableType[value]}
                                     </MenuItem>

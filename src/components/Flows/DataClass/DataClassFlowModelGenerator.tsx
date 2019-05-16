@@ -12,8 +12,8 @@ export class DataClassFlowModelGenerator extends BaseFlowModelGenerator {
         const nextFlow = dataClassFlow.getNextFlow()
         const nextFlowId = nextFlow ? nextFlow.getID() : null
 
-        return new FlowModelBuilder(FlowType.DATA_CLASS, dataClassFlow.getID(), nextFlowId).setFlowContent(
-            new DataClassFlowContent(dataClassFlow.variableName, dataClassFlow.name, dataClassFlow.fieldList)
-        ).build()
+        return new FlowModelBuilder(FlowType.DATA_CLASS, dataClassFlow.getID(), nextFlowId)
+            .setFlowContent(new DataClassFlowContent(dataClassFlow.variableName, dataClassFlow.name, dataClassFlow.fieldList))
+            .build()
     }
 }

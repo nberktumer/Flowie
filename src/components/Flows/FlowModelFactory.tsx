@@ -10,7 +10,8 @@ import {BaseFlowNode} from "../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {IfFlowModelGenerator} from "./If/IfFlowModelGenerator"
 import {RandomFlowModelGenerator} from "./Random/RandomFlowModelGenerator"
 import {DataClassFlowModelGenerator} from "./DataClass/DataClassFlowModelGenerator"
-import {ReturnFlowModelGenerator} from "./Return/ReturnFlowModelGenerator";
+import {ReturnFlowModelGenerator} from "./Return/ReturnFlowModelGenerator"
+import {ClassFlowModelGenerator} from "./Class/ClassFlowModelGenerator"
 import {CurrentTimeFlowModelGenerator} from "./CurrentTime/CurrentTimeFlowModelGenerator";
 
 export class FlowModelFactory {
@@ -37,6 +38,8 @@ export class FlowModelFactory {
                 return new RandomFlowModelGenerator().generate(baseFlow)
             case FlowType.CURRENT_TIME:
                 return new CurrentTimeFlowModelGenerator().generate(baseFlow)
+            case FlowType.CLASS:
+                return new ClassFlowModelGenerator().generate(baseFlow)
             case FlowType.DATA_CLASS:
                 return new DataClassFlowModelGenerator().generate(baseFlow)
             case FlowType.RETURN:

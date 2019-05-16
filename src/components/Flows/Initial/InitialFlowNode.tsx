@@ -8,11 +8,12 @@ import * as _ from "lodash"
 
 export class InitialFlowNode extends BaseFlowNode {
     argList: Variable[] = []
-    returnType: VariableType = VariableType.NONE
+    returnType: VariableType
 
-    constructor(withoutPorts: boolean = false) {
+    constructor(returnType: VariableType, withoutPorts: boolean = false) {
         super(FlowType.INITIAL, strings.initialFlow, NodeColors.INITIAL)
 
+        this.returnType = returnType
         if (!withoutPorts) {
             this.addLoopPort(strings.recurse).setMaximumLinks(Infinity)
             this.addOutPort(strings.out).setMaximumLinks(1)

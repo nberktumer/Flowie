@@ -23,6 +23,8 @@ import {ReturnFlowNodeGenerator} from "./Return/ReturnFlowNodeGenerator"
 import {ReturnFlowNode} from "./Return/ReturnFlowNode"
 import {CurrentTimeFlowNodeGenerator} from "./CurrentTime/CurrentTimeFlowNodeGenerator";
 import {CurrentTimeFlowNode} from "./CurrentTime/CurrentTimeFlowNode";
+import {ClassFlowNodeGenerator} from "./Class/ClassFlowNodeGenerator"
+import {ClassFlowNode} from "./Class/ClassFlowNode"
 
 export class FlowNodeFactory {
     private constructor() {
@@ -48,6 +50,8 @@ export class FlowNodeFactory {
                 return new RandomFlowNodeGenerator().create(data)
             case FlowType.CURRENT_TIME:
                 return new CurrentTimeFlowNodeGenerator().create(data)
+            case FlowType.CLASS:
+                return new ClassFlowNodeGenerator().create(data)
             case FlowType.DATA_CLASS:
                 return new DataClassFlowNodeGenerator().create(data)
             case FlowType.RETURN:
@@ -73,6 +77,8 @@ export class FlowNodeFactory {
                 return new AssignmentFlowNodeGenerator().load(node)
             case FlowType.RANDOM:
                 return new RandomFlowNodeGenerator().load(node)
+            case FlowType.CLASS:
+                return new ClassFlowNodeGenerator().load(node)
             case FlowType.CURRENT_TIME:
                 return new CurrentTimeFlowNodeGenerator().load(node)
             case FlowType.DATA_CLASS:
@@ -104,6 +110,8 @@ export class FlowNodeFactory {
                 return new RandomFlowNodeGenerator().create(data, node as RandomFlowNode)
             case FlowType.CURRENT_TIME:
                 return new CurrentTimeFlowNodeGenerator().create(data, node as CurrentTimeFlowNode)
+            case FlowType.CLASS:
+                return new ClassFlowNodeGenerator().create(data, node as ClassFlowNode)
             case FlowType.DATA_CLASS:
                 return new DataClassFlowNodeGenerator().create(data, node as DataClassFlowNode)
             case FlowType.RETURN:

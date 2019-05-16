@@ -17,9 +17,11 @@ import {FileUtils} from "../../utils"
 import {FileModel} from "../../models/FileModel"
 import {Defaults} from "../../config"
 import {DirectoryItemType} from "../../generator/project/DirectoryItem"
+import {VariableType} from "../../models"
+import ClazzModel from "../../models/ClazzModel"
 
 export interface HomeProps {
-    onLoad: (data: { rootFileModel: FileModel, projectName: string, currentFile: FileModel }) => void
+    onLoad: (data: { rootFileModel: FileModel, projectName: string, currentFile: FileModel, bigBigNoPackage: {ReturnType: VariableType, classList: ClazzModel[]} }) => void
 }
 
 export interface HomeState {
@@ -40,7 +42,7 @@ export default class Home extends Component<HomeProps, HomeState> {
     onLoadProjectClick = () => {
         FileUtils.load((data: string) => {
             try {
-                this.props.onLoad(JSON.parse(data) as { rootFileModel: FileModel, projectName: string, currentFile: FileModel })
+                this.props.onLoad(JSON.parse(data) as { rootFileModel: FileModel, projectName: string, currentFile: FileModel, bigBigNoPackage: {ReturnType: VariableType, classList: ClazzModel[]} })
             } catch (e) {
                 console.error(e)
             }
@@ -56,7 +58,8 @@ export default class Home extends Component<HomeProps, HomeState> {
         const data = {
             rootFileModel: srcModel,
             currentFile: mainFileModel,
-            projectName: this.state.projectName
+            projectName: this.state.projectName,
+            bigBigNoPackage: {ReturnType: VariableType.NONE, classList: []}
         }
         this.props.onLoad(data)
     }

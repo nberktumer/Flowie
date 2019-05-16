@@ -2,11 +2,11 @@ import React from "react"
 import {Variable} from "../models/Variable"
 import ClassModel from "../models/ClassModel"
 import {DataClazz} from "../generator/project/DataClazz"
-import {Clazz} from "../generator/project/Clazz"
+import ClazzModel from "../models/ClazzModel"
 
 interface FlowContextInterface {
     variableList: Variable[],
-    classList: Clazz[],
+    classList: ClazzModel[],
     dataClassList: DataClazz[],
     classNameList: ClassModel[],
     packageNameList: string[]
