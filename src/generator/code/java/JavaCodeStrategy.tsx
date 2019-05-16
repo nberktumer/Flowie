@@ -18,7 +18,6 @@ import {JavaReturnFlowCode} from "./JavaReturnFlowCode";
 import {JavaFunctionalityFlowCode} from "./JavaFunctionalityFlowCode";
 import {Variable} from "../../../models/Variable";
 import {JavaCurrentTimeFlowCode} from "./JavaCurrentTimeFlowCode";
-import {KotlinUpdateVariableFlowCode} from "../kotlin/KotlinUpdateVariableFlowCode";
 import {JavaUpdateVariableFlowCode} from "./JavaUpdateVariableFlowCode";
 
 export class JavaCodeStrategy implements CodeStrategy {
@@ -57,32 +56,32 @@ export class JavaCodeStrategy implements CodeStrategy {
     }
 
     initMain(classParameters: Variable[], classReturnType: VariableType, clazz: Clazz): void {
-        const parameters: Variable[] = []
+        let parameters: Variable[]
+        let returnType: VariableType
         const mainFunctionLines = new Code(clazz.indentationCount)
         let mainFnName = ""
 
         if (clazz.type === DirectoryItemType.MAIN_CLASS) {
+            parameters = []
+            returnType = VariableType.NONE
             mainFnName = "main"
             parameters.push(
                 new Variable(
                     "args",
                     VariableType.MAIN_ARG,
-                    undefined))
+                    null))
         } else {
+            parameters = classParameters
+            returnType = classReturnType
             mainFnName = clazz.name
-            parameters.push(
-                new Variable(
-                    clazz.name,
-                    VariableType.MAIN_ARG,
-                    undefined)) //TODO CHANGE TYPE TO ARG FROM FN
         }
 
         clazz.mainFunction = new Func(
             mainFnName,
             parameters,
-            undefined,
+            ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.JAVA, returnType),
             mainFunctionLines,
-            true
+            clazz.type === DirectoryItemType.MAIN_CLASS
         )
 
         this.initFunction(clazz.mainFunction)
@@ -115,7 +114,7 @@ export class JavaCodeStrategy implements CodeStrategy {
         })
 
         let visibilityString = ""
-        if (func.isMain) {
+        if (func.isProjectMain) {
             visibilityString = "public"
         } else {
             visibilityString = "private"

@@ -6,19 +6,19 @@ export class Func {
     parameters: Variable[]
     returnType: string | undefined
     code: Code
-    isMain: boolean
+    isProjectMain: boolean
 
     constructor(
         functionName: string,
         parameters: Variable[],
         returnType: string | undefined,
         codeLines: Code,
-        isMain: boolean
+        isProjectMain: boolean
     ) {
         this.functionName = functionName
         this.parameters = parameters
         this.returnType = returnType
         this.code = codeLines
-        this.isMain = isMain
+        this.isProjectMain = isProjectMain
     }
 }

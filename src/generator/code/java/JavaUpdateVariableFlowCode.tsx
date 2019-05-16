@@ -31,7 +31,7 @@ export class JavaUpdateVariableFlowCode implements UpdateVariableFlowCode {
             variableFromCode += setFromVariable.name
         }
 
-        clazz.writeCodeToMainFunction(variableSetCode + setToVariable.name + " = " + variableFromCode)
+        clazz.writeCodeToMainFunction(variableSetCode + setToVariable.name + " = " + variableFromCode + ";")
 
         clazz.writeMainCodeFromFlow(updateVariableFlow.nextFlow())
     }

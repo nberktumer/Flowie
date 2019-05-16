@@ -77,11 +77,14 @@ export class KotlinCodeStrategy implements CodeStrategy {
     }
 
     initMain(classParameters: Variable[], classReturnType: VariableType, clazz: Clazz): void {
-        const parameters: Variable[] = []
+        let parameters: Variable[]
+        let returnType: VariableType
         const mainFunctionLines = new Code(clazz.indentationCount)
         let mainFnName = ""
 
         if (clazz.type === DirectoryItemType.MAIN_CLASS) {
+            parameters = []
+            returnType = VariableType.NONE
             mainFnName = "main"
             parameters.push(
                 new Variable(
@@ -89,15 +92,17 @@ export class KotlinCodeStrategy implements CodeStrategy {
                     VariableType.MAIN_ARG,
                     null))
         } else {
+            parameters = classParameters
+            returnType = classReturnType
             mainFnName = clazz.name
         }
 
         clazz.mainFunction = new Func(
             mainFnName,
             parameters,
-            undefined,
+            ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.KOTLIN, returnType),
             mainFunctionLines,
-            true
+            clazz.type === DirectoryItemType.MAIN_CLASS
         )
 
         this.initFunction(clazz.mainFunction)
@@ -129,7 +134,7 @@ export class KotlinCodeStrategy implements CodeStrategy {
             }
         })
 
-        if (func.isMain)
+        if (func.isProjectMain)
             func.code.insert(`@JvmStatic`)
 
         func.code.insert(`fun ${func.functionName}(${parameterString})${returnTypeString} {`)

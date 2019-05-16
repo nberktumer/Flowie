@@ -26,6 +26,8 @@ export class ProgrammingLanguageTypeConverter {
                     case VariableType.MAIN_ARG:
                         convertedType = `String[]`
                         break
+                    case VariableType.NONE:
+                        convertedType = "void"
                 }
                 break
             case ProgrammingLanguage.KOTLIN:
@@ -48,6 +50,8 @@ export class ProgrammingLanguageTypeConverter {
                     case VariableType.MAIN_ARG:
                         convertedType = `Array<String>`
                         break
+                    case VariableType.NONE:
+                        convertedType = "Unit"
                 }
                 break
         }
@@ -62,7 +66,11 @@ export class ProgrammingLanguageTypeConverter {
             case ProgrammingLanguage.JAVA:
                 switch (variable.type) {
                     case VariableType.INT:
-                        convertedConstant = variable.value
+                        if (variable.value.toString().indexOf(".") === -1) {
+                            convertedConstant = `${variable.value}`
+                        } else {
+                            convertedConstant = `(int) ${variable.value}`
+                        }
                         break
                     case VariableType.BOOLEAN:
                         console.log(variable.value)
@@ -89,7 +97,11 @@ export class ProgrammingLanguageTypeConverter {
             case ProgrammingLanguage.KOTLIN:
                 switch (variable.type) {
                     case VariableType.INT:
-                        convertedConstant = variable.value
+                        if (variable.value.toString().indexOf(".") === -1) {
+                            convertedConstant = `${variable.value}`
+                        } else {
+                            convertedConstant = `${variable.value}.toInt()`
+                        }
                         break
                     case VariableType.BOOLEAN:
                         console.log(variable.value)
@@ -125,8 +137,8 @@ export class ProgrammingLanguageTypeConverter {
     static convertArithmeticResult(programmingLanguage: ProgrammingLanguage,
                                    originalExpression: string,
                                    setVariableType: VariableType,
-                                   firstOperatorType: VariableType,
-                                   secondOperatorType: VariableType): string {
+                                   firstOperatorType: VariableType | undefined,
+                                   secondOperatorType: VariableType | undefined): string {
         let convertedResult = originalExpression
         if (setVariableType === firstOperatorType && setVariableType === secondOperatorType) return convertedResult
 
