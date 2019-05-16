@@ -48,7 +48,7 @@ export interface CodeStrategy {
 
     generateDataClazz(dataClazz: DataClazz): void
 
-    //getDataClassSignature(dataClazz: DataClazz): string
+    // getDataClassSignature(dataClazz: DataClazz): string
 
-    //getDataClassCode(dataClazz: DataClazz): Code
+    // getDataClassCode(dataClazz: DataClazz): Code
 }
