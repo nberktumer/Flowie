@@ -70,5 +70,9 @@ export default {
     argType: "Argument Type",
     return: "Return",
     assignToVariable: "Assign to Variable",
-    createNewVariable: "Create New Variable"
+    assignFromVariable: "Assign from Variable",
+    constantVariable: "Constant / Variable",
+    createNewVariable: "Create New Variable",
+    createNewAndExistingVariable: "Create New / Assign to Existing Variable",
+    updateVariable: "Update Variable"
 }

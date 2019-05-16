@@ -54,7 +54,7 @@ export class CurrentTimeProperties extends BaseProperties<CurrentTimePropertiesP
                         <TextField
                             id="data-type-selector"
                             select
-                            label={strings.assignToVariable}
+                            label={strings.createNewAndExistingVariable}
                             value={this.state.assignToVariableStatus}
                             onChange={this.handleStringChange("assignToVariableStatus")}
                             margin="normal">

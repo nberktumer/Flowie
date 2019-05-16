@@ -13,6 +13,7 @@ import {DataClassFlowModelGenerator} from "./DataClass/DataClassFlowModelGenerat
 import {ReturnFlowModelGenerator} from "./Return/ReturnFlowModelGenerator"
 import {ClassFlowModelGenerator} from "./Class/ClassFlowModelGenerator"
 import {CurrentTimeFlowModelGenerator} from "./CurrentTime/CurrentTimeFlowModelGenerator";
+import {UpdateVariableFlowModelGenerator} from "./UpdateVariable/UpdateVariableFlowModelGenerator"
 
 export class FlowModelFactory {
     private constructor() {
@@ -34,6 +35,8 @@ export class FlowModelFactory {
                 return new ArithmeticFlowModelGenerator().generate(baseFlow)
             case FlowType.ASSIGNMENT:
                 return new AssignmentFlowModelGenerator().generate(baseFlow)
+            case FlowType.UPDATE_VARIABLE:
+                return new UpdateVariableFlowModelGenerator().generate(baseFlow)
             case FlowType.RANDOM:
                 return new RandomFlowModelGenerator().generate(baseFlow)
             case FlowType.CURRENT_TIME:

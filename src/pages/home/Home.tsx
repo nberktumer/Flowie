@@ -85,7 +85,7 @@ export default class Home extends Component<HomeProps, HomeState> {
                     onClose={() => this.onNewProjectDialogClose()}
                     aria-labelledby="form-dialog-title">
                     <DialogTitle id="form-dialog-title">{strings.newProject}</DialogTitle>
-                    <DialogContent>
+                    <DialogContent style={{minWidth: 350}}>
                         <TextField
                             autoFocus
                             margin="normal"

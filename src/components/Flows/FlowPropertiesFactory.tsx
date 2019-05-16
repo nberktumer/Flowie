@@ -17,7 +17,8 @@ import {CreateClassProperties} from "./Class/CreateClassProperties"
 import {InitialFlowProperties} from "./Initial/InitialFlowProperties"
 import {ReturnFlowProperties} from "./Return/ReturnFlowProperties"
 import {ClassProperties} from "./Class/ClassProperties"
-import {CurrentTimeProperties} from "./CurrentTime/CurrentTimeProperties";
+import {CurrentTimeProperties} from "./CurrentTime/CurrentTimeProperties"
+import {UpdateVariableProperties} from "./UpdateVariable/UpdateVariableProperties"
 
 export class FlowPropertiesFactory {
     private constructor() {
@@ -37,6 +38,9 @@ export class FlowPropertiesFactory {
             case FlowType.ASSIGNMENT:
                 return (<AssignmentProperties onDataChanged={(data) => onDataChanged(data)}
                                               isValidListener={((isValid) => isValidListener(isValid))}/>)
+            case FlowType.UPDATE_VARIABLE:
+                return (<UpdateVariableProperties onDataChanged={(data) => onDataChanged(data)}
+                                                  isValidListener={((isValid) => isValidListener(isValid))}/>)
             case FlowType.INPUT:
                 return (<InputProperties onDataChanged={(data) => onDataChanged(data)}
                                          isValidListener={((isValid) => isValidListener(isValid))}/>)
@@ -72,9 +76,11 @@ export class FlowPropertiesFactory {
             case FlowType.IF:
                 return (<IfProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             case FlowType.ARITHMETIC:
-                return (<ArithmeticProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
+                return (<ArithmeticProperties readonlyType node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             case FlowType.ASSIGNMENT:
                 return (<AssignmentProperties readonlyType node={node} onDataChanged={(data) => onDataChanged(data)}/>)
+            case FlowType.UPDATE_VARIABLE:
+                return (<UpdateVariableProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             case FlowType.INPUT:
                 return (<InputProperties readonlyType node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             case FlowType.OUTPUT:
@@ -117,6 +123,7 @@ export class FlowPropertiesFactory {
             case FlowType.IF:
             case FlowType.ARITHMETIC:
             case FlowType.ASSIGNMENT:
+            case FlowType.UPDATE_VARIABLE:
             case FlowType.INPUT:
             case FlowType.OUTPUT:
             case FlowType.RETURN:

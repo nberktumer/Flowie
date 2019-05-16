@@ -39,6 +39,7 @@ export class CreateDataClassProperties extends BaseProperties<BasePropertiesProp
         if (this.props.isValidListener && nextState !== this.state) {
             this.props.isValidListener(!nextState.errorMessage
                 && !nextState.errorField
+                && nextState.name
                 && nextState.fields
                 && nextState.fields.every((item: any) => item.name && item.type))
         }

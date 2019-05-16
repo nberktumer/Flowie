@@ -21,10 +21,12 @@ import {DataClassFlowNodeGenerator} from "./DataClass/DataClassFlowNodeGenerator
 import {DataClassFlowNode} from "./DataClass/DataClassFlowNode"
 import {ReturnFlowNodeGenerator} from "./Return/ReturnFlowNodeGenerator"
 import {ReturnFlowNode} from "./Return/ReturnFlowNode"
-import {CurrentTimeFlowNodeGenerator} from "./CurrentTime/CurrentTimeFlowNodeGenerator";
-import {CurrentTimeFlowNode} from "./CurrentTime/CurrentTimeFlowNode";
+import {CurrentTimeFlowNodeGenerator} from "./CurrentTime/CurrentTimeFlowNodeGenerator"
+import {CurrentTimeFlowNode} from "./CurrentTime/CurrentTimeFlowNode"
 import {ClassFlowNodeGenerator} from "./Class/ClassFlowNodeGenerator"
 import {ClassFlowNode} from "./Class/ClassFlowNode"
+import {UpdateVariableFlowNodeGenerator} from "./UpdateVariable/UpdateVariableFlowNodeGenerator"
+import {UpdateVariableFlowNode} from "./UpdateVariable/UpdateVariableFlowNode"
 
 export class FlowNodeFactory {
     private constructor() {
@@ -46,6 +48,8 @@ export class FlowNodeFactory {
                 return new ArithmeticFlowNodeGenerator().create(data)
             case FlowType.ASSIGNMENT:
                 return new AssignmentFlowNodeGenerator().create(data)
+            case FlowType.UPDATE_VARIABLE:
+                return new UpdateVariableFlowNodeGenerator().create(data)
             case FlowType.RANDOM:
                 return new RandomFlowNodeGenerator().create(data)
             case FlowType.CURRENT_TIME:
@@ -75,6 +79,8 @@ export class FlowNodeFactory {
                 return new ArithmeticFlowNodeGenerator().load(node)
             case FlowType.ASSIGNMENT:
                 return new AssignmentFlowNodeGenerator().load(node)
+            case FlowType.UPDATE_VARIABLE:
+                return new UpdateVariableFlowNodeGenerator().load(node)
             case FlowType.RANDOM:
                 return new RandomFlowNodeGenerator().load(node)
             case FlowType.CLASS:
@@ -106,6 +112,8 @@ export class FlowNodeFactory {
                 return new ArithmeticFlowNodeGenerator().create(data, node as ArithmeticFlowNode)
             case FlowType.ASSIGNMENT:
                 return new AssignmentFlowNodeGenerator().create(data, node as AssignmentFlowNode)
+            case FlowType.UPDATE_VARIABLE:
+                return new UpdateVariableFlowNodeGenerator().create(data, node as UpdateVariableFlowNode)
             case FlowType.RANDOM:
                 return new RandomFlowNodeGenerator().create(data, node as RandomFlowNode)
             case FlowType.CURRENT_TIME:

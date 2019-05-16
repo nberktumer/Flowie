@@ -10,13 +10,22 @@ import {FlowConsumer} from "../../../stores/FlowStore"
 import {SignConverter, Validator} from "../../../utils"
 import {Rules} from "../../../config"
 
-export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
+export interface ArithmeticPropertiesProps extends BasePropertiesProps {
+    readonlyType: boolean
+}
 
-    constructor(props: BasePropertiesProps) {
+export class ArithmeticProperties extends BaseProperties<ArithmeticPropertiesProps> {
+    static defaultProps = {
+        readonlyType: false
+    }
+
+    constructor(props: ArithmeticPropertiesProps) {
         super(props)
 
         if (props.node !== undefined) {
             const node = props.node as ArithmeticFlowNode
+
+            console.log(node)
 
             this.state = {
                 variable: JSON.stringify(node.getVariable()),
@@ -25,7 +34,7 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                 operator2: JSON.stringify(node.getOperator2()),
                 isOp2Constant: node.getOperator2().name === undefined,
                 op2initialValue: node.getOperator2().value,
-                variableName: "",
+                variableName: node.getVariable().name,
                 variableType: node.getVariable().type,
                 assignToVariableStatus: "assign"
             }
@@ -65,9 +74,13 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                         <TextField
                             id="data-type-selector"
                             select
-                            label={strings.assignToVariable}
+                            fullWidth
+                            disabled={this.props.readonlyType}
+                            label={strings.createNewAndExistingVariable}
                             value={this.state.assignToVariableStatus}
-                            onChange={this.handleStringChange("assignToVariableStatus")}
+                            onChange={this.handleStringChange("assignToVariableStatus", () => {
+                                this.setState({variableName: "", variableType: VariableType.INT, variable: ""})
+                            })}
                             margin="normal">
                             <MenuItem key={"new"} value={"new"}>
                                 {strings.createNewVariable}
@@ -79,6 +92,7 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                         <TextField
                             id="variable-name-input"
                             fullWidth
+                            disabled={this.props.readonlyType}
                             label={strings.variableName}
                             error={this.state.errorField === "variableName"}
                             style={{display: this.state.assignToVariableStatus === "new" ? "flex" : "none"}}
@@ -100,6 +114,7 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                             id="variable-type-input"
                             fullWidth
                             select
+                            disabled={this.props.readonlyType}
                             label={strings.variableType}
                             error={this.state.errorField === "variableType"}
                             style={{display: this.state.assignToVariableStatus === "new" ? "flex" : "none"}}
@@ -117,6 +132,8 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                         <TextField
                             id="variable-selector"
                             select
+                            fullWidth
+                            disabled={this.props.readonlyType}
                             label={strings.assignToVariable}
                             value={this.state.variable}
                             style={{display: this.state.assignToVariableStatus === "new" ? "none" : "flex"}}
@@ -131,21 +148,9 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                             ))}
                         </TextField>
                         <TextField
-                            id="operation-selector"
-                            select
-                            label={strings.operation}
-                            value={this.state.operation}
-                            onChange={this.handleStringChange("operation")}
-                            margin="normal">
-                            {Object.keys(ArithmeticOperationType).map((value: any) => (
-                                <MenuItem key={value} value={ArithmeticOperationType[value]}>
-                                    {SignConverter.arithmeticOperation(ArithmeticOperationType[value] as ArithmeticOperationType)}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                        <TextField
                             id="first-operator-selector"
                             select
+                            fullWidth
                             label={strings.firstOperator}
                             value={this.state.operator1}
                             onChange={this.handleStringChange("operator1")}
@@ -156,6 +161,20 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                                 <MenuItem key={value.name}
                                           value={JSON.stringify(new Variable(value.name, value.type, value.value))}>
                                     {value.name}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        <TextField
+                            id="operation-selector"
+                            select
+                            fullWidth
+                            label={strings.operation}
+                            value={this.state.operation}
+                            onChange={this.handleStringChange("operation")}
+                            margin="normal">
+                            {Object.keys(ArithmeticOperationType).map((value: any) => (
+                                <MenuItem key={value} value={ArithmeticOperationType[value]}>
+                                    {SignConverter.arithmeticOperation(ArithmeticOperationType[value] as ArithmeticOperationType)}
                                 </MenuItem>
                             ))}
                         </TextField>
