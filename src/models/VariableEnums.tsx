@@ -1,3 +1,4 @@
+
 export enum VariableType {
     INT = "Int",
     LONG = "Long",

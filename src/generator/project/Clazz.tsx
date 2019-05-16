@@ -4,7 +4,7 @@ import {Code, CodeLine} from "../code/Code"
 import {BaseFlow} from "../flows/BaseFlow"
 import {Stack} from "stack-typescript"
 import {FlowModel} from "../FlowModelJSON"
-import {FlowType} from "../../models"
+import {FlowType, VariableType} from "../../models"
 import {InitialFlow} from "../flows/InitialFlow"
 import {AssignmentFlow} from "../flows/AssignmentFlow"
 import {InputFlow} from "../flows/InputFlow"
@@ -18,6 +18,8 @@ import {DataClassFlow} from "../flows/DataClassFlow";
 import {ReturnFlow} from "../flows/ReturnFlow";
 import {FunctionalityFlow} from "../flows/FunctionalityFlow";
 import {CurrentTimeFlow} from "../flows/CurrentTimeFlow";
+import {UpdateVariableFlow} from "../flows/UpdateVariableFlow";
+import {Variable} from "../../models/Variable";
 
 export class Clazz implements DirectoryItem {
     static INITIAL_ID = "INITIAL_ID"
@@ -43,14 +45,14 @@ export class Clazz implements DirectoryItem {
     globalVariableSet = new Code(this.indentationCount)
     dependencySet = new Code(this.indentationCount)
 
-    constructor(type: DirectoryItemType, name: string, flowModels: FlowModel[]) {
+    constructor(parameters: Variable[], returnType: VariableType, type: DirectoryItemType, name: string, flowModels: FlowModel[]) {
         this.type = type
         this.name = name
         this.functions = []
-        this.reset(flowModels)
+        this.reset(parameters, returnType, flowModels)
     }
 
-    reset(flowModels: FlowModel[]) {
+    reset(parameters: Variable[], returnType: VariableType, flowModels: FlowModel[]) {
         this.flowMap = this.convertToFlowObjects(flowModels)
 
         this.functions = []
@@ -66,7 +68,7 @@ export class Clazz implements DirectoryItem {
         this.dependencySet = new Code(this.indentationCount)
 
         Project.codeStrategy.initClazz(this)
-        Project.codeStrategy.initMain(this)
+        Project.codeStrategy.initMain(parameters, returnType, this)
 
         this.loopStack.push(Clazz.TERMINATION_ID)
 
@@ -149,6 +151,8 @@ export class Clazz implements DirectoryItem {
                     Project.codeStrategy.returnFlowCode.generateMain(flow, this)
                 } else if (flow instanceof FunctionalityFlow) {
                     Project.codeStrategy.functionalityFlowCode.generateMain(flow, this)
+                } else if (flow instanceof UpdateVariableFlow) {
+                    Project.codeStrategy.updateVariableFlowCode.generateMain(flow, this)
                 } else if (flow instanceof InitialFlow) {
                     this.writeMainCodeFromFlow(flow.nextFlow())
                 }
@@ -249,6 +253,7 @@ export class Clazz implements DirectoryItem {
         const baseFlowMap = new Map<string, BaseFlow>()
 
         flowModels.forEach((value) => {
+                console.log(value)
 
                 switch (value.type) {
                     case FlowType.INITIAL:
@@ -336,6 +341,22 @@ export class Clazz implements DirectoryItem {
                             value.nextFlowId,
                             value.type,
                             value.returnFlowContent
+                        ))
+                        break
+                    case FlowType.UPDATE_VARIABLE:
+                        baseFlowMap.set(value.id, new UpdateVariableFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.updateVariableFlowContent
+                        ))
+                        break
+                    case FlowType.CLASS:
+                        baseFlowMap.set(value.id, new FunctionalityFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.functionalityFlowContent
                         ))
                         break
                     /*

@@ -103,7 +103,11 @@ export class ProgrammingLanguageTypeConverter {
                         convertedConstant = `"${variable.value}"`
                         break
                     case VariableType.DOUBLE:
-                        convertedConstant = variable.value
+                        if (variable.value.toString().indexOf(".") === -1) {
+                            convertedConstant = `${variable.value}.0`
+                        } else {
+                            convertedConstant = `${variable.value}`
+                        }
                         break
                     case VariableType.LONG:
                         convertedConstant = `${variable.value}L`
@@ -116,5 +120,45 @@ export class ProgrammingLanguageTypeConverter {
         }
 
         return convertedConstant
+    }
+
+    static convertArithmeticResult(programmingLanguage: ProgrammingLanguage,
+                                   originalExpression: string,
+                                   setVariableType: VariableType,
+                                   firstOperatorType: VariableType,
+                                   secondOperatorType: VariableType): string {
+        let convertedResult = originalExpression
+        if (setVariableType === firstOperatorType && setVariableType === secondOperatorType) return convertedResult
+
+        switch (+programmingLanguage) {
+            case ProgrammingLanguage.JAVA:
+                switch (setVariableType) {
+                    case VariableType.INT:
+                        convertedResult = `(int) (${convertedResult})`
+                        break
+                    case VariableType.DOUBLE:
+                        convertedResult = `(double) (${convertedResult})`
+                        break
+                    case VariableType.LONG:
+                        convertedResult = `(long) (${convertedResult})`
+                        break
+                }
+                break
+            case ProgrammingLanguage.KOTLIN:
+                switch (setVariableType) {
+                    case VariableType.INT:
+                        convertedResult = `(${convertedResult}).toInt()`
+                        break
+                    case VariableType.DOUBLE:
+                        convertedResult = `(${convertedResult}).toDouble()`
+                        break
+                    case VariableType.LONG:
+                        convertedResult = `(${convertedResult}).toLong()`
+                        break
+                }
+                break
+        }
+
+        return convertedResult
     }
 }

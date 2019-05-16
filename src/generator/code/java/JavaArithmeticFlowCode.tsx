@@ -47,11 +47,24 @@ export class JavaArithmeticFlowCode implements ArithmeticFlowCode {
             operator2Code += arithmeticFlow.content.operator2.value
         }
 
-        if (arithmeticFlow.content.operation == ArithmeticOperationType.ROOT) {
-            clazz.writeCodeToMainFunction(`${variableSetCode}${arithmeticFlow.content.variable.name} = Math.pow(${operator1Code}, 1 / ${operator2Code});`)
+        let fullOperationCode = ""
+
+        if (arithmeticFlow.content.operation === ArithmeticOperationType.ROOT) {
+            fullOperationCode = `Math.pow(${operator1Code}, 1 / ${operator2Code});`
         } else {
-            clazz.writeCodeToMainFunction(`${variableSetCode}${arithmeticFlow.content.variable.name} = ${operator1Code} ${operationCode} ${operator2Code};`)
+            fullOperationCode = `${operator1Code} ${operationCode} ${operator2Code};`
         }
+
+        fullOperationCode = ProgrammingLanguageTypeConverter.convertArithmeticResult(
+            ProgrammingLanguage.JAVA,
+            fullOperationCode,
+            arithmeticFlow.content.variable.type,
+            arithmeticFlow.content.operator1.type,
+            arithmeticFlow.content.operator2.type
+        )
+
+        clazz.writeCodeToMainFunction(`${variableSetCode}${arithmeticFlow.content.variable.name} = ${fullOperationCode};`)
+        clazz.writeMainCodeFromFlow(arithmeticFlow.nextFlow())
     }
 
 }

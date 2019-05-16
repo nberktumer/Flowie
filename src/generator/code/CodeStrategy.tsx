@@ -12,6 +12,9 @@ import {DataClassFlowCode} from "./common/DataClassFlowCode";
 import {ReturnFlowCode} from "./common/ReturnFlowCode";
 import {FunctionalityFlowCode} from "./common/FunctionalityFlowCode";
 import {CurrentTimeFlowCode} from "./common/CurrentTimeFlowCode";
+import {UpdateVariableFlowCode} from "./common/UpdateVariableFlowCode";
+import {Variable} from "../../models/Variable";
+import {VariableType} from "../../models";
 
 export interface CodeStrategy {
     arithmeticFlowCode: ArithmeticFlowCode
@@ -25,6 +28,7 @@ export interface CodeStrategy {
     returnFlowCode: ReturnFlowCode
     functionalityFlowCode: FunctionalityFlowCode
     currentTimeFlowCode: CurrentTimeFlowCode
+    updateVariableFlowCode: UpdateVariableFlowCode
 
     initClazz(clazz: Clazz): void
 
@@ -34,7 +38,7 @@ export interface CodeStrategy {
 
     finishClazzCode(clazz: Clazz): void
 
-    initMain(clazz: Clazz): void
+    initMain(classParameters: Variable[], classReturnType: VariableType, clazz: Clazz): void
 
     finishMain(clazz: Clazz): void
 
