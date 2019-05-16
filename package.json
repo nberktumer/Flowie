@@ -19,7 +19,7 @@
         "react-router-dom": "^5.0.0",
         "react-scripts": "^3.0.1",
         "stack-typescript": "^1.0.4",
-        "nberktumer-react-diagrams": "^5.2.4",
+        "nberktumer-react-diagrams": "^5.2.7",
         "tslint": "^5.16.0",
         "typeface-roboto": "^0.0.54",
         "typescript": "^3.4.5"

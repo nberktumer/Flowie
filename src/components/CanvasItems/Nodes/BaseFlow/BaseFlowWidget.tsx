@@ -86,6 +86,10 @@ export class BaseFlowWidget extends BaseWidget<RectangleNodeWidgetProps, Rectang
                                           display: this.state.isPropertiesOpen ? "flex" : "none",
                                           left: this.state.width - 12,
                                           bottom: this.state.height - 12
+                                      }}
+                                      onWheel={(e) => {
+                                          e.preventDefault()
+                                          e.stopPropagation()
                                       }}>
                                     <CardHeader title={strings.properties} action={
                                         <IconButton onClick={() => {
@@ -116,8 +120,10 @@ export class BaseFlowWidget extends BaseWidget<RectangleNodeWidgetProps, Rectang
                                 <div className={styles.rectangleNodeTitle}>
                                     <div className={styles.rectangleNodeName}>{this.props.node.name}</div>
                                     <Icon
-                                        style={{display: (HOLDER.currentClass.type === DirectoryItemType.MAIN_CLASS && this.props.node.flowType === FlowType.INITIAL)
-                                                || (HOLDER.ReturnType === VariableType.NONE && this.props.node.flowType === FlowType.RETURN) ? "none" : "flex"}}
+                                        style={{
+                                            display: (HOLDER.currentClass.type === DirectoryItemType.MAIN_CLASS && this.props.node.flowType === FlowType.INITIAL)
+                                            || (HOLDER.ReturnType === VariableType.NONE && this.props.node.flowType === FlowType.RETURN) ? "none" : "flex"
+                                        }}
                                         onClick={(e) => this.editClickListener(e)}
                                         className={styles.editIcon}>edit</Icon>
                                 </div>

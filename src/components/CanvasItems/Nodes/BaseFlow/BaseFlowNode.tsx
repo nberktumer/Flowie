@@ -81,12 +81,14 @@ export class BaseFlowNode extends NodeModel {
         super.deSerialize(object, engine)
         this.flowType = object.flowType
         this.info = object.info
+        this.name = object.name
     }
 
     serialize() {
         return _.merge(super.serialize(), {
             flowType: this.flowType,
-            info: this.info
+            info: this.info,
+            name: this.name
         })
     }
 
