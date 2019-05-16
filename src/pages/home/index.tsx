@@ -5,13 +5,14 @@ import {FileModel} from "../../models/FileModel"
 import {DirectoryItemType} from "../../generator/project/DirectoryItem"
 import {VariableType} from "../../models"
 import ClazzModel from "../../models/ClazzModel"
+import {Clazz} from "../../generator/project/Clazz"
 
 export interface HomePageProps {
 }
 
 export interface HomePageState {
     isLoaded: boolean,
-    data: { rootFileModel: FileModel, projectName: string, currentFile: FileModel, bigBigNoPackage: { ReturnType: VariableType, classList: ClazzModel[] } }
+    data: { rootFileModel: FileModel, projectName: string, currentFile: FileModel, bigBigNoPackage: { ReturnType: VariableType, classList: ClazzModel[], currentClass: Clazz } }
 }
 
 export default class HomePage extends Component<HomePageProps, HomePageState> {
@@ -27,7 +28,7 @@ export default class HomePage extends Component<HomePageProps, HomePageState> {
                 rootFileModel: dummyFileModel,
                 projectName: "Flowie",
                 currentFile: dummyFileModel,
-                bigBigNoPackage: {classList: [], ReturnType: VariableType.NONE}
+                bigBigNoPackage: {classList: [], ReturnType: VariableType.NONE, currentClass: new Clazz(DirectoryItemType.MAIN_CLASS, "", [])}
             }
         }
     }

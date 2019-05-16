@@ -16,6 +16,8 @@ import {FlowStateConsumer} from "../../../../stores/FlowStateStore"
 import {FlowType} from "../../../../models"
 import {InitialNodeProvider} from "../../../../stores/InitialNodeStore"
 import {InitialFlowNode} from "../../../Flows/Initial/InitialFlowNode"
+import {HOLDER} from "../../../../bigNoNoPackage/ReturnTypeHolder"
+import {DirectoryItemType} from "../../../../generator/project/DirectoryItem"
 
 export interface RectangleNodeWidgetProps extends BaseWidgetProps {
     node: BaseFlowNode;
@@ -113,8 +115,10 @@ export class BaseFlowWidget extends BaseWidget<RectangleNodeWidgetProps, Rectang
                                 </Card>
                                 <div className={styles.rectangleNodeTitle}>
                                     <div className={styles.rectangleNodeName}>{this.props.node.name}</div>
-                                    <Icon onClick={(e) => this.editClickListener(e)}
-                                          className={styles.editIcon}>edit</Icon>
+                                    <Icon
+                                        style={{display: HOLDER.currentClass.type === DirectoryItemType.MAIN_CLASS ? "none" : "flex"}}
+                                        onClick={(e) => this.editClickListener(e)}
+                                        className={styles.editIcon}>edit</Icon>
                                 </div>
                                 <div className={styles.rectangleNodeInfo}
                                      style={{display: this.props.node.info ? "flex" : "none"}}>

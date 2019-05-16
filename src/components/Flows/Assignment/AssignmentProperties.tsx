@@ -55,7 +55,7 @@ export class AssignmentProperties extends BaseProperties<AssignmentPropertiesPro
                     <div className="bodyContainer">
                         <TextField
                             id="variable-name-input"
-                            style={{width: "100%"}}
+                            fullWidth
                             label={strings.variableName}
                             disabled={this.props.readonlyType}
                             error={this.state.errorField === "variableName"}
@@ -72,7 +72,7 @@ export class AssignmentProperties extends BaseProperties<AssignmentPropertiesPro
                         <TextField
                             id="data-type-selector"
                             select
-                            style={{width: "100%"}}
+                            fullWidth
                             disabled={this.props.readonlyType}
                             label={strings.dataType}
                             value={this.state.variableType}
