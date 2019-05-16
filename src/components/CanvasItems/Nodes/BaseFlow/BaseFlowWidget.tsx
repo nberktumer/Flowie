@@ -13,6 +13,9 @@ import {FlowConsumer} from "../../../../stores/FlowStore"
 import {Card, CardContent, CardHeader, IconButton} from "@material-ui/core"
 import strings from "../../../../lang"
 import {FlowStateConsumer} from "../../../../stores/FlowStateStore"
+import {FlowType} from "../../../../models"
+import {InitialNodeProvider} from "../../../../stores/InitialNodeStore"
+import {InitialFlowNode} from "../../../Flows/Initial/InitialFlowNode"
 
 export interface RectangleNodeWidgetProps extends BaseWidgetProps {
     node: BaseFlowNode;
@@ -21,7 +24,8 @@ export interface RectangleNodeWidgetProps extends BaseWidgetProps {
 export interface RectangleNodeWidgetState {
     isPropertiesOpen: boolean,
     height: number,
-    width: number
+    width: number,
+    isInitialFlow: boolean
 }
 
 export class BaseFlowWidget extends BaseWidget<RectangleNodeWidgetProps, RectangleNodeWidgetState> {
@@ -32,7 +36,8 @@ export class BaseFlowWidget extends BaseWidget<RectangleNodeWidgetProps, Rectang
         this.state = {
             isPropertiesOpen: false,
             height: 0,
-            width: 0
+            width: 0,
+            isInitialFlow: props.node.flowType === FlowType.INITIAL
         }
     }
 
@@ -55,6 +60,18 @@ export class BaseFlowWidget extends BaseWidget<RectangleNodeWidgetProps, Rectang
     }
 
     render() {
+        if (this.state.isInitialFlow) {
+            return (
+                <InitialNodeProvider value={{initialNode: this.props.node as InitialFlowNode}}>
+                    {this.renderFlow()}
+                </InitialNodeProvider>
+            )
+        } else {
+            return this.renderFlow()
+        }
+    }
+
+    renderFlow() {
         return (
             <FlowStateConsumer>
                 {(flowStateContext) => (
@@ -87,8 +104,9 @@ export class BaseFlowWidget extends BaseWidget<RectangleNodeWidgetProps, Rectang
                                                         }
                                                     }
                                                 }
-                                                this.props.node.updateNode(data)
-                                                flowStateContext.flowChangedListener()
+                                                const node = this.props.node.updateNode(data)
+                                                if (node)
+                                                    flowStateContext.flowChangedListener(node)
                                             }
                                         }, this.props.node)}
                                     </CardContent>

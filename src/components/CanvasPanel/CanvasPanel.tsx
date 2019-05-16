@@ -69,6 +69,7 @@ export default class CanvasPanel extends Component<CanvasPanelProps, CanvasPanel
             variableList: this.variableList,
             initialNodeId: this.initialNode.getID()
         }
+
         return diagram
     }
 

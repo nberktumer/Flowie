@@ -12,6 +12,7 @@ import {Clazz} from "./project/Clazz";
 import {MainClazz} from "./project/MainClazz";
 import {DataClassFlowContent} from "./flows/DataClassFlow";
 import {ReturnFlowContent} from "./flows/ReturnFlow";
+import {FunctionalityFlowContent} from "./flows/FunctionalityFlow"
 
 export class DirectoryItemModel {
     type: DirectoryItemType
@@ -50,6 +51,7 @@ export class FlowModel {
     whileFlowContent: WhileFlowContent | null = null
     ifFlowContent: IfFlowContent | null = null
     randomFlowContent: RandomFlowContent | null = null
+    functionalityFlowContent: FunctionalityFlowContent | null = null
     dataClassFlowContent: DataClassFlowContent | null = null
     returnFlowContent: ReturnFlowContent | null = null
     // forFlowContent: ForFlowContent,
@@ -117,6 +119,7 @@ export class FlowModelBuilder {
                 this.flowModel.dataClassFlowContent = flowContent
                 break;
             case FlowType.CLASS:
+                this.flowModel.functionalityFlowContent = flowContent
                 break;
             case FlowType.PACKAGE:
                 break;

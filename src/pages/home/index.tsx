@@ -3,13 +3,15 @@ import Editor from "./Editor"
 import Home from "./Home"
 import {FileModel} from "../../models/FileModel"
 import {DirectoryItemType} from "../../generator/project/DirectoryItem"
+import {VariableType} from "../../models"
+import ClazzModel from "../../models/ClazzModel"
 
 export interface HomePageProps {
 }
 
 export interface HomePageState {
     isLoaded: boolean,
-    data: { rootFileModel: FileModel, projectName: string, currentFile: FileModel }
+    data: { rootFileModel: FileModel, projectName: string, currentFile: FileModel, bigBigNoPackage: { ReturnType: VariableType, classList: ClazzModel[] } }
 }
 
 export default class HomePage extends Component<HomePageProps, HomePageState> {
@@ -21,7 +23,12 @@ export default class HomePage extends Component<HomePageProps, HomePageState> {
 
         this.state = {
             isLoaded: false,
-            data: {rootFileModel: dummyFileModel, projectName: "Flowie", currentFile: dummyFileModel}
+            data: {
+                rootFileModel: dummyFileModel,
+                projectName: "Flowie",
+                currentFile: dummyFileModel,
+                bigBigNoPackage: {classList: [], ReturnType: VariableType.NONE}
+            }
         }
     }
 

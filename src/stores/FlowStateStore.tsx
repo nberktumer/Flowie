@@ -1,11 +1,12 @@
 import React from "react"
+import {BaseFlowNode} from "../components/CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 
 interface FlowStateContextInterface {
-    flowChangedListener: () => void
+    flowChangedListener: (node: BaseFlowNode) => void
 }
 
 export const FlowStateContext = React.createContext<FlowStateContextInterface>({
-    flowChangedListener: () => {}
+    flowChangedListener: (node: BaseFlowNode) => {}
 })
 
 export const FlowStateProvider = FlowStateContext.Provider

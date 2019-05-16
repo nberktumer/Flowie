@@ -29,8 +29,8 @@ export class BaseFlowNode extends NodeModel {
     updateInfo() {
     }
 
-    updateNode(data: BasePropertiesState) {
-        FlowNodeFactory.update(this, data)
+    updateNode(data: BasePropertiesState): BaseFlowNode | undefined {
+        return FlowNodeFactory.update(this, data)
     }
 
     addOnLinkChangedListener(listener: () => void) {

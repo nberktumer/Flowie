@@ -93,7 +93,7 @@ export class ProjectTreePanel extends Component<ProjectTreePanelProps, ProjectTr
                             onClose={() => this.onClose()}>
                             <MenuItem onClick={() => this.newPackage()}>{strings.newPackage}</MenuItem>
                             {/* TODO: Change this to "new class" later */}
-                            <MenuItem onClick={() => this.newClass()}>{strings.newFunction}</MenuItem>
+                            <MenuItem onClick={() => this.newClass()}>{strings.newClass}</MenuItem>
                             <MenuItem onClick={() => this.newDataClass()}>{strings.newDataClass}</MenuItem>
                             {/*<MenuItem onClick={() => this.newFunction()}>{strings.newFunction}</MenuItem>*/}
                         </Menu>

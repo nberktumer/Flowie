@@ -60,6 +60,7 @@ export default {
     newPackage: "New Package",
     newFunction: "New Function",
     dataClass: "Data Class",
+    class: "Class",
     setProperties: "Set Properties",
     defaultValue: "Default Value",
     returnType: "Return Type",

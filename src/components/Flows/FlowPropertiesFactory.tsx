@@ -16,6 +16,7 @@ import {CreatePackageProperties} from "./Package/CreatePackageProperties"
 import {CreateClassProperties} from "./Class/CreateClassProperties"
 import {InitialFlowProperties} from "./Initial/InitialFlowProperties"
 import {ReturnFlowProperties} from "./Return/ReturnFlowProperties"
+import {ClassProperties} from "./Class/ClassProperties"
 
 export class FlowPropertiesFactory {
     private constructor() {
@@ -23,9 +24,6 @@ export class FlowPropertiesFactory {
 
     static create(type: FlowType | null | undefined, onDataChanged: (data: BasePropertiesState) => void, isValidListener: (isValid: boolean) => void): JSX.Element {
         switch (type) {
-            case FlowType.INITIAL:
-                return (<InitialFlowProperties onDataChanged={(data) => onDataChanged(data)}
-                                               isValidListener={((isValid) => isValidListener(isValid))}/>)
             case FlowType.WHILE:
                 return (<WhileProperties onDataChanged={(data) => onDataChanged(data)}
                                          isValidListener={((isValid) => isValidListener(isValid))}/>)
@@ -47,6 +45,9 @@ export class FlowPropertiesFactory {
             case FlowType.RANDOM:
                 return (<RandomProperties onDataChanged={(data) => onDataChanged(data)}
                                           isValidListener={((isValid) => isValidListener(isValid))}/>)
+            case FlowType.CLASS:
+                return (<ClassProperties onDataChanged={(data) => onDataChanged(data)}
+                                         isValidListener={((isValid) => isValidListener(isValid))}/>)
             case FlowType.DATA_CLASS:
                 return (<DataClassProperties onDataChanged={(data) => onDataChanged(data)}
                                              isValidListener={((isValid) => isValidListener(isValid))}/>)
@@ -76,6 +77,8 @@ export class FlowPropertiesFactory {
                 return (<OutputProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             case FlowType.RANDOM:
                 return (<RandomProperties readonlyType node={node} onDataChanged={(data) => onDataChanged(data)}/>)
+            case FlowType.CLASS:
+                return (<ClassProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             case FlowType.DATA_CLASS:
                 return (<DataClassProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             case FlowType.RETURN:

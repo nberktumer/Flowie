@@ -31,16 +31,19 @@ import ClassModel from "../../models/ClassModel"
 import {HOLDER} from "../../bigNoNoPackage/ReturnTypeHolder"
 import {DataClassFlowNode} from "../../components/Flows/DataClass/DataClassFlowNode"
 import {FlowStateProvider} from "../../stores/FlowStateStore"
+import {InitialFlowNode} from "../../components/Flows/Initial/InitialFlowNode"
+import {ClassFlowNode} from "../../components/Flows/Class/ClassFlowNode"
+import ClazzModel from "../../models/ClazzModel"
 
 export interface EditorProps {
-    project: { rootFileModel: FileModel, projectName: string, currentFile: FileModel }
+    project: { rootFileModel: FileModel, projectName: string, currentFile: FileModel, bigBigNoPackage: {ReturnType: VariableType, classList: ClazzModel[]} }
 }
 
 export interface EditorState {
     dialogProps: { isOpen: boolean, flowType: FlowType | null, isCreateFile?: boolean, flowPosition?: { x: number, y: number }, filePath?: string },
     generatedCode: string,
     variableList: Variable[],
-    classList: Clazz[],
+    classList: ClazzModel[],
     dataClassList: DataClazz[],
     classNameList: ClassModel[],
     packageNameList: string[],
@@ -55,13 +58,16 @@ export default class Editor extends Component<EditorProps, EditorState> {
     project: Project
     currentFileModel: FileModel
     currentClass: Clazz
+    currentClassData: ClazzModel
     hasLoadedProject = false
 
     constructor(props: EditorProps) {
         super(props)
 
         this.project = new Project(props.project.projectName)
+        Object.assign(HOLDER, props.project.bigBigNoPackage)
         this.currentClass = new MainClazz(DirectoryItemType.MAIN_CLASS, "", [])
+        this.currentClassData = new ClazzModel("", [], VariableType.NONE)
         this.state = {
             dialogProps: {isOpen: false, flowType: null},
             generatedCode: "",
@@ -102,6 +108,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
     onModalSaveClick(data: BasePropertiesState | null) {
         this.onModalClose()
+        console.log(data, this.canvasPanel.current, this.state.dialogProps, data && this.canvasPanel.current && this.state.dialogProps.flowType && this.state.dialogProps.flowPosition && !data.errorMessage && !data.errorField)
         if (data && this.canvasPanel.current && this.state.dialogProps.flowType && this.state.dialogProps.flowPosition && !data.errorMessage && !data.errorField)
             this.canvasPanel.current.addItem(this.state.dialogProps.flowType, data, this.state.dialogProps.flowPosition)
     }
@@ -120,6 +127,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
         Project.setProgrammingLanguage(this.state.selectedLanguage)
 
         const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current ? this.canvasPanel.current.initialNode : null)
+        console.log(flowModelList)
 
         this.currentClass.reset(flowModelList)
         this.currentClass.generateCode()
@@ -205,7 +213,8 @@ export default class Editor extends Component<EditorProps, EditorState> {
                 }
                 case FlowType.CLASS: {
                     const clazz = new Clazz(DirectoryItemType.CLASS, data.name, [])
-                    this.setState((prevState) => ({classList: [...prevState.classList, clazz]}))
+                    const clazzModel = new ClazzModel(data.name, this.canvasPanel.current!.initialNode.argList, this.canvasPanel.current!.initialNode.returnType)
+                    this.setState((prevState) => ({classList: [...prevState.classList, clazzModel]}))
                     this.setState((prevState) => ({classNameList: [...prevState.classNameList, new ClassModel(data.name, this.state.dialogProps.filePath!)]}))
                     currentDir.addDirectoryItem(clazz)
                     lastFileModel.children.push(new FileModel(data.name, "", DirectoryItemType.CLASS, []))
@@ -263,6 +272,8 @@ export default class Editor extends Component<EditorProps, EditorState> {
             this.setState((prevState) => ({variableList: [...prevState.variableList, (flow as BaseVariableFlowNode).getVariable()]}))
         } else if (flow instanceof DataClassFlowNode) {
             this.setState((prevState) => ({variableList: [...prevState.variableList, new Variable((flow as DataClassFlowNode).variableName, VariableType.NONE, null)]}))
+        } else if (flow instanceof ClassFlowNode && flow.variable) {
+            this.setState((prevState) => ({variableList: [...prevState.variableList, flow.variable]}))
         }
     }
 
@@ -301,7 +312,8 @@ export default class Editor extends Component<EditorProps, EditorState> {
                 const saveContent = {
                     rootFileModel: this.state.rootFileModel,
                     projectName: this.project.projectName,
-                    currentFile: this.currentFileModel
+                    currentFile: this.currentFileModel,
+                    bigBigNoPackage: HOLDER
                 }
                 FileUtils.save(`${this.project.projectName}.${Defaults.SAVE_EXTENSION}`, JSON.stringify(saveContent))
                 break
@@ -312,8 +324,9 @@ export default class Editor extends Component<EditorProps, EditorState> {
                         return
 
                     try {
-                        const loadedData = JSON.parse(data) as { rootFileModel: FileModel, projectName: string, currentFile: FileModel }
-
+                        const loadedData = JSON.parse(data) as { rootFileModel: FileModel, projectName: string, currentFile: FileModel, bigBigNoPackage: {ReturnType: VariableType, classList: ClazzModel[]} }
+                        Object.assign(HOLDER.classList, loadedData.bigBigNoPackage.classList)
+                        HOLDER.ReturnType = loadedData.bigBigNoPackage.ReturnType
                         this.project = new Project(loadedData.projectName)
                         this.setState({rootFileModel: loadedData.rootFileModel})
                         this.loadClass(loadedData.currentFile)
@@ -333,9 +346,33 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
     render() {
         return (
-            <FlowStateProvider value={{flowChangedListener: () => {
+            <FlowStateProvider value={{
+                flowChangedListener: (node: BaseFlowNode) => {
+                    if (node.flowType === FlowType.INITIAL) {
+                        const initialNode = node as InitialFlowNode
+                        if (this.canvasPanel.current) {
+                            initialNode.id = this.canvasPanel.current.initialNode.getID()
+                            initialNode.x = this.canvasPanel.current.initialNode.x
+                            initialNode.y = this.canvasPanel.current.initialNode.y
+                            Object.assign(this.canvasPanel.current.activeModel.getNode(initialNode.getID()), initialNode)
+                            this.canvasPanel.current.initialNode = initialNode
+                            this.currentClassData.argList = initialNode.argList
+                            this.currentClassData.returnType = initialNode.returnType
+                            const currentClassData = this.state.classList.map((item, index) => {
+                                if (item.name === this.currentClassData.name) {
+                                    return this.currentClassData
+                                } else {
+                                    return item
+                                }
+                            })
+                            console.log(currentClassData)
+                            Object.assign(HOLDER.classList, currentClassData)
+                            this.setState({classList: currentClassData})
+                        }
+                    }
                     this.onDiagramChanged()
-                }}}>
+                }
+            }}>
                 <FlowProvider value={{
                     variableList: this.state.variableList,
                     classList: this.state.classList,
@@ -461,6 +498,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
                     const clazz = new MainClazz(DirectoryItemType.MAIN_CLASS, fileModel.filename, flowModelList)
                     this.currentClass = clazz
+                    this.currentClassData = new ClazzModel(fileModel.filename, this.canvasPanel.current!.initialNode.argList, this.canvasPanel.current!.initialNode.returnType)
                     parent.addDirectoryItem(clazz)
                 } else {
                     parent.addDirectoryItem(new MainClazz(DirectoryItemType.MAIN_CLASS, fileModel.filename, []))
@@ -476,13 +514,16 @@ export default class Editor extends Component<EditorProps, EditorState> {
                     const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current ? this.canvasPanel.current.initialNode : null)
 
                     const clazz = new Clazz(DirectoryItemType.CLASS, fileModel.filename, flowModelList)
+                    const clazzModel = new ClazzModel(fileModel.filename, this.canvasPanel.current!.initialNode.argList, this.canvasPanel.current!.initialNode.returnType)
                     this.currentClass = clazz
-                    this.setState((prevState) => ({classList: [...prevState.classList, clazz]}))
+                    this.currentClassData = clazzModel
+                    this.setState((prevState) => ({classList: [...prevState.classList, clazzModel]}))
 
                     parent.addDirectoryItem(clazz)
                 } else {
                     const clazz = new Clazz(DirectoryItemType.CLASS, fileModel.filename, [])
-                    this.setState((prevState) => ({classList: [...prevState.classList, clazz]}))
+                    const clazzModel = new ClazzModel(fileModel.filename, this.canvasPanel.current!.initialNode.argList, this.canvasPanel.current!.initialNode.returnType)
+                    this.setState((prevState) => ({classList: [...prevState.classList, clazzModel]}))
 
                     parent.addDirectoryItem(clazz)
                 }

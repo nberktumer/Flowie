@@ -21,6 +21,8 @@ import {DataClassFlowNodeGenerator} from "./DataClass/DataClassFlowNodeGenerator
 import {DataClassFlowNode} from "./DataClass/DataClassFlowNode"
 import {ReturnFlowNodeGenerator} from "./Return/ReturnFlowNodeGenerator"
 import {ReturnFlowNode} from "./Return/ReturnFlowNode"
+import {ClassFlowNodeGenerator} from "./Class/ClassFlowNodeGenerator"
+import {ClassFlowNode} from "./Class/ClassFlowNode"
 
 export class FlowNodeFactory {
     private constructor() {
@@ -44,6 +46,8 @@ export class FlowNodeFactory {
                 return new AssignmentFlowNodeGenerator().create(data)
             case FlowType.RANDOM:
                 return new RandomFlowNodeGenerator().create(data)
+            case FlowType.CLASS:
+                return new ClassFlowNodeGenerator().create(data)
             case FlowType.DATA_CLASS:
                 return new DataClassFlowNodeGenerator().create(data)
             case FlowType.RETURN:
@@ -69,6 +73,8 @@ export class FlowNodeFactory {
                 return new AssignmentFlowNodeGenerator().load(node)
             case FlowType.RANDOM:
                 return new RandomFlowNodeGenerator().load(node)
+            case FlowType.CLASS:
+                return new ClassFlowNodeGenerator().load(node)
             case FlowType.DATA_CLASS:
                 return new DataClassFlowNodeGenerator().load(node)
             case FlowType.RETURN:
@@ -96,6 +102,8 @@ export class FlowNodeFactory {
                 return new AssignmentFlowNodeGenerator().create(data, node as AssignmentFlowNode)
             case FlowType.RANDOM:
                 return new RandomFlowNodeGenerator().create(data, node as RandomFlowNode)
+            case FlowType.CLASS:
+                return new ClassFlowNodeGenerator().create(data, node as ClassFlowNode)
             case FlowType.DATA_CLASS:
                 return new DataClassFlowNodeGenerator().create(data, node as DataClassFlowNode)
             case FlowType.RETURN:
