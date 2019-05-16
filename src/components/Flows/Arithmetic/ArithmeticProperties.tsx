@@ -115,7 +115,7 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                             ))}
                         </TextField>
                         <TextField
-                            id="data-type-selector"
+                            id="variable-selector"
                             select
                             label={strings.assignToVariable}
                             value={this.state.variable}
@@ -131,7 +131,7 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                             ))}
                         </TextField>
                         <TextField
-                            id="data-type-selector"
+                            id="operation-selector"
                             select
                             label={strings.operation}
                             value={this.state.operation}
@@ -144,7 +144,7 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                             ))}
                         </TextField>
                         <TextField
-                            id="data-type-selector"
+                            id="first-operator-selector"
                             select
                             label={strings.firstOperator}
                             value={this.state.operator1}
@@ -164,7 +164,7 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                             flexDirection: "row"
                         }}>
                             <TextField
-                                id="data-type-selector"
+                                id="second-operator-selector"
                                 select
                                 style={{flex: 1, display: this.state.isOp2Constant ? "none" : "flex"}}
                                 label={strings.secondOperator}

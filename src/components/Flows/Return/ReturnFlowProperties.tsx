@@ -16,7 +16,7 @@ export class ReturnFlowProperties extends BaseProperties<BasePropertiesProps> {
 
         if (props.node !== undefined) {
             const node = props.node as ReturnFlowNode
-            
+
             this.state = {
                 variable: JSON.stringify(node.getVariable()),
                 isConstant: node.getVariable() && !Boolean(node.getVariable()!.name),
