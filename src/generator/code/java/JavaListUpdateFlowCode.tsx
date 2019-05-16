@@ -7,7 +7,7 @@ import {ProgrammingLanguage} from "../../../models";
 export class JavaListUpdateFlowCode implements ListUpdateFlowCode {
 
     generateMain(listUpdateFlow: ListUpdateFlow, clazz: Clazz): void {
-        if (!listUpdateFlow.content) return
+        if (!listUpdateFlow.content || !listUpdateFlow.content.list.listElementType) return
 
         clazz.addDependency("import java.util.ArrayList;")
 
@@ -15,7 +15,7 @@ export class JavaListUpdateFlowCode implements ListUpdateFlowCode {
         if (listUpdateFlow.content.element.name) {
             addedElementStr = listUpdateFlow.content.element.name
         } else {
-            addedElementStr = ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.JAVA, listUpdateFlow.content.element)
+            addedElementStr = ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.JAVA, listUpdateFlow.content.element.value, listUpdateFlow.content.list.listElementType)
         }
 
         clazz.writeCodeToMainFunction(listUpdateFlow.content.list.name + ".set(" + listUpdateFlow.content.index + "," + addedElementStr + ");")

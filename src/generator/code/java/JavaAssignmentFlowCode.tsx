@@ -22,7 +22,7 @@ export class JavaAssignmentFlowCode implements AssignmentFlowCode {
         if (valueAsVariable.name) {
             assignedFromCode += valueAsVariable.name
         } else {
-            assignedFromCode = ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.JAVA, valueAsVariable)
+            assignedFromCode = ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.JAVA, valueAsVariable.value, valueAsVariable.type)
         }
 
         clazz.writeCodeToMainFunction(`${variableSetCode}${assignmentFlow.content.variable.name} = ${assignedFromCode};`)

@@ -7,11 +7,11 @@ import {ProgrammingLanguage} from "../../../models";
 export class JavaListNewFlowCode implements ListNewFlowCode {
 
     generateMain(newListFlow: ListNewFlow, clazz: Clazz): void {
-        if (!newListFlow.content) return
+        if (!newListFlow.content || !newListFlow.content.list.listElementType) return
 
         clazz.addDependency("import java.util.ArrayList;")
 
-        const varType = newListFlow.content.list.type
+        const varType = newListFlow.content.list.listElementType
         const javaType = ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.JAVA, varType)
 
         let variableSetCode = ""

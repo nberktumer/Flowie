@@ -25,7 +25,7 @@ export class JavaUpdateVariableFlowCode implements UpdateVariableFlowCode {
             if (setFromVariable.name) {
                 variableFromCode = setFromVariable.name
             } else {
-                variableFromCode = ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.JAVA, setFromVariable)
+                variableFromCode = ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.JAVA, setFromVariable.value, setFromVariable.type)
             }
         } else {
             variableFromCode += setFromVariable.name

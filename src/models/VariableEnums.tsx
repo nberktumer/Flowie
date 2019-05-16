@@ -5,6 +5,7 @@ export enum VariableType {
     STRING = "String",
     BOOLEAN = "Boolean",
     DOUBLE = "Double",
+    LIST = "List",
     NONE = "None",
     MAIN_ARG = "MainArg" // TODO FIX
 }

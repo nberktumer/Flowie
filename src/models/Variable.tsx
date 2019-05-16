@@ -5,16 +5,15 @@ export class Variable {
     name: string | undefined
     type: VariableType
     value: any
-    isList: boolean
+    listElementType: VariableType | null
 
     constructor(name: string | undefined,
                 type: VariableType,
                 value: any,
-                isList: boolean = false) {
+                listElementType: VariableType | null) {
         this.name = name
         this.type = type
         this.value = value
-        this.isList = isList
+        this.listElementType = listElementType
     }
-
 }
