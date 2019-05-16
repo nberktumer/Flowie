@@ -20,6 +20,7 @@ import {ListAddFlowCode} from "./common/ListAddFlowCode";
 import {ListRemoveFlowCode} from "./common/ListRemoveFlowCode";
 import {ListUpdateFlowCode} from "./common/ListUpdateFlowCode";
 import {ListClearFlowCode} from "./common/ListClearFlowCode";
+import {ListGetFlowCode} from "./common/ListGetFlowCode";
 
 export interface CodeStrategy {
     arithmeticFlowCode: ArithmeticFlowCode
@@ -36,6 +37,7 @@ export interface CodeStrategy {
     updateVariableFlowCode: UpdateVariableFlowCode
     listNewFlowCode: ListNewFlowCode
     listAddFlowCode: ListAddFlowCode
+    listGetFlowCode: ListGetFlowCode
     listRemoveFlowCode: ListRemoveFlowCode
     listUpdateFlowCode: ListUpdateFlowCode
     listClearFlowCode: ListClearFlowCode

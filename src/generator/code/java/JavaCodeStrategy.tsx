@@ -24,6 +24,7 @@ import {JavaListAddFlowCode} from "./JavaListAddFlowCode";
 import {JavaListRemoveFlowCode} from "./JavaListRemoveFlowCode";
 import {JavaListUpdateFlowCode} from "./JavaListUpdateFlowCode";
 import {JavaListClearFlowCode} from "./JavaListClearFlowCode";
+import {JavaListGetFlowCode} from "./JavaListGetFlowCode";
 
 export class JavaCodeStrategy implements CodeStrategy {
 
@@ -41,6 +42,7 @@ export class JavaCodeStrategy implements CodeStrategy {
     updateVariableFlowCode = new JavaUpdateVariableFlowCode()
     listNewFlowCode = new JavaListNewFlowCode()
     listAddFlowCode = new JavaListAddFlowCode()
+    listGetFlowCode = new JavaListGetFlowCode()
     listRemoveFlowCode = new JavaListRemoveFlowCode()
     listUpdateFlowCode = new JavaListUpdateFlowCode()
     listClearFlowCode = new JavaListClearFlowCode()

@@ -5,12 +5,12 @@ export class Variable {
     name: string | undefined
     type: VariableType
     value: any
-    listElementType: VariableType | null
+    listElementType: VariableType | undefined
 
     constructor(name: string | undefined,
                 type: VariableType,
                 value: any,
-                listElementType: VariableType | null) {
+                listElementType?: VariableType) {
         this.name = name
         this.type = type
         this.value = value
