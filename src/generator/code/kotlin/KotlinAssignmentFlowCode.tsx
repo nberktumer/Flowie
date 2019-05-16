@@ -18,10 +18,11 @@ export class KotlinAssignmentFlowCode implements AssignmentFlowCode {
 
         let assignedFromCode = ""
 
-        if (assignmentFlow.content.variable.value instanceof Variable) {
-            assignedFromCode += assignmentFlow.content.variable.value.name
+        const valueAsVariable = assignmentFlow.content.variable.value as Variable
+        if (valueAsVariable.name) {
+            assignedFromCode += valueAsVariable.name
         } else {
-            assignedFromCode = ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.KOTLIN, assignmentFlow.content.variable)
+            assignedFromCode = ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.KOTLIN, valueAsVariable)
         }
 
         clazz.writeCodeToMainFunction(`${variableSetCode}${assignmentFlow.content.variable.name} = ${assignedFromCode}`)
