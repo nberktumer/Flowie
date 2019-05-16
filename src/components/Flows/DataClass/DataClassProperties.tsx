@@ -97,7 +97,7 @@ export class DataClassProperties extends BaseProperties<BasePropertiesProps> {
                                 value={this.state.variableName}
                                 error={this.state.errorField === "variableName"}
                                 onChange={this.handleStringChange("variableName", (data) => {
-                                    const error = Validator.validateVariableName(data, _.merge(flowContext.variableList, flowContext.argList))
+                                    const error = Validator.validateVariableName(data, _.concat(flowContext.variableList, flowContext.argList))
                                     this.setState({
                                         errorMessage: error,
                                         errorField: error ? "variableName" : ""
@@ -175,7 +175,7 @@ export class DataClassProperties extends BaseProperties<BasePropertiesProps> {
                                                 this.props.onDataChanged(this.state)
                                             }}
                                             margin="normal">
-                                            {_.merge(flowContext.variableList, flowContext.argList).filter((value: Variable) => {
+                                            {_.concat(flowContext.variableList, flowContext.argList).filter((value: Variable) => {
                                                 return value.type === field.field.type
                                             }).map((value: Variable) => (
                                                 <MenuItem key={value.name} value={JSON.stringify(value)}>

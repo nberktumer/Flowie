@@ -73,7 +73,7 @@ export class ReturnFlowProperties extends BaseProperties<BasePropertiesProps> {
                             value={this.state.variable}
                             onChange={this.handleStringChange("variable")}
                             margin="normal">
-                            {_.merge(flowContext.variableList, flowContext.argList).map((value) => (
+                            {_.concat(flowContext.variableList, flowContext.argList).map((value) => (
                                 <MenuItem key={value.name} value={JSON.stringify(value)}>
                                     {value.name}
                                 </MenuItem>

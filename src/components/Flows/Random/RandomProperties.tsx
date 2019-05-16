@@ -63,7 +63,7 @@ export class RandomProperties extends BaseProperties<RandomPropertiesProps> {
                             value={this.state.variableName}
                             inputProps={{maxLength: Rules.MAX_VAR_LENGTH}}
                             onChange={this.handleStringChange("variableName", (data) => {
-                                const error = Validator.validateVariableName(data, _.merge(flowContext.variableList, flowContext.argList))
+                                const error = Validator.validateVariableName(data, _.concat(flowContext.variableList, flowContext.argList))
                                 this.setState({errorMessage: error, errorField: error ? "variableName" : ""}, () => {
                                     this.props.onDataChanged(this.state)
                                 })

@@ -100,7 +100,7 @@ export class ArithmeticProperties extends BaseProperties<ArithmeticPropertiesPro
                             value={this.state.variableName}
                             inputProps={{maxLength: Rules.MAX_VAR_LENGTH}}
                             onChange={(e) => {
-                                const error = Validator.validateVariableName(e.target.value, _.merge(flowContext.variableList, flowContext.argList))
+                                const error = Validator.validateVariableName(e.target.value, _.concat(flowContext.variableList, flowContext.argList))
                                 this.setState({
                                     variableName: e.target.value,
                                     variable: e.target.value ? JSON.stringify(new Variable(e.target.value, this.state.variableType, undefined)) : "",
@@ -156,7 +156,7 @@ export class ArithmeticProperties extends BaseProperties<ArithmeticPropertiesPro
                             value={this.state.operator1}
                             onChange={this.handleStringChange("operator1")}
                             margin="normal">
-                            {_.merge(flowContext.variableList, flowContext.argList).filter((value: Variable) => {
+                            {_.concat(flowContext.variableList, flowContext.argList).filter((value: Variable) => {
                                 return value.type === VariableType.INT || value.type === VariableType.DOUBLE || value.type === VariableType.LONG
                             }).map((value: Variable) => (
                                 <MenuItem key={value.name}
@@ -191,7 +191,7 @@ export class ArithmeticProperties extends BaseProperties<ArithmeticPropertiesPro
                                 value={this.state.operator2}
                                 onChange={this.handleStringChange("operator2")}
                                 margin="normal">
-                                {_.merge(flowContext.variableList, flowContext.argList).filter((value: Variable) => {
+                                {_.concat(flowContext.variableList, flowContext.argList).filter((value: Variable) => {
                                     return value.type === VariableType.INT || value.type === VariableType.DOUBLE || value.type === VariableType.LONG
                                 }).map((value: Variable) => (
                                     <MenuItem key={value.name}

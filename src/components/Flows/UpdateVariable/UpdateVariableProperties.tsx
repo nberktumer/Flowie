@@ -101,7 +101,7 @@ export class UpdateVariableProperties extends BaseProperties {
                             style={{display: this.state.assignToVariableStatus === "constant" || !this.state.variable ? "none" : "flex"}}
                             onChange={this.handleStringChange("variableValue")}
                             margin="normal">
-                            {_.merge(flowContext.variableList, flowContext.argList).filter((item: Variable) => {
+                            {_.concat(flowContext.variableList, flowContext.argList).filter((item: Variable) => {
                                 return item.type === this.state.variableType as VariableType && item.name !== this.state.variableName
                             }).map((value) => (
                                 <MenuItem key={value.name} value={JSON.stringify(value)}>

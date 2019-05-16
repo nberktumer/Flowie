@@ -193,7 +193,7 @@ export class WhileProperties extends BaseProperties<BasePropertiesProps> {
                                             this.props.onDataChanged(this.state)
                                         }}
                                         margin="normal">
-                                        {_.merge(flowContext.variableList, flowContext.argList).filter((value: Variable) => {
+                                        {_.concat(flowContext.variableList, flowContext.argList).filter((value: Variable) => {
                                             return value.type === condition.variableType
                                         }).map((value: Variable) => (
                                             <MenuItem key={value.name} value={JSON.stringify(value)}>
@@ -217,7 +217,7 @@ export class WhileProperties extends BaseProperties<BasePropertiesProps> {
                                                 this.props.onDataChanged(this.state)
                                             }}
                                             margin="normal">
-                                            {_.merge(flowContext.variableList, flowContext.argList).filter((value: Variable) => {
+                                            {_.concat(flowContext.variableList, flowContext.argList).filter((value: Variable) => {
                                                 return value.type === condition.variableType
                                             }).map((value: Variable) => (
                                                 <MenuItem key={value.name} value={JSON.stringify(value)}>

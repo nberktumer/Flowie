@@ -78,7 +78,7 @@ export class CurrentTimeProperties extends BaseProperties<CurrentTimePropertiesP
                             value={this.state.variableName}
                             inputProps={{maxLength: Rules.MAX_VAR_LENGTH}}
                             onChange={(e) => {
-                                const error = Validator.validateVariableName(e.target.value, _.merge(flowContext.variableList, flowContext.argList))
+                                const error = Validator.validateVariableName(e.target.value, _.concat(flowContext.variableList, flowContext.argList))
                                 this.setState({
                                     variableName: e.target.value,
                                     variable: e.target.value ? JSON.stringify(new Variable(e.target.value, VariableType.LONG, undefined)) : "",
