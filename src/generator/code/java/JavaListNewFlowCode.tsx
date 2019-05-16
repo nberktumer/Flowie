@@ -1,17 +1,17 @@
 import {NewListFlowCode} from "../common/NewListFlowCode";
-import {NewListFlow} from "../../flows/NewListFlow";
+import {ListNewFlow} from "../../flows/ListNewFlow";
 import {Clazz} from "../../project/Clazz";
 import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
 import {ProgrammingLanguage} from "../../../models";
 
-export class JavaNewListFlowCode implements NewListFlowCode {
+export class JavaListNewFlowCode implements NewListFlowCode {
 
-    generateMain(newListFlow: NewListFlow, clazz: Clazz): void {
+    generateMain(newListFlow: ListNewFlow, clazz: Clazz): void {
         if (!newListFlow.content) return
 
         clazz.addDependency("import java.util.ArrayList;")
 
-        const varType = newListFlow.content.list.elementType
+        const varType = newListFlow.content.list.type
         const javaType = ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.JAVA, varType)
 
         let variableSetCode = ""
