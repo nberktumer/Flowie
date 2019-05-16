@@ -34,6 +34,8 @@ import {FlowStateProvider} from "../../stores/FlowStateStore"
 import {InitialFlowNode} from "../../components/Flows/Initial/InitialFlowNode"
 import {ClassFlowNode} from "../../components/Flows/Class/ClassFlowNode"
 import ClazzModel from "../../models/ClazzModel"
+import {ArithmeticFlowNode} from "../../components/Flows/Arithmetic/ArithmeticFlowNode"
+import {CurrentTimeFlowNode} from "../../components/Flows/CurrentTime/CurrentTimeFlowNode"
 
 export interface EditorProps {
     project: { rootFileModel: FileModel, projectName: string, currentFile: FileModel, bigBigNoPackage: { ReturnType: VariableType, classList: ClazzModel[], currentClass: Clazz } }
@@ -277,6 +279,8 @@ export default class Editor extends Component<EditorProps, EditorState> {
             this.setState((prevState) => ({variableList: [...prevState.variableList, new Variable((flow as DataClassFlowNode).variableName, VariableType.NONE, null)]}))
         } else if (flow instanceof ClassFlowNode && flow.variable) {
             this.setState((prevState) => ({variableList: [...prevState.variableList, flow.variable]}))
+        } else if ((flow instanceof ArithmeticFlowNode && flow.isNewVariable) || (flow instanceof CurrentTimeFlowNode && flow.isNewVariable)) {
+            this.setState((prevState) => ({variableList: [...prevState.variableList, flow.getVariable()]}))
         }
     }
 
@@ -285,6 +289,30 @@ export default class Editor extends Component<EditorProps, EditorState> {
         if (event.entity instanceof BaseVariableFlowNode) {
             const newVariableList = this.state.variableList.filter((value) => {
                 return value.name !== (event.entity as BaseVariableFlowNode).getVariable().name
+            })
+
+            this.setState({variableList: newVariableList})
+        } else if (event.entity instanceof ClassFlowNode) {
+            const newVariableList = this.state.variableList.filter((value) => {
+                return value.name !== (event.entity as ClassFlowNode).variable.name
+            })
+
+            this.setState({variableList: newVariableList})
+        } else if (event.entity instanceof DataClassFlowNode) {
+            const newVariableList = this.state.variableList.filter((value) => {
+                return value.name !== (event.entity as DataClassFlowNode).variableName
+            })
+
+            this.setState({variableList: newVariableList})
+        } else if (event.entity instanceof ArithmeticFlowNode && event.entity.isNewVariable) {
+            const newVariableList = this.state.variableList.filter((value) => {
+                return value.name !== (event.entity as ArithmeticFlowNode).getVariable().name
+            })
+
+            this.setState({variableList: newVariableList})
+        } else if (event.entity instanceof CurrentTimeFlowNode && event.entity.isNewVariable) {
+            const newVariableList = this.state.variableList.filter((value) => {
+                return value.name !== (event.entity as CurrentTimeFlowNode).getVariable().name
             })
 
             this.setState({variableList: newVariableList})

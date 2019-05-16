@@ -23,6 +23,6 @@ export class AssignmentFlowNode extends BaseVariableFlowNode {
     }
 
     updateInfo() {
-        this.info = `${this.getVariable().name} = ${this.getVariable().value}`
+        this.info = `${this.getVariable().name} = ${this.getVariable().value.name ? this.getVariable().value.name : this.getVariable().value.value}`
     }
 }

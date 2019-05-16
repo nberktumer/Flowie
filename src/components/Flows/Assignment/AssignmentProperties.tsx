@@ -9,6 +9,7 @@ import InputWithType from "../../InputWithType/InputWithType"
 import {Validator} from "../../../utils"
 import {FlowConsumer} from "../../../stores/FlowStore"
 import _ from "lodash"
+import {Variable} from "../../../models/Variable"
 
 export interface AssignmentPropertiesProps extends BasePropertiesProps {
     readonlyType: boolean
@@ -28,13 +29,15 @@ export class AssignmentProperties extends BaseProperties<AssignmentPropertiesPro
             this.state = {
                 variableName: node.getVariable().name,
                 variableType: node.getVariable().type,
-                value: node.getVariable().value
+                value: node.getVariable().value instanceof Variable ? JSON.stringify(node.getVariable().value) : node.getVariable().value,
+                assignToVariableStatus: node.getVariable().name ? "variable" : "constant"
             }
         } else {
             this.state = {
                 variableName: "",
                 variableType: "",
-                value: ""
+                value: "",
+                assignToVariableStatus: "constant"
             }
         }
     }
@@ -89,15 +92,51 @@ export class AssignmentProperties extends BaseProperties<AssignmentPropertiesPro
                                 </MenuItem>
                             ))}
                         </TextField>
+                        <TextField
+                            id="data-type-selector"
+                            select
+                            fullWidth
+                            label={strings.constantVariable}
+                            value={this.state.assignToVariableStatus}
+                            onChange={this.handleStringChange("assignToVariableStatus")}
+                            margin="normal">
+                            <MenuItem key={"constant"} value={"constant"}>
+                                {strings.constant}
+                            </MenuItem>
+                            <MenuItem key={"variable"} value={"variable"}>
+                                {strings.variable}
+                            </MenuItem>
+                        </TextField>
                         <InputWithType
                             variableType={this.state.variableType}
                             onDataChanged={(data: any) => {
-                                this.setState({value: data.value}, () => {
+                                this.setState({value: JSON.stringify(new Variable(undefined, this.state.variableType, data.value))}, () => {
                                     this.props.onDataChanged(this.state)
                                 })
                             }}
                             value={this.state.value}
-                            hide={this.state.variableType === ""}/>
+                            hide={this.state.variableType === "" || this.state.assignToVariableStatus === "variable"}/>
+                        <TextField
+                            id="variable-selector"
+                            select
+                            fullWidth
+                            label={strings.assignFromVariable}
+                            value={this.state.value}
+                            style={{display: this.state.assignToVariableStatus === "constant" || !this.state.variableType ? "none" : "flex"}}
+                            onChange={(e) => {
+                                this.setState({
+                                    value: e.target.value
+                                }, () => this.props.onDataChanged(this.state))
+                            }}
+                            margin="normal">
+                            {_.concat(flowContext.variableList, flowContext.argList).filter((item: Variable) => {
+                                return item.type === this.state.variableType as VariableType && item.name !== this.state.variableName
+                            }).map((value) => (
+                                <MenuItem key={value.name} value={JSON.stringify(value)}>
+                                    {value.name}
+                                </MenuItem>
+                            ))}
+                        </TextField>
                     </div>
                 )}
             </FlowConsumer>
