@@ -7,9 +7,9 @@ import {ProgrammingLanguage} from "../../../models";
 export class KotlinListNewFlowCode implements ListNewFlowCode {
 
     generateMain(newListFlow: ListNewFlow, clazz: Clazz): void {
-        if (!newListFlow.content) return
+        if (!newListFlow.content || !newListFlow.content.list.listElementType) return
 
-        const varType = newListFlow.content.list.type
+        const varType = newListFlow.content.list.listElementType
         const kotlinType = ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.KOTLIN, varType)
 
         let variableSetCode = ""

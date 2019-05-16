@@ -25,7 +25,7 @@ export class KotlinUpdateVariableFlowCode implements UpdateVariableFlowCode {
             if (setFromVariable.name) {
                 variableFromCode = setFromVariable.name
             } else {
-                variableFromCode = ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.KOTLIN, setFromVariable)
+                variableFromCode = ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.KOTLIN, setFromVariable.value, setFromVariable.type)
             }
         } else {
             variableFromCode += setFromVariable.name

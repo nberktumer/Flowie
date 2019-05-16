@@ -19,7 +19,7 @@ export class KotlinDataClassFlowCode implements DataClassFlowCode {
                 if (valueAsVariable.name) {
                     variableCode += valueAsVariable.name
                 } else {
-                    variableCode += ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.KOTLIN, valueAsVariable)
+                    variableCode += ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.KOTLIN, valueAsVariable.value, valueAsVariable.type)
                 }
             } else {
                 variableCode += variable.name

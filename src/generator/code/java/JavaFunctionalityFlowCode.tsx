@@ -19,7 +19,7 @@ export class JavaFunctionalityFlowCode implements FunctionalityFlowCode {
                 if (valueAsVariable.name) {
                     variableCode += valueAsVariable.name
                 } else {
-                    variableCode += ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.JAVA, valueAsVariable)
+                    variableCode += ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.JAVA, valueAsVariable.value, valueAsVariable.type)
                 }
             } else {
                 variableCode += variable.name

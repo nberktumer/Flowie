@@ -22,7 +22,7 @@ export class KotlinAssignmentFlowCode implements AssignmentFlowCode {
         if (valueAsVariable.name) {
             assignedFromCode += valueAsVariable.name
         } else {
-            assignedFromCode = ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.KOTLIN, valueAsVariable)
+            assignedFromCode = ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.KOTLIN, valueAsVariable.value, valueAsVariable.type)
         }
 
         clazz.writeCodeToMainFunction(`${variableSetCode}${assignmentFlow.content.variable.name} = ${assignedFromCode}`)

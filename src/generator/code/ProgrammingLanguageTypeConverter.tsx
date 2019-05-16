@@ -1,5 +1,4 @@
 import {ProgrammingLanguage, VariableType} from "../../models";
-import {Variable} from "../../models/Variable";
 
 export class ProgrammingLanguageTypeConverter {
     static convertType(programmingLanguage: ProgrammingLanguage, variableType: VariableType): string {
@@ -59,35 +58,35 @@ export class ProgrammingLanguageTypeConverter {
         return convertedType
     }
 
-    static convertConstantVariable(programmingLanguage: ProgrammingLanguage, variable: Variable): string {
+    static convertConstantVariable(programmingLanguage: ProgrammingLanguage, value: any, type: VariableType): string {
         let convertedConstant = ""
 
         switch (+programmingLanguage) {
             case ProgrammingLanguage.JAVA:
-                switch (variable.type) {
+                switch (type) {
                     case VariableType.INT:
-                        if (variable.value.toString().indexOf(".") === -1) {
-                            convertedConstant = `${variable.value}`
+                        if (value.toString().indexOf(".") === -1) {
+                            convertedConstant = `${value}`
                         } else {
-                            convertedConstant = `(int) ${variable.value}`
+                            convertedConstant = `(int) ${value}`
                         }
                         break
                     case VariableType.BOOLEAN:
-                        console.log(variable.value)
-                        if (variable.value === "true") {
+                        console.log(value)
+                        if (value === "true") {
                             convertedConstant = "true"
-                        } else if (variable.value === "false") {
+                        } else if (value === "false") {
                             convertedConstant = "false"
                         }
                         break
                     case VariableType.STRING:
-                        convertedConstant = `"${variable.value}"`
+                        convertedConstant = `"${value}"`
                         break
                     case VariableType.DOUBLE:
-                        convertedConstant = variable.value
+                        convertedConstant = value
                         break
                     case VariableType.LONG:
-                        convertedConstant = `${variable.value}L`
+                        convertedConstant = `${value}L`
                         break
                     case VariableType.MAIN_ARG:
                         convertedConstant = `String[]`
@@ -95,34 +94,34 @@ export class ProgrammingLanguageTypeConverter {
                 }
                 break
             case ProgrammingLanguage.KOTLIN:
-                switch (variable.type) {
+                switch (type) {
                     case VariableType.INT:
-                        if (variable.value.toString().indexOf(".") === -1) {
-                            convertedConstant = `${variable.value}`
+                        if (value.toString().indexOf(".") === -1) {
+                            convertedConstant = `${value}`
                         } else {
-                            convertedConstant = `${variable.value}.toInt()`
+                            convertedConstant = `${value}.toInt()`
                         }
                         break
                     case VariableType.BOOLEAN:
-                        console.log(variable.value)
-                        if (variable.value === "true") {
+                        console.log(value)
+                        if (value === "true") {
                             convertedConstant = "true"
-                        } else if (variable.value === "false") {
+                        } else if (value === "false") {
                             convertedConstant = "false"
                         }
                         break
                     case VariableType.STRING:
-                        convertedConstant = `"${variable.value}"`
+                        convertedConstant = `"${value}"`
                         break
                     case VariableType.DOUBLE:
-                        if (variable.value.toString().indexOf(".") === -1) {
-                            convertedConstant = `${variable.value}.0`
+                        if (value.toString().indexOf(".") === -1) {
+                            convertedConstant = `${value}.0`
                         } else {
-                            convertedConstant = `${variable.value}`
+                            convertedConstant = `${value}`
                         }
                         break
                     case VariableType.LONG:
-                        convertedConstant = `${variable.value}L`
+                        convertedConstant = `${value}L`
                         break
                     case VariableType.MAIN_ARG:
                         convertedConstant = `String[]`
