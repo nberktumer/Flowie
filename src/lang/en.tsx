@@ -74,5 +74,17 @@ export default {
     constantVariable: "Constant / Variable",
     createNewVariable: "Create New Variable",
     createNewAndExistingVariable: "Create New / Assign to Existing Variable",
-    updateVariable: "Update Variable"
+    updateVariable: "Update Variable",
+    list: "List",
+    function: "Function",
+    conditional: "Conditional",
+    util: "Utils",
+    addToList: "Add to List",
+    removeFromList: "Remove from List",
+    updateListItem: "Update List Item",
+    clearList: "Clear List",
+    newList: "New List",
+    listToClear: "List to Clear",
+    listToUpdate: "List to Update",
+    index: "Index"
 }

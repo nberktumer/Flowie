@@ -15,8 +15,8 @@ import {BaseEvent, BaseModel} from "nberktumer-react-diagrams"
 import {BaseFlowNode} from "../../components/CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {BaseVariableFlowNode} from "../../components/Flows/Base/BaseVariableFlowNode"
 import {EditorHeader} from "../../components/EditorHeader/EditorHeader"
-import {FileUtils} from "../../utils"
-import {MenuItem, TextField} from "@material-ui/core"
+import {FileUtils, FlowCategory} from "../../utils"
+import {MenuItem, Tab, Tabs, TextField} from "@material-ui/core"
 import {FlowProvider} from "../../stores/FlowStore"
 import {Project} from "../../generator/project/Project"
 import {MainClazz} from "../../generator/project/MainClazz"
@@ -36,6 +36,7 @@ import {ClassFlowNode} from "../../components/Flows/Class/ClassFlowNode"
 import ClazzModel from "../../models/ClazzModel"
 import {ArithmeticFlowNode} from "../../components/Flows/Arithmetic/ArithmeticFlowNode"
 import {CurrentTimeFlowNode} from "../../components/Flows/CurrentTime/CurrentTimeFlowNode"
+import {NewListFlowNode} from "../../components/Flows/List/NewList/NewListFlowNode"
 
 export interface EditorProps {
     project: { rootFileModel: FileModel, projectName: string, currentFile: FileModel, bigBigNoPackage: { ReturnType: VariableType, classList: ClazzModel[], currentClass: Clazz } }
@@ -51,7 +52,8 @@ export interface EditorState {
     classNameList: ClassModel[],
     packageNameList: string[],
     rootFileModel: FileModel,
-    selectedLanguage: ProgrammingLanguage
+    selectedLanguage: ProgrammingLanguage,
+    selectedTab: any
 }
 
 export default class Editor extends Component<EditorProps, EditorState> {
@@ -81,7 +83,8 @@ export default class Editor extends Component<EditorProps, EditorState> {
             classNameList: [],
             packageNameList: [],
             rootFileModel: props.project.rootFileModel,
-            selectedLanguage: Defaults.PROGRAMMING_LANGUAGE
+            selectedLanguage: Defaults.PROGRAMMING_LANGUAGE,
+            selectedTab: 0
         }
 
         this.currentFileModel = props.project.currentFile
@@ -426,11 +429,10 @@ export default class Editor extends Component<EditorProps, EditorState> {
                                 type={this.state.dialogProps.flowType}/>
                             <EditorHeader onClickListener={(item: string) => this.onHeaderMenuClickListener(item)}/>
                             <ReflexContainer orientation="vertical">
-                                <ReflexElement minSize={250}>
+                                <ReflexElement minSize={250} flex={0.15}>
                                     <ReflexContainer orientation="horizontal" style={{height: "100vh"}}>
                                         <ReflexElement className="left-pane" flex={0.35} minSize={200}>
-                                            <div
-                                                style={{width: "100%", height: "100%", backgroundColor: "#1d1f21"}}>
+                                            <div style={{width: "100%", height: "100%", backgroundColor: "#1d1f21"}}>
                                                 <ProjectTreePanel
                                                     onDoubleClickListener={(fileModel) => this.onFileDoubleClick(fileModel)}
                                                     onNewClass={(path) => this.onNewClass(path)}
@@ -443,19 +445,36 @@ export default class Editor extends Component<EditorProps, EditorState> {
                                         <ReflexSplitter/>
 
                                         <ReflexElement className="left-pane" minSize={200}>
-                                            <ShapePanel>
-                                                {Object.values(FlowType).filter((value) => value !== FlowType.INITIAL && value !== FlowType.PACKAGE)
-                                                    .map((value) => (
-                                                        <ShapeItem key={value} model={{type: value}} name={value}/>
+                                            <div className={styles.flowContainer}>
+                                                <Tabs
+                                                    value={this.state.selectedTab}
+                                                    onChange={(e, v) => this.setState({selectedTab: v})}
+                                                    style={{
+                                                        backgroundColor: "#1d1f21",
+                                                        color: "white",
+                                                        marginBottom: 16
+
+                                                    }}
+                                                    variant="scrollable"
+                                                    indicatorColor="#fff"
+                                                    scrollButtons="auto">
+                                                    {FlowCategory.map((category, index) => (
+                                                        <Tab key={index} value={index} label={category.name}/>
                                                     ))}
-                                            </ShapePanel>
+                                                </Tabs>
+                                                <ShapePanel>
+                                                    {FlowCategory[this.state.selectedTab].flows.map((flow, index) => (
+                                                        <ShapeItem key={index} model={{type: flow}} name={flow}/>
+                                                    ))}
+                                                </ShapePanel>
+                                            </div>
                                         </ReflexElement>
                                     </ReflexContainer>
                                 </ReflexElement>
 
                                 <ReflexSplitter/>
 
-                                <ReflexElement className="middle-pane" flex={0.55} minSize={250}>
+                                <ReflexElement className="middle-pane" flex={0.6} minSize={250}>
                                     <div className={styles.paneContent}>
                                         <CanvasPanel ref={this.canvasPanel}
                                                      onItemAdded={this.onItemAdded.bind(this)}
@@ -468,7 +487,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
                                 <ReflexSplitter/>
 
-                                <ReflexElement minSize={250}>
+                                <ReflexElement minSize={250} flex={0.25}>
                                     <div style={{
                                         display: "flex",
                                         height: "100%",

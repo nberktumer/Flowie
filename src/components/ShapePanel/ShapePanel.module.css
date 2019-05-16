@@ -1,11 +1,11 @@
 .tray {
     background: #1d1f21;
-    height: 100%;
+    height: calc(100% - 64px);
     width: 100%;
 }
 
 .trayItem {
-    color: white;
+    color: black;
     padding: 5px;
     border: solid 1px;
     border-radius: 5px;
