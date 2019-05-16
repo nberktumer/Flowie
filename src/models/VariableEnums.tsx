@@ -35,6 +35,7 @@ export enum FlowType {
     RETURN = "Return",
     LIST_NEW = "New List",
     LIST_ADD = "Add to List",
+    LIST_GET = "Get from List",
     LIST_UPDATE = "Update List Item",
     LIST_REMOVE = "Remove List Item",
     LIST_CLEAR = "Clear List"
