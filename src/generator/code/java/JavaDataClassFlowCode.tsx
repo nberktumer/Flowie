@@ -2,7 +2,7 @@ import {DataClassFlowCode} from "../common/DataClassFlowCode";
 import {Clazz} from "../../project/Clazz";
 import {DataClassFlow} from "../../flows/DataClassFlow";
 import {Variable} from "../../../models/Variable";
-import {ProgrammingLanguage, VariableType} from "../../../models";
+import {ProgrammingLanguage} from "../../../models";
 import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
 
 export class JavaDataClassFlowCode implements DataClassFlowCode {

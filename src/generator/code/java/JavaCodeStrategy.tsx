@@ -18,6 +18,8 @@ import {JavaReturnFlowCode} from "./JavaReturnFlowCode";
 import {JavaFunctionalityFlowCode} from "./JavaFunctionalityFlowCode";
 import {Variable} from "../../../models/Variable";
 import {JavaCurrentTimeFlowCode} from "./JavaCurrentTimeFlowCode";
+import {KotlinUpdateVariableFlowCode} from "../kotlin/KotlinUpdateVariableFlowCode";
+import {JavaUpdateVariableFlowCode} from "./JavaUpdateVariableFlowCode";
 
 export class JavaCodeStrategy implements CodeStrategy {
 
@@ -32,6 +34,7 @@ export class JavaCodeStrategy implements CodeStrategy {
     returnFlowCode = new JavaReturnFlowCode()
     functionalityFlowCode = new JavaFunctionalityFlowCode()
     currentTimeFlowCode = new JavaCurrentTimeFlowCode()
+    updateVariableFlowCode = new JavaUpdateVariableFlowCode()
 
     initClazz(clazz: Clazz): void {
         clazz.incrementIndentation()

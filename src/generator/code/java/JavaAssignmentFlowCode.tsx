@@ -18,6 +18,7 @@ export class JavaAssignmentFlowCode implements AssignmentFlowCode {
         }
 
         clazz.writeCodeToMainFunction(`${variableSetCode}${assignmentFlow.content.variable.name} = ${contentString};`)
+        clazz.writeMainCodeFromFlow(assignmentFlow.nextFlow())
     }
 
 }

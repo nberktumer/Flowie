@@ -14,6 +14,7 @@ import {DataClassFlowContent} from "./flows/DataClassFlow";
 import {ReturnFlowContent} from "./flows/ReturnFlow";
 import {CurrentTimeFlowContent} from "./flows/CurrentTimeFlow";
 import {FunctionalityFlowContent} from "./flows/FunctionalityFlow"
+import {UpdateVariableFlowContent} from "./flows/UpdateVariableFlow";
 
 export class DirectoryItemModel {
     type: DirectoryItemType
@@ -56,6 +57,7 @@ export class FlowModel {
     functionalityFlowContent: FunctionalityFlowContent | null = null
     dataClassFlowContent: DataClassFlowContent | null = null
     returnFlowContent: ReturnFlowContent | null = null
+    updateVariableFlowContent: UpdateVariableFlowContent | null = null
     // forFlowContent: ForFlowContent,
     // ifFlowContent: IfFlowContent,
     nextFlowId: string | null
@@ -130,6 +132,9 @@ export class FlowModelBuilder {
                 break;
             case FlowType.RETURN:
                 this.flowModel.returnFlowContent = flowContent
+                break;
+            case FlowType.UPDATE_VARIABLE:
+                this.flowModel.updateVariableFlowContent = flowContent
                 break;
         }
 

@@ -18,6 +18,7 @@ import {DataClassFlow} from "../flows/DataClassFlow";
 import {ReturnFlow} from "../flows/ReturnFlow";
 import {FunctionalityFlow} from "../flows/FunctionalityFlow";
 import {CurrentTimeFlow} from "../flows/CurrentTimeFlow";
+import {UpdateVariableFlow} from "../flows/UpdateVariableFlow";
 
 export class Clazz implements DirectoryItem {
     static INITIAL_ID = "INITIAL_ID"
@@ -149,6 +150,8 @@ export class Clazz implements DirectoryItem {
                     Project.codeStrategy.returnFlowCode.generateMain(flow, this)
                 } else if (flow instanceof FunctionalityFlow) {
                     Project.codeStrategy.functionalityFlowCode.generateMain(flow, this)
+                } else if (flow instanceof UpdateVariableFlow) {
+                    Project.codeStrategy.updateVariableFlowCode.generateMain(flow, this)
                 } else if (flow instanceof InitialFlow) {
                     this.writeMainCodeFromFlow(flow.nextFlow())
                 }
@@ -249,6 +252,7 @@ export class Clazz implements DirectoryItem {
         const baseFlowMap = new Map<string, BaseFlow>()
 
         flowModels.forEach((value) => {
+                console.log(value)
 
                 switch (value.type) {
                     case FlowType.INITIAL:
@@ -336,6 +340,22 @@ export class Clazz implements DirectoryItem {
                             value.nextFlowId,
                             value.type,
                             value.returnFlowContent
+                        ))
+                        break
+                    case FlowType.UPDATE_VARIABLE:
+                        baseFlowMap.set(value.id, new UpdateVariableFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.updateVariableFlowContent
+                        ))
+                        break
+                    case FlowType.CLASS:
+                        baseFlowMap.set(value.id, new FunctionalityFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.functionalityFlowContent
                         ))
                         break
                     /*
