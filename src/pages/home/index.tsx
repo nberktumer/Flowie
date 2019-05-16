@@ -6,6 +6,7 @@ import {DirectoryItemType} from "../../generator/project/DirectoryItem"
 import {VariableType} from "../../models"
 import ClazzModel from "../../models/ClazzModel"
 import {Clazz} from "../../generator/project/Clazz"
+import {MainClazz} from "../../generator/project/MainClazz"
 
 export interface HomePageProps {
 }
@@ -28,7 +29,7 @@ export default class HomePage extends Component<HomePageProps, HomePageState> {
                 rootFileModel: dummyFileModel,
                 projectName: "Flowie",
                 currentFile: dummyFileModel,
-                bigBigNoPackage: {classList: [], ReturnType: VariableType.NONE, currentClass: new Clazz(DirectoryItemType.MAIN_CLASS, "", [])}
+                bigBigNoPackage: {classList: [], ReturnType: VariableType.NONE, currentClass: new MainClazz(DirectoryItemType.MAIN_CLASS, "", [])}
             }
         }
     }

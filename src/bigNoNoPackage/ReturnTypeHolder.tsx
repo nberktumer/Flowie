@@ -5,5 +5,5 @@ import {DirectoryItemType} from "../generator/project/DirectoryItem"
 export const HOLDER = {
     ReturnType: VariableType.NONE,
     classList: [],
-    currentClass: new Clazz(DirectoryItemType.MAIN_CLASS, "", [])
+    currentClass: new Clazz([], VariableType.NONE, DirectoryItemType.MAIN_CLASS, "", [])
 }
