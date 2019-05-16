@@ -6,7 +6,7 @@ export enum VariableType {
     BOOLEAN = "Boolean",
     DOUBLE = "Double",
     NONE = "None",
-    MAIN_ARG = "MainArg" //TODO FIX
+    MAIN_ARG = "MainArg" // TODO FIX
 }
 
 export enum ArithmeticOperationType {

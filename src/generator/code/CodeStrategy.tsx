@@ -15,7 +15,11 @@ import {CurrentTimeFlowCode} from "./common/CurrentTimeFlowCode";
 import {UpdateVariableFlowCode} from "./common/UpdateVariableFlowCode";
 import {Variable} from "../../models/Variable";
 import {VariableType} from "../../models";
-import {NewListFlowCode} from "./common/NewListFlowCode";
+import {ListNewFlowCode} from "./common/ListNewFlowCode";
+import {ListAddFlowCode} from "./common/ListAddFlowCode";
+import {ListRemoveFlowCode} from "./common/ListRemoveFlowCode";
+import {ListUpdateFlowCode} from "./common/ListUpdateFlowCode";
+import {ListClearFlowCode} from "./common/ListClearFlowCode";
 
 export interface CodeStrategy {
     arithmeticFlowCode: ArithmeticFlowCode
@@ -30,7 +34,11 @@ export interface CodeStrategy {
     functionalityFlowCode: FunctionalityFlowCode
     currentTimeFlowCode: CurrentTimeFlowCode
     updateVariableFlowCode: UpdateVariableFlowCode
-    newListFlowCode: NewListFlowCode
+    listNewFlowCode: ListNewFlowCode
+    listAddFlowCode: ListAddFlowCode
+    listRemoveFlowCode: ListRemoveFlowCode
+    listUpdateFlowCode: ListUpdateFlowCode
+    listClearFlowCode: ListClearFlowCode
 
     initClazz(clazz: Clazz): void
 

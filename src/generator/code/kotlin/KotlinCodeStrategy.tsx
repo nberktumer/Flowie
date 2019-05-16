@@ -20,6 +20,10 @@ import {Variable} from "../../../models/Variable";
 import {KotlinCurrentTimeFlowCode} from "./KotlinCurrentTimeFlowCode";
 import {KotlinUpdateVariableFlowCode} from "./KotlinUpdateVariableFlowCode";
 import {KotlinListNewFlowCode} from "./KotlinListNewFlowCode";
+import {KotlinListAddFlowCode} from "./KotlinListAddFlowCode";
+import {KotlinListRemoveFlowCode} from "./KotlinListRemoveFlowCode";
+import {KotlinListUpdateFlowCode} from "./KotlinListUpdateFlowCode";
+import {KotlinListClearFlowCode} from "./KotlinListClearFlowCode";
 
 export class KotlinCodeStrategy implements CodeStrategy {
 
@@ -35,7 +39,11 @@ export class KotlinCodeStrategy implements CodeStrategy {
     functionalityFlowCode = new KotlinFunctionalityFlowCode()
     currentTimeFlowCode = new KotlinCurrentTimeFlowCode()
     updateVariableFlowCode = new KotlinUpdateVariableFlowCode()
-    newListFlowCode = new KotlinListNewFlowCode()
+    listNewFlowCode = new KotlinListNewFlowCode()
+    listAddFlowCode = new KotlinListAddFlowCode()
+    listRemoveFlowCode = new KotlinListRemoveFlowCode()
+    listUpdateFlowCode = new KotlinListUpdateFlowCode()
+    listClearFlowCode = new KotlinListClearFlowCode()
 
     initClazz(clazz: Clazz): void {
         clazz.incrementIndentation()

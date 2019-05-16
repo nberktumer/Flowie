@@ -21,6 +21,10 @@ import {CurrentTimeFlow} from "../flows/CurrentTimeFlow";
 import {UpdateVariableFlow} from "../flows/UpdateVariableFlow";
 import {Variable} from "../../models/Variable";
 import {ListNewFlow} from "../flows/ListNewFlow";
+import {ListAddFlow} from "../flows/ListAddFlow";
+import {ListRemoveFlow} from "../flows/ListRemoveFlow";
+import {ListUpdateFlow} from "../flows/ListUpdateFlow";
+import {ListClearFlow} from "../flows/ListClearFlow";
 
 export class Clazz implements DirectoryItem {
     static INITIAL_ID = "INITIAL_ID"
@@ -155,7 +159,15 @@ export class Clazz implements DirectoryItem {
                 } else if (flow instanceof UpdateVariableFlow) {
                     Project.codeStrategy.updateVariableFlowCode.generateMain(flow, this)
                 } else if (flow instanceof ListNewFlow) {
-                    Project.codeStrategy.newListFlowCode.generateMain(flow, this)
+                    Project.codeStrategy.listNewFlowCode.generateMain(flow, this)
+                } else if (flow instanceof ListAddFlow) {
+                    Project.codeStrategy.listAddFlowCode.generateMain(flow, this)
+                } else if (flow instanceof ListRemoveFlow) {
+                    Project.codeStrategy.listRemoveFlowCode.generateMain(flow, this)
+                } else if (flow instanceof ListUpdateFlow) {
+                    Project.codeStrategy.listUpdateFlowCode.generateMain(flow, this)
+                } else if (flow instanceof ListClearFlow) {
+                    Project.codeStrategy.listClearFlowCode.generateMain(flow, this)
                 } else if (flow instanceof InitialFlow) {
                     this.writeMainCodeFromFlow(flow.nextFlow())
                 }
@@ -360,6 +372,46 @@ export class Clazz implements DirectoryItem {
                             value.nextFlowId,
                             value.type,
                             value.functionalityFlowContent
+                        ))
+                        break
+                    case FlowType.LIST_NEW:
+                        baseFlowMap.set(value.id, new ListNewFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.listNewFlowContent
+                        ))
+                        break
+                    case FlowType.LIST_ADD:
+                        baseFlowMap.set(value.id, new ListAddFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.listAddFlowContent
+                        ))
+                        break
+                    case FlowType.LIST_UPDATE:
+                        baseFlowMap.set(value.id, new ListUpdateFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.listUpdateFlowContent
+                        ))
+                        break
+                    case FlowType.LIST_REMOVE:
+                        baseFlowMap.set(value.id, new ListRemoveFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.listRemoveFlowContent
+                        ))
+                        break
+                    case FlowType.LIST_CLEAR:
+                        baseFlowMap.set(value.id, new ListClearFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.listClearFlowContent
                         ))
                         break
                     /*

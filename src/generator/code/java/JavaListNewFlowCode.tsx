@@ -1,10 +1,10 @@
-import {NewListFlowCode} from "../common/NewListFlowCode";
+import {ListNewFlowCode} from "../common/ListNewFlowCode";
 import {ListNewFlow} from "../../flows/ListNewFlow";
 import {Clazz} from "../../project/Clazz";
 import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
 import {ProgrammingLanguage} from "../../../models";
 
-export class JavaListNewFlowCode implements NewListFlowCode {
+export class JavaListNewFlowCode implements ListNewFlowCode {
 
     generateMain(newListFlow: ListNewFlow, clazz: Clazz): void {
         if (!newListFlow.content) return
