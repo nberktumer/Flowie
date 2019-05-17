@@ -16,7 +16,7 @@ export class KotlinListGetFlowCode implements ListGetFlowCode {
             }
         }
 
-        clazz.writeCodeToMainFunction(`${setString}${listGetFlow.content.setToVariable.name} = ${listGetFlow.content.list.name}.get(${listGetFlow.content.index})`)
+        clazz.writeCodeToMainFunction(`${setString}= ${listGetFlow.content.list.name}.get(${listGetFlow.content.index})`)
         clazz.writeMainCodeFromFlow(listGetFlow.nextFlow())
     }
 
