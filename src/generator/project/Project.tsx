@@ -8,7 +8,8 @@ import {KotlinCodeStrategy} from "../code/kotlin/KotlinCodeStrategy"
 import {CodeStrategyFactory} from "../code/CodeStrategyFactory"
 import {Defaults} from "../../config"
 import {DataClazz} from "./DataClazz"
-import JSZip from "jszip";
+import JSZip from "jszip"
+import {FileUtils} from "../../utils"
 
 export class Project {
     static codeStrategy: CodeStrategy = new KotlinCodeStrategy()
@@ -30,6 +31,9 @@ export class Project {
     generateClazzCodes() {
         const zip = new JSZip()
         this.recursivelyGenerateClazzCodes(this.rootDirectory, zip)
+        zip.generateAsync({type: "blob"}).then((item) => {
+            FileUtils.download(item, `${this.projectName}.zip`)
+        })
     }
 
     private recursivelyGenerateClazzCodes(directory: Directory, jsZip: JSZip) {

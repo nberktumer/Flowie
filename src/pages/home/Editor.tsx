@@ -394,6 +394,10 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
                 break
             }
+            // case "export": {
+            //     this.project.generateClazzCodes()
+            //     break
+            // }
             default:
                 return
         }

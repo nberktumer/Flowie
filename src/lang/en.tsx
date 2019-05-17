@@ -90,5 +90,6 @@ export default {
     listToUpdate: "List to Update",
     index: "Index",
     getFromList: "Get from List",
-    listSize: "List Size"
+    listSize: "List Size",
+    exportProject: "Export Project"
 }
