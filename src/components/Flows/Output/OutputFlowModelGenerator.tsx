@@ -13,7 +13,7 @@ export class OutputFlowModelGenerator extends BaseFlowModelGenerator {
         const nextFlowId = nextFlow ? nextFlow.getID() : null
 
         const flowModelBuilder = new FlowModelBuilder(FlowType.OUTPUT, outputFlow.getID(), nextFlowId)
-        flowModelBuilder.setFlowContent(new OutputFlowContent(outputFlow.getVariable()))
+        flowModelBuilder.setFlowContent(new OutputFlowContent(outputFlow.getVariable(), outputFlow.isNewLine))
         return flowModelBuilder.build()
     }
 }
