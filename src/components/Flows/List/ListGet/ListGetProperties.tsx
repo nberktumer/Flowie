@@ -33,7 +33,8 @@ export class ListGetProperties extends BaseProperties<AssignmentPropertiesProps>
                 variableName: node.variable.name,
                 assignToVariableStatus: "assign",
                 initialIndexValue: node.index,
-                index: node.index
+                index: node.index,
+                isConstant: !Boolean(node.index.name)
             }
         } else {
             this.state = {
@@ -43,7 +44,8 @@ export class ListGetProperties extends BaseProperties<AssignmentPropertiesProps>
                 variableName: "",
                 assignToVariableStatus: "assign",
                 initialIndexValue: "",
-                index: -1
+                index: "",
+                isConstant: ""
             }
         }
     }
@@ -54,7 +56,7 @@ export class ListGetProperties extends BaseProperties<AssignmentPropertiesProps>
                 && !nextState.errorField
                 && nextState.list
                 && nextState.variable
-                && nextState.index >= 0)
+                && nextState.index)
         }
     }
 
@@ -138,15 +140,52 @@ export class ListGetProperties extends BaseProperties<AssignmentPropertiesProps>
                                 </MenuItem>
                             ))}
                         </TextField>
+                        <TextField
+                            id="data-type-selector"
+                            select
+                            fullWidth
+                            label={strings.constantVariable}
+                            value={this.state.isConstant}
+                            onChange={this.handleStringChange("isConstant", () => {
+                                this.setState({index: ""})
+                            })}
+                            margin="normal">
+                            <MenuItem key={"constant"} value={"constant"}>
+                                {strings.constant}
+                            </MenuItem>
+                            <MenuItem key={"variable"} value={"variable"}>
+                                {strings.variable}
+                            </MenuItem>
+                        </TextField>
+
+                        <TextField
+                            id="variable-selector"
+                            select
+                            fullWidth
+                            style={{display: this.state.isConstant === "constant" ? "none" : "flex"}}
+                            label={strings.variable}
+                            value={this.state.index}
+                            onChange={this.handleStringChange("index")}
+                            margin="normal">
+                            {_.concat(flowContext.variableList, flowContext.argList)
+                                .filter((variable) => variable.type === VariableType.INT)
+                                .map((value) => (
+                                    <MenuItem key={value.name} value={JSON.stringify(value)}>
+                                        {value.name}
+                                    </MenuItem>
+                                ))}
+                        </TextField>
+
                         <InputWithType
                             variableType={VariableType.INT}
                             onDataChanged={(data: any) => {
-                                this.setState({index: data.value}, () => {
+                                this.setState({index: JSON.stringify(new Variable(undefined, VariableType.INT, data.value))}, () => {
                                     this.props.onDataChanged(this.state)
                                 })
                             }}
                             label={strings.index}
-                            value={this.state.initialIndexValue}/>
+                            value={this.state.initialIndexValue}
+                            hide={this.state.isConstant !== "constant"}/>
                     </div>
                 )}
             </FlowConsumer>

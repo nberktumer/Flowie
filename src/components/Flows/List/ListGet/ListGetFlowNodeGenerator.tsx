@@ -11,14 +11,15 @@ export class ListGetFlowNodeGenerator extends BaseFlowNodeGenerator {
 
         const list = JSON.parse(data.list) as Variable
         const variable = JSON.parse(data.variable) as Variable
+        const index = JSON.parse(data.index) as Variable
 
         if (node) {
             node.setList(list)
             node.setVariable(variable)
-            node.setIndex(data.index)
+            node.setIndex(index)
             return node
         } else {
-            return new ListGetFlowNode(list, variable, data.index, data.assignToVariableStatus === "new")
+            return new ListGetFlowNode(list, variable, index, data.assignToVariableStatus === "new")
         }
     }
 
