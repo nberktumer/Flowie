@@ -21,14 +21,14 @@ export class OutputProperties extends BaseProperties<BasePropertiesProps> {
                 variable: JSON.stringify(node.getVariable()),
                 isConstant: !node.getVariable().name ? "constant" : "variable",
                 initialValue: node.getVariable().value,
-                isNewLine: JSON.stringify(node.isNewLine)
+                isNewLine: node.isNewLine
             }
         } else {
             this.state = {
                 variable: "",
                 isConstant: "constant",
                 initialValue: "",
-                isNewLine: "true"
+                isNewLine: true
             }
         }
     }
@@ -55,10 +55,11 @@ export class OutputProperties extends BaseProperties<BasePropertiesProps> {
                                 <Checkbox
                                     checked={this.state.isNewLine}
                                     onChange={(e: any) => {
-                                        this.setState({isNewLine: e.target.checked})
-                                        this.props.onDataChanged(this.state)
+                                        this.setState({isNewLine: e.target.checked}, () => {
+                                            this.props.onDataChanged(this.state)
+                                        })
                                     }}
-                                    value="true"
+                                    value={true}
                                     color="primary"/>
                             }
                             label={strings.newLine}
