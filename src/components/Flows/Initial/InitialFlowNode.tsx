@@ -9,11 +9,14 @@ import * as _ from "lodash"
 export class InitialFlowNode extends BaseFlowNode {
     argList: Variable[] = []
     returnType: VariableType
+    returnListType: VariableType
 
-    constructor(returnType: VariableType, withoutPorts: boolean = false) {
+    constructor(returnType: VariableType, returnListType: VariableType = VariableType.NONE, withoutPorts: boolean = false) {
         super(FlowType.INITIAL, strings.initialFlow, NodeColors.INITIAL)
 
         this.returnType = returnType
+        this.returnListType = returnListType
+
         if (!withoutPorts) {
             this.addLoopPort(strings.recurse).setMaximumLinks(Infinity)
             this.addOutPort(strings.out).setMaximumLinks(1)
@@ -22,8 +25,11 @@ export class InitialFlowNode extends BaseFlowNode {
 
     updateInfo() {
         this.info = this.argList.map((arg) => {
-            return `${arg.name}: ${arg.type}`
-        }).join(`<br />`)
+            if (arg.type === VariableType.LIST)
+                return `${arg.name}: ${arg.type}<${arg.listElementType}>`
+            else
+                return `${arg.name}: ${arg.type}`
+        }).join(`\n`)
     }
 
     addArgument(arg: Variable) {
@@ -54,12 +60,14 @@ export class InitialFlowNode extends BaseFlowNode {
         super.deSerialize(object, engine)
         this.argList = object.argList
         this.returnType = object.returnType
+        this.returnListType = object.returnListType
     }
 
     serialize() {
         return _.merge(super.serialize(), {
             argList: this.argList,
-            returnType: this.returnType
+            returnType: this.returnType,
+            returnListType: this.returnListType
         })
     }
 

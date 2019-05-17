@@ -7,7 +7,7 @@ interface InitialNodeContextInterface {
 }
 
 export const InitialNodeContext = React.createContext<InitialNodeContextInterface>({
-    initialNode: new InitialFlowNode(VariableType.NONE, false)
+    initialNode: new InitialFlowNode(VariableType.NONE, VariableType.NONE, false)
 })
 
 export const InitialNodeProvider = InitialNodeContext.Provider

@@ -7,7 +7,7 @@ import {VariableType} from "../../models"
 export class MainClazz extends Clazz implements DirectoryItem {
 
     constructor(type: DirectoryItemType, name: string, flowModels: FlowModel[]) {
-        super([], VariableType.MAIN_ARG, type, name, flowModels)
+        super([], VariableType.MAIN_ARG, false, type, name, flowModels)
     }
 
     setMainFunction(mainFunction: Func) {

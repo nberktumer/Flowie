@@ -73,7 +73,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
         this.project = new Project(props.project.projectName)
         Object.assign(HOLDER, props.project.bigBigNoPackage)
         this.currentClass = new MainClazz(DirectoryItemType.MAIN_CLASS, "", [])
-        this.currentClassData = new ClazzModel("", [], VariableType.NONE)
+        this.currentClassData = new ClazzModel("", [], VariableType.NONE, VariableType.NONE)
         this.state = {
             dialogProps: {isOpen: false, flowType: null},
             generatedCode: "",
@@ -137,7 +137,13 @@ export default class Editor extends Component<EditorProps, EditorState> {
         const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current ? this.canvasPanel.current.initialNode : null)
         console.log(flowModelList)
 
-        this.currentClass.reset(this.currentClassData.argList, this.currentClassData.returnType, flowModelList)
+        const returnType = this.currentClassData.returnType
+        const returnListType = this.currentClassData.returnListType
+        this.currentClass.reset(
+            this.currentClassData.argList,
+            returnType === VariableType.LIST ? returnListType : returnType,
+            returnType === VariableType.LIST,
+            flowModelList)
         this.currentClass.generateCode()
         // this.project.generateClazzCodes() // TODO: use this for exporting the project
         this.setState({generatedCode: this.currentClass.getCode()})
@@ -220,8 +226,8 @@ export default class Editor extends Component<EditorProps, EditorState> {
                     break
                 }
                 case FlowType.CLASS: {
-                    const clazz = new Clazz([], VariableType.NONE, DirectoryItemType.CLASS, data.name, [])
-                    const clazzModel = new ClazzModel(data.name, this.canvasPanel.current!.initialNode.argList, this.canvasPanel.current!.initialNode.returnType)
+                    const clazz = new Clazz([], VariableType.NONE, false, DirectoryItemType.CLASS, data.name, [])
+                    const clazzModel = new ClazzModel(data.name, this.canvasPanel.current!.initialNode.argList, this.canvasPanel.current!.initialNode.returnType, this.canvasPanel.current!.initialNode.returnListType)
                     this.setState((prevState) => ({classList: [...prevState.classList, clazzModel]}))
                     this.setState((prevState) => ({classNameList: [...prevState.classNameList, new ClassModel(data.name, this.state.dialogProps.filePath!)]}))
                     currentDir.addDirectoryItem(clazz)
@@ -407,6 +413,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
                             this.canvasPanel.current.initialNode = initialNode
                             this.currentClassData.argList = initialNode.argList
                             this.currentClassData.returnType = initialNode.returnType
+                            this.currentClassData.returnListType = initialNode.returnListType
                             const currentClassData = this.state.classList.map((item, index) => {
                                 if (item.name === this.currentClassData.name) {
                                     return this.currentClassData
@@ -567,7 +574,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
                     const clazz = new MainClazz(DirectoryItemType.MAIN_CLASS, fileModel.filename, flowModelList)
                     this.currentClass = clazz
                     HOLDER.currentClass = clazz
-                    this.currentClassData = new ClazzModel(fileModel.filename, this.canvasPanel.current!.initialNode.argList, this.canvasPanel.current!.initialNode.returnType)
+                    this.currentClassData = new ClazzModel(fileModel.filename, this.canvasPanel.current!.initialNode.argList, this.canvasPanel.current!.initialNode.returnType, this.canvasPanel.current!.initialNode.returnListType)
                     parent.addDirectoryItem(clazz)
                 } else {
                     parent.addDirectoryItem(new MainClazz(DirectoryItemType.MAIN_CLASS, fileModel.filename, []))
@@ -581,9 +588,18 @@ export default class Editor extends Component<EditorProps, EditorState> {
                 if (this.currentFileModel.id === fileModel.id) {
 
                     const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current ? this.canvasPanel.current.initialNode : null)
+                    const returnType = this.canvasPanel.current!.initialNode.returnType
+                    const returnListType = this.canvasPanel.current!.initialNode.returnListType
 
-                    const clazz = new Clazz(this.canvasPanel.current!.initialNode.argList, this.canvasPanel.current!.initialNode.returnType, DirectoryItemType.CLASS, fileModel.filename, flowModelList)
-                    const clazzModel = new ClazzModel(fileModel.filename, this.canvasPanel.current!.initialNode.argList, this.canvasPanel.current!.initialNode.returnType)
+                    const clazz = new Clazz(
+                        this.canvasPanel.current!.initialNode.argList,
+                        returnType === VariableType.LIST ? returnListType : returnType,
+                        returnType === VariableType.LIST,
+                        DirectoryItemType.CLASS,
+                        fileModel.filename,
+                        flowModelList
+                    )
+                    const clazzModel = new ClazzModel(fileModel.filename, this.canvasPanel.current!.initialNode.argList, this.canvasPanel.current!.initialNode.returnType, this.canvasPanel.current!.initialNode.returnListType)
                     this.currentClass = clazz
                     HOLDER.currentClass = clazz
                     this.currentClassData = clazzModel
@@ -594,8 +610,18 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
                     parent.addDirectoryItem(clazz)
                 } else {
-                    const clazz = new Clazz(this.canvasPanel.current!.initialNode.argList, this.canvasPanel.current!.initialNode.returnType, DirectoryItemType.CLASS, fileModel.filename, [])
-                    const clazzModel = new ClazzModel(fileModel.filename, this.canvasPanel.current!.initialNode.argList, this.canvasPanel.current!.initialNode.returnType)
+                    const returnType = this.canvasPanel.current!.initialNode.returnType
+                    const returnListType = this.canvasPanel.current!.initialNode.returnListType
+
+                    const clazz = new Clazz(
+                        this.canvasPanel.current!.initialNode.argList,
+                        returnType === VariableType.LIST ? returnListType : returnType,
+                        returnType === VariableType.LIST,
+                        DirectoryItemType.CLASS,
+                        fileModel.filename,
+                        []
+                    )
+                    const clazzModel = new ClazzModel(fileModel.filename, this.canvasPanel.current!.initialNode.argList, this.canvasPanel.current!.initialNode.returnType, this.canvasPanel.current!.initialNode.returnListType)
                     this.setState((prevState) => ({classList: [...prevState.classList, clazzModel]}))
 
                     parent.addDirectoryItem(clazz)

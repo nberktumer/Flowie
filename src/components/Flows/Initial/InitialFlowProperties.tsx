@@ -27,16 +27,19 @@ export class InitialFlowProperties extends BaseProperties<BasePropertiesProps> {
                 args: node.argList.map((item) => {
                     return {
                         name: item.name,
-                        type: item.type
+                        type: item.type,
+                        listType: item.listElementType
                     }
                 }),
                 returnType: node.returnType,
+                returnListType: node.returnListType,
                 expanded: ""
             }
         } else {
             this.state = {
                 args: [],
                 returnType: VariableType.NONE,
+                returnListType: VariableType.NONE,
                 expanded: ""
 
             }
@@ -56,7 +59,10 @@ export class InitialFlowProperties extends BaseProperties<BasePropertiesProps> {
         if (!arg || !arg.name || !arg.type)
             return strings.invalid
 
-        return `${arg.name}: ${arg.type}`
+        if (arg.type === VariableType.LIST && arg.listType)
+            return `${arg.name}: ${arg.type}<${arg.listType}>`
+        else
+            return `${arg.name}: ${arg.type}`
     }
 
     render() {
@@ -70,7 +76,24 @@ export class InitialFlowProperties extends BaseProperties<BasePropertiesProps> {
                     value={this.state.returnType}
                     onChange={this.handleStringChange("returnType")}
                     margin="normal">
-                    {Object.keys(VariableType).filter((item) => item !== VariableType.MAIN_ARG).map((value: any) => (
+                    {Object.keys(VariableType).filter((item: any) => VariableType[item] !== VariableType.MAIN_ARG).map((value: any) => (
+                        <MenuItem key={value} value={VariableType[value]}>
+                            {VariableType[value]}
+                        </MenuItem>
+                    ))}
+                </TextField>
+                <TextField
+                    fullWidth
+                    id="return-type-selector"
+                    select
+                    style={{display: this.state.returnType === VariableType.LIST ? "flex" : "none"}}
+                    label={strings.returnListType}
+                    value={this.state.returnListType}
+                    onChange={this.handleStringChange("returnListType")}
+                    margin="normal">
+                    {Object.keys(VariableType).filter((item: any) => {
+                        return VariableType[item] !== VariableType.MAIN_ARG && VariableType[item] !== VariableType.LIST && VariableType[item] !== VariableType.NONE
+                    }).map((value: any) => (
                         <MenuItem key={value} value={VariableType[value]}>
                             {VariableType[value]}
                         </MenuItem>
@@ -88,7 +111,8 @@ export class InitialFlowProperties extends BaseProperties<BasePropertiesProps> {
                     onClick={() => {
                         this.state.args.push({
                             name: "",
-                            type: ""
+                            type: "",
+                            listType: ""
                         })
                         this.forceUpdate()
                     }}>
@@ -146,7 +170,30 @@ export class InitialFlowProperties extends BaseProperties<BasePropertiesProps> {
                                     this.props.onDataChanged(this.state)
                                 }}
                                 margin="normal">
-                                {Object.keys(VariableType).filter((item) => item !== VariableType.MAIN_ARG).map((value: any) => (
+                                {Object.keys(VariableType).filter((item: any) => {
+                                    return VariableType[item] !== VariableType.MAIN_ARG && VariableType[item] !== VariableType.NONE
+                                }).map((value: any) => (
+                                    <MenuItem key={value} value={VariableType[value]}>
+                                        {VariableType[value]}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                            <TextField
+                                id="arg-type-selector"
+                                fullWidth
+                                select
+                                style={{display: this.state.args[index].type === VariableType.LIST ? "flex" : "none"}}
+                                label={strings.argListType}
+                                value={this.state.args[index].listType}
+                                onChange={(e: any) => {
+                                    this.state.args[index].listType = e.target.value
+                                    this.setState({args: this.state.args})
+                                    this.props.onDataChanged(this.state)
+                                }}
+                                margin="normal">
+                                {Object.keys(VariableType).filter((item: any) => {
+                                    return VariableType[item] !== VariableType.MAIN_ARG && VariableType[item] !== VariableType.LIST && VariableType[item] !== VariableType.NONE
+                                }).map((value: any) => (
                                     <MenuItem key={value} value={VariableType[value]}>
                                         {VariableType[value]}
                                     </MenuItem>

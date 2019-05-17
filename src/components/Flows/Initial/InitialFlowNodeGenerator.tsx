@@ -7,12 +7,16 @@ import {VariableType} from "../../../models"
 
 export class InitialFlowNodeGenerator extends BaseFlowNodeGenerator {
     create(data?: BasePropertiesState, node?: InitialFlowNode): BaseFlowNode | undefined {
-        const initialFlow = new InitialFlowNode(data && data.returnType ? data.returnType : VariableType.NONE)
+        const initialFlow = new InitialFlowNode(data && data.returnType ? data.returnType : VariableType.NONE, data && data.returnListType ? data.returnListType : VariableType.NONE)
 
         if (data && data.args) {
             initialFlow.removeAllArguments()
             data.args.forEach((item: any) => {
-                initialFlow.addArgument(new Variable(item.name, item.type, undefined))
+                if (item.type === VariableType.LIST) {
+                    initialFlow.addArgument(new Variable(item.name, item.type, undefined, item.listType))
+                } else {
+                    initialFlow.addArgument(new Variable(item.name, item.type, undefined))
+                }
             })
         }
 
@@ -20,6 +24,6 @@ export class InitialFlowNodeGenerator extends BaseFlowNodeGenerator {
     }
 
     load(node: BaseFlowNode): BaseFlowNode {
-        return new InitialFlowNode((node as InitialFlowNode).returnType, true)
+        return new InitialFlowNode((node as InitialFlowNode).returnType, (node as InitialFlowNode).returnListType, true)
     }
 }
