@@ -8,11 +8,13 @@ import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 
 export class OutputFlowNode extends BaseFlowNode {
     private variable: Variable
+    isNewLine: boolean
 
-    constructor(variable: Variable, withoutPorts: boolean = false) {
+    constructor(variable: Variable, isNewLine: boolean, withoutPorts: boolean = false) {
         super(FlowType.OUTPUT, strings.output, NodeColors.IF)
 
         this.variable = variable
+        this.isNewLine = isNewLine
         this.setVariable(variable)
 
         if (!withoutPorts) {
@@ -33,11 +35,13 @@ export class OutputFlowNode extends BaseFlowNode {
     deSerialize(object: any, engine: DiagramEngine) {
         super.deSerialize(object, engine)
         this.variable = object.variable
+        this.isNewLine = object.isNewLine
     }
 
     serialize() {
         return _.merge(super.serialize(), {
-            variable: this.variable
+            variable: this.variable,
+            isNewLine: this.isNewLine
         })
     }
 

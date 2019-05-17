@@ -91,5 +91,6 @@ export default {
     index: "Index",
     getFromList: "Get from List",
     listSize: "List Size",
-    exportProject: "Export Project"
+    exportProject: "Export Project",
+    newLine: "New Line"
 }
