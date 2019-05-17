@@ -7,8 +7,8 @@ import {DiagramEngine} from "nberktumer-react-diagrams"
 import * as _ from "lodash"
 
 export class CurrentTimeFlowNode extends BaseFlowNode {
-    private variable: Variable
     isNewVariable: boolean
+    private variable: Variable
 
     constructor(variable: Variable, isNewVariable: boolean, withoutPorts: boolean = false) {
         super(FlowType.CURRENT_TIME, strings.variable + " (" + strings.currentTime + ")", NodeColors.CURRENT_TIME)
@@ -38,11 +38,13 @@ export class CurrentTimeFlowNode extends BaseFlowNode {
 
     deSerialize(object: any, engine: DiagramEngine) {
         super.deSerialize(object, engine)
+        this.variable = object.variable
         this.isNewVariable = object.isNewVariable
     }
 
     serialize() {
         return _.merge(super.serialize(), {
+            variable: this.variable,
             isNewVariable: this.isNewVariable
         })
     }
