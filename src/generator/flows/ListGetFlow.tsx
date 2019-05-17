@@ -44,12 +44,12 @@ export class ListGetFlow implements BaseFlow {
 export class ListGetFlowContent {
     setToVariable: Variable
     list: Variable
-    index: number
+    index: Variable
 
     constructor(
         setToVariable: Variable,
         list: Variable,
-        index: number
+        index: Variable
     ) {
         this.setToVariable = setToVariable
         this.list = list
