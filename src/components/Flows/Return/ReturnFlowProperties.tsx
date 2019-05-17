@@ -8,6 +8,7 @@ import {Variable} from "../../../models/Variable"
 import {FlowConsumer} from "../../../stores/FlowStore"
 import _ from "lodash"
 import {ReturnFlowNode} from "./ReturnFlowNode"
+import {HOLDER} from "../../../bigNoNoPackage/ReturnTypeHolder"
 
 export class ReturnFlowProperties extends BaseProperties<BasePropertiesProps> {
 
@@ -73,7 +74,9 @@ export class ReturnFlowProperties extends BaseProperties<BasePropertiesProps> {
                             value={this.state.variable}
                             onChange={this.handleStringChange("variable")}
                             margin="normal">
-                            {_.concat(flowContext.variableList, flowContext.argList).map((value) => (
+                            {_.concat(flowContext.variableList, flowContext.argList).filter((item: Variable) => {
+                                return item.type === HOLDER.ReturnType
+                            }).map((value) => (
                                 <MenuItem key={value.name} value={JSON.stringify(value)}>
                                     {value.name}
                                 </MenuItem>
@@ -81,7 +84,7 @@ export class ReturnFlowProperties extends BaseProperties<BasePropertiesProps> {
                         </TextField>
 
                         <InputWithType
-                            variableType={VariableType.STRING}
+                            variableType={HOLDER.ReturnType}
                             onDataChanged={(data: any) => {
                                 this.setState({variable: JSON.stringify(new Variable(undefined, VariableType.STRING, data.value))}, () => {
                                     this.props.onDataChanged(this.state)
