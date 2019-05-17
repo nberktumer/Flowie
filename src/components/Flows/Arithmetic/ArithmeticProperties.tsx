@@ -118,7 +118,9 @@ export class ArithmeticProperties extends BaseProperties<ArithmeticPropertiesPro
                             error={this.state.errorField === "variableType"}
                             style={{display: this.state.assignToVariableStatus === "new" ? "flex" : "none"}}
                             value={this.state.variableType}
-                            onChange={this.handleStringChange("variableType")}
+                            onChange={(e) => {
+                                this.setState({variableType: e.target.value, variable: JSON.stringify(new Variable(this.state.variableName, e.target.value ? e.target.value as VariableType : VariableType.NONE, undefined))}, () => this.props.onDataChanged(this.state))
+                            }}
                             margin="normal">
                             {Object.keys(VariableType).filter((item: any) => {
                                 return VariableType[item] === VariableType.INT || VariableType[item] === VariableType.DOUBLE || VariableType[item] === VariableType.LONG

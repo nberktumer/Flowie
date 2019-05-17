@@ -1,5 +1,5 @@
 import React from "react"
-import {MenuItem, TextField} from "@material-ui/core"
+import {Checkbox, FormControlLabel, MenuItem, TextField} from "@material-ui/core"
 import strings from "../../../lang"
 import {BaseProperties, BasePropertiesProps, BasePropertiesState} from "../Base/BaseProperties"
 import {OutputFlowNode} from "./OutputFlowNode"
@@ -20,14 +20,15 @@ export class OutputProperties extends BaseProperties<BasePropertiesProps> {
             this.state = {
                 variable: JSON.stringify(node.getVariable()),
                 isConstant: !node.getVariable().name ? "constant" : "variable",
-                initialValue: node.getVariable().value
-
+                initialValue: node.getVariable().value,
+                isNewLine: JSON.stringify(node.isNewLine)
             }
         } else {
             this.state = {
                 variable: "",
                 isConstant: "constant",
-                initialValue: ""
+                initialValue: "",
+                isNewLine: "true"
             }
         }
     }
@@ -47,6 +48,22 @@ export class OutputProperties extends BaseProperties<BasePropertiesProps> {
             <FlowConsumer>
                 {(flowContext) => (
                     <div className="bodyContainer">
+
+
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={this.state.isNewLine}
+                                    onChange={(e: any) => {
+                                        this.setState({isNewLine: e.target.checked})
+                                        this.props.onDataChanged(this.state)
+                                    }}
+                                    value="true"
+                                    color="primary"/>
+                            }
+                            label={strings.newLine}
+                        />
+
                         <TextField
                             id="data-type-selector"
                             select
@@ -90,7 +107,7 @@ export class OutputProperties extends BaseProperties<BasePropertiesProps> {
                             }}
                             value={this.state.initialValue}
                             hide={this.state.isConstant !== "constant"}/>
-                        </div>
+                    </div>
                 )}
             </FlowConsumer>
         )
