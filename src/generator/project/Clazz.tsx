@@ -52,14 +52,14 @@ export class Clazz implements DirectoryItem {
     globalVariableSet = new Code(this.indentationCount)
     dependencySet = new Code(this.indentationCount)
 
-    constructor(parameters: Variable[], returnType: VariableType, type: DirectoryItemType, name: string, flowModels: FlowModel[]) {
+    constructor(parameters: Variable[], returnType: VariableType, returnTypeIsArray: boolean, type: DirectoryItemType, name: string, flowModels: FlowModel[]) {
         this.type = type
         this.name = name
         this.functions = []
-        this.reset(parameters, returnType, flowModels)
+        this.reset(parameters, returnType, returnTypeIsArray, flowModels)
     }
 
-    reset(parameters: Variable[], returnType: VariableType, flowModels: FlowModel[]) {
+    reset(parameters: Variable[], returnType: VariableType, returnTypeIsArray: boolean, flowModels: FlowModel[]) {
         this.flowMap = this.convertToFlowObjects(flowModels)
 
         this.functions = []
@@ -75,7 +75,7 @@ export class Clazz implements DirectoryItem {
         this.dependencySet = new Code(this.indentationCount)
 
         Project.codeStrategy.initClazz(this)
-        Project.codeStrategy.initMain(parameters, returnType, this)
+        Project.codeStrategy.initMain(parameters, returnType, returnTypeIsArray, this)
 
         this.loopStack.push(Clazz.TERMINATION_ID)
 

@@ -52,7 +52,7 @@ export interface CodeStrategy {
 
     finishClazzCode(clazz: Clazz): void
 
-    initMain(classParameters: Variable[], classReturnType: VariableType, clazz: Clazz): void
+    initMain(classParameters: Variable[], classReturnType: VariableType, returnTypeIsArray: boolean, clazz: Clazz): void
 
     finishMain(clazz: Clazz): void
 

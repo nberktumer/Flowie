@@ -90,7 +90,7 @@ export class KotlinCodeStrategy implements CodeStrategy {
         clazz.classFinishCode.insert("}")
     }
 
-    initMain(classParameters: Variable[], classReturnType: VariableType, clazz: Clazz): void {
+    initMain(classParameters: Variable[], classReturnType: VariableType, returnTypeIsArray: boolean, clazz: Clazz): void {
         let parameters: Variable[]
         let returnType: VariableType
         const mainFunctionLines = new Code(clazz.indentationCount)
