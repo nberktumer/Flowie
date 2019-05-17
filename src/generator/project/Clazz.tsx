@@ -196,8 +196,12 @@ export class Clazz implements DirectoryItem {
             throw new Error("Main function not defined!")
         }
 
+        const dependencyLineSet = new Set<string>()
         this.dependencySet.lines.forEach((dependencyLine) => {
-            this.generatedCode.push(this.createLineWithSpacing(dependencyLine))
+            if (!dependencyLineSet.has(dependencyLine.content)) {
+                dependencyLineSet.add(dependencyLine.content)
+                this.generatedCode.push(this.createLineWithSpacing(dependencyLine))
+            }
         })
 
         if (this.dependencySet.lines.length > 0) {
@@ -208,8 +212,12 @@ export class Clazz implements DirectoryItem {
             this.generatedCode.push(this.createLineWithSpacing(classLine))
         })
 
+        const globalVariableSet = new Set<string>()
         this.globalVariableSet.lines.forEach((globalVariableLine) => {
-            this.generatedCode.push(this.createLineWithSpacing(globalVariableLine))
+            if (!globalVariableSet.has(globalVariableLine.content)) {
+                globalVariableSet.add(globalVariableLine.content)
+                this.generatedCode.push(this.createLineWithSpacing(globalVariableLine))
+            }
         })
 
         if (this.globalVariableSet.lines.length > 0) {

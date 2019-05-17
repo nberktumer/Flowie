@@ -106,7 +106,7 @@ export class JavaCodeStrategy implements CodeStrategy {
             clazz.type === DirectoryItemType.MAIN_CLASS
         )
 
-        this.initFunction(clazz.mainFunction)
+        this.initFunction(clazz.mainFunction, clazz)
     }
 
     finishMain(clazz: Clazz): void {
@@ -118,7 +118,7 @@ export class JavaCodeStrategy implements CodeStrategy {
         clazz.mainFunction.code.insert("")
     }
 
-    initFunction(func: Func): void {
+    initFunction(func: Func, clazz: Clazz): void {
         let returnTypeString = ""
         if (func.returnType) {
             returnTypeString += `${func.returnType}`
@@ -129,7 +129,16 @@ export class JavaCodeStrategy implements CodeStrategy {
         let parameterString = ""
 
         func.parameters.forEach((value, index) => {
-            parameterString += `${ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.JAVA, value.type)} ${value.name}`
+            let typeString = ""
+
+            if (value.type === VariableType.LIST && value.listElementType) {
+                clazz.addDependency("import java.util.ArrayList;")
+                typeString = "ArrayList<" + ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.JAVA, value.listElementType) + ">"
+            } else {
+                typeString = ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.JAVA, value.type)
+            }
+
+            parameterString += `${typeString} ${value.name}`
             if (index !== func.parameters.length - 1) {
                 parameterString += ", "
             }

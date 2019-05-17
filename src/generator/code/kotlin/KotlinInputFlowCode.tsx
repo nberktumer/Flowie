@@ -40,7 +40,7 @@ export class KotlinInputFlowCode implements InputFlowCode {
             false
         )
 
-        Project.codeStrategy.initFunction(func)
+        Project.codeStrategy.initFunction(func, clazz)
 
         code.insert(`println("Please enter value for ${inputFlow.content.variable.name}")`)
 

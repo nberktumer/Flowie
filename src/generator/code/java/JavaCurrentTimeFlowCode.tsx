@@ -10,7 +10,7 @@ export class JavaCurrentTimeFlowCode implements CurrentTimeFlowCode {
 
         let variableSetCode = ""
         if (clazz.addVariable(currentTimeFlow.content.variable.name)) {
-            variableSetCode = "long "
+            variableSetCode = "Long "
         }
 
         clazz.writeCodeToMainFunction(
