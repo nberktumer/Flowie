@@ -3,6 +3,8 @@ import {NodeColors} from "../../../config"
 import {Variable} from "../../../models/Variable"
 import {FlowType} from "../../../models"
 import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
+import {DiagramEngine} from "nberktumer-react-diagrams"
+import * as _ from "lodash"
 
 export class CurrentTimeFlowNode extends BaseFlowNode {
     private variable: Variable
@@ -32,5 +34,16 @@ export class CurrentTimeFlowNode extends BaseFlowNode {
 
     updateInfo(): void {
         this.info = `${this.variable.name} = ${strings.currentTime}`
+    }
+
+    deSerialize(object: any, engine: DiagramEngine) {
+        super.deSerialize(object, engine)
+        this.isNewVariable = object.isNewVariable
+    }
+
+    serialize() {
+        return _.merge(super.serialize(), {
+            isNewVariable: this.isNewVariable
+        })
     }
 }
