@@ -10,12 +10,14 @@ export class ClassFlowNode extends BaseFlowNode {
     argList: Variable[] = []
     variable: Variable
     returnType: VariableType
+    returnListType: VariableType
 
-    constructor(variable: Variable, returnType: VariableType, className: string, withoutPorts: boolean = false) {
+    constructor(variable: Variable, returnType: VariableType, returnListType: VariableType, className: string, withoutPorts: boolean = false) {
         super(FlowType.CLASS, className, NodeColors.DATA_CLASS)
 
         this.variable = variable
         this.returnType = returnType
+        this.returnListType = returnListType
         if (!withoutPorts) {
             this.addInPort(strings.in).setMaximumLinks(1)
             this.addOutPort(strings.nextFlow).setMaximumLinks(1)
@@ -25,11 +27,20 @@ export class ClassFlowNode extends BaseFlowNode {
     updateInfo() {
         this.info = this.argList.map((arg) => {
             if (arg.value && arg.value.name) {
-                return `${arg.name}: ${arg.type} = ${arg.value.name}`
+                if (arg.type === VariableType.LIST)
+                    return `${arg.name}: ${arg.type}<${arg.listElementType}> = ${arg.value.name}`
+                else
+                    return `${arg.name}: ${arg.type} = ${arg.value.name}`
             } else if (arg.value && !arg.value.name) {
-                return `${arg.name}: ${arg.type} = ${arg.value.value}`
+                if (arg.type === VariableType.LIST)
+                    return `${arg.name}: ${arg.type}<${arg.listElementType}> = ${arg.value.value}`
+                else
+                    return `${arg.name}: ${arg.type} = ${arg.value.value}`
             } else {
-                return `${arg.name}: ${arg.type}`
+                if (arg.type === VariableType.LIST)
+                    return `${arg.name}: ${arg.type}<${arg.listElementType}>`
+                else
+                    return `${arg.name}: ${arg.type}`
             }
         }).join("\n")
     }
@@ -63,13 +74,15 @@ export class ClassFlowNode extends BaseFlowNode {
         this.argList = object.argList
         this.variable = object.variable
         this.returnType = object.returnType
+        this.returnListType = object.returnListType
     }
 
     serialize() {
         return _.merge(super.serialize(), {
             argList: this.argList,
             variable: this.variable,
-            returnType: this.returnType
+            returnType: this.returnType,
+            returnListType: this.returnListType
         })
     }
 }

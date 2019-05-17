@@ -43,7 +43,8 @@ export class ClassProperties extends BaseProperties<BasePropertiesProps> {
                 selectedClassName: node.name,
                 expanded: "",
                 variable: JSON.stringify(node.variable),
-                returnType: node.returnType
+                returnType: node.returnType,
+                returnListType: node.returnListType
             }
         } else {
             this.state = {
@@ -51,7 +52,8 @@ export class ClassProperties extends BaseProperties<BasePropertiesProps> {
                 selectedClassName: "",
                 expanded: "",
                 variable: "",
-                returnType: ""
+                returnType: "",
+                returnListType: ""
             }
         }
     }
@@ -75,10 +77,17 @@ export class ClassProperties extends BaseProperties<BasePropertiesProps> {
             return `${field.field.name}: ${field.field.type}`
         } else {
             const variable = JSON.parse(field.variable)
-            if (variable.value)
-                return `${field.field.name}: ${field.field.type} = ${field.isConstant ? variable.value : variable.name}`
-            else
-                return `${field.field.name}: ${field.field.type}`
+            if (variable.value) {
+                if (field.field.type === VariableType.LIST)
+                    return `${field.field.name}: ${field.field.type}<${field.field.listElementType}> = ${field.isConstant ? variable.value : variable.name}`
+                else
+                    return `${field.field.name}: ${field.field.type} = ${field.isConstant ? variable.value : variable.name}`
+            } else {
+                if (field.field.type === VariableType.LIST)
+                    return `${field.field.name}: ${field.field.type}<${field.field.listElementType}>`
+                else
+                    return `${field.field.name}: ${field.field.type}`
+            }
         }
     }
 
@@ -105,7 +114,7 @@ export class ClassProperties extends BaseProperties<BasePropertiesProps> {
                                 onChange={(e) => {
                                     const error = Validator.validateVariableName(e.target.value, _.concat(flowContext.variableList, flowContext.argList))
                                     this.setState({
-                                        variable: JSON.stringify(new Variable(e.target.value, this.state.returnType, undefined)),
+                                        variable: JSON.stringify(new Variable(e.target.value, this.state.returnType, undefined, this.state.returnListType ? this.state.returnListType : undefined)),
                                         errorMessage: error,
                                         errorField: error ? "variableName" : ""
                                     }, () => {
@@ -125,6 +134,7 @@ export class ClassProperties extends BaseProperties<BasePropertiesProps> {
                                     this.setState({
                                         selectedClassName: clazz.name,
                                         returnType: clazz.returnType,
+                                        returnListType: clazz.returnListType,
                                         fields: clazz.argList.map((item: any) => {
                                             const isConstant = item.value !== undefined && item.value != null && item.value !== ""
                                             return {
@@ -185,7 +195,10 @@ export class ClassProperties extends BaseProperties<BasePropertiesProps> {
                                             }}
                                             margin="normal">
                                             {_.concat(flowContext.variableList, flowContext.argList).filter((value: Variable) => {
-                                                return value.type === field.field.type
+                                                if (field.field.type === VariableType.LIST)
+                                                    return value.type === field.field.type && value.listElementType === field.field.listElementType
+                                                else
+                                                    return value.type === field.field.type
                                             }).map((value: Variable) => (
                                                 <MenuItem key={value.name} value={JSON.stringify(value)}>
                                                     {value.name}
@@ -200,7 +213,7 @@ export class ClassProperties extends BaseProperties<BasePropertiesProps> {
                                                 this.props.onDataChanged(this.state)
                                             }}
                                             value={this.state.fields[index].initialValue}
-                                            hide={!this.state.fields[index].isConstant}/>
+                                            hide={!this.state.fields[index].isConstant || this.state.fields[index].field.type === VariableType.LIST}/>
                                         <FormControlLabel
                                             control={
                                                 <Checkbox

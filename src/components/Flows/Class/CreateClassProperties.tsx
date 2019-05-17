@@ -31,7 +31,7 @@ export class CreateClassProperties extends BaseProperties<BasePropertiesProps> {
                         <TextField
                             fullWidth
                             id="class-name"
-                            label={strings.newPackage}
+                            label={strings.newClass}
                             value={this.state.name}
                             error={this.state.errorField === "name"}
                             onChange={this.handleStringChange("name", (data) => {
