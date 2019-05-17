@@ -12,7 +12,7 @@ export class KotlinListGetFlowCode implements ListGetFlowCode {
         let setString = ""
         if (listGetFlow.content.setToVariable.name) {
             if (clazz.addVariable(listGetFlow.content.setToVariable.name)) {
-                setString = "var "
+                setString = "var " + listGetFlow.content.setToVariable.name
             } else {
                 setString = listGetFlow.content.setToVariable.name
             }
@@ -25,7 +25,7 @@ export class KotlinListGetFlowCode implements ListGetFlowCode {
             indexString = ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.KOTLIN, listGetFlow.content.index.value, listGetFlow.content.index.type)
         }
 
-        clazz.writeCodeToMainFunction(`${setString}= ${listGetFlow.content.list.name}.get(${indexString})`)
+        clazz.writeCodeToMainFunction(`${setString} = ${listGetFlow.content.list.name}.get(${indexString})`)
         clazz.writeMainCodeFromFlow(listGetFlow.nextFlow())
     }
 
