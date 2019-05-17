@@ -121,8 +121,7 @@ export class BaseFlowWidget extends BaseWidget<RectangleNodeWidgetProps, Rectang
                                     <div className={styles.rectangleNodeName}>{this.props.node.name}</div>
                                     <Icon
                                         style={{
-                                            display: (HOLDER.currentClass.type === DirectoryItemType.MAIN_CLASS && this.props.node.flowType === FlowType.INITIAL)
-                                            || (HOLDER.ReturnType === VariableType.NONE && this.props.node.flowType === FlowType.RETURN) ? "none" : "flex"
+                                            display: (this.props.node.flowType !== FlowType.INITIAL || (HOLDER.currentClass.type === DirectoryItemType.MAIN_CLASS && this.props.node.flowType === FlowType.INITIAL)) ? "none" : "flex"
                                         }}
                                         onClick={(e) => this.editClickListener(e)}
                                         className={styles.editIcon}>edit</Icon>
