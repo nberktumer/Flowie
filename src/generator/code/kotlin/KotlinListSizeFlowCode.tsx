@@ -12,7 +12,7 @@ export class KotlinListSizeFlowCode implements ListSizeFlowCode {
         let setString = ""
         if (listSizeFlow.content.setToVariable.name) {
             if (clazz.addVariable(listSizeFlow.content.setToVariable.name)) {
-                setString = `${ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.KOTLIN, listSizeFlow.content.setToVariable.type)} `
+                setString = `${ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.KOTLIN, listSizeFlow.content.setToVariable.type)} ${listSizeFlow.content.setToVariable.name} `
             } else {
                 setString = `${listSizeFlow.content.setToVariable.name} `
             }
