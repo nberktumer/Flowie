@@ -3,7 +3,7 @@ import {InputFlowCode} from "../common/InputFlowCode";
 import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
 import {ProgrammingLanguage, VariableType} from "../../../models";
 import {Variable} from "../../../models/Variable";
-import {Func, Parameter} from "../../project/Func";
+import {Func} from "../../project/Func";
 import {Clazz} from "../../project/Clazz";
 import {Code} from "../Code";
 import {Project} from "../../project/Project";
@@ -16,7 +16,7 @@ export class JavaInputFlowCode implements InputFlowCode {
 
         let variableSetCode = ""
         if (clazz.addVariable(inputFlow.content.variable.name)) {
-            variableSetCode = `${ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, inputFlow.content.variable.type)} `
+            variableSetCode = `${ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.JAVA, inputFlow.content.variable.type)} `
         }
 
         clazz.writeCodeToMainFunction(
@@ -33,22 +33,22 @@ export class JavaInputFlowCode implements InputFlowCode {
         clazz.addDependency("import java.util.Scanner;")
 
         const code = new Code(clazz.indentationCount)
-        const parameters: Parameter[] = []
+        const parameters: Variable[] = []
 
         const func = new Func(
             inputFlow.functionName(),
             parameters,
-            ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, inputFlow.content.variable.type),
+            ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.JAVA, inputFlow.content.variable.type),
             code,
             false
         )
 
-        Project.codeStrategy.initFunction(func)
+        Project.codeStrategy.initFunction(func, clazz)
 
         code.insert(`System.out.println("Please enter value for ${inputFlow.content.variable.name}");`)
         code.insert(`Scanner scanner = new Scanner(System.in);`)
 
-        const variableTypeString = ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.JAVA, inputFlow.content.variable.type)
+        const variableTypeString = ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.JAVA, inputFlow.content.variable.type)
         switch (inputFlow.content.variable.type) {
             case VariableType.INT:
                 code.insert(`${variableTypeString} input = scanner.nextInt();`)

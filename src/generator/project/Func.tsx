@@ -1,36 +1,24 @@
 import {Code} from "../code/Code";
+import {Variable} from "../../models/Variable";
 
 export class Func {
     functionName: string
-    parameters: Parameter[]
+    parameters: Variable[]
     returnType: string | undefined
     code: Code
-    isMain: boolean
+    isProjectMain: boolean
 
     constructor(
         functionName: string,
-        parameters: Parameter[],
+        parameters: Variable[],
         returnType: string | undefined,
         codeLines: Code,
-        isMain: boolean
+        isProjectMain: boolean
     ) {
         this.functionName = functionName
         this.parameters = parameters
         this.returnType = returnType
         this.code = codeLines
-        this.isMain = isMain
-    }
-}
-
-export class Parameter {
-    name: string
-    type: string
-
-    constructor(
-        name: string,
-        type: string
-    ) {
-        this.name = name;
-        this.type = type
+        this.isProjectMain = isProjectMain
     }
 }

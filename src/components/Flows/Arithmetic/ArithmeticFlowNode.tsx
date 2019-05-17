@@ -8,12 +8,13 @@ import {SignConverter} from "../../../utils"
 import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 
 export class ArithmeticFlowNode extends BaseFlowNode {
+    isNewVariable: boolean
     private variable: Variable
     private operation: ArithmeticOperationType
     private operator1: Variable
     private operator2: Variable
 
-    constructor(variable: Variable, operation: ArithmeticOperationType, operator1: Variable, operator2: Variable, withoutPorts: boolean = false) {
+    constructor(variable: Variable, operation: ArithmeticOperationType, operator1: Variable, operator2: Variable, isNewVariable: boolean, withoutPorts: boolean = false) {
         super(FlowType.ARITHMETIC, strings.arithmetic, NodeColors.ARITHMETIC)
 
         if (!withoutPorts) {
@@ -21,6 +22,7 @@ export class ArithmeticFlowNode extends BaseFlowNode {
             this.addOutPort(strings.out).setMaximumLinks(1)
         }
 
+        this.isNewVariable = isNewVariable
         this.variable = variable
         this.operation = operation
         this.operator1 = operator1

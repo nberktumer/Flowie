@@ -8,10 +8,12 @@ import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 
 export class DataClassFlowNode extends BaseFlowNode {
     fieldList: Variable[] = []
+    variableName: string
 
-    constructor(withoutPorts: boolean = false) {
-        super(FlowType.DATA_CLASS, strings.dataClass, NodeColors.DATA_CLASS)
+    constructor(variableName: string, className: string, withoutPorts: boolean = false) {
+        super(FlowType.DATA_CLASS, className, NodeColors.DATA_CLASS)
 
+        this.variableName = variableName
         if (!withoutPorts) {
             this.addInPort(strings.in).setMaximumLinks(1)
             this.addOutPort(strings.nextFlow).setMaximumLinks(1)
@@ -20,7 +22,13 @@ export class DataClassFlowNode extends BaseFlowNode {
 
     updateInfo() {
         this.info = this.fieldList.map((field) => {
-            return `${field.name}: ${field.type}`
+            if (field.value && field.value.name) {
+                return `${field.name}: ${field.type} = ${field.value.name}`
+            } else if (field.value && !field.value.name) {
+                return `${field.name}: ${field.type} = ${field.value.value}`
+            } else {
+                return `${field.name}: ${field.type}`
+            }
         }).join("\n")
     }
 
@@ -51,11 +59,13 @@ export class DataClassFlowNode extends BaseFlowNode {
     deSerialize(object: any, engine: DiagramEngine) {
         super.deSerialize(object, engine)
         this.fieldList = object.fieldList
+        this.variableName = object.variableName
     }
 
     serialize() {
         return _.merge(super.serialize(), {
-            fieldList: this.fieldList
+            fieldList: this.fieldList,
+            variableName: this.variableName
         })
     }
 }

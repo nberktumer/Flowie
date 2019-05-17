@@ -19,7 +19,7 @@ export class RandomFlow implements BaseFlow {
         this.nextFlowId = nextFlowId
         this.type = type
         this.content = content
-        this.functionCallName = (Clazz.flowIncrementalId++).toString()
+        this.functionCallName = ""
     }
 
     functionInvocation(): string {

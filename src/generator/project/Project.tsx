@@ -6,8 +6,10 @@ import {Clazz} from "./Clazz"
 import {CodeStrategy} from "../code/CodeStrategy"
 import {KotlinCodeStrategy} from "../code/kotlin/KotlinCodeStrategy"
 import {CodeStrategyFactory} from "../code/CodeStrategyFactory"
-import {DataClazz} from "./DataClazz";
 import {Defaults} from "../../config"
+import {DataClazz} from "./DataClazz"
+import JSZip from "jszip"
+import {FileUtils} from "../../utils"
 
 export class Project {
     static codeStrategy: CodeStrategy = new KotlinCodeStrategy()
@@ -27,27 +29,34 @@ export class Project {
     }
 
     generateClazzCodes() {
-        this.recursivelyGenerateClazzCodes(this.rootDirectory)
+        const zip = new JSZip()
+        this.recursivelyGenerateClazzCodes(this.rootDirectory, zip)
+        zip.generateAsync({type: "blob"}).then((item) => {
+            FileUtils.download(item, `${this.projectName}.zip`)
+        })
     }
 
-    private recursivelyGenerateClazzCodes(directory: Directory) {
+    private recursivelyGenerateClazzCodes(directory: Directory, jsZip: JSZip) {
         directory.items.forEach((item) => {
             switch (item.type) {
                 case DirectoryItemType.MAIN_CLASS:
                     const mainClazz = item as MainClazz
                     mainClazz.generateCode()
+                    jsZip.file(mainClazz.name, mainClazz.getCode())
                     break
                 case DirectoryItemType.CLASS:
                     const clazz = item as Clazz
                     clazz.generateCode()
+                    jsZip.file(clazz.name, clazz.getCode())
                     break
                 case DirectoryItemType.DATA_CLASS:
                     const dataClass = item as DataClazz
                     dataClass.generateCode()
+                    jsZip.file(dataClass.name, dataClass.getCode())
                     break
                 case DirectoryItemType.DIRECTORY:
                     const directory = item as Directory
-                    this.recursivelyGenerateClazzCodes(directory)
+                    this.recursivelyGenerateClazzCodes(directory, jsZip)
                     break
             }
         })

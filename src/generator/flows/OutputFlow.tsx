@@ -51,10 +51,13 @@ export class OutputFlow implements BaseFlow {
 
 export class OutputFlowContent {
     variable: Variable
+    isNewLine: boolean
 
     constructor(
         variable: Variable,
+        isNewLine: boolean
     ) {
         this.variable = variable
+        this.isNewLine = isNewLine
     }
 }

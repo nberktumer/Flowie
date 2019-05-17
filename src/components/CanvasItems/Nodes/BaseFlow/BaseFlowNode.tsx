@@ -29,8 +29,8 @@ export class BaseFlowNode extends NodeModel {
     updateInfo() {
     }
 
-    updateNode(data: BasePropertiesState) {
-        FlowNodeFactory.update(this, data)
+    updateNode(data: BasePropertiesState): BaseFlowNode | undefined {
+        return FlowNodeFactory.update(this, data)
     }
 
     addOnLinkChangedListener(listener: () => void) {
@@ -81,12 +81,14 @@ export class BaseFlowNode extends NodeModel {
         super.deSerialize(object, engine)
         this.flowType = object.flowType
         this.info = object.info
+        this.name = object.name
     }
 
     serialize() {
         return _.merge(super.serialize(), {
             flowType: this.flowType,
-            info: this.info
+            info: this.info,
+            name: this.name
         })
     }
 
@@ -103,6 +105,9 @@ export class BaseFlowNode extends NodeModel {
     }
 
     getNextFlow(): BaseFlowNode | null {
+        if (this.getPortListByType(DefaultPortType.OUT).length === 0)
+            return null
+
         const links = Object.values(this.getPortListByType(DefaultPortType.OUT)[0].getLinks())
 
         if (links.length > 0) {

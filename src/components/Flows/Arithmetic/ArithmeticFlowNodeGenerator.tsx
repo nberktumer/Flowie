@@ -6,7 +6,7 @@ import {Variable} from "../../../models/Variable"
 
 export class ArithmeticFlowNodeGenerator extends BaseFlowNodeGenerator {
     create(data?: BasePropertiesState, node?: ArithmeticFlowNode): BaseFlowNode | undefined {
-        if (!data || data.variable === "" || data.operation === "" || data.operator1 === "" || data.operator2 === "")
+        if (!data || data.variable === "" || data.operation === "" || data.operator1 === "" || data.operator2 === "" || !data.assignToVariableStatus)
             return undefined
 
         const op1 = JSON.parse(data.operator1) as Variable
@@ -23,12 +23,13 @@ export class ArithmeticFlowNodeGenerator extends BaseFlowNodeGenerator {
                 JSON.parse(data.variable),
                 data.operation,
                 op1,
-                op2
+                op2,
+                data.assignToVariableStatus === "new"
             )
         }
     }
 
     load(node: any): BaseFlowNode {
-        return new ArithmeticFlowNode(node.variable, node.operation, node.operator1, node.operator2, true)
+        return new ArithmeticFlowNode(node.variable, node.operation, node.operator1, node.operator2, node.isNewVariable, true)
     }
 }

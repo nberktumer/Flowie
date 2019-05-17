@@ -4,13 +4,24 @@ import {InputFlowContent} from "./flows/InputFlow"
 import {AssignmentFlowContent} from "./flows/AssignmentFlow"
 import {WhileFlowContent} from "./flows/WhileFlow"
 import {FlowType} from "../models"
-import {IfFlowContent} from "./flows/IfFlow";
-import {RandomFlowContent} from "./flows/RandomFlow";
-import {DirectoryItemType} from "./project/DirectoryItem";
-import {Directory} from "./project/Directory";
-import {Clazz} from "./project/Clazz";
-import {MainClazz} from "./project/MainClazz";
-import {DataClassFlowContent} from "./flows/DataClassFlow";
+import {IfFlowContent} from "./flows/IfFlow"
+import {RandomFlowContent} from "./flows/RandomFlow"
+import {DirectoryItemType} from "./project/DirectoryItem"
+import {Directory} from "./project/Directory"
+import {Clazz} from "./project/Clazz"
+import {MainClazz} from "./project/MainClazz"
+import {DataClassFlowContent} from "./flows/DataClassFlow"
+import {ReturnFlowContent} from "./flows/ReturnFlow"
+import {CurrentTimeFlowContent} from "./flows/CurrentTimeFlow"
+import {FunctionalityFlowContent} from "./flows/FunctionalityFlow"
+import {UpdateVariableFlowContent} from "./flows/UpdateVariableFlow"
+import {ListNewFlowContent} from "./flows/ListNewFlow"
+import {ListAddFlowContent} from "./flows/ListAddFlow"
+import {ListUpdateFlowContent} from "./flows/ListUpdateFlow"
+import {ListRemoveFlowContent} from "./flows/ListRemoveFlow"
+import {ListClearFlowContent} from "./flows/ListClearFlow"
+import {ListGetFlowContent} from "./flows/ListGetFlow"
+import {ListSizeFlowContent} from "./flows/ListSizeFlow"
 
 export class DirectoryItemModel {
     type: DirectoryItemType
@@ -42,14 +53,25 @@ export class DirectoryItemModel {
 export class FlowModel {
     type: FlowType
     id: string
-    assignmentFlowContent: AssignmentFlowContent | null
-    inputFlowContent: InputFlowContent | null
-    outputFlowContent: OutputFlowContent | null
-    arithmeticFlowContent: ArithmeticFlowContent | null
-    whileFlowContent: WhileFlowContent | null
-    ifFlowContent: IfFlowContent | null
-    randomFlowContent: RandomFlowContent | null
-    dataClassFlowContent: DataClassFlowContent | null
+    assignmentFlowContent: AssignmentFlowContent | null = null
+    inputFlowContent: InputFlowContent | null = null
+    outputFlowContent: OutputFlowContent | null = null
+    arithmeticFlowContent: ArithmeticFlowContent | null = null
+    whileFlowContent: WhileFlowContent | null = null
+    ifFlowContent: IfFlowContent | null = null
+    randomFlowContent: RandomFlowContent | null = null
+    currentTimeFlowContent: CurrentTimeFlowContent | null = null
+    functionalityFlowContent: FunctionalityFlowContent | null = null
+    dataClassFlowContent: DataClassFlowContent | null = null
+    returnFlowContent: ReturnFlowContent | null = null
+    updateVariableFlowContent: UpdateVariableFlowContent | null = null
+    listNewFlowContent: ListNewFlowContent | null = null
+    listAddFlowContent: ListAddFlowContent | null = null
+    listGetFlowContent: ListGetFlowContent | null = null
+    listSizeFlowContent: ListSizeFlowContent | null = null
+    listUpdateFlowContent: ListUpdateFlowContent | null = null
+    listRemoveFlowContent: ListRemoveFlowContent | null = null
+    listClearFlowContent: ListClearFlowContent | null = null
     // forFlowContent: ForFlowContent,
     // ifFlowContent: IfFlowContent,
     nextFlowId: string | null
@@ -57,29 +79,106 @@ export class FlowModel {
     constructor(
         type: FlowType,
         id: string,
-        assignmentFlowContent: AssignmentFlowContent | null = null,
-        inputFlowContent: InputFlowContent | null = null,
-        outputFlowContent: OutputFlowContent | null = null,
-        arithmeticFlowContent: ArithmeticFlowContent | null = null,
-        whileFlowContent: WhileFlowContent | null = null,
-        ifFlowContent: IfFlowContent | null = null,
-        randomFlowContent: RandomFlowContent | null = null,
-        dataClassFlowContent: DataClassFlowContent | null = null,
         nextFlowId: string | null
         // forFlowContent: ForFlowContent,
 
     ) {
         this.type = type
         this.id = id
-        this.assignmentFlowContent = assignmentFlowContent
-        this.inputFlowContent = inputFlowContent
-        this.outputFlowContent = outputFlowContent
-        this.arithmeticFlowContent = arithmeticFlowContent
-        this.ifFlowContent = ifFlowContent
-        this.whileFlowContent = whileFlowContent
-        this.ifFlowContent = ifFlowContent
-        this.randomFlowContent = randomFlowContent
-        this.dataClassFlowContent = dataClassFlowContent
         this.nextFlowId = nextFlowId
     }
+}
+
+export class FlowModelBuilder {
+    private flowModel: FlowModel
+    private type: FlowType
+    private id: string
+    // forFlowContent: ForFlowContent,
+    // ifFlowContent: IfFlowContent,
+    private nextFlowId: string | null
+
+    constructor(
+        type: FlowType,
+        id: string,
+        nextFlowId: string | null
+    ) {
+        this.type = type
+        this.id = id
+        this.nextFlowId = nextFlowId
+        this.flowModel = new FlowModel(type, id, nextFlowId)
+    }
+
+    setFlowContent(flowContent: any): FlowModelBuilder {
+        switch (this.type) {
+            case FlowType.INITIAL:
+                break
+            case FlowType.IF:
+                this.flowModel.ifFlowContent = flowContent
+                break
+            case FlowType.WHILE:
+                this.flowModel.whileFlowContent = flowContent
+                break
+            case FlowType.INPUT:
+                this.flowModel.inputFlowContent = flowContent
+                break
+            case FlowType.OUTPUT:
+                this.flowModel.outputFlowContent = flowContent
+                break
+            case FlowType.ARITHMETIC:
+                this.flowModel.arithmeticFlowContent = flowContent
+                break
+            case FlowType.ASSIGNMENT:
+                this.flowModel.assignmentFlowContent = flowContent
+                break
+            case FlowType.RANDOM:
+                this.flowModel.randomFlowContent = flowContent
+                break
+            case FlowType.CURRENT_TIME:
+                this.flowModel.currentTimeFlowContent = flowContent
+                break
+            case FlowType.DATA_CLASS:
+                this.flowModel.dataClassFlowContent = flowContent
+                break
+            case FlowType.LIST_SIZE:
+                this.flowModel.listSizeFlowContent = flowContent
+                break
+            case FlowType.CLASS:
+                this.flowModel.functionalityFlowContent = flowContent
+                break
+            case FlowType.PACKAGE:
+                break
+            case FlowType.RETURN:
+                this.flowModel.returnFlowContent = flowContent
+                break
+            case FlowType.UPDATE_VARIABLE:
+                this.flowModel.updateVariableFlowContent = flowContent
+                break
+            case FlowType.LIST_NEW:
+                this.flowModel.listNewFlowContent = flowContent
+                break
+            case FlowType.LIST_GET:
+                this.flowModel.listGetFlowContent = flowContent
+                break
+            case FlowType.LIST_ADD:
+                this.flowModel.listAddFlowContent = flowContent
+                break
+            case FlowType.LIST_UPDATE:
+                this.flowModel.listUpdateFlowContent = flowContent
+                break
+            case FlowType.LIST_REMOVE:
+                this.flowModel.listRemoveFlowContent = flowContent
+                break
+            case FlowType.LIST_CLEAR:
+                this.flowModel.listClearFlowContent = flowContent
+                break
+
+        }
+
+        return this
+    }
+
+    build(): FlowModel {
+        return this.flowModel
+    }
+
 }

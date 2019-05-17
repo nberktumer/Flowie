@@ -31,6 +31,12 @@ export default class InputWithType extends Component<InputWithTypeProps, InputWi
         }
     }
 
+    componentWillUpdate(nextProps: Readonly<InputWithTypeProps>, nextState: Readonly<InputWithTypeState>, nextContext: any): void {
+        if (nextProps.hide !== this.props.hide || nextProps.variableType !== this.props.variableType) {
+            this.setState({value: ""})
+        }
+    }
+
     handleStringChange = (key: string, callback?: (value: string, onComplete: (data: any) => void) => void) => (event: any) => {
         this.setState({[key]: event.target.value}, () => {
             if (callback) {
@@ -60,6 +66,7 @@ export default class InputWithType extends Component<InputWithTypeProps, InputWi
                 return this.renderStringInput()
             case VariableType.INT:
             case VariableType.DOUBLE:
+            case VariableType.LONG:
                 return this.renderIntegerInput()
             case VariableType.BOOLEAN:
                 return this.renderBooleanInput()

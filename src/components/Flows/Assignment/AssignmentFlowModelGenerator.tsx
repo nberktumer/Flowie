@@ -1,5 +1,5 @@
 import {BaseFlowModelGenerator} from "../Base/BaseFlowModelGenerator"
-import {FlowModel} from "../../../generator/FlowModelJSON"
+import {FlowModel, FlowModelBuilder} from "../../../generator/FlowModelJSON"
 import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {AssignmentFlowNode} from "./AssignmentFlowNode"
 import {FlowType} from "../../../models"
@@ -12,18 +12,8 @@ export class AssignmentFlowModelGenerator extends BaseFlowModelGenerator {
         const nextFlow = assignmentFlow.getNextFlow()
         const nextFlowId = nextFlow ? nextFlow.getID() : null
 
-        return new FlowModel(
-            FlowType.ASSIGNMENT,
-            assignmentFlow.getID(),
-            new AssignmentFlowContent(assignmentFlow.getVariable()),
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            nextFlowId
-        )
+        const flowModelBuilder = new FlowModelBuilder(FlowType.ASSIGNMENT, assignmentFlow.getID(), nextFlowId)
+        flowModelBuilder.setFlowContent(new AssignmentFlowContent(assignmentFlow.getVariable()))
+        return flowModelBuilder.build()
     }
 }

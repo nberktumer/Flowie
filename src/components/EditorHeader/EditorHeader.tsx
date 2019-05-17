@@ -56,6 +56,7 @@ export class EditorHeader extends Component<EditorHeaderProps, EditorHeaderState
                             <MenuItem onClick={() => this.handleClick("new")}>{strings.new}</MenuItem>
                             <MenuItem onClick={() => this.handleClick("save")}>{strings.save}</MenuItem>
                             <MenuItem onClick={() => this.handleClick("load")}>{strings.load}</MenuItem>
+                            {/*<MenuItem onClick={() => this.handleClick("export")}>{strings.exportProject}</MenuItem>*/}
                         </Menu>
                     </div>
                 </Toolbar>

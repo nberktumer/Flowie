@@ -1,16 +1,26 @@
 import React from "react"
 import {Checkbox, FormControlLabel, MenuItem, TextField} from "@material-ui/core"
 import strings from "../../../lang"
-import {BaseProperties, BasePropertiesProps} from "../Base/BaseProperties"
+import {BaseProperties, BasePropertiesProps, BasePropertiesState} from "../Base/BaseProperties"
 import {ArithmeticOperationType, VariableType} from "../../../models"
 import {ArithmeticFlowNode} from "./ArithmeticFlowNode"
 import InputWithType from "../../InputWithType/InputWithType"
 import {Variable} from "../../../models/Variable"
 import {FlowConsumer} from "../../../stores/FlowStore"
+import {SignConverter, Validator} from "../../../utils"
+import {Rules} from "../../../config"
+import _ from "lodash"
 
-export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
+export interface ArithmeticPropertiesProps extends BasePropertiesProps {
+    readonlyType: boolean
+}
 
-    constructor(props: BasePropertiesProps) {
+export class ArithmeticProperties extends BaseProperties<ArithmeticPropertiesProps> {
+    static defaultProps = {
+        readonlyType: false
+    }
+
+    constructor(props: ArithmeticPropertiesProps) {
         super(props)
 
         if (props.node !== undefined) {
@@ -22,7 +32,10 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                 operator1: JSON.stringify(node.getOperator1()),
                 operator2: JSON.stringify(node.getOperator2()),
                 isOp2Constant: node.getOperator2().name === undefined,
-                op2initialValue: node.getOperator2().value
+                op2initialValue: node.getOperator2().value,
+                variableName: node.getVariable().name,
+                variableType: node.getVariable().type,
+                assignToVariableStatus: "assign"
             }
         } else {
             this.state = {
@@ -31,8 +44,24 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                 operator1: "",
                 operator2: "",
                 isOp2Constant: false,
-                op2initialValue: ""
+                op2initialValue: "",
+                variableName: "",
+                variableType: VariableType.INT,
+                assignToVariableStatus: "new"
             }
+        }
+    }
+
+    componentWillUpdate(nextProps: Readonly<BasePropertiesProps>, nextState: Readonly<BasePropertiesState>, nextContext: any): void {
+        if (this.props.isValidListener && nextState !== this.state) {
+            this.props.isValidListener(!nextState.errorMessage
+                && !nextState.errorField
+                && nextState.variable
+                && nextState.operation
+                && nextState.operator1
+                && ((nextState.isOp2Constant && nextState.operator2 && JSON.parse(nextState.operator2).value)
+                    || (!nextState.isOp2Constant && nextState.operator2)
+                ))
         }
     }
 
@@ -44,12 +73,75 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                         <TextField
                             id="data-type-selector"
                             select
-                            label={strings.variable}
+                            fullWidth
+                            disabled={this.props.readonlyType}
+                            label={strings.createNewAndExistingVariable}
+                            value={this.state.assignToVariableStatus}
+                            onChange={this.handleStringChange("assignToVariableStatus", () => {
+                                this.setState({variableName: "", variableType: VariableType.INT, variable: ""})
+                            })}
+                            margin="normal">
+                            <MenuItem key={"new"} value={"new"}>
+                                {strings.createNewVariable}
+                            </MenuItem>
+                            <MenuItem key={"assign"} value={"assign"}>
+                                {strings.assignToVariable}
+                            </MenuItem>
+                        </TextField>
+                        <TextField
+                            id="variable-name-input"
+                            fullWidth
+                            disabled={this.props.readonlyType}
+                            label={strings.variableName}
+                            error={this.state.errorField === "variableName"}
+                            style={{display: this.state.assignToVariableStatus === "new" ? "flex" : "none"}}
+                            value={this.state.variableName}
+                            inputProps={{maxLength: Rules.MAX_VAR_LENGTH}}
+                            onChange={(e) => {
+                                const error = Validator.validateVariableName(e.target.value, _.concat(flowContext.variableList, flowContext.argList))
+                                this.setState({
+                                    variableName: e.target.value,
+                                    variable: e.target.value ? JSON.stringify(new Variable(e.target.value, this.state.variableType, undefined)) : "",
+                                    errorMessage: error,
+                                    errorField: error ? "variableName" : ""
+                                }, () => {
+                                    this.props.onDataChanged(this.state)
+                                })
+                            }}
+                            margin="normal"/>
+                        <TextField
+                            id="variable-type-input"
+                            fullWidth
+                            select
+                            disabled={this.props.readonlyType}
+                            label={strings.variableType}
+                            error={this.state.errorField === "variableType"}
+                            style={{display: this.state.assignToVariableStatus === "new" ? "flex" : "none"}}
+                            value={this.state.variableType}
+                            onChange={(e) => {
+                                this.setState({variableType: e.target.value, variable: JSON.stringify(new Variable(this.state.variableName, e.target.value ? e.target.value as VariableType : VariableType.NONE, undefined))}, () => this.props.onDataChanged(this.state))
+                            }}
+                            margin="normal">
+                            {Object.keys(VariableType).filter((item: any) => {
+                                return VariableType[item] === VariableType.INT || VariableType[item] === VariableType.DOUBLE || VariableType[item] === VariableType.LONG
+                            }).map((key: any) => (
+                                <MenuItem key={key} value={VariableType[key]}>
+                                    {VariableType[key]}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        <TextField
+                            id="variable-selector"
+                            select
+                            fullWidth
+                            disabled={this.props.readonlyType}
+                            label={strings.assignToVariable}
                             value={this.state.variable}
+                            style={{display: this.state.assignToVariableStatus === "new" ? "none" : "flex"}}
                             onChange={this.handleStringChange("variable")}
                             margin="normal">
                             {flowContext.variableList.filter((value) => {
-                                return value.type === VariableType.INT || value.type === VariableType.DOUBLE
+                                return value.type === VariableType.INT || value.type === VariableType.DOUBLE || value.type === VariableType.LONG
                             }).map((value) => (
                                 <MenuItem key={value.name} value={JSON.stringify(value)}>
                                     {value.name}
@@ -57,31 +149,33 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                             ))}
                         </TextField>
                         <TextField
-                            id="data-type-selector"
+                            id="first-operator-selector"
                             select
+                            fullWidth
+                            label={strings.firstOperator}
+                            value={this.state.operator1}
+                            onChange={this.handleStringChange("operator1")}
+                            margin="normal">
+                            {_.concat(flowContext.variableList, flowContext.argList).filter((value: Variable) => {
+                                return value.type === VariableType.INT || value.type === VariableType.DOUBLE || value.type === VariableType.LONG
+                            }).map((value: Variable) => (
+                                <MenuItem key={value.name}
+                                          value={JSON.stringify(new Variable(value.name, value.type, value.value))}>
+                                    {value.name}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        <TextField
+                            id="operation-selector"
+                            select
+                            fullWidth
                             label={strings.operation}
                             value={this.state.operation}
                             onChange={this.handleStringChange("operation")}
                             margin="normal">
                             {Object.keys(ArithmeticOperationType).map((value: any) => (
                                 <MenuItem key={value} value={ArithmeticOperationType[value]}>
-                                    {ArithmeticOperationType[value]}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                        <TextField
-                            id="data-type-selector"
-                            select
-                            label={strings.firstOperator}
-                            value={this.state.operator1}
-                            onChange={this.handleStringChange("operator1")}
-                            margin="normal">
-                            {flowContext.variableList.filter((value) => {
-                                return value.type === VariableType.INT || value.type === VariableType.DOUBLE
-                            }).map((value) => (
-                                <MenuItem key={value.name}
-                                          value={JSON.stringify(new Variable(value.name, value.type, value.value))}>
-                                    {value.name}
+                                    {SignConverter.arithmeticOperation(ArithmeticOperationType[value] as ArithmeticOperationType)}
                                 </MenuItem>
                             ))}
                         </TextField>
@@ -90,16 +184,16 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                             flexDirection: "row"
                         }}>
                             <TextField
-                                id="data-type-selector"
+                                id="second-operator-selector"
                                 select
                                 style={{flex: 1, display: this.state.isOp2Constant ? "none" : "flex"}}
                                 label={strings.secondOperator}
                                 value={this.state.operator2}
                                 onChange={this.handleStringChange("operator2")}
                                 margin="normal">
-                                {flowContext.variableList.filter((value) => {
-                                    return value.type === VariableType.INT || value.type === VariableType.DOUBLE
-                                }).map((value) => (
+                                {_.concat(flowContext.variableList, flowContext.argList).filter((value: Variable) => {
+                                    return value.type === VariableType.INT || value.type === VariableType.DOUBLE || value.type === VariableType.LONG
+                                }).map((value: Variable) => (
                                     <MenuItem key={value.name}
                                               value={JSON.stringify(new Variable(value.name, value.type, value.value))}>
                                         {value.name}
@@ -119,7 +213,11 @@ export class ArithmeticProperties extends BaseProperties<BasePropertiesProps> {
                                 control={
                                     <Checkbox
                                         checked={this.state.isOp2Constant}
-                                        onChange={this.handleBooleanChange("isOp2Constant")}
+                                        onChange={this.handleBooleanChange("isOp2Constant", () => {
+                                            this.setState({operator2: null}, () => {
+                                                this.props.onDataChanged(this.state)
+                                            })
+                                        })}
                                         value="true"
                                         color="primary"
                                     />

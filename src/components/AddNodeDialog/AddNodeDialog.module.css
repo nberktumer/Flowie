@@ -11,8 +11,7 @@
 }
 
 .addNodeDialogBody {
-    min-width: 400px;
-    padding: 12px 24px;
+    min-width: 350px;
 }
 
 .addNodeDialogBody > div {
