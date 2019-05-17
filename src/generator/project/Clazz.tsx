@@ -42,7 +42,6 @@ export class Clazz implements DirectoryItem {
     generatedCode: string[] = []
     scopeCount = 0
     spacing = "\t"
-    loopStack: Stack<string> = new Stack()
 
     indentationCount = 0
     declaredVariableSet: Set<string> = new Set()
@@ -66,7 +65,6 @@ export class Clazz implements DirectoryItem {
         this.mainFunction = null
         this.generatedCode = []
         this.scopeCount = 0
-        this.loopStack = new Stack()
         this.indentationCount = 0
         this.declaredVariableSet = new Set()
         this.classInitCode = new Code(this.indentationCount)
@@ -76,8 +74,6 @@ export class Clazz implements DirectoryItem {
 
         Project.codeStrategy.initClazz(this)
         Project.codeStrategy.initMain(parameters, returnType, returnTypeIsArray, this)
-
-        this.loopStack.push(Clazz.TERMINATION_ID)
 
         const initialFlow = this.flowMap.get(Clazz.INITIAL_ID)
 
@@ -128,55 +124,49 @@ export class Clazz implements DirectoryItem {
         return true
     }
 
-    addToLoopStack(id: string) {
-        this.loopStack.push(id)
-    }
-
     writeMainCodeFromFlow(id: string) {
-        if (!this.removeFromStackIfTopEquals(id)) {
-            const flow = this.flowMap.get(id)
-            if (flow) {
-                if (flow instanceof ArithmeticFlow) {
-                    Project.codeStrategy.arithmeticFlowCode.generateMain(flow, this)
-                } else if (flow instanceof AssignmentFlow) {
-                    Project.codeStrategy.assignmentFlowCode.generateMain(flow, this)
-                } else if (flow instanceof InputFlow) {
-                    Project.codeStrategy.inputFlowCode.generateMain(flow, this)
-                } else if (flow instanceof OutputFlow) {
-                    Project.codeStrategy.outputFlowCode.generateMain(flow, this)
-                } else if (flow instanceof WhileFlow) {
-                    Project.codeStrategy.whileFlowCode.generateMain(flow, this)
-                } else if (flow instanceof IfFlow) {
-                    Project.codeStrategy.ifFlowCode.generateMain(flow, this)
-                } else if (flow instanceof RandomFlow) {
-                    Project.codeStrategy.randomFlowCode.generateMain(flow, this)
-                } else if (flow instanceof CurrentTimeFlow) {
-                    Project.codeStrategy.currentTimeFlowCode.generateMain(flow, this)
-                } else if (flow instanceof DataClassFlow) {
-                    Project.codeStrategy.dataClassFlowCode.generateMain(flow, this)
-                } else if (flow instanceof ReturnFlow) {
-                    Project.codeStrategy.returnFlowCode.generateMain(flow, this)
-                } else if (flow instanceof FunctionalityFlow) {
-                    Project.codeStrategy.functionalityFlowCode.generateMain(flow, this)
-                } else if (flow instanceof UpdateVariableFlow) {
-                    Project.codeStrategy.updateVariableFlowCode.generateMain(flow, this)
-                } else if (flow instanceof ListNewFlow) {
-                    Project.codeStrategy.listNewFlowCode.generateMain(flow, this)
-                } else if (flow instanceof ListAddFlow) {
-                    Project.codeStrategy.listAddFlowCode.generateMain(flow, this)
-                } else if (flow instanceof ListGetFlow) {
-                    Project.codeStrategy.listGetFlowCode.generateMain(flow, this)
-                } else if (flow instanceof ListRemoveFlow) {
-                    Project.codeStrategy.listRemoveFlowCode.generateMain(flow, this)
-                } else if (flow instanceof ListSizeFlow) {
-                    Project.codeStrategy.listSizeFlowCode.generateMain(flow, this)
-                } else if (flow instanceof ListUpdateFlow) {
-                    Project.codeStrategy.listUpdateFlowCode.generateMain(flow, this)
-                } else if (flow instanceof ListClearFlow) {
-                    Project.codeStrategy.listClearFlowCode.generateMain(flow, this)
-                } else if (flow instanceof InitialFlow) {
-                    this.writeMainCodeFromFlow(flow.nextFlow())
-                }
+        const flow = this.flowMap.get(id)
+        if (flow) {
+            if (flow instanceof ArithmeticFlow) {
+                Project.codeStrategy.arithmeticFlowCode.generateMain(flow, this)
+            } else if (flow instanceof AssignmentFlow) {
+                Project.codeStrategy.assignmentFlowCode.generateMain(flow, this)
+            } else if (flow instanceof InputFlow) {
+                Project.codeStrategy.inputFlowCode.generateMain(flow, this)
+            } else if (flow instanceof OutputFlow) {
+                Project.codeStrategy.outputFlowCode.generateMain(flow, this)
+            } else if (flow instanceof WhileFlow) {
+                Project.codeStrategy.whileFlowCode.generateMain(flow, this)
+            } else if (flow instanceof IfFlow) {
+                Project.codeStrategy.ifFlowCode.generateMain(flow, this)
+            } else if (flow instanceof RandomFlow) {
+                Project.codeStrategy.randomFlowCode.generateMain(flow, this)
+            } else if (flow instanceof CurrentTimeFlow) {
+                Project.codeStrategy.currentTimeFlowCode.generateMain(flow, this)
+            } else if (flow instanceof DataClassFlow) {
+                Project.codeStrategy.dataClassFlowCode.generateMain(flow, this)
+            } else if (flow instanceof ReturnFlow) {
+                Project.codeStrategy.returnFlowCode.generateMain(flow, this)
+            } else if (flow instanceof FunctionalityFlow) {
+                Project.codeStrategy.functionalityFlowCode.generateMain(flow, this)
+            } else if (flow instanceof UpdateVariableFlow) {
+                Project.codeStrategy.updateVariableFlowCode.generateMain(flow, this)
+            } else if (flow instanceof ListNewFlow) {
+                Project.codeStrategy.listNewFlowCode.generateMain(flow, this)
+            } else if (flow instanceof ListAddFlow) {
+                Project.codeStrategy.listAddFlowCode.generateMain(flow, this)
+            } else if (flow instanceof ListGetFlow) {
+                Project.codeStrategy.listGetFlowCode.generateMain(flow, this)
+            } else if (flow instanceof ListRemoveFlow) {
+                Project.codeStrategy.listRemoveFlowCode.generateMain(flow, this)
+            } else if (flow instanceof ListSizeFlow) {
+                Project.codeStrategy.listSizeFlowCode.generateMain(flow, this)
+            } else if (flow instanceof ListUpdateFlow) {
+                Project.codeStrategy.listUpdateFlowCode.generateMain(flow, this)
+            } else if (flow instanceof ListClearFlow) {
+                Project.codeStrategy.listClearFlowCode.generateMain(flow, this)
+            } else if (flow instanceof InitialFlow) {
+                this.writeMainCodeFromFlow(flow.nextFlow())
             }
         }
     }
@@ -253,19 +243,6 @@ export class Clazz implements DirectoryItem {
 
     decrementIndentation() {
         this.indentationCount--
-    }
-
-    /**
-     * Returns true if top equals index and pops it returns false otherwise.
-     */
-
-    removeFromStackIfTopEquals(id: string): boolean {
-        if (this.loopStack.top === id) {
-            this.loopStack.pop()
-            return true
-        }
-
-        return false
     }
 
     protected createLineWithSpacing(codeLine: CodeLine): string {

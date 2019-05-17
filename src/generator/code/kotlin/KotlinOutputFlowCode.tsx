@@ -40,10 +40,18 @@ export class KotlinOutputFlowCode implements OutputFlowCode {
 
         let printString = ""
 
-        if (!outputFlow.content.variable.name) {
-            printString = `println("${outputFlow.content.variable.value}")`
+        let newLineCode = ""
+
+        if (outputFlow.content.isNewLine) {
+            newLineCode = "println"
         } else {
-            printString = `println("Value of ${outputFlow.content.variable.name} is \${${outputFlow.content.variable.name}}")`
+            newLineCode = "print"
+        }
+
+        if (!outputFlow.content.variable.name) {
+            printString = `${newLineCode}("${outputFlow.content.variable.value}")`
+        } else {
+            printString = `${newLineCode}("Value of ${outputFlow.content.variable.name} is \${${outputFlow.content.variable.name}}")`
         }
 
         code.insert(printString)

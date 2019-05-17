@@ -40,10 +40,18 @@ export class JavaOutputFlowCode implements OutputFlowCode {
 
         let printString = ""
 
-        if (!outputFlow.content.variable.name) {
-            printString = `System.out.println("${outputFlow.content.variable.value}");`
+        let newLineCode = ""
+
+        if (outputFlow.content.isNewLine) {
+            newLineCode = "System.out.println"
         } else {
-            printString = `System.out.println("Value of ${outputFlow.content.variable.name} is " + ${outputFlow.content.variable.name});`
+            newLineCode = "System.out.print"
+        }
+
+        if (!outputFlow.content.variable.name) {
+            printString = `${newLineCode}("${outputFlow.content.variable.value}");`
+        } else {
+            printString = `${newLineCode}("Value of ${outputFlow.content.variable.name} is " + ${outputFlow.content.variable.name});`
         }
 
         code.insert(printString)
