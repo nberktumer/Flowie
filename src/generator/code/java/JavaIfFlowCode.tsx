@@ -49,7 +49,6 @@ export class JavaIfFlowCode implements IfFlowCode {
         clazz.mainFunction.code.incrementIndentation()
 
         if (ifFlow.content.trueScopeId != null) {
-            clazz.addToLoopStack(ifFlow.id)
             clazz.writeMainCodeFromFlow(ifFlow.content.trueScopeId)
         }
 
@@ -59,13 +58,14 @@ export class JavaIfFlowCode implements IfFlowCode {
             clazz.writeCodeToMainFunction("} else {")
             clazz.mainFunction.code.incrementIndentation()
 
-            clazz.addToLoopStack(ifFlow.id)
             clazz.writeMainCodeFromFlow(ifFlow.content.falseScopeId)
 
             clazz.mainFunction.code.decrementIndentation()
 
         }
         clazz.writeCodeToMainFunction("}")
+
+        clazz.writeMainCodeFromFlow(ifFlow.nextFlow())
     }
 
 }

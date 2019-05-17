@@ -14,6 +14,7 @@ export enum ArithmeticOperationType {
     SUBTRACTION = "Subtraction",
     MULTIPLICATION = "Multiplication",
     DIVISION = "Division",
+    MODULO = "Modulo",
     ROOT = "Root"
 }
 

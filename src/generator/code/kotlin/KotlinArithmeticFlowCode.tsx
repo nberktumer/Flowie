@@ -30,6 +30,9 @@ export class KotlinArithmeticFlowCode implements ArithmeticFlowCode {
             case ArithmeticOperationType.DIVISION:
                 operationCode = "/"
                 break
+            case ArithmeticOperationType.MODULO:
+                operationCode = "%"
+                break
         }
 
         let operator1Code = ""

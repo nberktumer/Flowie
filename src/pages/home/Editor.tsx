@@ -370,6 +370,9 @@ export default class Editor extends Component<EditorProps, EditorState> {
                     currentFile: this.currentFileModel,
                     bigBigNoPackage: HOLDER
                 }
+
+                console.log(saveContent)
+                console.log(JSON.stringify(saveContent))
                 FileUtils.save(`${this.project.projectName}.${Defaults.SAVE_EXTENSION}`, JSON.stringify(saveContent))
                 break
             }
