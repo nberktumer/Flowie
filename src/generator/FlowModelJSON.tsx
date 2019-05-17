@@ -4,15 +4,15 @@ import {InputFlowContent} from "./flows/InputFlow"
 import {AssignmentFlowContent} from "./flows/AssignmentFlow"
 import {WhileFlowContent} from "./flows/WhileFlow"
 import {FlowType} from "../models"
-import {IfFlowContent} from "./flows/IfFlow";
-import {RandomFlowContent} from "./flows/RandomFlow";
-import {DirectoryItemType} from "./project/DirectoryItem";
-import {Directory} from "./project/Directory";
-import {Clazz} from "./project/Clazz";
-import {MainClazz} from "./project/MainClazz";
-import {DataClassFlowContent} from "./flows/DataClassFlow";
-import {ReturnFlowContent} from "./flows/ReturnFlow";
-import {CurrentTimeFlowContent} from "./flows/CurrentTimeFlow";
+import {IfFlowContent} from "./flows/IfFlow"
+import {RandomFlowContent} from "./flows/RandomFlow"
+import {DirectoryItemType} from "./project/DirectoryItem"
+import {Directory} from "./project/Directory"
+import {Clazz} from "./project/Clazz"
+import {MainClazz} from "./project/MainClazz"
+import {DataClassFlowContent} from "./flows/DataClassFlow"
+import {ReturnFlowContent} from "./flows/ReturnFlow"
+import {CurrentTimeFlowContent} from "./flows/CurrentTimeFlow"
 import {FunctionalityFlowContent} from "./flows/FunctionalityFlow"
 import {UpdateVariableFlowContent} from "./flows/UpdateVariableFlow";
 import {ListNewFlowContent} from "./flows/ListNewFlow";
@@ -111,48 +111,64 @@ export class FlowModelBuilder {
     setFlowContent(flowContent: any): FlowModelBuilder {
         switch (this.type) {
             case FlowType.INITIAL:
-                break;
+                break
             case FlowType.IF:
                 this.flowModel.ifFlowContent = flowContent
-                break;
+                break
             case FlowType.WHILE:
                 this.flowModel.whileFlowContent = flowContent
-                break;
+                break
             case FlowType.INPUT:
                 this.flowModel.inputFlowContent = flowContent
-                break;
+                break
             case FlowType.OUTPUT:
                 this.flowModel.outputFlowContent = flowContent
-                break;
+                break
             case FlowType.ARITHMETIC:
                 this.flowModel.arithmeticFlowContent = flowContent
-                break;
+                break
             case FlowType.ASSIGNMENT:
                 this.flowModel.assignmentFlowContent = flowContent
-                break;
+                break
             case FlowType.RANDOM:
                 this.flowModel.randomFlowContent = flowContent
-                break;
+                break
             case FlowType.CURRENT_TIME:
                 this.flowModel.currentTimeFlowContent = flowContent
-                break;
+                break
             case FlowType.DATA_CLASS:
                 this.flowModel.dataClassFlowContent = flowContent
                 break;
             case FlowType.LIST_SIZE:
                 this.flowModel.listSizeFlowContent = flowContent
-                break;
+                break
             case FlowType.CLASS:
                 this.flowModel.functionalityFlowContent = flowContent
-                break;
+                break
             case FlowType.PACKAGE:
-                break;
+                break
             case FlowType.RETURN:
                 this.flowModel.returnFlowContent = flowContent
-                break;
+                break
             case FlowType.UPDATE_VARIABLE:
                 this.flowModel.updateVariableFlowContent = flowContent
-                break;
+                break
+            case FlowType.LIST_NEW:
+                this.flowModel.listNewFlowContent = flowContent
+                break
+            case FlowType.LIST_ADD:
+                this.flowModel.listAddFlowContent = flowContent
+                break
+            case FlowType.LIST_UPDATE:
+                this.flowModel.listUpdateFlowContent = flowContent
+                break
+            case FlowType.LIST_REMOVE:
+                this.flowModel.listRemoveFlowContent = flowContent
+                break
+            case FlowType.LIST_CLEAR:
+                this.flowModel.listClearFlowContent = flowContent
+                break
+
         }
 
         return this

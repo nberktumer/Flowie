@@ -12,8 +12,13 @@ import {RandomFlowModelGenerator} from "./Random/RandomFlowModelGenerator"
 import {DataClassFlowModelGenerator} from "./DataClass/DataClassFlowModelGenerator"
 import {ReturnFlowModelGenerator} from "./Return/ReturnFlowModelGenerator"
 import {ClassFlowModelGenerator} from "./Class/ClassFlowModelGenerator"
-import {CurrentTimeFlowModelGenerator} from "./CurrentTime/CurrentTimeFlowModelGenerator";
+import {CurrentTimeFlowModelGenerator} from "./CurrentTime/CurrentTimeFlowModelGenerator"
 import {UpdateVariableFlowModelGenerator} from "./UpdateVariable/UpdateVariableFlowModelGenerator"
+import {NewListFlowModelGenerator} from "./List/NewList/NewListFlowModelGenerator"
+import {ListAddFlowModelGenerator} from "./List/ListAdd/ListAddFlowModelGenerator"
+import {ListClearFlowModelGenerator} from "./List/ListClear/ListClearFlowModelGenerator"
+import {ListRemoveFlowModelGenerator} from "./List/ListRemove/ListRemoveFlowModelGenerator"
+import {ListUpdateFlowModelGenerator} from "./List/ListUpdate/ListUpdateFlowModelGenerator"
 
 export class FlowModelFactory {
     private constructor() {
@@ -47,6 +52,16 @@ export class FlowModelFactory {
                 return new DataClassFlowModelGenerator().generate(baseFlow)
             case FlowType.RETURN:
                 return new ReturnFlowModelGenerator().generate(baseFlow)
+            case FlowType.LIST_NEW:
+                return new NewListFlowModelGenerator().generate(baseFlow)
+            case FlowType.LIST_ADD:
+                return new ListAddFlowModelGenerator().generate(baseFlow)
+            case FlowType.LIST_UPDATE:
+                return new ListUpdateFlowModelGenerator().generate(baseFlow)
+            case FlowType.LIST_REMOVE:
+                return new ListRemoveFlowModelGenerator().generate(baseFlow)
+            case FlowType.LIST_CLEAR:
+                return new ListClearFlowModelGenerator().generate(baseFlow)
             default:
                 return null
         }

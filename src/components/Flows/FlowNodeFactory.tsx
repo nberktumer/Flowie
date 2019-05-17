@@ -27,6 +27,16 @@ import {ClassFlowNodeGenerator} from "./Class/ClassFlowNodeGenerator"
 import {ClassFlowNode} from "./Class/ClassFlowNode"
 import {UpdateVariableFlowNodeGenerator} from "./UpdateVariable/UpdateVariableFlowNodeGenerator"
 import {UpdateVariableFlowNode} from "./UpdateVariable/UpdateVariableFlowNode"
+import {NewListFlowNodeGenerator} from "./List/NewList/NewListFlowNodeGenerator"
+import {NewListFlowNode} from "./List/NewList/NewListFlowNode"
+import {ListClearFlowNodeGenerator} from "./List/ListClear/ListClearFlowNodeGenerator"
+import {ListAddFlowNodeGenerator} from "./List/ListAdd/ListAddFlowNodeGenerator"
+import {ListAddFlowNode} from "./List/ListAdd/ListAddFlowNode"
+import {ListClearFlowNode} from "./List/ListClear/ListClearFlowNode"
+import {ListRemoveFlowNodeGenerator} from "./List/ListRemove/ListRemoveFlowNodeGenerator"
+import {ListRemoveFlowNode} from "./List/ListRemove/ListRemoveFlowNode"
+import {ListUpdateFlowNodeGenerator} from "./List/ListUpdate/ListUpdateFlowNodeGenerator"
+import {ListUpdateFlowNode} from "./List/ListUpdate/ListUpdateFlowNode"
 
 export class FlowNodeFactory {
     private constructor() {
@@ -60,6 +70,16 @@ export class FlowNodeFactory {
                 return new DataClassFlowNodeGenerator().create(data)
             case FlowType.RETURN:
                 return new ReturnFlowNodeGenerator().create(data)
+            case FlowType.LIST_NEW:
+                return new NewListFlowNodeGenerator().create(data)
+            case FlowType.LIST_ADD:
+                return new ListAddFlowNodeGenerator().create(data)
+            case FlowType.LIST_UPDATE:
+                return new ListUpdateFlowNodeGenerator().create(data)
+            case FlowType.LIST_REMOVE:
+                return new ListRemoveFlowNodeGenerator().create(data)
+            case FlowType.LIST_CLEAR:
+                return new ListClearFlowNodeGenerator().create(data)
         }
     }
 
@@ -91,6 +111,16 @@ export class FlowNodeFactory {
                 return new DataClassFlowNodeGenerator().load(node)
             case FlowType.RETURN:
                 return new ReturnFlowNodeGenerator().load(node)
+            case FlowType.LIST_NEW:
+                return new NewListFlowNodeGenerator().load(node)
+            case FlowType.LIST_ADD:
+                return new ListAddFlowNodeGenerator().load(node)
+            case FlowType.LIST_UPDATE:
+                return new ListUpdateFlowNodeGenerator().load(node)
+            case FlowType.LIST_REMOVE:
+                return new ListRemoveFlowNodeGenerator().load(node)
+            case FlowType.LIST_CLEAR:
+                return new ListClearFlowNodeGenerator().load(node)
             default:
                 return new BaseFlowNode()
         }
@@ -124,6 +154,16 @@ export class FlowNodeFactory {
                 return new DataClassFlowNodeGenerator().create(data, node as DataClassFlowNode)
             case FlowType.RETURN:
                 return new ReturnFlowNodeGenerator().create(data, node as ReturnFlowNode)
+            case FlowType.LIST_NEW:
+                return new NewListFlowNodeGenerator().create(data, node as NewListFlowNode)
+            case FlowType.LIST_ADD:
+                return new ListAddFlowNodeGenerator().create(data, node as ListAddFlowNode)
+            case FlowType.LIST_UPDATE:
+                return new ListUpdateFlowNodeGenerator().create(data, node as ListUpdateFlowNode)
+            case FlowType.LIST_REMOVE:
+                return new ListRemoveFlowNodeGenerator().create(data, node as ListRemoveFlowNode)
+            case FlowType.LIST_CLEAR:
+                return new ListClearFlowNodeGenerator().create(data, node as ListClearFlowNode)
         }
     }
 }

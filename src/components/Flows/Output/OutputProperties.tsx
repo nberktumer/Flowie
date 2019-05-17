@@ -47,49 +47,49 @@ export class OutputProperties extends BaseProperties<BasePropertiesProps> {
             <FlowConsumer>
                 {(flowContext) => (
                     <div className="bodyContainer">
-                            <TextField
-                                id="data-type-selector"
-                                select
-                                fullWidth
-                                label={strings.constantVariable}
-                                value={this.state.isConstant}
-                                onChange={this.handleStringChange("isConstant", () => {
-                                    this.setState({variable: ""})
-                                })}
-                                margin="normal">
-                                <MenuItem key={"constant"} value={"constant"}>
-                                    {strings.constant}
-                                </MenuItem>
-                                <MenuItem key={"variable"} value={"variable"}>
-                                    {strings.variable}
-                                </MenuItem>
-                            </TextField>
+                        <TextField
+                            id="data-type-selector"
+                            select
+                            fullWidth
+                            label={strings.constantVariable}
+                            value={this.state.isConstant}
+                            onChange={this.handleStringChange("isConstant", () => {
+                                this.setState({variable: ""})
+                            })}
+                            margin="normal">
+                            <MenuItem key={"constant"} value={"constant"}>
+                                {strings.constant}
+                            </MenuItem>
+                            <MenuItem key={"variable"} value={"variable"}>
+                                {strings.variable}
+                            </MenuItem>
+                        </TextField>
 
-                            <TextField
-                                id="variable-selector"
-                                select
-                                fullWidth
-                                style={{display: this.state.isConstant === "constant" ? "none" : "flex"}}
-                                label={strings.variable}
-                                value={this.state.variable}
-                                onChange={this.handleStringChange("variable")}
-                                margin="normal">
-                                {_.concat(flowContext.variableList, flowContext.argList).map((value) => (
-                                    <MenuItem key={value.name} value={JSON.stringify(value)}>
-                                        {value.name}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
+                        <TextField
+                            id="variable-selector"
+                            select
+                            fullWidth
+                            style={{display: this.state.isConstant === "constant" ? "none" : "flex"}}
+                            label={strings.variable}
+                            value={this.state.variable}
+                            onChange={this.handleStringChange("variable")}
+                            margin="normal">
+                            {_.concat(flowContext.variableList, flowContext.argList).map((value) => (
+                                <MenuItem key={value.name} value={JSON.stringify(value)}>
+                                    {value.name}
+                                </MenuItem>
+                            ))}
+                        </TextField>
 
-                            <InputWithType
-                                variableType={VariableType.STRING}
-                                onDataChanged={(data: any) => {
-                                    this.setState({variable: JSON.stringify(new Variable(undefined, VariableType.STRING, data.value))}, () => {
-                                        this.props.onDataChanged(this.state)
-                                    })
-                                }}
-                                value={this.state.initialValue}
-                                hide={this.state.isConstant !== "constant"}/>
+                        <InputWithType
+                            variableType={VariableType.STRING}
+                            onDataChanged={(data: any) => {
+                                this.setState({variable: JSON.stringify(new Variable(undefined, VariableType.STRING, data.value))}, () => {
+                                    this.props.onDataChanged(this.state)
+                                })
+                            }}
+                            value={this.state.initialValue}
+                            hide={this.state.isConstant !== "constant"}/>
                         </div>
                 )}
             </FlowConsumer>
