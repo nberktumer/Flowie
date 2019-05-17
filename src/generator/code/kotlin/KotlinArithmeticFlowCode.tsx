@@ -1,7 +1,8 @@
 import {ArithmeticFlow} from "../../flows/ArithmeticFlow";
 import {ArithmeticFlowCode} from "../common/ArithmeticFlowCode";
 import {Clazz} from "../../project/Clazz";
-import {ArithmeticOperationType} from "../../../models";
+import {ArithmeticOperationType, ProgrammingLanguage} from "../../../models";
+import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
 
 export class KotlinArithmeticFlowCode implements ArithmeticFlowCode {
 
@@ -29,6 +30,9 @@ export class KotlinArithmeticFlowCode implements ArithmeticFlowCode {
             case ArithmeticOperationType.DIVISION:
                 operationCode = "/"
                 break
+            case ArithmeticOperationType.MODULO:
+                operationCode = "%"
+                break
         }
 
         let operator1Code = ""
@@ -46,12 +50,23 @@ export class KotlinArithmeticFlowCode implements ArithmeticFlowCode {
             operator2Code += arithmeticFlow.content.operator2.value
         }
 
-        if (arithmeticFlow.content.operation == ArithmeticOperationType.ROOT) {
-            clazz.writeCodeToMainFunction(`${variableSetCode}${arithmeticFlow.content.variable.name} = Math.pow(${operator1Code}, 1 / ${operator2Code})`)
+        let fullOperationCode = ""
+
+        if (arithmeticFlow.content.operation === ArithmeticOperationType.ROOT) {
+            fullOperationCode = `Math.pow(${operator1Code}, 1 / ${operator2Code})`
         } else {
-            clazz.writeCodeToMainFunction(`${variableSetCode}${arithmeticFlow.content.variable.name} = ${operator1Code} ${operationCode} ${operator2Code}`)
+            fullOperationCode = `${operator1Code} ${operationCode} ${operator2Code}`
         }
 
+        fullOperationCode = ProgrammingLanguageTypeConverter.convertArithmeticResult(
+            ProgrammingLanguage.KOTLIN,
+            fullOperationCode,
+            arithmeticFlow.content.variable.type,
+            arithmeticFlow.content.operator1.type,
+            arithmeticFlow.content.operator2.type
+        )
+
+        clazz.writeCodeToMainFunction(`${variableSetCode}${arithmeticFlow.content.variable.name} = ${fullOperationCode}`)
         clazz.writeMainCodeFromFlow(arithmeticFlow.nextFlow())
     }
 

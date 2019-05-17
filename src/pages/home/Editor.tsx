@@ -4,7 +4,7 @@ import {ReflexContainer, ReflexElement, ReflexSplitter} from "react-reflex"
 import {ShapePanel} from "../../components/ShapePanel/ShapePanel"
 import {ShapeItem} from "../../components/ShapePanel/ShapeItem"
 import {CodePreviewPanel} from "../../components/CodePreviewPanel/CodePreviewPanel"
-import {FlowType, ProgrammingLanguage} from "../../models"
+import {FlowType, ProgrammingLanguage, VariableType} from "../../models"
 import {ProjectTreePanel} from "../../components/ProjectTreePanel/ProjectTreePanel"
 import {AddNodeDialog} from "../../components/AddNodeDialog/AddNodeDialog"
 import {BasePropertiesState} from "../../components/Flows/Base/BaseProperties"
@@ -15,17 +15,8 @@ import {BaseEvent, BaseModel} from "nberktumer-react-diagrams"
 import {BaseFlowNode} from "../../components/CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {BaseVariableFlowNode} from "../../components/Flows/Base/BaseVariableFlowNode"
 import {EditorHeader} from "../../components/EditorHeader/EditorHeader"
-import {FileUtils} from "../../utils"
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    MenuItem,
-    TextField
-} from "@material-ui/core"
+import {FileUtils, FlowCategory} from "../../utils"
+import {MenuItem, Tab, Tabs, TextField} from "@material-ui/core"
 import {FlowProvider} from "../../stores/FlowStore"
 import {Project} from "../../generator/project/Project"
 import {MainClazz} from "../../generator/project/MainClazz"
@@ -34,26 +25,36 @@ import {FileModel} from "../../models/FileModel"
 import {Directory} from "../../generator/project/Directory"
 import {ProjectProvider} from "../../stores/ProjectStore"
 import {DirectoryItemType} from "../../generator/project/DirectoryItem"
-import strings from "../../lang"
 import {Defaults} from "../../config"
+import {DataClazz} from "../../generator/project/DataClazz"
+import ClassModel from "../../models/ClassModel"
+import {HOLDER} from "../../bigNoNoPackage/ReturnTypeHolder"
+import {DataClassFlowNode} from "../../components/Flows/DataClass/DataClassFlowNode"
+import {FlowStateProvider} from "../../stores/FlowStateStore"
+import {InitialFlowNode} from "../../components/Flows/Initial/InitialFlowNode"
+import {ClassFlowNode} from "../../components/Flows/Class/ClassFlowNode"
+import ClazzModel from "../../models/ClazzModel"
+import {ArithmeticFlowNode} from "../../components/Flows/Arithmetic/ArithmeticFlowNode"
+import {CurrentTimeFlowNode} from "../../components/Flows/CurrentTime/CurrentTimeFlowNode"
+import {ListGetFlowNode} from "../../components/Flows/List/ListGet/ListGetFlowNode"
+import {ListSizeFlowNode} from "../../components/Flows/List/ListSize/ListSizeFlowNode"
 
 export interface EditorProps {
-    project: { rootFileModel: FileModel, projectName: string, currentFile: FileModel }
+    project: { rootFileModel: FileModel, projectName: string, currentFile: FileModel, bigBigNoPackage: { ReturnType: VariableType, classList: ClazzModel[], currentClass: Clazz } }
 }
 
 export interface EditorState {
-    isModalOpen: boolean,
-    isAddNewFileModalOpen: boolean,
-    flowType: FlowType | null,
-    flowPosition: { x: number, y: number },
+    dialogProps: { isOpen: boolean, flowType: FlowType | null, isCreateFile?: boolean, flowPosition?: { x: number, y: number }, filePath?: string },
     generatedCode: string,
-    newFileName: string,
-    newFileTitle: string,
-    newFileType: string,
-    newFilePath: string,
     variableList: Variable[],
+    argList: Variable[],
+    classList: ClazzModel[],
+    dataClassList: DataClazz[],
+    classNameList: ClassModel[],
+    packageNameList: string[],
     rootFileModel: FileModel,
-    selectedLanguage: ProgrammingLanguage
+    selectedLanguage: ProgrammingLanguage,
+    selectedTab: any
 }
 
 export default class Editor extends Component<EditorProps, EditorState> {
@@ -63,29 +64,30 @@ export default class Editor extends Component<EditorProps, EditorState> {
     project: Project
     currentFileModel: FileModel
     currentClass: Clazz
+    currentClassData: ClazzModel
     hasLoadedProject = false
 
     constructor(props: EditorProps) {
         super(props)
 
         this.project = new Project(props.project.projectName)
+        Object.assign(HOLDER, props.project.bigBigNoPackage)
         this.currentClass = new MainClazz(DirectoryItemType.MAIN_CLASS, "", [])
+        this.currentClassData = new ClazzModel("", [], VariableType.NONE, VariableType.NONE)
         this.state = {
-            isModalOpen: false,
-            isAddNewFileModalOpen: false,
-            flowType: null,
-            flowPosition: {x: 0, y: 0},
+            dialogProps: {isOpen: false, flowType: null},
             generatedCode: "",
-            newFileName: "",
-            newFileTitle: "",
-            newFileType: "",
-            newFilePath: "",
             variableList: [],
+            argList: [],
+            classList: [],
+            dataClassList: [],
+            classNameList: [],
+            packageNameList: [],
             rootFileModel: props.project.rootFileModel,
-            selectedLanguage: ProgrammingLanguage.KOTLIN
+            selectedLanguage: Defaults.PROGRAMMING_LANGUAGE,
+            selectedTab: 0
         }
 
-        console.log(props.project)
         this.currentFileModel = props.project.currentFile
     }
 
@@ -102,22 +104,21 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
     resetState = () => {
         this.setState({
-            isModalOpen: false,
-            isAddNewFileModalOpen: false,
-            flowType: null,
-            flowPosition: {x: 0, y: 0},
+            dialogProps: {isOpen: false, flowType: null},
             variableList: [],
-            generatedCode: "",
-            newFileName: "",
-            newFileType: "",
-            newFilePath: ""
+            argList: [],
+            classList: [],
+            dataClassList: [],
+            classNameList: [],
+            packageNameList: [],
+            generatedCode: ""
         })
     }
 
     onModalSaveClick(data: BasePropertiesState | null) {
         this.onModalClose()
-        if (data && this.canvasPanel.current && this.state.flowType && !data.errorMessage && !data.errorField)
-            this.canvasPanel.current.addItem(this.state.flowType, data, this.state.flowPosition)
+        if (data && this.canvasPanel.current && this.state.dialogProps.flowType && this.state.dialogProps.flowPosition && !data.errorMessage && !data.errorField)
+            this.canvasPanel.current.addItem(this.state.dialogProps.flowType, data, this.state.dialogProps.flowPosition)
     }
 
     onModalDismissClick() {
@@ -126,9 +127,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
     onModalClose() {
         this.setState({
-            isModalOpen: false,
-            flowType: null,
-            flowPosition: {x: 0, y: 0}
+            dialogProps: {isOpen: false, flowType: null}
         })
     }
 
@@ -136,8 +135,15 @@ export default class Editor extends Component<EditorProps, EditorState> {
         Project.setProgrammingLanguage(this.state.selectedLanguage)
 
         const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current ? this.canvasPanel.current.initialNode : null)
+        console.log(flowModelList)
 
-        this.currentClass.reset(flowModelList)
+        const returnType = this.currentClassData.returnType
+        const returnListType = this.currentClassData.returnListType
+        this.currentClass.reset(
+            this.currentClassData.argList,
+            returnType === VariableType.LIST ? returnListType : returnType,
+            returnType === VariableType.LIST,
+            flowModelList)
         this.currentClass.generateCode()
         // this.project.generateClazzCodes() // TODO: use this for exporting the project
         this.setState({generatedCode: this.currentClass.getCode()})
@@ -146,89 +152,93 @@ export default class Editor extends Component<EditorProps, EditorState> {
     updateDirectoryItems() {
         this.project.rootDirectory.items = []
         this.state.rootFileModel.children.forEach((item: FileModel) => {
-            this.generateDirectoryItems(item, this.project.rootDirectory)
+            this.generateDirectoryItems(item, this.project.rootDirectory, this.project.rootDirectory.name)
         })
     }
 
-    onNewClass(path: string) {
+    onNewClass(fileModel: FileModel & { path: string }) {
         this.setState({
-            isAddNewFileModalOpen: true,
-            newFileType: "class",
-            newFilePath: path,
-            newFileTitle: strings.newClass
+            dialogProps: {isOpen: true, isCreateFile: true, flowType: FlowType.CLASS, filePath: fileModel.path}
         })
     }
 
-    onNewDataClass(path: string) {
+    onNewDataClass(fileModel: FileModel & { path: string }) {
         this.setState({
-            isAddNewFileModalOpen: true,
-            newFileType: "data_class",
-            newFilePath: path,
-            newFileTitle: strings.newDataClass
+            dialogProps: {isOpen: true, isCreateFile: true, flowType: FlowType.DATA_CLASS, filePath: fileModel.path}
         })
     }
 
-    onNewPackage(path: string) {
+    onNewPackage(fileModel: FileModel & { path: string }) {
         this.setState({
-            isAddNewFileModalOpen: true,
-            newFileType: "package",
-            newFilePath: path,
-            newFileTitle: strings.newPackage
+            dialogProps: {isOpen: true, isCreateFile: true, flowType: FlowType.PACKAGE, filePath: fileModel.path}
         })
     }
 
-    onNewFunctionality(path: string) {
-        this.setState({
-            isAddNewFileModalOpen: true,
-            newFileType: "functionality",
-            newFilePath: path,
-            newFileTitle: strings.newFunction
-        })
+    onNewFunctionality(fileModel: FileModel & { path: string }) {
+        // this.setState({
+        //     isModalOpen: true,
+        //     isCreateFileDialog: true,
+        //     newFileType: "functionality",
+        //     newFilePath: path,
+        //     newFileTitle: strings.newFunction
+        // })
     }
 
-    onNewFileSave() {
-        const pathList = this.state.newFilePath.split("/")
+    onNewFileSave(data: BasePropertiesState | null) {
+        if (!data || !this.state.dialogProps.filePath)
+            return
 
+        const pathList = this.state.dialogProps.filePath.split("/")
+        const newPath = `${this.state.dialogProps.filePath}/${data.name}`
+
+        let currentDir = this.project.rootDirectory
         let lastFileModel: FileModel | undefined = this.state.rootFileModel
         pathList.forEach((path) => {
             if (lastFileModel) {
-                const result = lastFileModel.children.find((val) => val.isDir && val.filename === path)
+                const result = lastFileModel.children.find((val) => val.type === DirectoryItemType.DIRECTORY && val.filename === path)
                 if (result) {
                     lastFileModel = result
                 }
             }
+            currentDir.items.forEach((dirItem) => {
+                if (dirItem.type === DirectoryItemType.DIRECTORY && dirItem.name === path) {
+                    currentDir = dirItem as Directory
+                }
+            })
         })
 
         if (lastFileModel) {
-            switch (this.state.newFileType) {
-                case "package":
-                case "data_class":
-                case "class": {
-                    let currentDir = this.project.rootDirectory
-                    pathList.forEach((path) => {
-                        currentDir.items.forEach((dirItem) => {
-                            if (dirItem.type === DirectoryItemType.DIRECTORY && dirItem.name === path) {
-                                currentDir = dirItem as Directory
-                            }
-                        })
-                    })
-                    if (this.state.newFileType === "package") {
-                        currentDir.addDirectoryItem(new Directory(this.state.newFileName, []))
-                    } else {
-                        currentDir.addDirectoryItem(new Clazz(DirectoryItemType.CLASS, this.state.newFileName, []))
-                    }
-                    lastFileModel.children.push(new FileModel(this.state.newFileName, "", this.state.newFileType === "package", false, []))
+            switch (this.state.dialogProps.flowType) {
+                case FlowType.PACKAGE: {
+                    const directory = new Directory(data.name, [])
+                    this.setState((prevState) => ({packageNameList: [...prevState.packageNameList, newPath]}))
+                    currentDir.addDirectoryItem(directory)
+                    lastFileModel.children.push(new FileModel(data.name, "", DirectoryItemType.DIRECTORY, []))
+                    break
+                }
+                case FlowType.DATA_CLASS: {
+                    const clazz = new DataClazz(data.name, data.fields.map((item: any) => new Variable(item.name, item.type, item.value)))
+                    this.setState((prevState) => ({dataClassList: [...prevState.dataClassList, clazz]}))
+                    this.setState((prevState) =>
+                        ({classNameList: [...prevState.classNameList, new ClassModel(data.name, this.state.dialogProps.filePath!)]}))
+                    currentDir.addDirectoryItem(clazz)
+                    lastFileModel.children.push(new FileModel(data.name, "", DirectoryItemType.DATA_CLASS, []))
+                    break
+                }
+                case FlowType.CLASS: {
+                    const clazz = new Clazz([], VariableType.NONE, false, DirectoryItemType.CLASS, data.name, [])
+                    const clazzModel = new ClazzModel(data.name, this.canvasPanel.current!.initialNode.argList, this.canvasPanel.current!.initialNode.returnType, this.canvasPanel.current!.initialNode.returnListType)
+                    this.setState((prevState) => ({classList: [...prevState.classList, clazzModel]}))
+                    this.setState((prevState) => ({classNameList: [...prevState.classNameList, new ClassModel(data.name, this.state.dialogProps.filePath!)]}))
+                    currentDir.addDirectoryItem(clazz)
+                    lastFileModel.children.push(new FileModel(data.name, "", DirectoryItemType.CLASS, []))
                     break
                 }
             }
         }
 
-        this.onAddNewFileDialogClose()
+        this.onModalClose()
         this.forceUpdate()
-    }
-
-    onAddNewFileDialogClose() {
-        this.setState({isAddNewFileModalOpen: false, newFileName: "", newFileTitle: "", newFileType: ""})
     }
 
     onFileDoubleClick(fileModel: FileModel & { path: string }) {
@@ -238,7 +248,7 @@ export default class Editor extends Component<EditorProps, EditorState> {
     }
 
     loadClass(fileModel: FileModel, saveCurrent: boolean = true) {
-        if (!fileModel.isDir && this.canvasPanel.current) {
+        if (fileModel.type !== DirectoryItemType.DIRECTORY && fileModel.type !== DirectoryItemType.DATA_CLASS && this.canvasPanel.current) {
             if (saveCurrent)
                 this.currentFileModel.json = JSON.stringify(this.canvasPanel.current.saveProject())
 
@@ -246,9 +256,10 @@ export default class Editor extends Component<EditorProps, EditorState> {
                 this.canvasPanel.current.loadProject(fileModel.json, (variableList: any) => {
                     this.currentFileModel = fileModel
                     this.resetState()
-                    this.setState({variableList})
-                    this.updateDirectoryItems()
-                    this.onDiagramChanged()
+                    this.setState({variableList}, () => {
+                        this.updateDirectoryItems()
+                        this.onDiagramChanged()
+                    })
                 })
             } else {
                 this.currentFileModel = fileModel
@@ -261,22 +272,75 @@ export default class Editor extends Component<EditorProps, EditorState> {
     }
 
     onCanvasDrop(type: FlowType, position: { x: number, y: number }) {
-        this.setState({
-            isModalOpen: true,
-            flowType: type,
-            flowPosition: position
-        })
+        if (type === FlowType.RETURN && HOLDER.ReturnType === VariableType.NONE) {
+            if (this.canvasPanel.current)
+                this.canvasPanel.current.addItem(type, {}, position)
+        } else {
+            this.setState({
+                dialogProps: {isOpen: true, flowType: type, flowPosition: position}
+            })
+        }
     }
 
     onItemAdded(flow: BaseFlowNode) {
         if (flow instanceof BaseVariableFlowNode) {
-            this.state.variableList.push((flow as BaseVariableFlowNode).getVariable())
+            this.setState((prevState) => ({variableList: [...prevState.variableList, (flow as BaseVariableFlowNode).getVariable()]}))
+        } else if (flow instanceof DataClassFlowNode) {
+            this.setState((prevState) => ({variableList: [...prevState.variableList, new Variable((flow as DataClassFlowNode).variableName, VariableType.NONE, null)]}))
+        } else if (flow instanceof ClassFlowNode && flow.variable) {
+            this.setState((prevState) => ({variableList: [...prevState.variableList, flow.variable]}))
+        } else if ((flow instanceof ArithmeticFlowNode && flow.isNewVariable) || (flow instanceof CurrentTimeFlowNode && flow.isNewVariable)) {
+            this.setState((prevState) => ({variableList: [...prevState.variableList, flow.getVariable()]}))
+        } else if ((flow instanceof ListGetFlowNode && flow.isNewVariable) || (flow instanceof ListSizeFlowNode && flow.isNewVariable)) {
+            this.setState((prevState) => ({variableList: [...prevState.variableList, flow.variable]}))
         }
     }
 
     // On item deleted
     onEntityRemoved(event: BaseEvent<BaseModel>) {
+        if (event.entity instanceof BaseVariableFlowNode) {
+            const newVariableList = this.state.variableList.filter((value) => {
+                return value.name !== (event.entity as BaseVariableFlowNode).getVariable().name
+            })
 
+            this.setState({variableList: newVariableList})
+        } else if (event.entity instanceof ClassFlowNode) {
+            const newVariableList = this.state.variableList.filter((value) => {
+                return value.name !== (event.entity as ClassFlowNode).variable.name
+            })
+
+            this.setState({variableList: newVariableList})
+        } else if (event.entity instanceof DataClassFlowNode) {
+            const newVariableList = this.state.variableList.filter((value) => {
+                return value.name !== (event.entity as DataClassFlowNode).variableName
+            })
+
+            this.setState({variableList: newVariableList})
+        } else if (event.entity instanceof ArithmeticFlowNode && event.entity.isNewVariable) {
+            const newVariableList = this.state.variableList.filter((value) => {
+                return value.name !== (event.entity as ArithmeticFlowNode).getVariable().name
+            })
+
+            this.setState({variableList: newVariableList})
+        } else if (event.entity instanceof CurrentTimeFlowNode && event.entity.isNewVariable) {
+            const newVariableList = this.state.variableList.filter((value) => {
+                return value.name !== (event.entity as CurrentTimeFlowNode).getVariable().name
+            })
+
+            this.setState({variableList: newVariableList})
+        } else if (event.entity instanceof ListGetFlowNode && event.entity.isNewVariable) {
+            const newVariableList = this.state.variableList.filter((value) => {
+                return value.name !== (event.entity as ListGetFlowNode).variable.name
+            })
+
+            this.setState({variableList: newVariableList})
+        } else if (event.entity instanceof ListSizeFlowNode && event.entity.isNewVariable) {
+            const newVariableList = this.state.variableList.filter((value) => {
+                return value.name !== (event.entity as ListSizeFlowNode).variable.name
+            })
+
+            this.setState({variableList: newVariableList})
+        }
     }
 
     // On item selected
@@ -303,8 +367,12 @@ export default class Editor extends Component<EditorProps, EditorState> {
                 const saveContent = {
                     rootFileModel: this.state.rootFileModel,
                     projectName: this.project.projectName,
-                    currentFile: this.currentFileModel
+                    currentFile: this.currentFileModel,
+                    bigBigNoPackage: HOLDER
                 }
+
+                console.log(saveContent)
+                console.log(JSON.stringify(saveContent))
                 FileUtils.save(`${this.project.projectName}.${Defaults.SAVE_EXTENSION}`, JSON.stringify(saveContent))
                 break
             }
@@ -314,9 +382,11 @@ export default class Editor extends Component<EditorProps, EditorState> {
                         return
 
                     try {
-                        const loadedData = JSON.parse(data) as { rootFileModel: FileModel, projectName: string, currentFile: FileModel }
-
+                        const loadedData = JSON.parse(data) as { rootFileModel: FileModel, projectName: string, currentFile: FileModel, bigBigNoPackage: { ReturnType: VariableType, classList: ClazzModel[] } }
+                        Object.assign(HOLDER.classList, loadedData.bigBigNoPackage.classList)
+                        HOLDER.ReturnType = loadedData.bigBigNoPackage.ReturnType
                         this.project = new Project(loadedData.projectName)
+                        this.setState({rootFileModel: loadedData.rootFileModel})
                         this.loadClass(loadedData.currentFile)
                     } catch (e) {
                         console.error(e)
@@ -327,6 +397,10 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
                 break
             }
+            // case "export": {
+            //     this.project.generateClazzCodes()
+            //     break
+            // }
             default:
                 return
         }
@@ -334,161 +408,230 @@ export default class Editor extends Component<EditorProps, EditorState> {
 
     render() {
         return (
-            <FlowProvider value={{variableList: this.state.variableList}}>
-                <ProjectProvider value={{project: this.state.rootFileModel}}>
-                    <div className={styles.App}>
-                        <Dialog
-                            open={this.state.isAddNewFileModalOpen}
-                            onClose={() => this.onAddNewFileDialogClose()}
-                            aria-labelledby="form-dialog-title">
-                            <DialogTitle id="form-dialog-title">{this.state.newFileTitle}</DialogTitle>
-                            <DialogContent>
-                                <DialogContentText>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce a auctor dui. Nunc at
-                                    pellentesque purus. Aliquam leo massa, pellentesque.
-                                </DialogContentText>
-                                <TextField
-                                    autoFocus
-                                    margin="dense"
-                                    id="fileName"
-                                    onChange={(e) => this.setState({newFileName: e.target.value})}
-                                    label={strings.projectName}
-                                    fullWidth
-                                />
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={() => this.onAddNewFileDialogClose()} color="primary">
-                                    {strings.cancel}
-                                </Button>
-                                <Button onClick={() => this.onNewFileSave()} color="primary">
-                                    {strings.create}
-                                </Button>
-                            </DialogActions>
-                        </Dialog>
-                        <AddNodeDialog onSaveClick={this.onModalSaveClick.bind(this)}
-                                       onDismissClick={this.onModalDismissClick.bind(this)}
-                                       onClose={this.onModalClose.bind(this)}
-                                       aria-labelledby="simple-dialog-title"
-                                       open={this.state.isModalOpen}
-                                       type={this.state.flowType}/>
-                        <EditorHeader onClickListener={(item: string) => this.onHeaderMenuClickListener(item)}/>
-                        <ReflexContainer orientation="vertical">
-                            <ReflexElement minSize={250}>
-                                <ReflexContainer orientation="horizontal" style={{height: "100vh"}}>
-                                    <ReflexElement className="left-pane" flex={0.35} minSize={200}>
-                                        <div style={{width: "100%", height: "100%", backgroundColor: "#1d1f21"}}>
-                                            <ProjectTreePanel
-                                                onDoubleClickListener={(fileModel) => this.onFileDoubleClick(fileModel)}
-                                                onNewClass={(path) => this.onNewClass(path)}
-                                                onNewDataClass={(path) => this.onNewDataClass(path)}
-                                                onNewFunctionality={(path) => this.onNewFunctionality(path)}
-                                                onNewPackage={(path) => this.onNewPackage(path)}/>
-                                        </div>
-                                    </ReflexElement>
+            <FlowStateProvider value={{
+                flowChangedListener: (node: BaseFlowNode) => {
+                    if (node.flowType === FlowType.INITIAL) {
+                        const initialNode = node as InitialFlowNode
+                        if (this.canvasPanel.current) {
+                            initialNode.id = this.canvasPanel.current.initialNode.getID()
+                            initialNode.x = this.canvasPanel.current.initialNode.x
+                            initialNode.y = this.canvasPanel.current.initialNode.y
+                            Object.assign(this.canvasPanel.current.activeModel.getNode(initialNode.getID()), initialNode)
+                            this.canvasPanel.current.initialNode = initialNode
+                            this.currentClassData.argList = initialNode.argList
+                            this.currentClassData.returnType = initialNode.returnType
+                            this.currentClassData.returnListType = initialNode.returnListType
+                            const currentClassData = this.state.classList.map((item, index) => {
+                                if (item.name === this.currentClassData.name) {
+                                    return this.currentClassData
+                                } else {
+                                    return item
+                                }
+                            })
+                            Object.assign(HOLDER.classList, currentClassData)
+                            this.setState({
+                                classList: currentClassData,
+                                argList: this.canvasPanel.current.initialNode.argList
+                            })
+                        }
+                    }
+                    this.onDiagramChanged()
+                }
+            }}>
+                <FlowProvider value={{
+                    variableList: this.state.variableList,
+                    argList: this.state.argList,
+                    classList: this.state.classList,
+                    dataClassList: this.state.dataClassList,
+                    classNameList: this.state.classNameList,
+                    packageNameList: this.state.packageNameList
+                }}>
+                    <ProjectProvider value={{project: this.state.rootFileModel}}>
+                        <div className={styles.App}>
+                            <AddNodeDialog
+                                onSaveClick={this.state.dialogProps.isCreateFile ? this.onNewFileSave.bind(this) : this.onModalSaveClick.bind(this)}
+                                onDismissClick={this.onModalDismissClick.bind(this)}
+                                onClose={this.onModalClose.bind(this)}
+                                aria-labelledby="simple-dialog-title"
+                                open={this.state.dialogProps.isOpen}
+                                file={this.state.dialogProps.isCreateFile}
+                                type={this.state.dialogProps.flowType}/>
+                            <EditorHeader onClickListener={(item: string) => this.onHeaderMenuClickListener(item)}/>
+                            <ReflexContainer orientation="vertical">
+                                <ReflexElement minSize={250} flex={0.15}>
+                                    <ReflexContainer orientation="horizontal" style={{height: "100vh"}}>
+                                        <ReflexElement className="left-pane" flex={0.35} minSize={200}>
+                                            <div style={{width: "100%", height: "100%", backgroundColor: "#1d1f21"}}>
+                                                <ProjectTreePanel
+                                                    onDoubleClickListener={(fileModel) => this.onFileDoubleClick(fileModel)}
+                                                    onNewClass={(path) => this.onNewClass(path)}
+                                                    onNewDataClass={(path) => this.onNewDataClass(path)}
+                                                    onNewFunctionality={(path) => this.onNewFunctionality(path)}
+                                                    onNewPackage={(path) => this.onNewPackage(path)}/>
+                                            </div>
+                                        </ReflexElement>
 
-                                    <ReflexSplitter/>
+                                        <ReflexSplitter/>
 
-                                    <ReflexElement className="left-pane" minSize={200}>
-                                        <ShapePanel>
-                                            {Object.values(FlowType).filter((value) => value !== FlowType.INITIAL)
-                                                .map((value) => (
-                                                    <ShapeItem key={value} model={{type: value}} name={value}/>
-                                                ))}
-                                        </ShapePanel>
-                                    </ReflexElement>
-                                </ReflexContainer>
-                            </ReflexElement>
+                                        <ReflexElement className="left-pane" minSize={200}>
+                                            <div className={styles.flowContainer}>
+                                                <Tabs
+                                                    value={this.state.selectedTab}
+                                                    onChange={(e, v) => this.setState({selectedTab: v})}
+                                                    style={{
+                                                        backgroundColor: "#1d1f21",
+                                                        color: "white",
+                                                        marginBottom: 16
 
-                            <ReflexSplitter/>
+                                                    }}
+                                                    variant="scrollable"
+                                                    indicatorColor="#fff"
+                                                    scrollButtons="auto">
+                                                    {FlowCategory.map((category, index) => (
+                                                        <Tab key={index} value={index} label={category.name}/>
+                                                    ))}
+                                                </Tabs>
+                                                <ShapePanel>
+                                                    {FlowCategory[this.state.selectedTab].flows.map((flow, index) => (
+                                                        <ShapeItem key={index} model={{type: flow}} name={flow}/>
+                                                    ))}
+                                                </ShapePanel>
+                                            </div>
+                                        </ReflexElement>
+                                    </ReflexContainer>
+                                </ReflexElement>
 
-                            <ReflexElement className="middle-pane" flex={0.55} minSize={250}>
-                                <div className={styles.paneContent}>
-                                    <CanvasPanel ref={this.canvasPanel}
-                                                 onItemAdded={this.onItemAdded.bind(this)}
-                                                 onDiagramChanged={this.onDiagramChanged.bind(this)}
-                                                 onDrop={this.onCanvasDrop.bind(this)}
-                                                 onSelectionChanged={this.onSelectionChanged.bind(this)}
-                                                 onEntityRemoved={this.onEntityRemoved.bind(this)}/>
-                                </div>
-                            </ReflexElement>
+                                <ReflexSplitter/>
 
-                            <ReflexSplitter/>
+                                <ReflexElement className="middle-pane" flex={0.6} minSize={250}>
+                                    <div className={styles.paneContent}>
+                                        <CanvasPanel ref={this.canvasPanel}
+                                                     onItemAdded={this.onItemAdded.bind(this)}
+                                                     onDiagramChanged={this.onDiagramChanged.bind(this)}
+                                                     onDrop={this.onCanvasDrop.bind(this)}
+                                                     onSelectionChanged={this.onSelectionChanged.bind(this)}
+                                                     onEntityRemoved={this.onEntityRemoved.bind(this)}/>
+                                    </div>
+                                </ReflexElement>
 
-                            <ReflexElement minSize={250}>
-                                <div style={{
-                                    display: "flex",
-                                    height: "100%",
-                                    width: "100%",
-                                    flexDirection: "column"
-                                }}>
-                                    <TextField
-                                        id="language-selector"
-                                        select
-                                        value={this.state.selectedLanguage}
-                                        onChange={(event: any) => {
-                                            this.setState({selectedLanguage: event.target.value}, () => {
-                                                this.onDiagramChanged()
-                                            })
-                                        }}
-                                        className={styles.languageSelector}
-                                        margin="none">
-                                        {this.programmingLanguages.map((key: any) => (
-                                            <MenuItem key={key} value={key}>
-                                                {ProgrammingLanguage[key]}
-                                            </MenuItem>
-                                        ))}
-                                    </TextField>
+                                <ReflexSplitter/>
+
+                                <ReflexElement minSize={250} flex={0.25}>
                                     <div style={{
                                         display: "flex",
-                                        flex: 1,
                                         height: "100%",
                                         width: "100%",
                                         flexDirection: "column"
                                     }}>
+                                        <TextField
+                                            id="language-selector"
+                                            select
+                                            value={this.state.selectedLanguage}
+                                            onChange={(event: any) => {
+                                                this.setState({selectedLanguage: event.target.value}, () => {
+                                                    this.onDiagramChanged()
+                                                })
+                                            }}
+                                            className={styles.languageSelector}
+                                            margin="none">
+                                            {this.programmingLanguages.map((key: any) => (
+                                                <MenuItem key={key} value={key}>
+                                                    {ProgrammingLanguage[key]}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                        <div style={{
+                                            display: "flex",
+                                            flex: 1,
+                                            height: "100%",
+                                            width: "100%",
+                                            flexDirection: "column"
+                                        }}>
 
-                                        <CodePreviewPanel code={this.state.generatedCode}
-                                                          language={this.state.selectedLanguage}/>
+                                            <CodePreviewPanel code={this.state.generatedCode}
+                                                              language={this.state.selectedLanguage}/>
+                                        </div>
                                     </div>
-                                </div>
-                            </ReflexElement>
-                        </ReflexContainer>
-                    </div>
-                </ProjectProvider>
-            </FlowProvider>
+                                </ReflexElement>
+                            </ReflexContainer>
+                        </div>
+                    </ProjectProvider>
+                </FlowProvider>
+            </FlowStateProvider>
         )
     }
 
-    private generateDirectoryItems(fileModel: FileModel, parent: Directory) {
-        if (fileModel.isDir) {
+    private generateDirectoryItems(fileModel: FileModel, parent: Directory, path: string) {
+        if (fileModel.type === DirectoryItemType.DIRECTORY) {
             const directory = new Directory(fileModel.filename, [])
+            this.setState((prevState) => ({packageNameList: [...prevState.packageNameList, path]}))
+
             parent.addDirectoryItem(directory)
             fileModel.children.forEach((item) => {
-                this.generateDirectoryItems(item, directory)
+                this.generateDirectoryItems(item, directory, `${path}/${item.filename}`)
             })
         } else {
-            if (fileModel.isMainClass) {
+            this.setState((prevState) => ({classNameList: [...prevState.classNameList, new ClassModel(fileModel.filename, path)]}))
+
+            if (fileModel.type === DirectoryItemType.MAIN_CLASS) {
                 if (this.currentFileModel.id === fileModel.id) {
+
                     const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current ? this.canvasPanel.current.initialNode : null)
-                    console.log(flowModelList)
 
                     const clazz = new MainClazz(DirectoryItemType.MAIN_CLASS, fileModel.filename, flowModelList)
-
                     this.currentClass = clazz
+                    HOLDER.currentClass = clazz
+                    this.currentClassData = new ClazzModel(fileModel.filename, this.canvasPanel.current!.initialNode.argList, this.canvasPanel.current!.initialNode.returnType, this.canvasPanel.current!.initialNode.returnListType)
                     parent.addDirectoryItem(clazz)
                 } else {
                     parent.addDirectoryItem(new MainClazz(DirectoryItemType.MAIN_CLASS, fileModel.filename, []))
                 }
+            } else if (fileModel.type === DirectoryItemType.DATA_CLASS) {
+                const clazz = new DataClazz(fileModel.filename, [])
+                this.setState((prevState) => ({dataClassList: [...prevState.dataClassList, clazz]}))
+
+                parent.addDirectoryItem(clazz)
             } else {
                 if (this.currentFileModel.id === fileModel.id) {
+
                     const flowModelList = FlowModelGenerator.generate(this.canvasPanel.current ? this.canvasPanel.current.initialNode : null)
-                    console.log(flowModelList)
+                    const returnType = this.canvasPanel.current!.initialNode.returnType
+                    const returnListType = this.canvasPanel.current!.initialNode.returnListType
 
-                    const clazz = new Clazz(DirectoryItemType.CLASS, fileModel.filename, flowModelList)
-
+                    const clazz = new Clazz(
+                        this.canvasPanel.current!.initialNode.argList,
+                        returnType === VariableType.LIST ? returnListType : returnType,
+                        returnType === VariableType.LIST,
+                        DirectoryItemType.CLASS,
+                        fileModel.filename,
+                        flowModelList
+                    )
+                    const clazzModel = new ClazzModel(fileModel.filename, this.canvasPanel.current!.initialNode.argList, this.canvasPanel.current!.initialNode.returnType, this.canvasPanel.current!.initialNode.returnListType)
                     this.currentClass = clazz
+                    HOLDER.currentClass = clazz
+                    this.currentClassData = clazzModel
+                    this.setState((prevState) => ({
+                        classList: [...prevState.classList, clazzModel],
+                        argList: this.canvasPanel.current!.initialNode.argList
+                    }))
+
                     parent.addDirectoryItem(clazz)
                 } else {
-                    parent.addDirectoryItem(new Clazz(DirectoryItemType.CLASS, fileModel.filename, []))
+                    const returnType = this.canvasPanel.current!.initialNode.returnType
+                    const returnListType = this.canvasPanel.current!.initialNode.returnListType
+
+                    const clazz = new Clazz(
+                        this.canvasPanel.current!.initialNode.argList,
+                        returnType === VariableType.LIST ? returnListType : returnType,
+                        returnType === VariableType.LIST,
+                        DirectoryItemType.CLASS,
+                        fileModel.filename,
+                        []
+                    )
+                    const clazzModel = new ClazzModel(fileModel.filename, this.canvasPanel.current!.initialNode.argList, this.canvasPanel.current!.initialNode.returnType, this.canvasPanel.current!.initialNode.returnListType)
+                    this.setState((prevState) => ({classList: [...prevState.classList, clazzModel]}))
+
+                    parent.addDirectoryItem(clazz)
                 }
             }
         }

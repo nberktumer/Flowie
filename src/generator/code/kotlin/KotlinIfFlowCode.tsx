@@ -56,7 +56,6 @@ export class KotlinIfFlowCode implements IfFlowCode {
         clazz.mainFunction.code.incrementIndentation()
 
         if (ifFlow.content.trueScopeId != null) {
-            clazz.addToLoopStack(ifFlow.id)
             clazz.writeMainCodeFromFlow(ifFlow.content.trueScopeId)
         }
 
@@ -67,8 +66,7 @@ export class KotlinIfFlowCode implements IfFlowCode {
 
             clazz.mainFunction.code.incrementIndentation()
 
-            clazz.addToLoopStack(ifFlow.id)
-            clazz.writeCodeToMainFunction(ifFlow.content.falseScopeId)
+            clazz.writeMainCodeFromFlow(ifFlow.content.falseScopeId)
 
             clazz.mainFunction.code.decrementIndentation()
         }

@@ -1,12 +1,13 @@
 import React from "react"
 import {MenuItem, TextField} from "@material-ui/core"
 import strings from "../../../lang"
-import {BaseProperties, BasePropertiesProps} from "../Base/BaseProperties"
+import {BaseProperties, BasePropertiesProps, BasePropertiesState} from "../Base/BaseProperties"
 import {VariableType} from "../../../models"
 import {Rules} from "../../../config"
 import {InputFlowNode} from "./InputFlowNode"
 import {Validator} from "../../../utils"
 import {FlowConsumer} from "../../../stores/FlowStore"
+import _ from "lodash"
 
 export interface InputPropertiesProps extends BasePropertiesProps {
     readonlyType: boolean
@@ -25,15 +26,22 @@ export class InputProperties extends BaseProperties<InputPropertiesProps> {
 
             this.state = {
                 variableName: node.getVariable().name,
-                variableType: node.getVariable().type,
-                variable: node.getVariable()
+                variableType: node.getVariable().type
             }
         } else {
             this.state = {
                 variableName: "",
-                variableType: "",
-                variable: null
+                variableType: ""
             }
+        }
+    }
+
+    componentWillUpdate(nextProps: Readonly<BasePropertiesProps>, nextState: Readonly<BasePropertiesState>, nextContext: any): void {
+        if (this.props.isValidListener && nextState !== this.state) {
+            this.props.isValidListener(!nextState.errorMessage
+                && !nextState.errorField
+                && nextState.variableName
+                && nextState.variableType)
         }
     }
 
@@ -51,7 +59,7 @@ export class InputProperties extends BaseProperties<InputPropertiesProps> {
                             value={this.state.variableName}
                             inputProps={{maxLength: Rules.MAX_VAR_LENGTH}}
                             onChange={this.handleStringChange("variableName", (data) => {
-                                const error = Validator.validateVariableName(data, flowContext.variableList)
+                                const error = Validator.validateVariableName(data, _.concat(flowContext.variableList, flowContext.argList))
                                 this.setState({errorMessage: error, errorField: error ? "variableName" : ""}, () => {
                                     this.props.onDataChanged(this.state)
                                 })
@@ -67,7 +75,9 @@ export class InputProperties extends BaseProperties<InputPropertiesProps> {
                             value={this.state.variableType}
                             onChange={this.handleStringChange("variableType")}
                             margin="normal">
-                            {Object.keys(VariableType).map((key: any) => (
+                            {Object.keys(VariableType).filter((type: any) => {
+                                return VariableType[type] !== VariableType.MAIN_ARG && VariableType[type] !== VariableType.NONE
+                            }).map((key: any) => (
                                 <MenuItem key={key} value={VariableType[key]}>
                                     {VariableType[key]}
                                 </MenuItem>

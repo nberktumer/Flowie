@@ -1,5 +1,5 @@
 import {BaseFlowModelGenerator} from "../Base/BaseFlowModelGenerator"
-import {FlowModel} from "../../../generator/FlowModelJSON"
+import {FlowModel, FlowModelBuilder} from "../../../generator/FlowModelJSON"
 import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {FlowType} from "../../../models"
 import {WhileFlowNode} from "./WhileFlowNode"
@@ -14,22 +14,13 @@ export class WhileFlowModelGenerator extends BaseFlowModelGenerator {
         const scopeFlow = whileFlow.getScopeFlow()
         const scopeFlowId = scopeFlow ? scopeFlow.getID() : null
 
-        return new FlowModel(
-            FlowType.WHILE,
-            whileFlow.getID(),
-            null,
-            null,
-            null,
-            null,
-            new WhileFlowContent(
-                whileFlow.conditionList,
-                whileFlow.conditionType,
-                scopeFlowId
-            ),
-            null,
-            null,
-            null,
-            nextFlowId
-        )
+        const flowModelBuilder = new FlowModelBuilder(FlowType.WHILE, whileFlow.getID(), nextFlowId)
+        flowModelBuilder.setFlowContent(new WhileFlowContent(
+            whileFlow.conditionList,
+            whileFlow.conditionType,
+            scopeFlowId
+        ))
+
+        return flowModelBuilder.build()
     }
 }

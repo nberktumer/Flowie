@@ -6,21 +6,26 @@ import {Variable} from "../../../models/Variable"
 
 export class DataClassFlowNodeGenerator extends BaseFlowNodeGenerator {
     create(data?: BasePropertiesState, node?: DataClassFlowNode): BaseFlowNode | undefined {
-        if (!data || !data.fieldList)
+        if (!data || !data.selectedClassName || !data.fields || !data.variableName)
             return undefined
 
-        const resultNode = node ? node : new DataClassFlowNode()
-        resultNode.removeAllFields()
+        try {
+            const resultNode = node ? node : new DataClassFlowNode(data.variableName, data.selectedClassName)
+            resultNode.removeAllFields()
 
-        for (const field of data.fieldList as Variable[]) {
-            if (!field.type || !field.name || !field.value)
-                continue
+            for (const field of data.fields) {
+                if (!field.field || !field.variable)
+                    continue
 
-            resultNode.addField(field)
+                resultNode.addField(new Variable(field.field.name, field.field.type, JSON.parse(field.variable)))
+            }
+
+            return resultNode
+        } catch (e) {
+            console.error(e)
+            return undefined
         }
-
-        return resultNode
     }
 
-    load = (node: any): BaseFlowNode => new DataClassFlowNode(true)
+    load = (node: any): BaseFlowNode => new DataClassFlowNode((node as DataClassFlowNode).variableName, (node as DataClassFlowNode).name, true)
 }

@@ -1,5 +1,4 @@
 import {IfFlow} from "../../flows/IfFlow";
-import {Func} from "../../project/Func";
 import {ConditionOperation} from "../../../models/VariableEnums";
 import {IfFlowCode} from "../common/IfFlowCode";
 import {Clazz} from "../../project/Clazz";
@@ -50,7 +49,6 @@ export class JavaIfFlowCode implements IfFlowCode {
         clazz.mainFunction.code.incrementIndentation()
 
         if (ifFlow.content.trueScopeId != null) {
-            clazz.addToLoopStack(ifFlow.id)
             clazz.writeMainCodeFromFlow(ifFlow.content.trueScopeId)
         }
 
@@ -60,13 +58,14 @@ export class JavaIfFlowCode implements IfFlowCode {
             clazz.writeCodeToMainFunction("} else {")
             clazz.mainFunction.code.incrementIndentation()
 
-            clazz.addToLoopStack(ifFlow.id)
             clazz.writeMainCodeFromFlow(ifFlow.content.falseScopeId)
 
             clazz.mainFunction.code.decrementIndentation()
 
         }
         clazz.writeCodeToMainFunction("}")
+
+        clazz.writeMainCodeFromFlow(ifFlow.nextFlow())
     }
 
 }

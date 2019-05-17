@@ -1,5 +1,6 @@
 import {Variable} from "../models/Variable"
 import strings from "../lang"
+import ClassModel from "../models/ClassModel"
 
 export class Validator {
 
@@ -17,11 +18,25 @@ export class Validator {
         return ""
     }
 
-    static validateClassName(className: string) {
-        if (!className.charAt(0).match(/[A-Z]/i))
+    static validateClassName(className: string, classList: ClassModel[]) {
+        if (classList.find((item) => item.name === className))
+            return strings.classExists
+        else if (!className.charAt(0).match(/[A-Z]/))
             return strings.classFirstCharacterError
         else if (!className.match(/^(?!-)(?!.*-)[A-Za-z]+$/))
             return strings.classContainsInvalidCharacters
+
+        return ""
+    }
+
+    static validatePackageName(packageName: string, packageList: string[]) {
+        console.log(packageList)
+        if (packageList.find((name) => name === packageName))
+            return strings.packageExists
+        else if (!packageName.charAt(0).match(/[a-z]/i))
+            return strings.packageFirstCharacterError
+        else if (!packageName.match(/^(?!-)(?!.*-)[A-Za-z]+$/))
+            return strings.packageContainsInvalidCharacters
 
         return ""
     }

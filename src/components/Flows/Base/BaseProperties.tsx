@@ -3,6 +3,7 @@ import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 
 export interface BasePropertiesProps {
     onDataChanged: (data: BasePropertiesState) => void,
+    isValidListener?: (isValid: boolean) => void,
     errorMessage?: string,
     errorField?: string,
     node?: BaseFlowNode

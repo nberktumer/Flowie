@@ -7,6 +7,21 @@ import {RandomFlowCode} from "./common/RandomFlowCode";
 import {WhileFlowCode} from "./common/WhileFlowCode";
 import {IfFlowCode} from "./common/IfFlowCode";
 import {InputFlowCode} from "./common/InputFlowCode";
+import {DataClazz} from "../project/DataClazz";
+import {DataClassFlowCode} from "./common/DataClassFlowCode";
+import {ReturnFlowCode} from "./common/ReturnFlowCode";
+import {FunctionalityFlowCode} from "./common/FunctionalityFlowCode";
+import {CurrentTimeFlowCode} from "./common/CurrentTimeFlowCode";
+import {UpdateVariableFlowCode} from "./common/UpdateVariableFlowCode";
+import {Variable} from "../../models/Variable";
+import {VariableType} from "../../models";
+import {ListNewFlowCode} from "./common/ListNewFlowCode";
+import {ListAddFlowCode} from "./common/ListAddFlowCode";
+import {ListRemoveFlowCode} from "./common/ListRemoveFlowCode";
+import {ListUpdateFlowCode} from "./common/ListUpdateFlowCode";
+import {ListClearFlowCode} from "./common/ListClearFlowCode";
+import {ListGetFlowCode} from "./common/ListGetFlowCode";
+import {ListSizeFlowCode} from "./common/ListSizeFlowCode";
 
 export interface CodeStrategy {
     arithmeticFlowCode: ArithmeticFlowCode
@@ -16,6 +31,18 @@ export interface CodeStrategy {
     randomFlowCode: RandomFlowCode
     whileFlowCode: WhileFlowCode
     ifFlowCode: IfFlowCode
+    dataClassFlowCode: DataClassFlowCode
+    returnFlowCode: ReturnFlowCode
+    functionalityFlowCode: FunctionalityFlowCode
+    currentTimeFlowCode: CurrentTimeFlowCode
+    updateVariableFlowCode: UpdateVariableFlowCode
+    listNewFlowCode: ListNewFlowCode
+    listAddFlowCode: ListAddFlowCode
+    listGetFlowCode: ListGetFlowCode
+    listSizeFlowCode: ListSizeFlowCode
+    listRemoveFlowCode: ListRemoveFlowCode
+    listUpdateFlowCode: ListUpdateFlowCode
+    listClearFlowCode: ListClearFlowCode
 
     initClazz(clazz: Clazz): void
 
@@ -25,15 +52,17 @@ export interface CodeStrategy {
 
     finishClazzCode(clazz: Clazz): void
 
-    initMain(clazz: Clazz): void
+    initMain(classParameters: Variable[], classReturnType: VariableType, returnTypeIsArray: boolean, clazz: Clazz): void
 
     finishMain(clazz: Clazz): void
 
-    initFunction(func: Func): void
+    initFunction(func: Func, clazz: Clazz): void
 
     finishFunction(func: Func): void
 
-    //getDataClassSignature(dataClazz: DataClazz): string
+    generateDataClazz(dataClazz: DataClazz): void
 
-    //getDataClassCode(dataClazz: DataClazz): Code
+    // getDataClassSignature(dataClazz: DataClazz): string
+
+    // getDataClassCode(dataClazz: DataClazz): Code
 }

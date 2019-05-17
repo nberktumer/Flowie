@@ -4,7 +4,7 @@ import {Code, CodeLine} from "../code/Code"
 import {BaseFlow} from "../flows/BaseFlow"
 import {Stack} from "stack-typescript"
 import {FlowModel} from "../FlowModelJSON"
-import {FlowType} from "../../models"
+import {FlowType, VariableType} from "../../models"
 import {InitialFlow} from "../flows/InitialFlow"
 import {AssignmentFlow} from "../flows/AssignmentFlow"
 import {InputFlow} from "../flows/InputFlow"
@@ -15,6 +15,18 @@ import {IfFlow} from "../flows/IfFlow"
 import {RandomFlow} from "../flows/RandomFlow"
 import {Project} from "./Project"
 import {DataClassFlow} from "../flows/DataClassFlow";
+import {ReturnFlow} from "../flows/ReturnFlow";
+import {FunctionalityFlow} from "../flows/FunctionalityFlow";
+import {CurrentTimeFlow} from "../flows/CurrentTimeFlow";
+import {UpdateVariableFlow} from "../flows/UpdateVariableFlow";
+import {Variable} from "../../models/Variable";
+import {ListNewFlow} from "../flows/ListNewFlow";
+import {ListAddFlow} from "../flows/ListAddFlow";
+import {ListRemoveFlow} from "../flows/ListRemoveFlow";
+import {ListUpdateFlow} from "../flows/ListUpdateFlow";
+import {ListClearFlow} from "../flows/ListClearFlow";
+import {ListGetFlow} from "../flows/ListGetFlow";
+import {ListSizeFlow} from "../flows/ListSizeFlow";
 
 export class Clazz implements DirectoryItem {
     static INITIAL_ID = "INITIAL_ID"
@@ -30,7 +42,6 @@ export class Clazz implements DirectoryItem {
     generatedCode: string[] = []
     scopeCount = 0
     spacing = "\t"
-    loopStack: Stack<string> = new Stack()
 
     indentationCount = 0
     declaredVariableSet: Set<string> = new Set()
@@ -40,21 +51,20 @@ export class Clazz implements DirectoryItem {
     globalVariableSet = new Code(this.indentationCount)
     dependencySet = new Code(this.indentationCount)
 
-    constructor(type: DirectoryItemType, name: string, flowModels: FlowModel[]) {
+    constructor(parameters: Variable[], returnType: VariableType, returnTypeIsArray: boolean, type: DirectoryItemType, name: string, flowModels: FlowModel[]) {
         this.type = type
         this.name = name
         this.functions = []
-        this.reset(flowModels)
+        this.reset(parameters, returnType, returnTypeIsArray, flowModels)
     }
 
-    reset(flowModels: FlowModel[]) {
+    reset(parameters: Variable[], returnType: VariableType, returnTypeIsArray: boolean, flowModels: FlowModel[]) {
         this.flowMap = this.convertToFlowObjects(flowModels)
 
         this.functions = []
         this.mainFunction = null
         this.generatedCode = []
         this.scopeCount = 0
-        this.loopStack = new Stack()
         this.indentationCount = 0
         this.declaredVariableSet = new Set()
         this.classInitCode = new Code(this.indentationCount)
@@ -63,9 +73,7 @@ export class Clazz implements DirectoryItem {
         this.dependencySet = new Code(this.indentationCount)
 
         Project.codeStrategy.initClazz(this)
-        Project.codeStrategy.initMain(this)
-
-        this.loopStack.push(Clazz.TERMINATION_ID)
+        Project.codeStrategy.initMain(parameters, returnType, returnTypeIsArray, this)
 
         const initialFlow = this.flowMap.get(Clazz.INITIAL_ID)
 
@@ -116,31 +124,49 @@ export class Clazz implements DirectoryItem {
         return true
     }
 
-    addToLoopStack(id: string) {
-        this.loopStack.push(id)
-    }
-
     writeMainCodeFromFlow(id: string) {
-        if (!this.removeFromStackIfTopEquals(id)) {
-            const flow = this.flowMap.get(id)
-            if (flow) {
-                if (flow instanceof ArithmeticFlow) {
-                    Project.codeStrategy.arithmeticFlowCode.generateMain(flow, this)
-                } else if (flow instanceof AssignmentFlow) {
-                    Project.codeStrategy.assignmentFlowCode.generateMain(flow, this)
-                } else if (flow instanceof InputFlow) {
-                    Project.codeStrategy.inputFlowCode.generateMain(flow, this)
-                } else if (flow instanceof OutputFlow) {
-                    Project.codeStrategy.outputFlowCode.generateMain(flow, this)
-                } else if (flow instanceof WhileFlow) {
-                    Project.codeStrategy.whileFlowCode.generateMain(flow, this)
-                } else if (flow instanceof IfFlow) {
-                    Project.codeStrategy.ifFlowCode.generateMain(flow, this)
-                } else if (flow instanceof RandomFlow) {
-                    Project.codeStrategy.randomFlowCode.generateMain(flow, this)
-                } else if (flow instanceof InitialFlow) {
-                    this.writeMainCodeFromFlow(flow.nextFlow())
-                }
+        const flow = this.flowMap.get(id)
+        if (flow) {
+            if (flow instanceof ArithmeticFlow) {
+                Project.codeStrategy.arithmeticFlowCode.generateMain(flow, this)
+            } else if (flow instanceof AssignmentFlow) {
+                Project.codeStrategy.assignmentFlowCode.generateMain(flow, this)
+            } else if (flow instanceof InputFlow) {
+                Project.codeStrategy.inputFlowCode.generateMain(flow, this)
+            } else if (flow instanceof OutputFlow) {
+                Project.codeStrategy.outputFlowCode.generateMain(flow, this)
+            } else if (flow instanceof WhileFlow) {
+                Project.codeStrategy.whileFlowCode.generateMain(flow, this)
+            } else if (flow instanceof IfFlow) {
+                Project.codeStrategy.ifFlowCode.generateMain(flow, this)
+            } else if (flow instanceof RandomFlow) {
+                Project.codeStrategy.randomFlowCode.generateMain(flow, this)
+            } else if (flow instanceof CurrentTimeFlow) {
+                Project.codeStrategy.currentTimeFlowCode.generateMain(flow, this)
+            } else if (flow instanceof DataClassFlow) {
+                Project.codeStrategy.dataClassFlowCode.generateMain(flow, this)
+            } else if (flow instanceof ReturnFlow) {
+                Project.codeStrategy.returnFlowCode.generateMain(flow, this)
+            } else if (flow instanceof FunctionalityFlow) {
+                Project.codeStrategy.functionalityFlowCode.generateMain(flow, this)
+            } else if (flow instanceof UpdateVariableFlow) {
+                Project.codeStrategy.updateVariableFlowCode.generateMain(flow, this)
+            } else if (flow instanceof ListNewFlow) {
+                Project.codeStrategy.listNewFlowCode.generateMain(flow, this)
+            } else if (flow instanceof ListAddFlow) {
+                Project.codeStrategy.listAddFlowCode.generateMain(flow, this)
+            } else if (flow instanceof ListGetFlow) {
+                Project.codeStrategy.listGetFlowCode.generateMain(flow, this)
+            } else if (flow instanceof ListRemoveFlow) {
+                Project.codeStrategy.listRemoveFlowCode.generateMain(flow, this)
+            } else if (flow instanceof ListSizeFlow) {
+                Project.codeStrategy.listSizeFlowCode.generateMain(flow, this)
+            } else if (flow instanceof ListUpdateFlow) {
+                Project.codeStrategy.listUpdateFlowCode.generateMain(flow, this)
+            } else if (flow instanceof ListClearFlow) {
+                Project.codeStrategy.listClearFlowCode.generateMain(flow, this)
+            } else if (flow instanceof InitialFlow) {
+                this.writeMainCodeFromFlow(flow.nextFlow())
             }
         }
     }
@@ -148,8 +174,6 @@ export class Clazz implements DirectoryItem {
     writeFunctionCodeFromFlow(flow: BaseFlow) {
         if (flow instanceof InputFlow) {
             Project.codeStrategy.inputFlowCode.generateFunc(flow, this)
-        } else if (flow instanceof OutputFlow) {
-            Project.codeStrategy.outputFlowCode.generateFunc(flow, this)
         }
     }
 
@@ -160,8 +184,12 @@ export class Clazz implements DirectoryItem {
             throw new Error("Main function not defined!")
         }
 
+        const dependencyLineSet = new Set<string>()
         this.dependencySet.lines.forEach((dependencyLine) => {
-            this.generatedCode.push(this.createLineWithSpacing(dependencyLine))
+            if (!dependencyLineSet.has(dependencyLine.content)) {
+                dependencyLineSet.add(dependencyLine.content)
+                this.generatedCode.push(this.createLineWithSpacing(dependencyLine))
+            }
         })
 
         if (this.dependencySet.lines.length > 0) {
@@ -172,8 +200,12 @@ export class Clazz implements DirectoryItem {
             this.generatedCode.push(this.createLineWithSpacing(classLine))
         })
 
+        const globalVariableSet = new Set<string>()
         this.globalVariableSet.lines.forEach((globalVariableLine) => {
-            this.generatedCode.push(this.createLineWithSpacing(globalVariableLine))
+            if (!globalVariableSet.has(globalVariableLine.content)) {
+                globalVariableSet.add(globalVariableLine.content)
+                this.generatedCode.push(this.createLineWithSpacing(globalVariableLine))
+            }
         })
 
         if (this.globalVariableSet.lines.length > 0) {
@@ -211,19 +243,6 @@ export class Clazz implements DirectoryItem {
         this.indentationCount--
     }
 
-    /**
-     * Returns true if top equals index and pops it returns false otherwise.
-     */
-
-    removeFromStackIfTopEquals(id: string): boolean {
-        if (this.loopStack.top === id) {
-            this.loopStack.pop()
-            return true
-        }
-
-        return false
-    }
-
     protected createLineWithSpacing(codeLine: CodeLine): string {
         let line = ""
         for (let i = 0; i < codeLine.indentationCount; i++) {
@@ -238,6 +257,7 @@ export class Clazz implements DirectoryItem {
         const baseFlowMap = new Map<string, BaseFlow>()
 
         flowModels.forEach((value) => {
+                console.log(value)
 
                 switch (value.type) {
                     case FlowType.INITIAL:
@@ -295,6 +315,14 @@ export class Clazz implements DirectoryItem {
                             value.ifFlowContent
                         ))
                         break
+                    case FlowType.CURRENT_TIME:
+                        baseFlowMap.set(value.id, new CurrentTimeFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.currentTimeFlowContent
+                        ))
+                        break
                     case FlowType.RANDOM:
                         baseFlowMap.set(value.id, new RandomFlow(
                             value.id,
@@ -309,6 +337,86 @@ export class Clazz implements DirectoryItem {
                             value.nextFlowId,
                             value.type,
                             value.dataClassFlowContent
+                        ))
+                        break
+                    case FlowType.RETURN:
+                        baseFlowMap.set(value.id, new ReturnFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.returnFlowContent
+                        ))
+                        break
+                    case FlowType.UPDATE_VARIABLE:
+                        baseFlowMap.set(value.id, new UpdateVariableFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.updateVariableFlowContent
+                        ))
+                        break
+                    case FlowType.CLASS:
+                        baseFlowMap.set(value.id, new FunctionalityFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.functionalityFlowContent
+                        ))
+                        break
+                    case FlowType.LIST_NEW:
+                        baseFlowMap.set(value.id, new ListNewFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.listNewFlowContent
+                        ))
+                        break
+                    case FlowType.LIST_ADD:
+                        baseFlowMap.set(value.id, new ListAddFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.listAddFlowContent
+                        ))
+                        break
+                    case FlowType.LIST_GET:
+                        baseFlowMap.set(value.id, new ListGetFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.listGetFlowContent
+                        ))
+                        break
+                    case FlowType.LIST_SIZE:
+                        baseFlowMap.set(value.id, new ListSizeFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.listSizeFlowContent
+                        ))
+                        break
+                    case FlowType.LIST_UPDATE:
+                        baseFlowMap.set(value.id, new ListUpdateFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.listUpdateFlowContent
+                        ))
+                        break
+                    case FlowType.LIST_REMOVE:
+                        baseFlowMap.set(value.id, new ListRemoveFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.listRemoveFlowContent
+                        ))
+                        break
+                    case FlowType.LIST_CLEAR:
+                        baseFlowMap.set(value.id, new ListClearFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.listClearFlowContent
                         ))
                         break
                     /*

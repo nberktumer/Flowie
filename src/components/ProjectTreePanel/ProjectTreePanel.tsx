@@ -6,17 +6,18 @@ import {ProjectConsumer} from "../../stores/ProjectStore"
 import {Icon, Menu, MenuItem} from "@material-ui/core"
 import _ from "lodash"
 import strings from "../../lang"
+import {DirectoryItemType} from "../../generator/project/DirectoryItem"
 
 export interface ProjectTreePanelProps {
-    onNewClass: (path: string) => void,
-    onNewDataClass: (path: string) => void,
-    onNewPackage: (path: string) => void,
-    onNewFunctionality: (path: string) => void,
+    onNewClass: (fileModel: FileModel & { path: string }) => void,
+    onNewDataClass: (fileModel: FileModel & { path: string }) => void,
+    onNewPackage: (fileModel: FileModel & { path: string }) => void,
+    onNewFunctionality: (fileModel: FileModel & { path: string }) => void,
     onDoubleClickListener: (fileModel: FileModel & { path: string }) => void
 }
 
 export interface ProjectTreePanelState {
-    itemPath: string,
+    item: FileModel & { path: string } | null,
     currentTarget: ((element: HTMLElement) => HTMLElement) | HTMLElement | undefined | null
 }
 
@@ -26,28 +27,36 @@ export class ProjectTreePanel extends Component<ProjectTreePanelProps, ProjectTr
     constructor(props: ProjectTreePanelProps) {
         super(props)
         this.state = {
-            itemPath: "",
+            item: null,
             currentTarget: null
         }
     }
 
     newClass = () => {
-        this.props.onNewClass(this.state.itemPath)
-        this.setState({currentTarget: null, itemPath: ""})
+        if (!this.state.item)
+            return
+        this.props.onNewClass(this.state.item)
+        this.onClose()
     }
 
     newDataClass = () => {
-        this.props.onNewDataClass(this.state.itemPath)
-        this.setState({currentTarget: null, itemPath: ""})
+        if (!this.state.item)
+            return
+        this.props.onNewDataClass(this.state.item)
+        this.onClose()
     }
 
     newFunction = () => {
-        this.setState({currentTarget: null, itemPath: ""})
+        if (!this.state.item)
+            return
+        this.onClose()
     }
 
     newPackage = () => {
-        this.props.onNewPackage(this.state.itemPath)
-        this.setState({currentTarget: null, itemPath: ""})
+        if (!this.state.item)
+            return
+        this.props.onNewPackage(this.state.item)
+        this.onClose()
     }
 
     onDoubleClick = (fileModel: FileModel & { path: string }) => {
@@ -57,7 +66,7 @@ export class ProjectTreePanel extends Component<ProjectTreePanelProps, ProjectTr
     renderTree = (fileModel: FileModel, parent?: string) => {
         this.nodeMap[fileModel.id] = _.merge(fileModel, {path: parent ? `${parent}/${fileModel.filename}` : fileModel.filename})
 
-        if (fileModel.isDir) {
+        if (fileModel.type === DirectoryItemType.DIRECTORY) {
             return (
                 <TreeNode icon={<Icon style={{fontSize: 16}}>folder</Icon>}
                           title={fileModel.filename}
@@ -81,10 +90,10 @@ export class ProjectTreePanel extends Component<ProjectTreePanelProps, ProjectTr
                             id="simple-menu"
                             anchorEl={this.state.currentTarget}
                             open={Boolean(this.state.currentTarget)}
-                            onClose={() => this.setState({currentTarget: null})}>
+                            onClose={() => this.onClose()}>
                             <MenuItem onClick={() => this.newPackage()}>{strings.newPackage}</MenuItem>
                             {/* TODO: Change this to "new class" later */}
-                            <MenuItem onClick={() => this.newClass()}>{strings.newFunction}</MenuItem>
+                            <MenuItem onClick={() => this.newClass()}>{strings.newClass}</MenuItem>
                             <MenuItem onClick={() => this.newDataClass()}>{strings.newDataClass}</MenuItem>
                             {/*<MenuItem onClick={() => this.newFunction()}>{strings.newFunction}</MenuItem>*/}
                         </Menu>
@@ -102,7 +111,7 @@ export class ProjectTreePanel extends Component<ProjectTreePanelProps, ProjectTr
                                   if (!props.node.props.isLeaf)
                                       this.setState({
                                           currentTarget: props.event.currentTarget as HTMLElement,
-                                          itemPath: this.nodeMap[props.node.props.eventKey].path
+                                          item: this.nodeMap[props.node.props.eventKey]
                                       })
                               }}>
                             {this.renderTree(projectContext.project)}
@@ -111,5 +120,9 @@ export class ProjectTreePanel extends Component<ProjectTreePanelProps, ProjectTr
                 )}
             </ProjectConsumer>
         )
+    }
+
+    private onClose = () => {
+        this.setState({currentTarget: null, item: null})
     }
 }

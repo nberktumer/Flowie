@@ -5,18 +5,19 @@ import {OutputFlowNode} from "./OutputFlowNode"
 
 export class OutputFlowNodeGenerator extends BaseFlowNodeGenerator {
     create(data?: BasePropertiesState, node?: OutputFlowNode): BaseFlowNode | undefined {
-        if (!data || data.variable === "")
+        if (!data || data.variable === "" || data.isNewLine === "")
             return undefined
 
         if (node !== undefined) {
             node.setVariable(JSON.parse(data.variable))
+            node.isNewLine = data.isNewLine
             return node
         } else {
-            return new OutputFlowNode(JSON.parse(data.variable))
+            return new OutputFlowNode(JSON.parse(data.variable), data.isNewLine)
         }
     }
 
     load(node: any): BaseFlowNode {
-        return new OutputFlowNode(node.variable, true)
+        return new OutputFlowNode(node.variable, node.isNewLine, true)
     }
 }

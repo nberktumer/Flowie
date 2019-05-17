@@ -1,5 +1,5 @@
 import {BaseFlowModelGenerator} from "../Base/BaseFlowModelGenerator"
-import {FlowModel} from "../../../generator/FlowModelJSON"
+import {FlowModel, FlowModelBuilder} from "../../../generator/FlowModelJSON"
 import {BaseFlowNode} from "../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {FlowType} from "../../../models"
 import {IfFlowNode} from "./IfFlowNode"
@@ -16,23 +16,13 @@ export class IfFlowModelGenerator extends BaseFlowModelGenerator {
         const falseScopeFlow = ifFlow.getFalseScopeFlow()
         const falseScopeFlowId = falseScopeFlow ? falseScopeFlow.getID() : null
 
-        return new FlowModel(
-            FlowType.IF,
-            ifFlow.getID(),
-            null,
-            null,
-            null,
-            null,
-            null,
-            new IfFlowContent(
-                ifFlow.conditionList,
-                ifFlow.conditionType,
-                trueScopeFlowId,
-                falseScopeFlowId
-            ),
-            null,
-            null,
-            nextFlowId
-        )
+        const flowModelBuilder = new FlowModelBuilder(FlowType.IF, ifFlow.getID(), nextFlowId)
+        flowModelBuilder.setFlowContent(new IfFlowContent(
+            ifFlow.conditionList,
+            ifFlow.conditionType,
+            trueScopeFlowId,
+            falseScopeFlowId
+        ))
+        return flowModelBuilder.build()
     }
 }

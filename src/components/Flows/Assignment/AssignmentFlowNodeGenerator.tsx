@@ -6,10 +6,11 @@ import {AssignmentFlowNode} from "./AssignmentFlowNode"
 
 export class AssignmentFlowNodeGenerator extends BaseFlowNodeGenerator {
     create(data?: BasePropertiesState, node?: AssignmentFlowNode): BaseFlowNode | undefined {
-        if (!data || data.variableName === "" || data.variableType === "" || data.value === "")
+        if (!data || !data.variableName || !data.variableType || !data.value)
             return undefined
 
-        const variable = new Variable(data.variableName, data.variableType, data.value)
+        const value = JSON.parse(data.value) as Variable
+        const variable = new Variable(data.variableName, data.variableType, value)
 
         if (node) {
             node.setVariable(variable)

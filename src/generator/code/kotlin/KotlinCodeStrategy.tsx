@@ -1,5 +1,5 @@
 import {CodeStrategy} from "../CodeStrategy";
-import {Func, Parameter} from "../../project/Func";
+import {Func} from "../../project/Func";
 import {Clazz} from "../../project/Clazz";
 import {Code} from "../Code";
 import {KotlinArithmeticFlowCode} from "./KotlinArithmeticFlowCode";
@@ -12,6 +12,20 @@ import {KotlinWhileFlowCode} from "./KotlinWhileFlowCode";
 import {DirectoryItemType} from "../../project/DirectoryItem";
 import {ProgrammingLanguage, VariableType} from "../../../models";
 import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
+import {DataClazz} from "../../project/DataClazz";
+import {KotlinDataClassFlowCode} from "./KotlinDataClassFlowCode";
+import {KotlinReturnFlowCode} from "./KotlinReturnFlowCode";
+import {KotlinFunctionalityFlowCode} from "./KotlinFunctionalityFlowCode";
+import {Variable} from "../../../models/Variable";
+import {KotlinCurrentTimeFlowCode} from "./KotlinCurrentTimeFlowCode";
+import {KotlinUpdateVariableFlowCode} from "./KotlinUpdateVariableFlowCode";
+import {KotlinListNewFlowCode} from "./KotlinListNewFlowCode";
+import {KotlinListAddFlowCode} from "./KotlinListAddFlowCode";
+import {KotlinListRemoveFlowCode} from "./KotlinListRemoveFlowCode";
+import {KotlinListUpdateFlowCode} from "./KotlinListUpdateFlowCode";
+import {KotlinListClearFlowCode} from "./KotlinListClearFlowCode";
+import {KotlinListGetFlowCode} from "./KotlinListGetFlowCode";
+import {KotlinListSizeFlowCode} from "./KotlinListSizeFlowCode";
 
 export class KotlinCodeStrategy implements CodeStrategy {
 
@@ -22,6 +36,18 @@ export class KotlinCodeStrategy implements CodeStrategy {
     outputFlowCode = new KotlinOutputFlowCode()
     randomFlowCode = new KotlinRandomFlowCode()
     whileFlowCode = new KotlinWhileFlowCode()
+    dataClassFlowCode = new KotlinDataClassFlowCode()
+    returnFlowCode = new KotlinReturnFlowCode()
+    functionalityFlowCode = new KotlinFunctionalityFlowCode()
+    currentTimeFlowCode = new KotlinCurrentTimeFlowCode()
+    updateVariableFlowCode = new KotlinUpdateVariableFlowCode()
+    listNewFlowCode = new KotlinListNewFlowCode()
+    listAddFlowCode = new KotlinListAddFlowCode()
+    listGetFlowCode = new KotlinListGetFlowCode()
+    listSizeFlowCode = new KotlinListSizeFlowCode()
+    listRemoveFlowCode = new KotlinListRemoveFlowCode()
+    listUpdateFlowCode = new KotlinListUpdateFlowCode()
+    listClearFlowCode = new KotlinListClearFlowCode()
 
     initClazz(clazz: Clazz): void {
         clazz.incrementIndentation()
@@ -64,34 +90,43 @@ export class KotlinCodeStrategy implements CodeStrategy {
         clazz.classFinishCode.insert("}")
     }
 
-    initMain(clazz: Clazz): void {
-        const parameters: Parameter[] = []
+    initMain(classParameters: Variable[], classReturnType: VariableType, returnTypeIsArray: boolean, clazz: Clazz): void {
+        let parameters: Variable[]
+        let returnType: VariableType
         const mainFunctionLines = new Code(clazz.indentationCount)
         let mainFnName = ""
 
         if (clazz.type === DirectoryItemType.MAIN_CLASS) {
+            parameters = []
+            returnType = VariableType.NONE
             mainFnName = "main"
             parameters.push(
-                new Parameter(
+                new Variable(
                     "args",
-                    ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.KOTLIN, VariableType.MAIN_ARG)))
+                    VariableType.MAIN_ARG,
+                    null))
         } else {
+            parameters = classParameters
+            returnType = classReturnType
             mainFnName = clazz.name
-            parameters.push(
-                new Parameter(
-                    clazz.name,
-                    ProgrammingLanguageTypeConverter.convert(ProgrammingLanguage.KOTLIN, VariableType.MAIN_ARG))) //TODO CHANGE TYPE TO ARG FROM FN
+        }
+
+        let returnTypeString = ""
+        if (returnTypeIsArray) {
+            returnTypeString = "ArrayList<" + ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.KOTLIN, returnType) + ">"
+        } else {
+            returnTypeString = ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.KOTLIN, returnType)
         }
 
         clazz.mainFunction = new Func(
             mainFnName,
             parameters,
-            undefined,
+            returnTypeString,
             mainFunctionLines,
             clazz.type === DirectoryItemType.MAIN_CLASS
         )
 
-        this.initFunction(clazz.mainFunction)
+        this.initFunction(clazz.mainFunction, clazz)
     }
 
     finishMain(clazz: Clazz): void {
@@ -103,7 +138,7 @@ export class KotlinCodeStrategy implements CodeStrategy {
         clazz.mainFunction.code.insert("")
     }
 
-    initFunction(func: Func): void {
+    initFunction(func: Func, clazz: Clazz): void {
         let returnTypeString = ""
         if (func.returnType) {
             returnTypeString += ": " + func.returnType
@@ -114,15 +149,23 @@ export class KotlinCodeStrategy implements CodeStrategy {
         let parameterString = ""
 
         func.parameters.forEach((value, index) => {
-            parameterString += `${value.name}: ${value.type}`
+            let typeString = ""
+
+            if (value.type === VariableType.LIST && value.listElementType) {
+                typeString = "ArrayList<" + ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.KOTLIN, value.listElementType) + ">"
+            } else {
+                typeString = ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.KOTLIN, value.type)
+            }
+
+            parameterString += `${value.name}: ${typeString}`
             if (index !== func.parameters.length - 1) {
                 parameterString += ", "
             }
         })
 
-        if (func.isMain)
+        if (func.isProjectMain)
             func.code.insert(`@JvmStatic`)
-        
+
         func.code.insert(`fun ${func.functionName}(${parameterString})${returnTypeString} {`)
         func.code.incrementIndentation()
     }
@@ -131,5 +174,18 @@ export class KotlinCodeStrategy implements CodeStrategy {
         func.code.decrementIndentation()
         func.code.insert("}")
         func.code.insert("")
+    }
+
+    generateDataClazz(dataClazz: DataClazz): void {
+        let variableCode = ""
+
+        dataClazz.variables.forEach((variable, index) => {
+            variableCode += `val ${variable.name} : ${ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.KOTLIN, variable.type)}`
+            if (index !== dataClazz.variables.length - 1) {
+                variableCode += ", "
+            }
+        })
+
+        dataClazz.code.insert(`data class ${dataClazz.name} (${variableCode})`)
     }
 }

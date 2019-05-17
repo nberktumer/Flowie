@@ -51,7 +51,6 @@ export class JavaWhileFlowCode implements WhileFlowCode {
         clazz.mainFunction.code.incrementIndentation()
 
         if (nextScopeId != null) {
-            clazz.addToLoopStack(whileFlow.id)
             clazz.writeMainCodeFromFlow(nextScopeId)
         }
 

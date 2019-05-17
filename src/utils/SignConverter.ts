@@ -13,6 +13,8 @@ export class SignConverter {
                 return "*"
             case ArithmeticOperationType.DIVISION:
                 return "/"
+            case ArithmeticOperationType.MODULO:
+                return "%"
             case ArithmeticOperationType.ROOT:
                 return "root"
             default:
