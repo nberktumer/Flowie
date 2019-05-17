@@ -111,10 +111,17 @@ export class KotlinCodeStrategy implements CodeStrategy {
             mainFnName = clazz.name
         }
 
+        let returnTypeString = ""
+        if (returnTypeIsArray) {
+            returnTypeString = "ArrayList<" + ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.KOTLIN, returnType) + ">"
+        } else {
+            returnTypeString = ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.KOTLIN, returnType)
+        }
+
         clazz.mainFunction = new Func(
             mainFnName,
             parameters,
-            ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.KOTLIN, returnType),
+            returnTypeString,
             mainFunctionLines,
             clazz.type === DirectoryItemType.MAIN_CLASS
         )
