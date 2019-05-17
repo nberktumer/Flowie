@@ -28,40 +28,31 @@ export class Project {
     }
 
     generateClazzCodes() {
-        this.recursivelyGenerateClazzCodes(this.rootDirectory)
+        const zip = new JSZip()
+        this.recursivelyGenerateClazzCodes(this.rootDirectory, zip)
     }
 
-    private recursivelyGenerateClazzCodes(directory: Directory) {
-
-        /*
-                var zip = new JSZip();
-        zip.file("Hello.txt", "Hello World\n");
-        var img = zip.folder("images");
-        img.file("smile.gif", imgData, {base64: true});
-        zip.generateAsync({type:"blob"})
-            .then(function(content) {
-                // see FileSaver.js
-                saveAs(content, "example.zip");
-            });
-*/
-
+    private recursivelyGenerateClazzCodes(directory: Directory, jsZip: JSZip) {
         directory.items.forEach((item) => {
             switch (item.type) {
                 case DirectoryItemType.MAIN_CLASS:
                     const mainClazz = item as MainClazz
                     mainClazz.generateCode()
+                    jsZip.file(mainClazz.name, mainClazz.getCode())
                     break
                 case DirectoryItemType.CLASS:
                     const clazz = item as Clazz
                     clazz.generateCode()
+                    jsZip.file(clazz.name, clazz.getCode())
                     break
                 case DirectoryItemType.DATA_CLASS:
                     const dataClass = item as DataClazz
                     dataClass.generateCode()
+                    jsZip.file(dataClass.name, dataClass.getCode())
                     break
                 case DirectoryItemType.DIRECTORY:
                     const directory = item as Directory
-                    this.recursivelyGenerateClazzCodes(directory)
+                    this.recursivelyGenerateClazzCodes(directory, jsZip)
                     break
             }
         })
