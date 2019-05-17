@@ -50,7 +50,6 @@
 .rectangleNodeName {
     flex-grow: 1;
     padding: 5px 5px;
-    white-space: pre-wrap;
 }
 
 .rectangleNodePorts {
