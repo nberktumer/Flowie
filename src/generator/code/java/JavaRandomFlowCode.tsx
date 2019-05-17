@@ -13,7 +13,7 @@ export class JavaRandomFlowCode implements RandomFlowCode {
 
         let variableSetCode = ""
         if (clazz.addVariable(randomFlow.content.variable.name)) {
-            variableSetCode = "double "
+            variableSetCode = "Double "
         }
 
         clazz.writeCodeToMainFunction(

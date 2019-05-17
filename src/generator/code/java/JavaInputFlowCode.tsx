@@ -43,7 +43,7 @@ export class JavaInputFlowCode implements InputFlowCode {
             false
         )
 
-        Project.codeStrategy.initFunction(func)
+        Project.codeStrategy.initFunction(func, clazz)
 
         code.insert(`System.out.println("Please enter value for ${inputFlow.content.variable.name}");`)
         code.insert(`Scanner scanner = new Scanner(System.in);`)

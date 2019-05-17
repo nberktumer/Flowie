@@ -36,7 +36,7 @@ export class JavaOutputFlowCode implements OutputFlowCode {
             false
         )
 
-        Project.codeStrategy.initFunction(func)
+        Project.codeStrategy.initFunction(func, clazz)
 
         let printString = ""
 

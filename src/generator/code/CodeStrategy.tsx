@@ -56,7 +56,7 @@ export interface CodeStrategy {
 
     finishMain(clazz: Clazz): void
 
-    initFunction(func: Func): void
+    initFunction(func: Func, clazz: Clazz): void
 
     finishFunction(func: Func): void
 

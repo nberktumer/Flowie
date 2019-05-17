@@ -8,19 +8,19 @@ export class ProgrammingLanguageTypeConverter {
             case ProgrammingLanguage.JAVA:
                 switch (variableType) {
                     case VariableType.INT:
-                        convertedType = "int"
+                        convertedType = "Integer"
                         break
                     case VariableType.BOOLEAN:
-                        convertedType = "boolean"
+                        convertedType = "Boolean"
                         break
                     case VariableType.STRING:
                         convertedType = "String"
                         break
                     case VariableType.DOUBLE:
-                        convertedType = "double"
+                        convertedType = "Double"
                         break
                     case VariableType.LONG:
-                        convertedType = "long"
+                        convertedType = "Long"
                         break
                     case VariableType.MAIN_ARG:
                         convertedType = `String[]`
@@ -145,13 +145,13 @@ export class ProgrammingLanguageTypeConverter {
             case ProgrammingLanguage.JAVA:
                 switch (setVariableType) {
                     case VariableType.INT:
-                        convertedResult = `(int) (${convertedResult})`
+                        convertedResult = `(${convertedResult}).intValue()`
                         break
                     case VariableType.DOUBLE:
-                        convertedResult = `(double) (${convertedResult})`
+                        convertedResult = `(${convertedResult}).doubleValue()`
                         break
                     case VariableType.LONG:
-                        convertedResult = `(long) (${convertedResult})`
+                        convertedResult = `(${convertedResult}).longValue()`
                         break
                 }
                 break

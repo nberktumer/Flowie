@@ -126,7 +126,7 @@ export class KotlinCodeStrategy implements CodeStrategy {
             clazz.type === DirectoryItemType.MAIN_CLASS
         )
 
-        this.initFunction(clazz.mainFunction)
+        this.initFunction(clazz.mainFunction, clazz)
     }
 
     finishMain(clazz: Clazz): void {
@@ -138,7 +138,7 @@ export class KotlinCodeStrategy implements CodeStrategy {
         clazz.mainFunction.code.insert("")
     }
 
-    initFunction(func: Func): void {
+    initFunction(func: Func, clazz: Clazz): void {
         let returnTypeString = ""
         if (func.returnType) {
             returnTypeString += ": " + func.returnType
@@ -149,7 +149,15 @@ export class KotlinCodeStrategy implements CodeStrategy {
         let parameterString = ""
 
         func.parameters.forEach((value, index) => {
-            parameterString += `${value.name}: ${ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.KOTLIN, value.type)}`
+            let typeString = ""
+
+            if (value.type === VariableType.LIST && value.listElementType) {
+                typeString = "ArrayList<" + ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.KOTLIN, value.listElementType) + ">"
+            } else {
+                typeString = ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.KOTLIN, value.type)
+            }
+
+            parameterString += `${value.name}: ${typeString}`
             if (index !== func.parameters.length - 1) {
                 parameterString += ", "
             }
