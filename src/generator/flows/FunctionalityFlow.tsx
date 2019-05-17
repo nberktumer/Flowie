@@ -46,18 +46,21 @@ export class FunctionalityFlowContent {
     variables: Variable[]
     assignVariable: Variable
     returnType: VariableType
+    returnTypeIsArray: boolean
 
     constructor(
         clazzName: string,
         functionName: string,
         variables: Variable[],
         assignVariable: Variable,
-        returnType: VariableType
+        returnType: VariableType,
+        returnTypeIsArray: boolean
     ) {
         this.clazzName = clazzName
         this.functionName = functionName
         this.variables = variables
         this.assignVariable = assignVariable
         this.returnType = returnType
+        this.returnTypeIsArray = returnTypeIsArray
     }
 }

@@ -37,7 +37,12 @@ export class JavaFunctionalityFlowCode implements FunctionalityFlowCode {
 
         if (functionalityFlow.content.returnType !== VariableType.NONE && assignVariable.name) {
             if (clazz.addVariable(assignVariable.name)) {
-                variableSetCode = `${ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.JAVA, assignVariable.type)} ${assignVariable.name} = `
+                if (functionalityFlow.content.returnTypeIsArray) {
+                    clazz.addDependency("import java.util.ArrayList;")
+                    variableSetCode = "ArrayList<" + ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.JAVA, assignVariable.type) + "> " + assignVariable.name
+                } else {
+                    variableSetCode = ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.JAVA, assignVariable.type) + " " + assignVariable.name
+                }
             } else {
                 variableSetCode = assignVariable.name + " = "
             }
