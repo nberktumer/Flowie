@@ -16,6 +16,8 @@ export class KotlinListGetFlowCode implements ListGetFlowCode {
             } else {
                 setString = listGetFlow.content.setToVariable.name
             }
+        } else {
+
         }
 
         let indexString = ""
