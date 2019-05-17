@@ -21,6 +21,7 @@ import {ListUpdateFlowContent} from "./flows/ListUpdateFlow";
 import {ListRemoveFlowContent} from "./flows/ListRemoveFlow";
 import {ListClearFlowContent} from "./flows/ListClearFlow";
 import {ListGetFlowContent} from "./flows/ListGetFlow";
+import {ListSizeFlowContent} from "./flows/ListSizeFlow";
 
 export class DirectoryItemModel {
     type: DirectoryItemType
@@ -65,11 +66,12 @@ export class FlowModel {
     returnFlowContent: ReturnFlowContent | null = null
     updateVariableFlowContent: UpdateVariableFlowContent | null = null
     listNewFlowContent: ListNewFlowContent | null = null
-    listAddFlowContent: ListAddFlowContent| null = null
-    listGetFlowContent: ListGetFlowContent| null = null
-    listUpdateFlowContent: ListUpdateFlowContent| null = null
-    listRemoveFlowContent: ListRemoveFlowContent| null = null
-    listClearFlowContent: ListClearFlowContent| null = null
+    listAddFlowContent: ListAddFlowContent | null = null
+    listGetFlowContent: ListGetFlowContent | null = null
+    listSizeFlowContent: ListSizeFlowContent | null = null
+    listUpdateFlowContent: ListUpdateFlowContent | null = null
+    listRemoveFlowContent: ListRemoveFlowContent | null = null
+    listClearFlowContent: ListClearFlowContent | null = null
     // forFlowContent: ForFlowContent,
     // ifFlowContent: IfFlowContent,
     nextFlowId: string | null
@@ -136,6 +138,9 @@ export class FlowModelBuilder {
                 break
             case FlowType.DATA_CLASS:
                 this.flowModel.dataClassFlowContent = flowContent
+                break;
+            case FlowType.LIST_SIZE:
+                this.flowModel.listSizeFlowContent = flowContent
                 break
             case FlowType.CLASS:
                 this.flowModel.functionalityFlowContent = flowContent
