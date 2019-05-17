@@ -26,6 +26,7 @@ import {ListRemoveFlow} from "../flows/ListRemoveFlow";
 import {ListUpdateFlow} from "../flows/ListUpdateFlow";
 import {ListClearFlow} from "../flows/ListClearFlow";
 import {ListGetFlow} from "../flows/ListGetFlow";
+import {ListSizeFlow} from "../flows/ListSizeFlow";
 
 export class Clazz implements DirectoryItem {
     static INITIAL_ID = "INITIAL_ID"
@@ -167,6 +168,8 @@ export class Clazz implements DirectoryItem {
                     Project.codeStrategy.listGetFlowCode.generateMain(flow, this)
                 } else if (flow instanceof ListRemoveFlow) {
                     Project.codeStrategy.listRemoveFlowCode.generateMain(flow, this)
+                } else if (flow instanceof ListSizeFlow) {
+                    Project.codeStrategy.listSizeFlowCode.generateMain(flow, this)
                 } else if (flow instanceof ListUpdateFlow) {
                     Project.codeStrategy.listUpdateFlowCode.generateMain(flow, this)
                 } else if (flow instanceof ListClearFlow) {
@@ -399,6 +402,14 @@ export class Clazz implements DirectoryItem {
                             value.nextFlowId,
                             value.type,
                             value.listGetFlowContent
+                        ))
+                        break
+                    case FlowType.LIST_SIZE:
+                        baseFlowMap.set(value.id, new ListSizeFlow(
+                            value.id,
+                            value.nextFlowId,
+                            value.type,
+                            value.listSizeFlowContent
                         ))
                         break
                     case FlowType.LIST_UPDATE:

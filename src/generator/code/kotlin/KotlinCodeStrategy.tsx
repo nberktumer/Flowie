@@ -25,6 +25,7 @@ import {KotlinListRemoveFlowCode} from "./KotlinListRemoveFlowCode";
 import {KotlinListUpdateFlowCode} from "./KotlinListUpdateFlowCode";
 import {KotlinListClearFlowCode} from "./KotlinListClearFlowCode";
 import {KotlinListGetFlowCode} from "./KotlinListGetFlowCode";
+import {KotlinListSizeFlowCode} from "./KotlinListSizeFlowCode";
 
 export class KotlinCodeStrategy implements CodeStrategy {
 
@@ -43,6 +44,7 @@ export class KotlinCodeStrategy implements CodeStrategy {
     listNewFlowCode = new KotlinListNewFlowCode()
     listAddFlowCode = new KotlinListAddFlowCode()
     listGetFlowCode = new KotlinListGetFlowCode()
+    listSizeFlowCode = new KotlinListSizeFlowCode()
     listRemoveFlowCode = new KotlinListRemoveFlowCode()
     listUpdateFlowCode = new KotlinListUpdateFlowCode()
     listClearFlowCode = new KotlinListClearFlowCode()
