@@ -90,10 +90,18 @@ export class JavaCodeStrategy implements CodeStrategy {
             mainFnName = clazz.name
         }
 
+        let returnTypeString = ""
+        if (returnTypeIsArray) {
+            clazz.addDependency("import java.util.ArrayList;")
+            returnTypeString = "ArrayList<" + ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.JAVA, returnType) + ">"
+        } else {
+            returnTypeString = ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.JAVA, returnType)
+        }
+
         clazz.mainFunction = new Func(
             mainFnName,
             parameters,
-            ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.JAVA, returnType),
+            returnTypeString,
             mainFunctionLines,
             clazz.type === DirectoryItemType.MAIN_CLASS
         )
