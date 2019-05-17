@@ -9,10 +9,10 @@ import * as _ from "lodash"
 export class ListGetFlowNode extends BaseFlowNode {
     list: Variable
     variable: Variable
-    index: number
+    index: Variable
     isNewVariable: boolean
 
-    constructor(list: Variable, variable: Variable, index: number, isNewVariable: boolean, withoutPorts: boolean = false) {
+    constructor(list: Variable, variable: Variable, index: Variable, isNewVariable: boolean, withoutPorts: boolean = false) {
         super(FlowType.LIST_GET, strings.getFromList + " (" + variable.type + ")", NodeColors.LIST_GET)
 
         this.list = list
@@ -39,13 +39,13 @@ export class ListGetFlowNode extends BaseFlowNode {
         this.updateInfo()
     }
 
-    setIndex(index: number) {
+    setIndex(index: Variable) {
         this.index = index
         this.updateInfo()
     }
 
     updateInfo() {
-        this.info = `${this.variable.name} = ${this.list.name}[${this.index}]`
+        this.info = `${this.variable.name} = ${this.list.name}[${this.index.name ? this.index.name : this.index.value}]`
     }
 
     deSerialize(object: any, engine: DiagramEngine) {
