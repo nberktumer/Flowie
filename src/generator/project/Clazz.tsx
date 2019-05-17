@@ -174,8 +174,6 @@ export class Clazz implements DirectoryItem {
     writeFunctionCodeFromFlow(flow: BaseFlow) {
         if (flow instanceof InputFlow) {
             Project.codeStrategy.inputFlowCode.generateFunc(flow, this)
-        } else if (flow instanceof OutputFlow) {
-            Project.codeStrategy.outputFlowCode.generateFunc(flow, this)
         }
     }
 

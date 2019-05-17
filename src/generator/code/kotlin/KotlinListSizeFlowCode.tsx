@@ -1,6 +1,4 @@
 import {Clazz} from "../../project/Clazz";
-import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
-import {ProgrammingLanguage} from "../../../models";
 import {ListSizeFlowCode} from "../common/ListSizeFlowCode";
 import {ListSizeFlow} from "../../flows/ListSizeFlow";
 
@@ -12,7 +10,7 @@ export class KotlinListSizeFlowCode implements ListSizeFlowCode {
         let setString = ""
         if (listSizeFlow.content.setToVariable.name) {
             if (clazz.addVariable(listSizeFlow.content.setToVariable.name)) {
-                setString = `${ProgrammingLanguageTypeConverter.convertType(ProgrammingLanguage.KOTLIN, listSizeFlow.content.setToVariable.type)} ${listSizeFlow.content.setToVariable.name} `
+                setString = `var ${listSizeFlow.content.setToVariable.name} `
             } else {
                 setString = `${listSizeFlow.content.setToVariable.name} `
             }
