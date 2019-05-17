@@ -1,6 +1,8 @@
 import {Clazz} from "../../project/Clazz";
 import {ListGetFlowCode} from "../common/ListGetFlowCode";
 import {ListGetFlow} from "../../flows/ListGetFlow";
+import {ProgrammingLanguageTypeConverter} from "../ProgrammingLanguageTypeConverter";
+import {ProgrammingLanguage} from "../../../models";
 
 export class KotlinListGetFlowCode implements ListGetFlowCode {
 
@@ -16,7 +18,14 @@ export class KotlinListGetFlowCode implements ListGetFlowCode {
             }
         }
 
-        clazz.writeCodeToMainFunction(`${setString}= ${listGetFlow.content.list.name}.get(${listGetFlow.content.index})`)
+        let indexString = ""
+        if (listGetFlow.content.index.name) {
+            indexString = listGetFlow.content.index.name
+        } else {
+            indexString = ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.KOTLIN, listGetFlow.content.index.value, listGetFlow.content.index.type)
+        }
+
+        clazz.writeCodeToMainFunction(`${setString}= ${listGetFlow.content.list.name}.get(${indexString})`)
         clazz.writeMainCodeFromFlow(listGetFlow.nextFlow())
     }
 

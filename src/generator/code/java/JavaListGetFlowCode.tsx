@@ -20,7 +20,14 @@ export class JavaListGetFlowCode implements ListGetFlowCode {
             }
         }
 
-        clazz.writeCodeToMainFunction(`${setString}= ${listGetFlow.content.list.name}.get(${listGetFlow.content.index});`)
+        let indexString = ""
+        if (listGetFlow.content.index.name) {
+            indexString = listGetFlow.content.index.name
+        } else {
+            indexString = ProgrammingLanguageTypeConverter.convertConstantVariable(ProgrammingLanguage.JAVA, listGetFlow.content.index.value, listGetFlow.content.index.type)
+        }
+
+        clazz.writeCodeToMainFunction(`${setString}= ${listGetFlow.content.list.name}.get(${indexString});`)
         clazz.writeMainCodeFromFlow(listGetFlow.nextFlow())
     }
 

@@ -68,7 +68,7 @@ export class ProgrammingLanguageTypeConverter {
                         if (value.toString().indexOf(".") === -1) {
                             convertedConstant = `${value}`
                         } else {
-                            convertedConstant = `(int) ${value}`
+                            convertedConstant = `${value}.intValue()`
                         }
                         break
                     case VariableType.BOOLEAN:
