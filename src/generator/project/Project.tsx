@@ -7,7 +7,8 @@ import {CodeStrategy} from "../code/CodeStrategy"
 import {KotlinCodeStrategy} from "../code/kotlin/KotlinCodeStrategy"
 import {CodeStrategyFactory} from "../code/CodeStrategyFactory"
 import {Defaults} from "../../config"
-import {DataClazz} from "./DataClazz";
+import {DataClazz} from "./DataClazz"
+import JSZip from "jszip";
 
 export class Project {
     static codeStrategy: CodeStrategy = new KotlinCodeStrategy()
@@ -31,6 +32,19 @@ export class Project {
     }
 
     private recursivelyGenerateClazzCodes(directory: Directory) {
+
+        /*
+                var zip = new JSZip();
+        zip.file("Hello.txt", "Hello World\n");
+        var img = zip.folder("images");
+        img.file("smile.gif", imgData, {base64: true});
+        zip.generateAsync({type:"blob"})
+            .then(function(content) {
+                // see FileSaver.js
+                saveAs(content, "example.zip");
+            });
+*/
+
         directory.items.forEach((item) => {
             switch (item.type) {
                 case DirectoryItemType.MAIN_CLASS:
