@@ -3,6 +3,8 @@ import {FlowType} from "../../../../models"
 import strings from "../../../../lang"
 import {NodeColors} from "../../../../config"
 import {BaseFlowNode} from "../../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
+import {DiagramEngine} from "nberktumer-react-diagrams"
+import * as _ from "lodash"
 
 export class ListUpdateFlowNode extends BaseFlowNode {
     list: Variable
@@ -41,5 +43,20 @@ export class ListUpdateFlowNode extends BaseFlowNode {
 
     updateInfo() {
         this.info = `Replace item located in ${this.index} with ${this.variable.name ? this.variable.name : this.variable.value} in ${this.list.name}`
+    }
+
+    deSerialize(object: any, engine: DiagramEngine) {
+        super.deSerialize(object, engine)
+        this.list = object.list
+        this.variable = object.variable
+        this.index = object.index
+    }
+
+    serialize() {
+        return _.merge(super.serialize(), {
+            list: this.list,
+            variable: this.variable,
+            index: this.index
+        })
     }
 }

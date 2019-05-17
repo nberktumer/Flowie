@@ -3,6 +3,8 @@ import {FlowType} from "../../../../models"
 import strings from "../../../../lang"
 import {NodeColors} from "../../../../config"
 import {BaseFlowNode} from "../../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
+import {DiagramEngine} from "nberktumer-react-diagrams"
+import * as _ from "lodash"
 
 export class ListAddFlowNode extends BaseFlowNode {
     list: Variable
@@ -34,5 +36,18 @@ export class ListAddFlowNode extends BaseFlowNode {
 
     updateInfo() {
         this.info = `Insert ${this.variable.name ? this.variable.name : this.variable.value} to ${this.list.name}`
+    }
+
+    deSerialize(object: any, engine: DiagramEngine) {
+        super.deSerialize(object, engine)
+        this.list = object.list
+        this.variable = object.variable
+    }
+
+    serialize() {
+        return _.merge(super.serialize(), {
+            list: this.list,
+            variable: this.variable
+        })
     }
 }

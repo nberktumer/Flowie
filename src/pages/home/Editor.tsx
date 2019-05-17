@@ -36,7 +36,8 @@ import {ClassFlowNode} from "../../components/Flows/Class/ClassFlowNode"
 import ClazzModel from "../../models/ClazzModel"
 import {ArithmeticFlowNode} from "../../components/Flows/Arithmetic/ArithmeticFlowNode"
 import {CurrentTimeFlowNode} from "../../components/Flows/CurrentTime/CurrentTimeFlowNode"
-import {NewListFlowNode} from "../../components/Flows/List/NewList/NewListFlowNode"
+import {ListGetFlowNode} from "../../components/Flows/List/ListGet/ListGetFlowNode"
+import {ListSizeFlowNode} from "../../components/Flows/List/ListSize/ListSizeFlowNode"
 
 export interface EditorProps {
     project: { rootFileModel: FileModel, projectName: string, currentFile: FileModel, bigBigNoPackage: { ReturnType: VariableType, classList: ClazzModel[], currentClass: Clazz } }
@@ -284,6 +285,8 @@ export default class Editor extends Component<EditorProps, EditorState> {
             this.setState((prevState) => ({variableList: [...prevState.variableList, flow.variable]}))
         } else if ((flow instanceof ArithmeticFlowNode && flow.isNewVariable) || (flow instanceof CurrentTimeFlowNode && flow.isNewVariable)) {
             this.setState((prevState) => ({variableList: [...prevState.variableList, flow.getVariable()]}))
+        } else if ((flow instanceof ListGetFlowNode && flow.isNewVariable) || (flow instanceof ListSizeFlowNode && flow.isNewVariable)) {
+            this.setState((prevState) => ({variableList: [...prevState.variableList, flow.variable]}))
         }
     }
 
@@ -316,6 +319,18 @@ export default class Editor extends Component<EditorProps, EditorState> {
         } else if (event.entity instanceof CurrentTimeFlowNode && event.entity.isNewVariable) {
             const newVariableList = this.state.variableList.filter((value) => {
                 return value.name !== (event.entity as CurrentTimeFlowNode).getVariable().name
+            })
+
+            this.setState({variableList: newVariableList})
+        } else if (event.entity instanceof ListGetFlowNode && event.entity.isNewVariable) {
+            const newVariableList = this.state.variableList.filter((value) => {
+                return value.name !== (event.entity as ListGetFlowNode).variable.name
+            })
+
+            this.setState({variableList: newVariableList})
+        } else if (event.entity instanceof ListSizeFlowNode && event.entity.isNewVariable) {
+            const newVariableList = this.state.variableList.filter((value) => {
+                return value.name !== (event.entity as ListSizeFlowNode).variable.name
             })
 
             this.setState({variableList: newVariableList})

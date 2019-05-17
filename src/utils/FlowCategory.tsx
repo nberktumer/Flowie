@@ -13,7 +13,7 @@ export const FlowCategory: FlowCategoryInterface[] = [
     },
     {
         name: strings.list,
-        flows: [FlowType.LIST_NEW, FlowType.LIST_ADD, FlowType.LIST_UPDATE, FlowType.LIST_REMOVE, FlowType.LIST_CLEAR]
+        flows: [FlowType.LIST_NEW, FlowType.LIST_GET, FlowType.LIST_ADD, FlowType.LIST_UPDATE, FlowType.LIST_REMOVE, FlowType.LIST_CLEAR, FlowType.LIST_SIZE]
     },
     {
         name: strings.util,

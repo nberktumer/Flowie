@@ -86,5 +86,7 @@ export default {
     newList: "New List",
     listToClear: "List to Clear",
     listToUpdate: "List to Update",
-    index: "Index"
+    index: "Index",
+    getFromList: "Get from List",
+    listSize: "List Size"
 }

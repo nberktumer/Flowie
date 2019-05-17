@@ -6,17 +6,19 @@ import {BaseFlowNode} from "../../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {DiagramEngine} from "nberktumer-react-diagrams"
 import * as _ from "lodash"
 
-export class ListRemoveFlowNode extends BaseFlowNode {
+export class ListSizeFlowNode extends BaseFlowNode {
     list: Variable
-    index: number
+    variable: Variable
+    isNewVariable: boolean
 
-    constructor(list: Variable, index: number, withoutPorts: boolean = false) {
-        super(FlowType.LIST_REMOVE, strings.removeFromList + " (" + list.type + ")", NodeColors.LIST_REMOVE)
+    constructor(list: Variable, variable: Variable, isNewVariable: boolean, withoutPorts: boolean = false) {
+        super(FlowType.LIST_SIZE, strings.listSize, NodeColors.LIST_SIZE)
 
         this.list = list
-        this.index = index
+        this.variable = variable
+        this.isNewVariable = isNewVariable
         this.setList(list)
-        this.setIndex(index)
+        this.setVariable(variable)
 
         if (!withoutPorts) {
             this.addInPort(strings.in).setMaximumLinks(1)
@@ -29,25 +31,27 @@ export class ListRemoveFlowNode extends BaseFlowNode {
         this.updateInfo()
     }
 
-    setIndex(index: number) {
-        this.index = index
+    setVariable(variable: Variable) {
+        this.variable = variable
         this.updateInfo()
     }
 
     updateInfo() {
-        this.info = `Remove item located at ${this.index} from ${this.list.name}`
+        this.info = `${this.list.name}`
     }
 
     deSerialize(object: any, engine: DiagramEngine) {
         super.deSerialize(object, engine)
         this.list = object.list
-        this.index = object.index
+        this.variable = object.variable
+        this.isNewVariable = object.isNewVariable
     }
 
     serialize() {
         return _.merge(super.serialize(), {
             list: this.list,
-            index: this.index
+            variable: this.variable,
+            isNewVariable: this.isNewVariable
         })
     }
 }

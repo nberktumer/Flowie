@@ -14,14 +14,14 @@ import {DataClassFlowContent} from "./flows/DataClassFlow"
 import {ReturnFlowContent} from "./flows/ReturnFlow"
 import {CurrentTimeFlowContent} from "./flows/CurrentTimeFlow"
 import {FunctionalityFlowContent} from "./flows/FunctionalityFlow"
-import {UpdateVariableFlowContent} from "./flows/UpdateVariableFlow";
-import {ListNewFlowContent} from "./flows/ListNewFlow";
-import {ListAddFlowContent} from "./flows/ListAddFlow";
-import {ListUpdateFlowContent} from "./flows/ListUpdateFlow";
-import {ListRemoveFlowContent} from "./flows/ListRemoveFlow";
-import {ListClearFlowContent} from "./flows/ListClearFlow";
-import {ListGetFlowContent} from "./flows/ListGetFlow";
-import {ListSizeFlowContent} from "./flows/ListSizeFlow";
+import {UpdateVariableFlowContent} from "./flows/UpdateVariableFlow"
+import {ListNewFlowContent} from "./flows/ListNewFlow"
+import {ListAddFlowContent} from "./flows/ListAddFlow"
+import {ListUpdateFlowContent} from "./flows/ListUpdateFlow"
+import {ListRemoveFlowContent} from "./flows/ListRemoveFlow"
+import {ListClearFlowContent} from "./flows/ListClearFlow"
+import {ListGetFlowContent} from "./flows/ListGetFlow"
+import {ListSizeFlowContent} from "./flows/ListSizeFlow"
 
 export class DirectoryItemModel {
     type: DirectoryItemType
@@ -138,7 +138,7 @@ export class FlowModelBuilder {
                 break
             case FlowType.DATA_CLASS:
                 this.flowModel.dataClassFlowContent = flowContent
-                break;
+                break
             case FlowType.LIST_SIZE:
                 this.flowModel.listSizeFlowContent = flowContent
                 break
@@ -155,6 +155,9 @@ export class FlowModelBuilder {
                 break
             case FlowType.LIST_NEW:
                 this.flowModel.listNewFlowContent = flowContent
+                break
+            case FlowType.LIST_GET:
+                this.flowModel.listGetFlowContent = flowContent
                 break
             case FlowType.LIST_ADD:
                 this.flowModel.listAddFlowContent = flowContent

@@ -26,8 +26,6 @@ export class ArithmeticProperties extends BaseProperties<ArithmeticPropertiesPro
         if (props.node !== undefined) {
             const node = props.node as ArithmeticFlowNode
 
-            console.log(node)
-
             this.state = {
                 variable: JSON.stringify(node.getVariable()),
                 operation: node.getOperation(),

@@ -19,6 +19,8 @@ import {ListAddFlowModelGenerator} from "./List/ListAdd/ListAddFlowModelGenerato
 import {ListClearFlowModelGenerator} from "./List/ListClear/ListClearFlowModelGenerator"
 import {ListRemoveFlowModelGenerator} from "./List/ListRemove/ListRemoveFlowModelGenerator"
 import {ListUpdateFlowModelGenerator} from "./List/ListUpdate/ListUpdateFlowModelGenerator"
+import {ListGetFlowModelGenerator} from "./List/ListGet/ListGetFlowModelGenerator"
+import {ListSizeFlowModelGenerator} from "./List/ListSize/ListSizeFlowModelGenerator"
 
 export class FlowModelFactory {
     private constructor() {
@@ -54,6 +56,8 @@ export class FlowModelFactory {
                 return new ReturnFlowModelGenerator().generate(baseFlow)
             case FlowType.LIST_NEW:
                 return new NewListFlowModelGenerator().generate(baseFlow)
+            case FlowType.LIST_GET:
+                return new ListGetFlowModelGenerator().generate(baseFlow)
             case FlowType.LIST_ADD:
                 return new ListAddFlowModelGenerator().generate(baseFlow)
             case FlowType.LIST_UPDATE:
@@ -62,6 +66,8 @@ export class FlowModelFactory {
                 return new ListRemoveFlowModelGenerator().generate(baseFlow)
             case FlowType.LIST_CLEAR:
                 return new ListClearFlowModelGenerator().generate(baseFlow)
+            case FlowType.LIST_SIZE:
+                return new ListSizeFlowModelGenerator().generate(baseFlow)
             default:
                 return null
         }

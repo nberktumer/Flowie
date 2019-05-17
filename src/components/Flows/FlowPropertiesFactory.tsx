@@ -24,6 +24,8 @@ import {ListAddProperties} from "./List/ListAdd/ListAddProperties"
 import {ListClearProperties} from "./List/ListClear/ListClearProperties"
 import {ListRemoveProperties} from "./List/ListRemove/ListRemoveProperties"
 import {ListUpdateProperties} from "./List/ListUpdate/ListUpdateProperties"
+import {ListGetProperties} from "./List/ListGet/ListGetProperties"
+import {ListSizeProperties} from "./List/ListSize/ListSizeProperties"
 
 export class FlowPropertiesFactory {
     private constructor() {
@@ -70,6 +72,9 @@ export class FlowPropertiesFactory {
             case FlowType.LIST_NEW:
                 return (<NewListProperties onDataChanged={(data) => onDataChanged(data)}
                                            isValidListener={((isValid) => isValidListener(isValid))}/>)
+            case FlowType.LIST_GET:
+                return (<ListGetProperties onDataChanged={(data) => onDataChanged(data)}
+                                           isValidListener={((isValid) => isValidListener(isValid))}/>)
             case FlowType.LIST_ADD:
                 return (<ListAddProperties onDataChanged={(data) => onDataChanged(data)}
                                            isValidListener={((isValid) => isValidListener(isValid))}/>)
@@ -82,6 +87,9 @@ export class FlowPropertiesFactory {
             case FlowType.LIST_CLEAR:
                 return (<ListClearProperties onDataChanged={(data) => onDataChanged(data)}
                                              isValidListener={((isValid) => isValidListener(isValid))}/>)
+            case FlowType.LIST_SIZE:
+                return (<ListSizeProperties onDataChanged={(data) => onDataChanged(data)}
+                                            isValidListener={((isValid) => isValidListener(isValid))}/>)
             default:
                 return (<div/>)
         }
@@ -117,6 +125,8 @@ export class FlowPropertiesFactory {
                 return (<ReturnFlowProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             case FlowType.LIST_NEW:
                 return (<NewListProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
+            case FlowType.LIST_GET:
+                return (<ListGetProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             case FlowType.LIST_ADD:
                 return (<ListAddProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             case FlowType.LIST_UPDATE:
@@ -125,6 +135,8 @@ export class FlowPropertiesFactory {
                 return (<ListRemoveProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             case FlowType.LIST_CLEAR:
                 return (<ListClearProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
+            case FlowType.LIST_SIZE:
+                return (<ListSizeProperties node={node} onDataChanged={(data) => onDataChanged(data)}/>)
             default:
                 return (<div/>)
         }
@@ -160,10 +172,12 @@ export class FlowPropertiesFactory {
             case FlowType.RANDOM:
             case FlowType.CURRENT_TIME:
             case FlowType.LIST_NEW:
+            case FlowType.LIST_GET:
             case FlowType.LIST_ADD:
             case FlowType.LIST_UPDATE:
             case FlowType.LIST_REMOVE:
             case FlowType.LIST_CLEAR:
+            case FlowType.LIST_SIZE:
                 return {title: strings.setProperties, contextText: ""}
             case FlowType.DATA_CLASS:
                 return {title: strings.newDataClass, contextText: ""}

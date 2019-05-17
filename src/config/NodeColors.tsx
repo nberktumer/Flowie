@@ -13,5 +13,7 @@ export const NodeColors = {
     LIST_ADD: "rgb(255, 192, 192)",
     LIST_REMOVE: "rgb(255, 192, 192)",
     LIST_UPDATE: "rgb(255, 192, 192)",
-    LIST_CLEAR: "rgb(255, 192, 192)"
+    LIST_CLEAR: "rgb(255, 192, 192)",
+    LIST_SIZE: "rgb(255, 192, 192)",
+    LIST_GET: "rgb(255, 192, 192)"
 }

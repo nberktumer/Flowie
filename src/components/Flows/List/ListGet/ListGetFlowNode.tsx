@@ -6,16 +6,21 @@ import {BaseFlowNode} from "../../../CanvasItems/Nodes/BaseFlow/BaseFlowNode"
 import {DiagramEngine} from "nberktumer-react-diagrams"
 import * as _ from "lodash"
 
-export class ListRemoveFlowNode extends BaseFlowNode {
+export class ListGetFlowNode extends BaseFlowNode {
     list: Variable
+    variable: Variable
     index: number
+    isNewVariable: boolean
 
-    constructor(list: Variable, index: number, withoutPorts: boolean = false) {
-        super(FlowType.LIST_REMOVE, strings.removeFromList + " (" + list.type + ")", NodeColors.LIST_REMOVE)
+    constructor(list: Variable, variable: Variable, index: number, isNewVariable: boolean, withoutPorts: boolean = false) {
+        super(FlowType.LIST_GET, strings.getFromList + " (" + variable.type + ")", NodeColors.LIST_GET)
 
         this.list = list
+        this.variable = variable
         this.index = index
+        this.isNewVariable = isNewVariable
         this.setList(list)
+        this.setVariable(variable)
         this.setIndex(index)
 
         if (!withoutPorts) {
@@ -29,25 +34,34 @@ export class ListRemoveFlowNode extends BaseFlowNode {
         this.updateInfo()
     }
 
+    setVariable(variable: Variable) {
+        this.variable = variable
+        this.updateInfo()
+    }
+
     setIndex(index: number) {
         this.index = index
         this.updateInfo()
     }
 
     updateInfo() {
-        this.info = `Remove item located at ${this.index} from ${this.list.name}`
+        this.info = `${this.variable.name} = ${this.list.name}[${this.index}]`
     }
 
     deSerialize(object: any, engine: DiagramEngine) {
         super.deSerialize(object, engine)
         this.list = object.list
+        this.variable = object.variable
         this.index = object.index
+        this.isNewVariable = object.isNewVariable
     }
 
     serialize() {
         return _.merge(super.serialize(), {
             list: this.list,
-            index: this.index
+            variable: this.variable,
+            index: this.index,
+            isNewVariable: this.isNewVariable
         })
     }
 }
