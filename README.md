@@ -1,3 +1,15 @@
+## Flowie: Live Code Generator
+
+Flowie is a live Java and Kotlin code generator with simple interface with Drag & Drop functionality. You can add the following to your code by using Flowie's diagram structure:
+
+* Variables: Int, Long, Double, String, Boolean, List
+* Handling user input & output
+* Getting time, generating random variables
+* Functions
+* If & While conditionals
+* Arithmetic operations: addition, subtraction, multiplication, division, modulus, root
+* Classes
+
 ## Demo
 
 [https://nberktumer.github.io/Flowie/](https://nberktumer.github.io/Flowie/)
